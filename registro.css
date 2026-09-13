@@ -4,10 +4,41 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f4f6fa;
+  background-color: #ffffff;
   margin: 0;
   padding: 0;
   color: #333;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Mancha rosada superior izquierda */
+body::before {
+  content: '';
+  position: fixed;
+  top: -120px;
+  left: -130px;
+  width: 580px;
+  height: 520px;
+  background-color: #fdebee;
+  border-radius: 50%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Mancha lila derecha */
+body::after {
+  content: '';
+  position: fixed;
+  top: 30px;
+  right: -160px;
+  width: 680px;
+  height: 680px;
+  background-color: #f1ecfe;
+  border-radius: 50%;
+  z-index: -1;
+  pointer-events: none;
 }
 
 /* Barra de navegación superior */
@@ -16,7 +47,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 15px 40px;
-  background-color: #ffffff;
+  background-color: transparent;
   border-bottom: 1px solid #eaeaea;
 }
 
