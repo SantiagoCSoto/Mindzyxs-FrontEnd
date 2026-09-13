@@ -32,14 +32,27 @@
     <section>
       <h1>Registrarse</h1>
 
-      <form action="#" method="POST">
+      <form action="#" method="POST" enctype="multipart/form-data">
         <div>
           <label for="tipo-usuario">Tipo de usuario *</label>
           <select id="tipo-usuario" name="tipo_usuario" required>
             <option value="" disabled selected>Selecciona una opción</option>
-            <option value="estudiante">Paciente</option>
-            <option value="profesional">Psicologo</option>
+            <option value="paciente">Paciente</option>
+            <option value="psicologo">Psicólogo</option>
           </select>
+        </div>
+
+        <div id="seccion-credenciales-psicologo">
+          <div>
+            <span>🎓</span>
+            <h3>Credenciales profesionales</h3>
+          </div>
+
+          <div>
+            <label for="tarjeta-profesional">Subir tarjeta profesional *</label>
+            <input type="file" id="tarjeta-profesional" name="tarjeta_profesional" accept=".pdf,application/pdf">
+            <small>Formatos permitidos: PDF — Tamaño máximo 5MB</small>
+          </div>
         </div>
 
         <div>
