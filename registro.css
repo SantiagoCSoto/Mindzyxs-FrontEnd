@@ -208,6 +208,64 @@ select:focus {
   font-size: 12px;
   color: #777;
   margin-top: 5px;
+  display: block;
+}
+
+/* Selector personalizado de archivo */
+.file-upload-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #ffffff;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  padding: 6px 10px;
+  margin-top: 5px;
+}
+
+.file-input-real {
+  display: none;
+}
+
+.btn-custom-file {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.btn-custom-file:hover {
+  background-color: #f8fafc;
+  border-color: #56c5c0;
+}
+
+.file-upload-icon {
+  font-size: 14px;
+  font-weight: bold;
+  color: #444;
+}
+
+.file-name-text {
+  font-size: 13px;
+  color: #888888;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-name-text.archivo-cargado {
+  color: #222222;
+  font-weight: 500;
 }
 
 /* Botones de acción inferiores */
