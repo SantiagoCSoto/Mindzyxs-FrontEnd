@@ -5,16 +5,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Registrarse - Mindzyx</title>
+  <link rel="stylesheet" href="registro.css">
 </head>
 
 <body>
 
-  <header>
-    <div>
-      <a href="#">Mindzyx</a>
+  <header class="header-nav">
+    <div class="logo-container">
+      <a href="#" class="logo-link">
+        <span class="logo-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9" stroke="#ffffff" stroke-width="2.2" fill="none" />
+            <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5" stroke="#ffffff" stroke-width="2.2" />
+          </svg>
+        </span>
+        Mindzyx
+      </a>
     </div>
 
-    <nav>
+    <nav class="main-nav">
       <ul>
         <li><a href="#">Inicio</a></li>
         <li><a href="#">Nosotros</a></li>
@@ -22,18 +32,18 @@
       </ul>
     </nav>
 
-    <div>
-      <a href="#">Iniciar sesión</a>
-      <a href="#">Registrarse</a>
+    <div class="header-auth-buttons">
+      <a href="#" class="btn-login">Iniciar sesión</a>
+      <a href="#" class="btn-signup-header">Registrarse</a>
     </div>
   </header>
 
   <main>
-    <section>
+    <section class="registro-card">
       <h1>Registrarse</h1>
 
-      <form action="#" method="POST" enctype="multipart/form-data">
-        <div>
+      <form action="#" method="POST" enctype="multipart/form-data" class="form-registro">
+        <div class="form-group">
           <label for="tipo-usuario">Tipo de usuario *</label>
           <select id="tipo-usuario" name="tipo_usuario" required>
             <option value="" disabled selected>Selecciona una opción</option>
@@ -43,37 +53,37 @@
         </div>
 
         <div id="seccion-credenciales-psicologo">
-          <div>
-            <span>🎓</span>
+          <div class="credenciales-header">
+            <span class="icono-credenciales">🎓</span>
             <h3>Credenciales profesionales</h3>
           </div>
 
-          <div>
+          <div class="credenciales-body">
             <label for="tarjeta-profesional">Subir tarjeta profesional *</label>
             <input type="file" id="tarjeta-profesional" name="tarjeta_profesional" accept=".pdf,application/pdf">
-            <small>Formatos permitidos: PDF — Tamaño máximo 5MB</small>
+            <small class="formato-ayuda">Formatos permitidos: PDF — Tamaño máximo 5MB</small>
           </div>
         </div>
 
-        <div>
-          <div>
+        <div class="form-row">
+          <div class="form-group">
             <label for="nombres">Nombres</label>
             <input type="text" id="nombres" name="nombres" placeholder="Ej. Sofía" required>
           </div>
 
-          <div>
+          <div class="form-group">
             <label for="apellidos">Apellidos</label>
             <input type="text" id="apellidos" name="apellidos" placeholder="Ej. Martínez" required>
           </div>
         </div>
 
-        <div>
-          <div>
+        <div class="form-row">
+          <div class="form-group">
             <label for="edad">Edad</label>
             <input type="number" id="edad" name="edad" placeholder="Ej. 24" min="1" max="120">
           </div>
 
-          <div>
+          <div class="form-group">
             <label for="genero">Género</label>
             <select id="genero" name="genero">
               <option value="" disabled selected>Selecciona</option>
@@ -85,20 +95,20 @@
           </div>
         </div>
 
-        <div>
+        <div class="form-group">
           <label for="correo">Correo</label>
           <input type="email" id="correo" name="correo" placeholder="tu@correo.com" required>
         </div>
 
-        <div>
+        <div class="form-group">
           <label for="contrasena">Contraseña</label>
           <input type="password" id="contrasena" name="contrasena" placeholder="Mín. 6 caracteres" minlength="6"
             required>
         </div>
 
-        <div>
-          <button type="button">Cancelar / Volver</button>
-          <button type="submit">Continuar &rarr;</button>
+        <div class="form-actions">
+          <button type="button" class="btn-cancel">Cancelar / Volver</button>
+          <button type="submit" class="btn-submit">Continuar &rarr;</button>
         </div>
       </form>
     </section>
