@@ -182,11 +182,12 @@ select:focus {
 
 /* Sección de credenciales para el Psicólogo */
 #seccion-credenciales-psicologo {
+  display: none;
+  /* Oculto por defecto hasta que se seleccione Psicólogo */
   background-color: #f7f6fd;
   border: 1px dashed #b8b1ea;
   border-radius: 10px;
   padding: 15px;
-  display: flex;
   flex-direction: column;
   gap: 10px;
 }
