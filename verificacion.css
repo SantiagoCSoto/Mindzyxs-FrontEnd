@@ -95,6 +95,25 @@ label {
   box-shadow: 0 0 0 3px rgba(86, 197, 192, 0.15);
 }
 
+/* Estado de error / código expirado */
+#codigo-verificacion.error {
+  border-color: #eb5771;
+  background-color: #fff8f8;
+}
+
+.alerta-error {
+  display: none;
+  width: 100%;
+  background-color: #feeef2;
+  color: #eb5771;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  margin-top: 8px;
+}
+
 /* Botón principal Verificar */
 .btn-verificar {
   width: 100%;

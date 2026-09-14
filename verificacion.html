@@ -41,9 +41,11 @@
         <div class="form-group">
           <label for="codigo-verificacion">Código de verificación</label>
           <div class="input-codigo-contenedor">
-            <input type="text" id="codigo-verificacion" name="codigo_verificacion" maxlength="6"
-              inputmode="numeric" pattern="[0-9]*" placeholder="&mdash;  &mdash;  &mdash;  &mdash;  &mdash;  &mdash;" autocomplete="off" required>
+            <input type="text" id="codigo-verificacion" name="codigo_verificacion" maxlength="6" inputmode="numeric"
+              pattern="[0-9]*" placeholder="&mdash;  &mdash;  &mdash;  &mdash;  &mdash;  &mdash;" autocomplete="off"
+              required>
           </div>
+          <div id="banner-error" class="alerta-error">El código expiró. Reenvía el código</div>
         </div>
 
         <button type="submit" id="btn-verificar" class="btn-verificar">Verificar</button>
