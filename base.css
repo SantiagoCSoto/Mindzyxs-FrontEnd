@@ -61,6 +61,14 @@ body::after {
   font-weight: bold;
 }
 
+.logo-img {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
 .logo-badge {
   background-color: #56c5c0;
   color: white;
