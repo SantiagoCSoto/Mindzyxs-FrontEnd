@@ -66,8 +66,13 @@ if (formRecuperar) {
       return;
     }
 
-    // Si todo es válido, mostrar éxito
+    // Si todo es válido, mostrar éxito y redirigir
     mostrarExito();
     inputEmail.value = '';
+    
+    // Redirigir a verificación después de 2 segundos
+    setTimeout(() => {
+      window.location.href = 'verificacion_recuperar.html';
+    }, 2000);
   });
 }

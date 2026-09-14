@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verificación de Recuperación - Mindzyxs</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/verificacion.css">
+</head>
+
+<body>
+
+  <header class="header-nav">
+    <div class="logo-container">
+      <a href="login.html" class="logo-link">
+        <img src="assets/Logo1.png" alt="Logo Mindzyxs" class="logo-img">
+        Mindzyxs
+      </a>
+    </div>
+
+  </header>
+
+  <main>
+    <section class="verificacion-card">
+      <h1>Verificación de recuperación</h1>
+      <p class="verificacion-subtitulo">Ingresa el código enviado a tu correo</p>
+
+      <div class="chip-correo">
+        <span class="icono-correo">📨</span>
+        <span>Código enviado a <strong>tu@correo.com</strong> &bull; válido 5 min</span>
+      </div>
+
+      <form class="form-verificacion" id="form-verificacion-recuperar" action="#">
+        <div class="form-group">
+          <label for="codigo-verificacion">Código de verificación</label>
+          <div class="input-codigo-contenedor">
+            <input type="text" id="codigo-verificacion" name="codigo_verificacion" maxlength="6" inputmode="numeric"
+              pattern="[0-9]*" placeholder="&mdash;  &mdash;  &mdash;  &mdash;  &mdash;  &mdash;" autocomplete="off"
+              required>
+          </div>
+          <div id="banner-error" class="alerta-error">El código expiró. Reenvía el código</div>
+          <div id="banner-exito" class="alerta-exito">Se ha reenviado un nuevo código a tu correo.</div>
+        </div>
+
+        <button type="submit" id="btn-verificar" class="btn-verificar">Verificar</button>
+
+        <div class="verificacion-acciones">
+          <button type="button" id="btn-reenviar" class="link-accion">Reenviar código</button>
+          <a href="recuperar_contrasena.html" id="link-cancelar" class="link-cancelar">Cancelar</a>
+        </div>
+      </form>
+    </section>
+
+    <div id="modal-exito" class="modal">
+      <div class="modal-contenido">
+        <div class="modal-encabezado">
+          <h2 id="modal-titulo">Código verificado</h2>
+        </div>
+        <p id="modal-subtitulo">Tu código ha sido verificado correctamente. Ahora puedes establecer una nueva contraseña.</p>
+        <button id="btn-modal-continuar" class="btn-modal">Continuar</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/verificacion_recuperar.js"></script>
+
+</body>
+
+</html>
