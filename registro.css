@@ -310,6 +310,118 @@ select:focus {
   font-weight: bold;
 }
 
+/* Modal de confirmación al cancelar */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-overlay.activo {
+  display: flex;
+}
+
+.modal-contenido {
+  background-color: #ffffff;
+  border-radius: 24px;
+  padding: 36px 32px 30px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+  animation: modalEntrada 0.2s ease-out;
+}
+
+@keyframes modalEntrada {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-badge-icon {
+  width: 48px;
+  height: 48px;
+  background-color: #feeef2;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.modal-badge-icon span {
+  color: #eb5771;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.modal-contenido h2 {
+  font-size: 19px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 10px;
+}
+
+.modal-contenido p {
+  font-size: 14px;
+  color: #8892a0;
+  margin: 0 0 26px;
+  line-height: 1.5;
+}
+
+.modal-acciones {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-modal-cancel {
+  flex: 1;
+  background-color: #ffffff;
+  border: 1px solid #dcdcdc;
+  color: #1f2937;
+  padding: 11px 18px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.btn-modal-cancel:hover {
+  background-color: #f7fafc;
+  border-color: #cbd5e1;
+}
+
+.btn-modal-confirm {
+  flex: 1;
+  background-color: #eb5771;
+  border: none;
+  color: #ffffff;
+  padding: 11px 18px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-modal-confirm:hover {
+  background-color: #d84560;
+}
+
 /* Diseño responsivo (Tablets y Dispositivos Móviles) */
 
 @media (max-width: 768px) {
