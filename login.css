@@ -272,3 +272,66 @@ label {
 .btn-modal-continuar:hover {
   background-color: #48b4af;
 }
+
+/* Diseño responsivo */
+@media (max-width: 768px) {
+  .login-card {
+    margin: 24px 16px;
+    padding: 28px 20px;
+  }
+
+  .modal-contenido {
+    padding: 30px 20px 24px;
+    margin: 0 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    margin: 16px 12px;
+    padding: 24px 16px;
+  }
+
+  .login-card h1 {
+    font-size: 20px;
+  }
+
+  .login-subtitulo {
+    font-size: 12px;
+    margin-bottom: 20px;
+  }
+
+  .form-group input {
+    height: 44px;
+    font-size: 13.5px;
+  }
+
+  .btn-login-submit {
+    padding: 12px 18px;
+    font-size: 14px;
+  }
+
+  .login-enlaces {
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .nota-pruebas {
+    font-size: 11px;
+  }
+
+  .modal-contenido h2 {
+    font-size: 17px;
+  }
+
+  .modal-contenido p {
+    font-size: 12px;
+    margin-bottom: 20px;
+  }
+
+  .btn-modal-continuar {
+    padding: 11px 18px;
+    font-size: 14px;
+  }
+}
