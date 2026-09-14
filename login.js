@@ -62,6 +62,30 @@ function validarFormulario() {
   return esValido;
 }
 
+const modalRol = document.getElementById('modal-rol');
+const modalTitulo = document.getElementById('modal-titulo');
+const modalSubtitulo = document.getElementById('modal-subtitulo');
+const btnModalContinuar = document.getElementById('btn-modal-continuar');
+
+// Usuarios y credenciales de prueba
+const usuariosPrueba = {
+  'paciente@test.com': {
+    password: '123456a',
+    rol: 'Paciente',
+    destino: 'Panel del paciente'
+  },
+  'psicologo@test.com': {
+    password: '123456a',
+    rol: 'Psicólogo',
+    destino: 'Panel del psicólogo'
+  },
+  'admin@test.com': {
+    password: '123456a',
+    rol: 'Administrador',
+    destino: 'Consola de administración'
+  }
+};
+
 formLogin.addEventListener('submit', function (e) {
   e.preventDefault();
   ocultarBannerError();
@@ -71,5 +95,35 @@ formLogin.addEventListener('submit', function (e) {
     return;
   }
 
-  // Siguiente paso: Autenticación por roles
+  const correo = inputCorreo.value.trim().toLowerCase();
+  const password = inputPassword.value.trim();
+  const usuario = usuariosPrueba[correo];
+
+  if (usuario && usuario.password === password) {
+    ocultarBannerError();
+    modalTitulo.textContent = `Sesión iniciada \u2014 ${usuario.rol}`;
+    modalSubtitulo.textContent = `Redirigiendo a: ${usuario.destino}`;
+    modalRol.classList.add('activo');
+  } else {
+    if (bannerError) {
+      bannerError.textContent = 'Correo o contraseña incorrectos';
+      bannerError.classList.add('visible');
+    }
+  }
 });
+
+// Cerrar modal al pulsar continuar o fondo exterior
+if (btnModalContinuar) {
+  btnModalContinuar.addEventListener('click', function () {
+    modalRol.classList.remove('activo');
+  });
+}
+
+if (modalRol) {
+  modalRol.addEventListener('click', function (e) {
+    if (e.target === modalRol) {
+      modalRol.classList.remove('activo');
+    }
+  });
+}
+
