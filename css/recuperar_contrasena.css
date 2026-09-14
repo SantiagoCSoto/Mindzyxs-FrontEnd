@@ -22,6 +22,33 @@
   margin: 0 0 24px;
 }
 
+/* Banners de alerta */
+.alerta-error {
+  display: none;
+  width: 100%;
+  background-color: #feeef2;
+  color: #eb5771;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  margin-bottom: 18px;
+}
+
+.alerta-exito {
+  display: none;
+  width: 100%;
+  background-color: #ecf8f6;
+  color: #56c5c0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  margin-bottom: 18px;
+}
+
 /* Formulario y campos de texto */
 .form-recuperar {
   display: flex;
@@ -60,6 +87,16 @@ label {
 .form-group input:focus {
   border-color: #56c5c0;
   box-shadow: 0 0 0 3px rgba(86, 197, 192, 0.15);
+}
+
+.form-group input.error {
+  border-color: #eb5771;
+  background-color: #fff8f8;
+}
+
+.form-group input.error:focus {
+  border-color: #eb5771;
+  box-shadow: 0 0 0 3px rgba(235, 87, 113, 0.15);
 }
 
 .form-group input::placeholder {
@@ -112,6 +149,14 @@ label {
   color: #64748b;
   line-height: 1.5;
   margin-top: 14px;
+}
+
+.info-texto p {
+  margin-bottom: 8px;
+}
+
+.info-texto p:last-child {
+  margin-bottom: 0;
 }
 
 .info-texto strong {
