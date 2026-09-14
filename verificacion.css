@@ -215,6 +215,7 @@ label {
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -270,4 +271,57 @@ label {
 
 .btn-iniciar-sesion:hover {
   background-color: #48b4af;
+}
+
+/* Diseño responsivo */
+@media (max-width: 768px) {
+  .verificacion-card {
+    margin: 24px 16px;
+    padding: 28px 20px;
+  }
+
+  #codigo-verificacion {
+    letter-spacing: 12px;
+    font-size: 18px;
+  }
+
+  .chip-correo {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+
+  .modal-contenido {
+    padding: 30px 20px 24px;
+    margin: 0 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .verificacion-card {
+    margin: 16px 12px;
+    padding: 24px 16px;
+  }
+
+  .verificacion-card h1 {
+    font-size: 20px;
+  }
+
+  #codigo-verificacion {
+    letter-spacing: 8px;
+    font-size: 16px;
+    height: 48px;
+  }
+
+  #codigo-verificacion::placeholder {
+    letter-spacing: 8px;
+  }
+
+  .modal-contenido h2 {
+    font-size: 17px;
+  }
+
+  .modal-contenido p {
+    font-size: 12px;
+    margin-bottom: 20px;
+  }
 }
