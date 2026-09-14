@@ -1,6 +1,7 @@
 const formVerificacion = document.getElementById('form-verificacion');
 const inputCodigo = document.getElementById('codigo-verificacion');
 const bannerError = document.getElementById('banner-error');
+const modalExito = document.getElementById('modal-exito');
 
 function mostrarError(mensaje) {
   inputCodigo.classList.add('error');
@@ -35,8 +36,15 @@ formVerificacion.addEventListener('submit', function (e) {
 
   if (codigo === '123456') {
     ocultarError();
+    modalExito.classList.add('activo');
     return;
   }
 
   mostrarError('Código incorrecto. Inténtalo de nuevo.');
+});
+
+modalExito.addEventListener('click', function (e) {
+  if (e.target === modalExito) {
+    modalExito.classList.remove('activo');
+  }
 });
