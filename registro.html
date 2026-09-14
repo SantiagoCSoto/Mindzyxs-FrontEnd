@@ -61,7 +61,8 @@
           <div class="credenciales-body">
             <label class="label-tarjeta">Subir tarjeta profesional *</label>
             <div class="file-upload-box">
-              <input type="file" id="tarjeta-profesional" name="tarjeta_profesional" accept=".pdf,application/pdf" class="file-input-real">
+              <input type="file" id="tarjeta-profesional" name="tarjeta_profesional" accept=".pdf,application/pdf"
+                class="file-input-real">
               <label for="tarjeta-profesional" class="btn-custom-file">
                 <span class="file-upload-icon">↗</span>
                 <span>Seleccionar archivo</span>
@@ -121,6 +122,20 @@
       </form>
     </section>
   </main>
+
+  <div id="modal-cancelar" class="modal-overlay">
+    <div class="modal-contenido">
+      <div class="modal-badge-icon">
+        <span>!</span>
+      </div>
+      <h2>¿Deseas cancelar el registro?</h2>
+      <p>Se perderán los datos no guardados y volverás al inicio sin crear la cuenta.</p>
+      <div class="modal-acciones">
+        <button type="button" id="btn-no-cancelar" class="btn-modal-cancel">No, continuar</button>
+        <button type="button" id="btn-si-cancelar" class="btn-modal-confirm">Sí, cancelar</button>
+      </div>
+    </div>
+  </div>
 
   <script src="registro.js"></script>
 </body>

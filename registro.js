@@ -71,12 +71,32 @@ formularioRegistro.addEventListener('submit', function (e) {
   actualizarVisibilidadCredenciales();
 });
 
+const modalCancelar = document.getElementById('modal-cancelar');
+const btnNoCancelar = document.getElementById('btn-no-cancelar');
+const btnSiCancelar = document.getElementById('btn-si-cancelar');
+
 btnCancelar.addEventListener('click', function () {
+  modalCancelar.classList.add('activo');
+});
+
+btnNoCancelar.addEventListener('click', function () {
+  modalCancelar.classList.remove('activo');
+});
+
+btnSiCancelar.addEventListener('click', function () {
+  modalCancelar.classList.remove('activo');
+  formularioRegistro.reset();
+  actualizarVisibilidadCredenciales();
   if (window.history.length > 1) {
     window.history.back();
   } else {
-    formularioRegistro.reset();
-    actualizarVisibilidadCredenciales();
+    window.location.href = '#';
+  }
+});
+
+modalCancelar.addEventListener('click', function (e) {
+  if (e.target === modalCancelar) {
+    modalCancelar.classList.remove('activo');
   }
 });
 
