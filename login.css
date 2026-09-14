@@ -5,11 +5,22 @@
   font-weight: 500;
 }
 
-/* Ocultar elementos de estado por defecto */
-.alerta-error,
-.error-mensaje,
-.modal-overlay {
+/* Banner de alerta de error general */
+.alerta-error {
   display: none;
+  width: 100%;
+  background-color: #feeef2;
+  color: #eb5771;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  margin-bottom: 18px;
+}
+
+.alerta-error.visible {
+  display: block;
 }
 
 /* Tarjeta principal de login */
@@ -74,6 +85,29 @@ label {
 .form-group input:focus {
   border-color: #56c5c0;
   box-shadow: 0 0 0 3px rgba(86, 197, 192, 0.15);
+}
+
+.form-group input.error {
+  border-color: #eb5771;
+  background-color: #fff8f8;
+}
+
+.form-group input.error:focus {
+  border-color: #eb5771;
+  box-shadow: 0 0 0 3px rgba(235, 87, 113, 0.15);
+}
+
+.error-mensaje {
+  display: none;
+  font-size: 12px;
+  color: #eb5771;
+  margin-top: 5px;
+  text-align: left;
+  font-weight: 500;
+}
+
+.error-mensaje.visible {
+  display: block;
 }
 
 /* Botón principal Iniciar sesión */
@@ -145,4 +179,96 @@ label {
 .nota-pruebas strong {
   font-weight: 600;
   color: #475569;
+}
+
+/* Modal de autenticación exitosa */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-overlay.activo {
+  display: flex;
+}
+
+.modal-contenido {
+  background-color: #ffffff;
+  border-radius: 24px;
+  padding: 36px 32px 30px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+  animation: modalEntrada 0.2s ease-out;
+}
+
+@keyframes modalEntrada {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-badge-exito {
+  width: 48px;
+  height: 48px;
+  background-color: #ecfdf5;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.modal-badge-exito span {
+  color: #10b981;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.modal-contenido h2 {
+  font-size: 19px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 8px;
+}
+
+.modal-contenido p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0 0 24px;
+  line-height: 1.5;
+}
+
+.btn-modal-continuar {
+  width: 100%;
+  background-color: #56c5c0;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-modal-continuar:hover {
+  background-color: #48b4af;
 }
