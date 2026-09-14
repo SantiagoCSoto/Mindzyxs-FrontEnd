@@ -1,12 +1,17 @@
 const formVerificacion = document.getElementById('form-verificacion');
 const inputCodigo = document.getElementById('codigo-verificacion');
 const bannerError = document.getElementById('banner-error');
+const bannerExito = document.getElementById('banner-exito');
 const modalExito = document.getElementById('modal-exito');
+const btnReenviar = document.getElementById('btn-reenviar');
+
+let temporizadorExito = null;
 
 function mostrarError(mensaje) {
   inputCodigo.classList.add('error');
   bannerError.textContent = mensaje;
   bannerError.style.display = 'block';
+  if (bannerExito) bannerExito.style.display = 'none';
 }
 
 function ocultarError() {
@@ -17,6 +22,7 @@ function ocultarError() {
 inputCodigo.addEventListener('input', function () {
   this.value = this.value.replace(/[^0-9]/g, '');
   ocultarError();
+  if (bannerExito) bannerExito.style.display = 'none';
 });
 
 // Códigos de prueba
@@ -48,3 +54,19 @@ modalExito.addEventListener('click', function (e) {
     modalExito.classList.remove('activo');
   }
 });
+
+if (btnReenviar) {
+  btnReenviar.addEventListener('click', function () {
+    ocultarError();
+    inputCodigo.value = '';
+    inputCodigo.focus();
+
+    if (bannerExito) {
+      bannerExito.style.display = 'block';
+      clearTimeout(temporizadorExito);
+      temporizadorExito = setTimeout(() => {
+        bannerExito.style.display = 'none';
+      }, 4000);
+    }
+  });
+}

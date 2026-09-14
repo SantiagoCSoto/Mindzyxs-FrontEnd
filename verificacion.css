@@ -114,6 +114,20 @@ label {
   margin-top: 8px;
 }
 
+.alerta-exito {
+  display: none;
+  width: 100%;
+  background-color: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  margin-top: 8px;
+}
+
 /* Botón principal Verificar */
 .btn-verificar {
   width: 100%;
