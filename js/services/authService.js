@@ -280,7 +280,7 @@ export const authService = {
   },
 
   /**
-   * Solicitar recuperación de contraseña
+   * Solicitar código de recuperación de contraseña (POST /api/account/forgot)
    */
   async requestPasswordReset(correo) {
     const email = correo ? correo.trim().toLowerCase() : '';
@@ -291,12 +291,24 @@ export const authService = {
       return { exito: false, mensaje: 'Ingresa un correo válido' };
     }
 
-    // Intentar endpoint de backend si existe, o usar resend/simulación
-    const usuariosValidos = Object.keys(USUARIOS_PRUEBA);
-    if (!usuariosValidos.includes(email)) {
-      return { exito: false, mensaje: 'Mensaje genérico de seguridad' };
+    const res = await postJson('/account/forgot', { correo: email });
+
+    if (res.ok && res.data) {
+      return {
+        exito: true,
+        mensaje: res.data.mensaje || 'Si el correo está registrado, recibirás un código.'
+      };
     }
 
+    if (!res.ok && !res.isNetworkError) {
+      return {
+        exito: false,
+        mensaje: res.error || 'Error al enviar el código de recuperación.'
+      };
+    }
+
+    // Fallback si el backend está offline
+    console.info('[authService] Backend offline, simulando envío de código de recuperación.');
     return {
       exito: true,
       mensaje: 'Se ha enviado un código de recuperación a tu correo.'
@@ -304,10 +316,34 @@ export const authService = {
   },
 
   /**
-   * Verificar código de recuperación
+   * Verificar código de recuperación (POST /api/account/forgot/verify)
    */
   async verifyPasswordResetCode(correo, codigo) {
+    const email = correo ? correo.trim().toLowerCase() : '';
     const cod = codigo ? codigo.trim() : '';
+
+    const res = await postJson('/account/forgot/verify', {
+      correo: email,
+      codigo: cod
+    });
+
+    if (res.ok && res.data) {
+      return {
+        exito: true,
+        mensaje: res.data.mensaje || 'Código verificado correctamente.'
+      };
+    }
+
+    if (!res.ok && !res.isNetworkError) {
+      return {
+        exito: false,
+        expirado: res.status === 410 || (res.error && res.error.includes('expiró')),
+        mensaje: res.error || 'Código incorrecto. Verifica e intenta nuevamente'
+      };
+    }
+
+    // Fallback si el backend está offline
+    console.info('[authService] Backend offline, simulando verificación de recuperación.');
     if (cod === '000000') {
       return { exito: false, expirado: true, mensaje: 'El código expiró. Reenvía el código' };
     }
@@ -318,13 +354,66 @@ export const authService = {
   },
 
   /**
-   * Establecer nueva contraseña tras recuperación
+   * Reenviar código de recuperación (POST /api/account/forgot/resend)
+   */
+  async resendRecoveryCode(correo) {
+    const email = correo ? correo.trim().toLowerCase() : '';
+
+    const res = await postJson('/account/forgot/resend', { correo: email });
+
+    if (res.ok && res.data) {
+      return {
+        exito: true,
+        mensaje: res.data.mensaje || 'Código reenviado'
+      };
+    }
+
+    if (!res.ok && !res.isNetworkError) {
+      return {
+        exito: false,
+        mensaje: res.error || 'Error al reenviar el código.'
+      };
+    }
+
+    return {
+      exito: true,
+      mensaje: 'Se ha reenviado un nuevo código a tu correo.'
+    };
+  },
+
+  /**
+   * Establecer nueva contraseña tras recuperación (POST /api/account/forgot/reset)
    */
   async resetPassword(correo, codigo, nuevaContrasena) {
     const email = correo ? correo.trim().toLowerCase() : '';
-    if (USUARIOS_PRUEBA[email]) {
-      USUARIOS_PRUEBA[email].password = nuevaContrasena;
+    const cod = codigo ? codigo.trim() : '';
+
+    const res = await postJson('/account/forgot/reset', {
+      correo: email,
+      codigo: cod,
+      password: nuevaContrasena
+    });
+
+    if (res.ok && res.data) {
+      return {
+        exito: true,
+        mensaje: res.data.mensaje || 'Contraseña actualizada correctamente.'
+      };
     }
-    return { exito: true, mensaje: 'Contraseña actualizada correctamente.' };
+
+    if (!res.ok && !res.isNetworkError) {
+      return {
+        exito: false,
+        expirado: res.status === 410 || (res.error && res.error.includes('expiró')),
+        mensaje: res.error || 'Error al actualizar la contraseña.'
+      };
+    }
+
+    // Fallback si el backend está offline
+    console.info('[authService] Backend offline, simulando actualización de contraseña.');
+    return {
+      exito: true,
+      mensaje: 'Contraseña actualizada correctamente.'
+    };
   }
 };

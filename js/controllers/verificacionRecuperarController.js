@@ -110,11 +110,11 @@ if (btnReenviar) {
     inputCodigo.focus();
 
     btnReenviar.disabled = true;
-    const resultado = await authService.requestPasswordReset(correoRecuperacion);
+    const resultado = await authService.resendRecoveryCode(correoRecuperacion);
     btnReenviar.disabled = false;
 
     if (resultado.exito) {
-      mostrarBanner(bannerExito, 'Se ha reenviado un nuevo código a tu correo.');
+      mostrarBanner(bannerExito, resultado.mensaje || 'Se ha reenviado un nuevo código a tu correo.');
       clearTimeout(temporizadorExito);
       temporizadorExito = setTimeout(() => {
         ocultarBanner(bannerExito);

@@ -192,4 +192,41 @@ if (selectTipoUsuario) {
   selectTipoUsuario.addEventListener('change', actualizarVisibilidadCredenciales);
 }
 
+// Cargar catálogos (tipos de cuenta y géneros) desde el backend (GET /api/account/catalogos)
+async function cargarCatalogos() {
+  const selectGenero = document.getElementById('genero');
+
+  try {
+    const catalogo = await authService.getCatalogos();
+
+    const tiposCuenta = catalogo.tiposCuenta || [];
+    const generos = catalogo.generos || [];
+
+    if (selectTipoUsuario && tiposCuenta.length > 0) {
+      selectTipoUsuario.innerHTML = '<option value="" disabled selected>Selecciona una opción</option>';
+      tiposCuenta.forEach((tipo) => {
+        const opcion = document.createElement('option');
+        opcion.value = tipo.codigo || tipo.nombre;
+        opcion.textContent = tipo.nombre || tipo.codigo;
+        selectTipoUsuario.appendChild(opcion);
+      });
+    }
+
+    if (selectGenero && generos.length > 0) {
+      selectGenero.innerHTML = '<option value="" disabled selected>Selecciona</option>';
+      generos.forEach((genero) => {
+        const opcion = document.createElement('option');
+        opcion.value = genero.id;
+        opcion.textContent = genero.nombre || genero.codigo;
+        selectGenero.appendChild(opcion);
+      });
+    }
+
+    actualizarVisibilidadCredenciales();
+  } catch (err) {
+    console.warn('[registro] No se pudieron cargar los catálogos:', err);
+  }
+}
+
 actualizarVisibilidadCredenciales();
+cargarCatalogos();
