@@ -1,130 +1,129 @@
-/**
- * Controlador para views/login.html
- * Gestiona interacciones de usuario, validaciones y autenticación.
- */
-
-import { authService } from '../services/authService.js';
-import { esCampoVacio, tieneArroba } from '../utils/validators.js';
-import { marcarErrorInput, limpiarErrorInput, mostrarBanner, ocultarBanner, abrirModal, cerrarModal } from '../utils/alerts.js';
-
 const formLogin = document.getElementById('form-login');
 const inputCorreo = document.getElementById('correo');
 const inputPassword = document.getElementById('password');
 const errorCorreo = document.getElementById('error-correo');
 const errorPassword = document.getElementById('error-password');
 const bannerError = document.getElementById('banner-error-login');
-const modalRol = document.getElementById('modal-rol');
-const modalTitulo = document.getElementById('modal-titulo');
-const modalSubtitulo = document.getElementById('modal-subtitulo');
-const btnLoginSubmit = document.getElementById('btn-login');
-const btnModalContinuar = document.getElementById('btn-modal-continuar');
 
-// Precargar correo si viene de registro o verificación
-const urlParams = new URLSearchParams(window.location.search);
-const correoInicial = urlParams.get('correo') || sessionStorage.getItem('correoRegistro');
-if (correoInicial && inputCorreo && !inputCorreo.value) {
-  inputCorreo.value = correoInicial;
+function mostrarErrorCampo(input, spanError, mensaje) {
+  input.classList.add('error');
+  spanError.textContent = mensaje;
+  spanError.classList.add('visible');
+}
+
+function limpiarErrorCampo(input, spanError) {
+  input.classList.remove('error');
+  spanError.textContent = '';
+  spanError.classList.remove('visible');
+}
+
+function ocultarBannerError() {
+  if (bannerError) {
+    bannerError.classList.remove('visible');
+  }
 }
 
 // Limpieza de errores en tiempo real al escribir
-if (inputCorreo) {
-  inputCorreo.addEventListener('input', () => {
-    limpiarErrorInput(inputCorreo, errorCorreo);
-    ocultarBanner(bannerError);
-  });
-}
+inputCorreo.addEventListener('input', function () {
+  limpiarErrorCampo(inputCorreo, errorCorreo);
+  ocultarBannerError();
+});
 
-if (inputPassword) {
-  inputPassword.addEventListener('input', () => {
-    limpiarErrorInput(inputPassword, errorPassword);
-    ocultarBanner(bannerError);
-  });
-}
+inputPassword.addEventListener('input', function () {
+  limpiarErrorCampo(inputPassword, errorPassword);
+  ocultarBannerError();
+});
 
-// Validación de campos
+// Validación de campos obligatorios y formato de correo
 function validarFormulario() {
   let esValido = true;
   const correo = inputCorreo.value.trim();
   const password = inputPassword.value.trim();
 
   // Validación de correo
-  if (esCampoVacio(correo)) {
-    marcarErrorInput(inputCorreo, errorCorreo, 'Este campo es obligatorio');
+  if (!correo) {
+    mostrarErrorCampo(inputCorreo, errorCorreo, 'Este campo es obligatorio');
     esValido = false;
-  } else if (!tieneArroba(correo)) {
-    marcarErrorInput(inputCorreo, errorCorreo, 'Ingresa un correo válido');
+  } else if (!correo.includes('@')) {
+    mostrarErrorCampo(inputCorreo, errorCorreo, 'Ingresa un correo válido');
     esValido = false;
   } else {
-    limpiarErrorInput(inputCorreo, errorCorreo);
+    limpiarErrorCampo(inputCorreo, errorCorreo);
   }
 
   // Validación de contraseña
-  if (esCampoVacio(password)) {
-    marcarErrorInput(inputPassword, errorPassword, 'Este campo es obligatorio');
+  if (!password) {
+    mostrarErrorCampo(inputPassword, errorPassword, 'Este campo es obligatorio');
     esValido = false;
   } else {
-    limpiarErrorInput(inputPassword, errorPassword);
+    limpiarErrorCampo(inputPassword, errorPassword);
   }
 
   return esValido;
 }
 
-// Procesamiento de inicio de sesión
-if (formLogin) {
-  formLogin.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    ocultarBanner(bannerError);
+const modalRol = document.getElementById('modal-rol');
+const modalTitulo = document.getElementById('modal-titulo');
+const modalSubtitulo = document.getElementById('modal-subtitulo');
+const btnModalContinuar = document.getElementById('btn-modal-continuar');
 
-    if (!validarFormulario()) {
-      return;
+// Usuarios y credenciales de prueba
+const usuariosPrueba = {
+  'paciente@test.com': {
+    password: '123456a',
+    rol: 'Paciente',
+    destino: 'Panel del paciente'
+  },
+  'psicologo@test.com': {
+    password: '123456a',
+    rol: 'Psicólogo',
+    destino: 'Panel del psicólogo'
+  },
+  'admin@test.com': {
+    password: '123456a',
+    rol: 'Administrador',
+    destino: 'Consola de administración'
+  }
+};
+
+formLogin.addEventListener('submit', function (e) {
+  e.preventDefault();
+  ocultarBannerError();
+
+  const esValido = validarFormulario();
+  if (!esValido) {
+    return;
+  }
+
+  const correo = inputCorreo.value.trim().toLowerCase();
+  const password = inputPassword.value.trim();
+  const usuario = usuariosPrueba[correo];
+
+  if (usuario && usuario.password === password) {
+    ocultarBannerError();
+    modalTitulo.textContent = `Sesión iniciada \u2014 ${usuario.rol}`;
+    modalSubtitulo.textContent = `Redirigiendo a: ${usuario.destino}`;
+    modalRol.classList.add('activo');
+  } else {
+    if (bannerError) {
+      bannerError.textContent = 'Correo o contraseña incorrectos';
+      bannerError.classList.add('visible');
     }
+  }
+});
 
-    const correo = inputCorreo.value.trim();
-    const password = inputPassword.value.trim();
-
-    if (btnLoginSubmit) {
-      btnLoginSubmit.disabled = true;
-      btnLoginSubmit.textContent = 'Iniciando sesión...';
-    }
-
-    try {
-      const resultado = await authService.login(correo, password);
-
-      if (btnLoginSubmit) {
-        btnLoginSubmit.disabled = false;
-        btnLoginSubmit.textContent = 'Iniciar sesión';
-      }
-
-      if (resultado.exito) {
-        ocultarBanner(bannerError);
-        if (modalTitulo) modalTitulo.textContent = `Sesión iniciada \u2014 ${resultado.rol}`;
-        if (modalSubtitulo) modalSubtitulo.textContent = `Redirigiendo a: ${resultado.destino}`;
-        abrirModal(modalRol);
-      } else {
-        mostrarBanner(bannerError, resultado.mensaje || 'Correo o contraseña incorrectos');
-      }
-    } catch (err) {
-      if (btnLoginSubmit) {
-        btnLoginSubmit.disabled = false;
-        btnLoginSubmit.textContent = 'Iniciar sesión';
-      }
-      mostrarBanner(bannerError, 'Error de conexión. Intenta de nuevo.');
-      console.error(err);
-    }
-  });
-}
-
-// Eventos de cierre de modal
+// Cerrar modal al pulsar continuar o fondo exterior
 if (btnModalContinuar) {
-  btnModalContinuar.addEventListener('click', () => {
-    cerrarModal(modalRol);
+  btnModalContinuar.addEventListener('click', function () {
+    modalRol.classList.remove('activo');
   });
 }
 
 if (modalRol) {
-  modalRol.addEventListener('click', (e) => {
+  modalRol.addEventListener('click', function (e) {
     if (e.target === modalRol) {
-      cerrarModal(modalRol);
+      modalRol.classList.remove('activo');
     }
   });
 }
+

@@ -1,0 +1,165 @@
+/* Tarjeta principal de recuperación de contraseña */
+.recuperar-card {
+  max-width: 440px;
+  margin: 40px auto;
+  background-color: #ffffff;
+  padding: 36px 32px;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  text-align: center;
+}
+
+.recuperar-card h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px;
+}
+
+.recuperar-subtitulo {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0 0 24px;
+}
+
+/* Banners de alerta */
+.alerta-error {
+  display: none;
+  width: 100%;
+  background-color: #feeef2;
+  color: #eb5771;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  margin-bottom: 18px;
+}
+
+.alerta-exito {
+  display: none;
+  width: 100%;
+  background-color: #ecf8f6;
+  color: #56c5c0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  margin-bottom: 18px;
+}
+
+/* Formulario y campos de texto */
+.form-recuperar {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 18px;
+  width: 100%;
+}
+
+label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+.form-group input {
+  width: 100%;
+  height: 46px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background-color: #ffffff;
+  font-size: 14px;
+  padding: 0 14px;
+  color: #1e293b;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input:focus {
+  border-color: #56c5c0;
+  box-shadow: 0 0 0 3px rgba(86, 197, 192, 0.15);
+}
+
+.form-group input.error {
+  border-color: #eb5771;
+  background-color: #fff8f8;
+}
+
+.form-group input.error:focus {
+  border-color: #eb5771;
+  box-shadow: 0 0 0 3px rgba(235, 87, 113, 0.15);
+}
+
+.form-group input::placeholder {
+  color: #94a3b8;
+}
+
+/* Botón principal Enviar código */
+.btn-recuperar-submit {
+  width: 100%;
+  background-color: #56c5c0;
+  color: white;
+  border: none;
+  padding: 13px 20px;
+  border-radius: 25px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 4px;
+  margin-bottom: 16px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-recuperar-submit:hover {
+  background-color: #48b4af;
+}
+
+/* Enlaces de acción */
+.recuperar-enlaces {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+.link-accion {
+  font-size: 13px;
+  color: #4db7b2;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.link-accion:hover {
+  color: #3aa39e;
+}
+
+/* Texto informativo */
+.info-texto {
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.5;
+  margin-top: 14px;
+}
+
+.info-texto p {
+  margin-bottom: 8px;
+}
+
+.info-texto p:last-child {
+  margin-bottom: 0;
+}
+
+.info-texto strong {
+  color: #56c5c0;
+  font-weight: 600;
+}
