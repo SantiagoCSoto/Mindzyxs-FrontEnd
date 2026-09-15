@@ -200,8 +200,9 @@
 }
 
 .backup-list-head {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto auto 32px;
+  gap: 8px;
   padding: 10px 12px;
   background: #f9f7ff;
   font-size: 11px;
@@ -210,11 +211,32 @@
 }
 
 .backup-row {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto auto 32px;
+  gap: 8px;
+  align-items: center;
   padding: 10px 12px;
   border-top: 1px solid #f0eaf6;
   font-size: 11px;
+}
+
+.btn-download {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid #56c5c0;
+  background: white;
+  color: #56c5c0;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.btn-download:hover {
+  background: #e8fff1;
 }
 
 .audit-console {

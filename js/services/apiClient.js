@@ -134,3 +134,35 @@ export async function getJson(endpoint, opciones = {}) {
     };
   }
 }
+
+/**
+ * Petición GET devolviendo un Blob (para descarga de archivos).
+ */
+export async function getBlob(endpoint, opciones = {}) {
+  const url = `${API_BASE_URL}${endpoint}`;
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        ...authHeaders(),
+        ...opciones.headers
+      }
+    });
+
+    if (!response.ok) {
+      const isJson = response.headers.get('content-type')?.includes('application/json');
+      const resData = isJson ? await response.json() : null;
+      return {
+        ok: false,
+        status: response.status,
+        error: resData?.error || 'Error al descargar archivo'
+      };
+    }
+
+    const blob = await response.blob();
+    return { ok: true, status: response.status, blob };
+  } catch (err) {
+    console.warn(`[apiClient] Backend no disponible en ${url}:`, err.message);
+    return { ok: false, isNetworkError: true, error: 'No fue posible conectar con el servidor backend.' };
+  }
+}

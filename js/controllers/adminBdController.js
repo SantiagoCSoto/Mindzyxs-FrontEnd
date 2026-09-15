@@ -34,6 +34,17 @@ const btnConfirmYes = document.getElementById('btn-confirm-yes');
 let restoreFile = null;
 let accionPendiente = null;
 
+function triggerDownload(blob, nombreArchivo) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = nombreArchivo || 'respaldo.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
 function addLog(msg) {
   const t = new Date().toLocaleString();
   auditLog.textContent += `\n[${t}] ${msg}`;
@@ -67,13 +78,17 @@ function initPermisos() {
 function renderRespaldos(respaldos = []) {
   backupRows.innerHTML = '';
   if (!respaldos.length) {
-    backupRows.innerHTML = '<div class="backup-row"><span>Sin respaldos registrados</span><span>—</span><span>—</span></div>';
+    backupRows.innerHTML = '<div class="backup-row"><span>Sin respaldos registrados</span><span>—</span><span>—</span><span>—</span></div>';
   } else {
     respaldos.forEach((r) => {
       const row = document.createElement('div');
       row.className = 'backup-row';
       const fecha = r.fechaHora ? new Date(r.fechaHora).toLocaleString() : '';
-      row.innerHTML = `<span>${r.nombreArchivo || ''}</span><span>${r.tamano || ''}</span><span>${fecha}</span>`;
+      row.innerHTML =
+        `<span>${r.nombreArchivo || ''}</span>` +
+        `<span>${r.tamano || ''}</span>` +
+        `<span>${fecha}</span>` +
+        `<span><button class="btn-download" data-id="${r.idRespaldo}" data-name="${r.nombreArchivo || ''}" title="Descargar respaldo">&#11015;</button></span>`;
       backupRows.appendChild(row);
     });
   }
@@ -98,6 +113,13 @@ async function crearRespaldo() {
     const r = resultado.respaldo || {};
     mostrarMsg(msgBackup, `${resultado.mensaje} — ${r.nombreArchivo || ''} (${r.tamano || ''})`, 'ok');
     addLog(`BACKUP creado por admin: ${r.nombreArchivo || 'archivo'} (${r.tamano || ''})`);
+
+    // Descargar el archivo al PC del administrador
+    if (r.idRespaldo) {
+      const dl = await adminService.descargarRespaldo(r.idRespaldo, r.nombreArchivo);
+      if (dl.exito) triggerDownload(dl.blob, dl.nombreArchivo);
+    }
+
     await verRespaldos(false);
   } else {
     mostrarMsg(msgBackup, resultado.mensaje || 'No fue posible crear el respaldo. Intente nuevamente', 'err');
@@ -147,6 +169,20 @@ async function ejecutarMantenimiento() {
 document.getElementById('btn-backup').addEventListener('click', crearRespaldo);
 document.getElementById('btn-view-backups').addEventListener('click', () => verRespaldos(true));
 document.getElementById('btn-maintenance').addEventListener('click', ejecutarMantenimiento);
+
+backupRows.addEventListener('click', async (e) => {
+  const btn = e.target.closest('.btn-download');
+  if (!btn) return;
+  const id = btn.dataset.id;
+  const name = btn.dataset.name;
+  const dl = await adminService.descargarRespaldo(id, name);
+  if (dl.exito) {
+    triggerDownload(dl.blob, dl.nombreArchivo);
+    addLog(`DOWNLOAD respaldo por admin: ${name || id}`);
+  } else {
+    mostrarMsg(msgBackup, dl.mensaje || 'No fue posible descargar el respaldo', 'err');
+  }
+});
 
 btnRestorePick.addEventListener('click', () => restoreInput.click());
 restoreInput.addEventListener('change', () => {

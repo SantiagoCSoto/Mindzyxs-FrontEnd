@@ -4,7 +4,7 @@
  * Los endpoints requieren token de sesión de un rol Administrador.
  */
 
-import { postJson, postFormData, getJson } from './apiClient.js';
+import { postJson, postFormData, getJson, getBlob } from './apiClient.js';
 
 export const adminService = {
   /**
@@ -83,5 +83,18 @@ export const adminService = {
       return { exito: false, mensaje: res.error || 'No fue posible ejecutar el mantenimiento. Intente nuevamente' };
     }
     return { exito: false, mensaje: 'No fue posible conectar con el servidor backend.' };
+  },
+
+  /**
+   * Descargar respaldo existente (GET /api/admin/backups/{id}/download)
+   * Devuelve { exito, blob } o { exito:false, mensaje }.
+   */
+  async descargarRespaldo(idRespaldo, nombreArchivo) {
+    const res = await getBlob(`/admin/backups/${idRespaldo}/download`);
+
+    if (res.ok && res.blob) {
+      return { exito: true, blob: res.blob, nombreArchivo };
+    }
+    return { exito: false, mensaje: res.error || 'No fue posible descargar el respaldo' };
   }
 };
