@@ -1,144 +1,275 @@
-/* Estilos para la página de Nueva Contraseña */
-
+/* Tarjeta principal de nueva contraseña */
 .nueva-contrasena-card {
-  width: 100%;
-  max-width: 450px;
-  margin: 60px auto;
-  padding: 40px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
-  animation: slideInUp 0.4s ease-out;
+  max-width: 440px;
+  margin: 40px auto;
+  background-color: #ffffff;
+  padding: 36px 32px;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  text-align: center;
 }
 
 .nueva-contrasena-card h1 {
-  font-size: 28px;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin-bottom: 8px;
-  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px;
 }
 
 .nueva-contrasena-subtitulo {
-  font-size: 14px;
-  color: #666;
-  text-align: center;
-  margin-bottom: 30px;
+  font-size: 13px;
+  color: #64748b;
+  margin: 0 0 24px;
 }
 
+/* Banner de alerta de éxito */
+.alerta-exito {
+  display: none;
+  width: 100%;
+  background-color: #ecf9f7;
+  color: #4db7b2;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  margin-bottom: 18px;
+}
+
+.alerta-exito.visible {
+  display: block;
+}
+
+/* Formulario */
 .form-nueva-contrasena {
   display: flex;
   flex-direction: column;
-  gap: 20px;
 }
 
+/* Wrapper para inputs de contraseña */
 .input-password-wrapper {
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .input-password-wrapper input {
   width: 100%;
-  padding-right: 40px;
+  height: 46px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background-color: #ffffff;
+  font-size: 14px;
+  padding: 0 14px 0 14px;
+  padding-right: 44px;
+  color: #1e293b;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
+.input-password-wrapper input:focus {
+  border-color: #56c5c0;
+  box-shadow: 0 0 0 3px rgba(86, 197, 192, 0.15);
+}
+
+.input-password-wrapper input.error {
+  border-color: #eb5771;
+  background-color: #fff8f8;
+}
+
+.input-password-wrapper input.error:focus {
+  border-color: #eb5771;
+  box-shadow: 0 0 0 3px rgba(235, 87, 113, 0.15);
+}
+
+/* Botón toggle de mostrar/ocultar contraseña */
 .btn-toggle-password {
   position: absolute;
   right: 12px;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 8px;
+  padding: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
-  color: #999;
-  transition: color 0.3s ease;
+  color: #9ca3af;
+  transition: color 0.2s ease;
 }
 
 .btn-toggle-password:hover {
-  color: #333;
+  color: #56c5c0;
 }
 
-.icono-ojo {
-  display: block;
-  line-height: 1;
+.icono-toggle {
+  width: 20px;
+  height: 20px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.btn-guardar {
+/* Botón principal */
+.btn-nueva-contrasena {
   width: 100%;
-  padding: 12px;
-  background-color: #007bff;
+  background-color: #56c5c0;
   color: white;
   border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  font-weight: 600;
+  padding: 13px 20px;
+  border-radius: 25px;
+  font-size: 15px;
+  font-weight: bold;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 10px;
+  margin-top: 4px;
+  margin-bottom: 16px;
+  transition: background-color 0.2s ease;
 }
 
-.btn-guardar:hover {
-  background-color: #0056b3;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+.btn-nueva-contrasena:hover {
+  background-color: #48b4af;
 }
 
-.btn-guardar:active {
-  transform: translateY(0);
-}
-
-.btn-guardar:disabled {
+.btn-nueva-contrasena:disabled {
   background-color: #ccc;
   cursor: not-allowed;
-  transform: none;
 }
 
+/* Enlaces de acción */
 .nueva-contrasena-enlaces {
   display: flex;
   justify-content: center;
-  gap: 20px;
-  margin-top: 20px;
+  width: 100%;
+  margin-bottom: 14px;
 }
 
-.nueva-contrasena-enlaces a {
-  text-decoration: none;
-  color: #007bff;
-  font-size: 14px;
-  transition: color 0.3s ease;
-}
-
-.nueva-contrasena-enlaces a:hover {
-  color: #0056b3;
+.nueva-contrasena-enlaces .link-cancelar {
+  font-size: 13px;
+  color: #64748b;
   text-decoration: underline;
+  transition: color 0.2s;
 }
 
+.nueva-contrasena-enlaces .link-cancelar:hover {
+  color: #334155;
+}
+
+/* Nota de pruebas */
 .nota-pruebas {
-  font-size: 12px;
-  color: #999;
+  font-size: 11.5px;
+  color: #64748b;
+  line-height: 1.5;
+  margin: 0;
   text-align: center;
-  margin-top: 20px;
-  padding-top: 15px;
-  border-top: 1px solid #eee;
-  line-height: 1.6;
 }
 
 .nota-pruebas strong {
-  color: #333;
   font-weight: 600;
+  color: #475569;
 }
 
-/* Animación de entrada */
-@keyframes slideInUp {
+/* Modal de éxito */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-overlay.activo {
+  display: flex;
+}
+
+.modal-contenido {
+  background-color: white;
+  border-radius: 20px;
+  padding: 36px 32px;
+  text-align: center;
+  max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+.modal-badge-exito {
+  width: 60px;
+  height: 60px;
+  background-color: #ecf9f7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.modal-badge-exito svg {
+  width: 32px;
+  height: 32px;
+  color: #56c5c0;
+  stroke: #56c5c0;
+}
+
+.modal-contenido h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 12px;
+}
+
+.modal-contenido p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0 0 20px;
+  line-height: 1.6;
+}
+
+.btn-modal-continuar {
+  display: inline-block;
+  background-color: #56c5c0;
+  color: white;
+  padding: 12px 28px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.btn-modal-continuar:hover {
+  background-color: #48b4af;
+}
+
+/* Animación modal */
+@keyframes modalSlideIn {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1);
+  }
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .nueva-contrasena-card {
+    max-width: 90%;
+    padding: 28px 20px;
+  }
+
+  .nueva-contrasena-card h1 {
+    font-size: 20px;
+  }
+
+  .modal-contenido {
+    max-width: 85%;
+    padding: 28px 20px;
   }
 }

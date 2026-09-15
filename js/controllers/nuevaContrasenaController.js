@@ -148,7 +148,6 @@ formNuevaContrasena.addEventListener('submit', async function (e) {
 function mostrarModalExito() {
   if (modalExito) {
     modalExito.classList.add('activo');
-    modalExito.style.display = 'flex';
   } else {
     bannerExito.textContent = 'Contraseña actualizada correctamente. Redirigiendo...';
     bannerExito.style.display = 'block';

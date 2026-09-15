@@ -34,7 +34,10 @@
           <div class="input-password-wrapper">
             <input type="password" id="contrasena" name="contrasena" placeholder="Mín. 6 caracteres" minlength="6" required>
             <button type="button" class="btn-toggle-password" data-target="contrasena" aria-label="Mostrar/ocultar contraseña">
-              <span class="icono-ojo">👁️</span>
+              <svg class="icono-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
             </button>
           </div>
           <span id="error-contrasena" class="error-mensaje"></span>
@@ -45,13 +48,16 @@
           <div class="input-password-wrapper">
             <input type="password" id="confirmar-contrasena" name="confirmar_contrasena" placeholder="Repite tu contraseña" minlength="6" required>
             <button type="button" class="btn-toggle-password" data-target="confirmar-contrasena" aria-label="Mostrar/ocultar contraseña">
-              <span class="icono-ojo">👁️</span>
+              <svg class="icono-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
             </button>
           </div>
           <span id="error-confirmar" class="error-mensaje"></span>
         </div>
 
-        <button type="submit" id="btn-guardar" class="btn-guardar">Guardar contraseña</button>
+        <button type="submit" id="btn-guardar" class="btn-nueva-contrasena">Guardar contraseña</button>
 
         <div class="nueva-contrasena-enlaces">
           <a href="login.html" id="link-cancelar" class="link-cancelar">Cancelar / Volver</a>
@@ -67,11 +73,13 @@
   <div id="modal-exito" class="modal-overlay">
     <div class="modal-contenido">
       <div class="modal-badge-exito">
-        <span>&check;</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
       </div>
       <h2>Contraseña actualizada</h2>
       <p>Tu contraseña ha sido restablecida correctamente. Ya puedes iniciar sesión.</p>
-      <a href="login.html" class="btn-iniciar-sesion">Iniciar sesión</a>
+      <a href="login.html" class="btn-modal-continuar">Iniciar sesión</a>
     </div>
   </div>
 
