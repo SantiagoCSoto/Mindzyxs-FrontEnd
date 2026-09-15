@@ -101,9 +101,9 @@ if (formLogin) {
         if (modalSubtitulo) modalSubtitulo.textContent = `Redirigiendo a: ${resultado.destino}`;
         abrirModal(modalRol);
 
-        // Redirigir a inicio.html después de 1.5 segundos
+        // Redirigir según el rol después de 1.5 segundos
         setTimeout(() => {
-          window.location.href = 'inicio.html';
+          window.location.href = destinoPorRol();
         }, 1500);
       } else {
         mostrarBanner(bannerError, resultado.mensaje || 'Correo o contraseña incorrectos');
@@ -119,11 +119,16 @@ if (formLogin) {
   });
 }
 
-// Cerrar modal y redirigir inmediatamente a inicio.html
+// Cerrar modal y redirigir según el rol
+function destinoPorRol() {
+  const rol = String(localStorage.getItem('rol') || '').toLowerCase();
+  return rol === 'administrador' || rol === 'admin' ? 'admin_bd.html' : 'inicio.html';
+}
+
 if (btnModalContinuar) {
   btnModalContinuar.addEventListener('click', () => {
     cerrarModal(modalRol);
-    window.location.href = 'inicio.html';
+    window.location.href = destinoPorRol();
   });
 }
 
@@ -131,7 +136,7 @@ if (modalRol) {
   modalRol.addEventListener('click', (e) => {
     if (e.target === modalRol) {
       cerrarModal(modalRol);
-      window.location.href = 'inicio.html';
+      window.location.href = destinoPorRol();
     }
   });
 }

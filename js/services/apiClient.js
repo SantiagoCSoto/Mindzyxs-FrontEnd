@@ -5,17 +5,24 @@
 
 export const API_BASE_URL = 'http://localhost:5015/api';
 
+function authHeaders() {
+  const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+  return token ? { 'Authorization': `Bearer ${token}` } : {};
+}
+
 /**
  * Petición POST enviando un objeto JSON
  */
-export async function postJson(endpoint, data) {
+export async function postJson(endpoint, data, opciones = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
   try {
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        ...authHeaders(),
+        ...opciones.headers
       },
       body: JSON.stringify(data)
     });
@@ -49,11 +56,15 @@ export async function postJson(endpoint, data) {
 /**
  * Petición POST enviando un FormData (multipart/form-data)
  */
-export async function postFormData(endpoint, formData) {
+export async function postFormData(endpoint, formData, opciones = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
   try {
     const response = await fetch(url, {
       method: 'POST',
+      headers: {
+        ...authHeaders(),
+        ...opciones.headers
+      },
       body: formData
     });
 
@@ -86,13 +97,15 @@ export async function postFormData(endpoint, formData) {
 /**
  * Petición GET esperando respuesta JSON
  */
-export async function getJson(endpoint) {
+export async function getJson(endpoint, opciones = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
   try {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        ...authHeaders(),
+        ...opciones.headers
       }
     });
 
