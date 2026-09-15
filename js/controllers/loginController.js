@@ -101,9 +101,26 @@ formLogin.addEventListener('submit', function (e) {
 
   if (usuario && usuario.password === password) {
     ocultarBannerError();
+    
+    // Guardar datos del usuario en sessionStorage
+    const datosUsuario = {
+      correo: correo,
+      nombre: correo.split('@')[0], // Usar la parte del email como nombre
+      nombres: correo.split('@')[0],
+      rol: usuario.rol,
+      tipo_usuario: usuario.rol
+    };
+    sessionStorage.setItem('usuario', JSON.stringify(datosUsuario));
+    sessionStorage.setItem('token', 'token_temporal_' + Date.now());
+    
     modalTitulo.textContent = `Sesión iniciada \u2014 ${usuario.rol}`;
     modalSubtitulo.textContent = `Redirigiendo a: ${usuario.destino}`;
     modalRol.classList.add('activo');
+    
+    // Redirigir a inicio.html después de 1.5 segundos
+    setTimeout(function () {
+      window.location.href = 'inicio.html';
+    }, 1500);
   } else {
     if (bannerError) {
       bannerError.textContent = 'Correo o contraseña incorrectos';
@@ -116,6 +133,8 @@ formLogin.addEventListener('submit', function (e) {
 if (btnModalContinuar) {
   btnModalContinuar.addEventListener('click', function () {
     modalRol.classList.remove('activo');
+    // Redirigir a inicio.html
+    window.location.href = 'inicio.html';
   });
 }
 
