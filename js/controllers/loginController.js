@@ -1,3 +1,6 @@
+import { authService } from '../services/authService.js';
+import { setToken } from '../services/apiClient.js';
+
 const formLogin = document.getElementById('form-login');
 const inputCorreo = document.getElementById('correo');
 const inputPassword = document.getElementById('password');
@@ -23,7 +26,6 @@ function ocultarBannerError() {
   }
 }
 
-// Limpieza de errores en tiempo real al escribir
 inputCorreo.addEventListener('input', function () {
   limpiarErrorCampo(inputCorreo, errorCorreo);
   ocultarBannerError();
@@ -34,13 +36,11 @@ inputPassword.addEventListener('input', function () {
   ocultarBannerError();
 });
 
-// Validación de campos obligatorios y formato de correo
 function validarFormulario() {
   let esValido = true;
   const correo = inputCorreo.value.trim();
   const password = inputPassword.value.trim();
 
-  // Validación de correo
   if (!correo) {
     mostrarErrorCampo(inputCorreo, errorCorreo, 'Este campo es obligatorio');
     esValido = false;
@@ -51,7 +51,6 @@ function validarFormulario() {
     limpiarErrorCampo(inputCorreo, errorCorreo);
   }
 
-  // Validación de contraseña
   if (!password) {
     mostrarErrorCampo(inputPassword, errorPassword, 'Este campo es obligatorio');
     esValido = false;
@@ -67,26 +66,7 @@ const modalTitulo = document.getElementById('modal-titulo');
 const modalSubtitulo = document.getElementById('modal-subtitulo');
 const btnModalContinuar = document.getElementById('btn-modal-continuar');
 
-// Usuarios y credenciales de prueba
-const usuariosPrueba = {
-  'paciente@test.com': {
-    password: '123456a',
-    rol: 'Paciente',
-    destino: 'Panel del paciente'
-  },
-  'psicologo@test.com': {
-    password: '123456a',
-    rol: 'Psicólogo',
-    destino: 'Panel del psicólogo'
-  },
-  'admin@test.com': {
-    password: '123456a',
-    rol: 'Administrador',
-    destino: 'Consola de administración'
-  }
-};
-
-formLogin.addEventListener('submit', function (e) {
+formLogin.addEventListener('submit', async function (e) {
   e.preventDefault();
   ocultarBannerError();
 
@@ -95,24 +75,50 @@ formLogin.addEventListener('submit', function (e) {
     return;
   }
 
-  const correo = inputCorreo.value.trim().toLowerCase();
+  const correo = inputCorreo.value.trim();
   const password = inputPassword.value.trim();
-  const usuario = usuariosPrueba[correo];
 
-  if (usuario && usuario.password === password) {
-    ocultarBannerError();
-    modalTitulo.textContent = `Sesión iniciada \u2014 ${usuario.rol}`;
-    modalSubtitulo.textContent = `Redirigiendo a: ${usuario.destino}`;
-    modalRol.classList.add('activo');
-  } else {
+  try {
+    const resultado = await authService.login(correo, password);
+
+    if (resultado.exito) {
+      setToken(resultado.token);
+      localStorage.setItem('usuario', JSON.stringify(resultado.usuario));
+
+      ocultarBannerError();
+      modalTitulo.textContent = `Sesión iniciada \u2014 ${resultado.usuario.rol}`;
+      modalSubtitulo.textContent = `Redirigiendo a: Panel del ${resultado.usuario.panel}`;
+      modalRol.classList.add('activo');
+
+      const panelRutas = {
+        Paciente: '../views/paciente.html',
+        Psicologo: '../views/psicologo.html',
+        Administrador: '../views/admin.html'
+      };
+
+      btnModalContinuar.onclick = function () {
+        const ruta = panelRutas[resultado.usuario.panel];
+        if (ruta) {
+          window.location.href = ruta;
+        } else {
+          modalRol.classList.remove('activo');
+        }
+      };
+    } else {
+      if (bannerError) {
+        bannerError.textContent = resultado.mensaje;
+        bannerError.classList.add('visible');
+      }
+    }
+  } catch (error) {
+    console.error('[login] Error:', error);
     if (bannerError) {
-      bannerError.textContent = 'Correo o contraseña incorrectos';
+      bannerError.textContent = 'Error de conexión con el servidor';
       bannerError.classList.add('visible');
     }
   }
 });
 
-// Cerrar modal al pulsar continuar o fondo exterior
 if (btnModalContinuar) {
   btnModalContinuar.addEventListener('click', function () {
     modalRol.classList.remove('activo');
@@ -126,4 +132,3 @@ if (modalRol) {
     }
   });
 }
-

@@ -14,7 +14,9 @@ const modalExito = document.getElementById('modal-exito');
 const btnGuardar = document.getElementById('btn-guardar');
 const toggleButtons = document.querySelectorAll('.btn-toggle-password');
 
-// Funciones de validación
+const correoRecuperacion = sessionStorage.getItem('correoRecuperacion');
+const codigoRecuperacion = sessionStorage.getItem('codigoRecuperacion');
+
 function validarContrasena(contrasena) {
   if (!contrasena || contrasena.trim() === '') {
     return { valido: false, mensaje: 'La contraseña es obligatoria' };
@@ -60,7 +62,6 @@ function ocultarBanners() {
   }
 }
 
-// Mostrar/ocultar contraseña
 toggleButtons.forEach(btn => {
   btn.addEventListener('click', function (e) {
     e.preventDefault();
@@ -77,7 +78,6 @@ toggleButtons.forEach(btn => {
   });
 });
 
-// Limpiar errores en tiempo real
 inputContrasena.addEventListener('input', function () {
   limpiarErrorCampo(inputContrasena, errorContrasena);
   ocultarBanners();
@@ -88,7 +88,6 @@ inputConfirmar.addEventListener('input', function () {
   ocultarBanners();
 });
 
-// Validar coincidencia en tiempo real
 inputConfirmar.addEventListener('blur', function () {
   if (inputContrasena.value && inputConfirmar.value) {
     const validacion = validarConfirmacion(inputContrasena.value, inputConfirmar.value);
@@ -98,15 +97,19 @@ inputConfirmar.addEventListener('blur', function () {
   }
 });
 
-// Envío del formulario
 formNuevaContrasena.addEventListener('submit', async function (e) {
   e.preventDefault();
   ocultarBanners();
 
+  if (!correoRecuperacion || !codigoRecuperacion) {
+    bannerError.textContent = 'Sesión de recuperación expirada. Vuelve a iniciar el proceso.';
+    bannerError.style.display = 'block';
+    return;
+  }
+
   const contrasena = inputContrasena.value;
   const confirmar = inputConfirmar.value;
 
-  // Validar contraseña
   const validContra = validarContrasena(contrasena);
   if (!validContra.valido) {
     mostrarErrorCampo(inputContrasena, errorContrasena, validContra.mensaje);
@@ -115,7 +118,6 @@ formNuevaContrasena.addEventListener('submit', async function (e) {
     limpiarErrorCampo(inputContrasena, errorContrasena);
   }
 
-  // Validar confirmación
   const validConfirm = validarConfirmacion(contrasena, confirmar);
   if (!validConfirm.valido) {
     mostrarErrorCampo(inputConfirmar, errorConfirmar, validConfirm.mensaje);
@@ -124,21 +126,25 @@ formNuevaContrasena.addEventListener('submit', async function (e) {
     limpiarErrorCampo(inputConfirmar, errorConfirmar);
   }
 
-  // Desactivar botón durante el envío
   btnGuardar.disabled = true;
   btnGuardar.textContent = 'Guardando...';
 
   try {
-    // Simular llamada a API
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    const { authService } = await import('../services/authService.js');
+    const resultado = await authService.forgotReset(correoRecuperacion, codigoRecuperacion, contrasena);
 
-    // Simular respuesta exitosa
-    mostrarModalExito();
-    formNuevaContrasena.reset();
+    if (resultado.exito) {
+      sessionStorage.removeItem('correoRecuperacion');
+      sessionStorage.removeItem('codigoRecuperacion');
+      mostrarModalExito();
+    } else {
+      bannerError.textContent = resultado.mensaje;
+      bannerError.style.display = 'block';
+    }
   } catch (error) {
     bannerError.textContent = 'Ocurrió un error al guardar la contraseña. Intenta de nuevo.';
     bannerError.style.display = 'block';
-    console.error('Error:', error);
+    console.error('[nueva-contrasena] Error:', error);
   } finally {
     btnGuardar.disabled = false;
     btnGuardar.textContent = 'Guardar contraseña';

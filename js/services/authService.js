@@ -1,103 +1,162 @@
 /**
  * Servicio de Autenticación
  * Encargado de las operaciones de negocio y peticiones de autenticación.
- * Actualmente opera con datos simulados y está listo para integrarse con el Backend.
+ * Se comunica con el Backend a través de apiClient.
  */
 
-// Base de datos simulada para pruebas
-const USUARIOS_PRUEBA = {
-  'paciente@test.com': {
-    password: '123456a',
-    rol: 'Paciente',
-    destino: 'Panel del paciente'
-  },
-  'psicologo@test.com': {
-    password: '123456a',
-    rol: 'Psicólogo',
-    destino: 'Panel del psicólogo'
-  },
-  'admin@test.com': {
-    password: '123456a',
-    rol: 'Administrador',
-    destino: 'Consola de administración'
-  }
-};
+import { request } from './apiClient.js';
 
 export const authService = {
-  /**
-   * Iniciar sesión de usuario
-   */
   async login(correo, password) {
-    // Simulación de latencia de red
-    await new Promise((resolve) => setTimeout(resolve, 150));
+    const { status, data } = await request('/account/login', {
+      method: 'POST',
+      body: JSON.stringify({ correo, password })
+    });
 
-    const emailNormalizado = correo ? correo.trim().toLowerCase() : '';
-    const pass = password ? password.trim() : '';
-    const usuario = USUARIOS_PRUEBA[emailNormalizado];
-
-    if (usuario && usuario.password === pass) {
+    if (status === 200) {
       return {
         exito: true,
-        rol: usuario.rol,
-        destino: usuario.destino
+        token: data.token,
+        expiraEn: data.expiraEn,
+        usuario: data.usuario
       };
     }
 
     return {
       exito: false,
-      mensaje: 'Correo o contraseña incorrectos'
+      mensaje: data?.error || 'Error al iniciar sesión'
     };
   },
 
-  /**
-   * Registrar nuevo usuario
-   */
-  async register(datosUsuario) {
-    await new Promise((resolve) => setTimeout(resolve, 150));
-    console.log('[authService] Registrando usuario:', datosUsuario);
-    return {
-      exito: true,
-      mensaje: 'Registro exitoso'
-    };
-  },
+  async register(formData) {
+    const { status, data } = await request('/account/register', {
+      method: 'POST',
+      body: formData
+    });
 
-  /**
-   * Verificar código de 6 dígitos
-   */
-  async verifyCode(codigo) {
-    await new Promise((resolve) => setTimeout(resolve, 150));
-    const cod = codigo ? codigo.trim() : '';
-
-    if (cod === '000000') {
-      return {
-        exito: false,
-        expirado: true,
-        mensaje: 'El código expiró. Reenvía el código'
-      };
+    if (status === 201 || status === 200) {
+      return { exito: true, mensaje: data?.mensaje || 'Registro exitoso' };
     }
 
-    if (cod === '123456') {
+    return {
+      exito: false,
+      mensaje: data?.error || 'Error al registrar usuario'
+    };
+  },
+
+  async verifyCode(correo, codigo) {
+    const { status, data } = await request('/account/verify', {
+      method: 'POST',
+      body: JSON.stringify({ correo, codigo })
+    });
+
+    if (status === 200) {
       return {
         exito: true,
-        mensaje: 'Código verificado exitosamente'
+        estado: data?.estado,
+        mensaje: data?.mensaje || 'Código verificado'
       };
     }
 
     return {
       exito: false,
-      expirado: false,
-      mensaje: 'Código incorrecto. Inténtalo de nuevo.'
+      expirado: status === 410,
+      mensaje: data?.error || 'Error al verificar código'
     };
   },
 
-  /**
-   * Reenviar código de verificación
-   */
-  async resendCode(correo = '') {
-    await new Promise((resolve) => setTimeout(resolve, 150));
+  async resendCode(correo) {
+    const { status, data } = await request('/account/resend', {
+      method: 'POST',
+      body: JSON.stringify({ correo })
+    });
+
+    if (status === 200) {
+      return { exito: true, mensaje: data?.mensaje || 'Código reenviado' };
+    }
+
     return {
-      exito: true,
-      mensaje: 'Se ha reenviado un nuevo código a tu correo.'
+      exito: false,
+      mensaje: data?.error || 'Error al reenviar código'
+    };
+  },
+
+  async forgot(correo) {
+    const { status, data } = await request('/account/forgot', {
+      method: 'POST',
+      body: JSON.stringify({ correo })
+    });
+
+    if (status === 200) {
+      return { exito: true, mensaje: data?.mensaje || 'Código enviado' };
+    }
+
+    return {
+      exito: false,
+      mensaje: data?.error || 'Error al enviar código'
+    };
+  },
+
+  async forgotVerify(correo, codigo) {
+    const { status, data } = await request('/account/forgot/verify', {
+      method: 'POST',
+      body: JSON.stringify({ correo, codigo })
+    });
+
+    if (status === 200) {
+      return { exito: true, mensaje: data?.mensaje || 'Código verificado' };
+    }
+
+    return {
+      exito: false,
+      expirado: status === 410,
+      mensaje: data?.error || 'Error al verificar código'
+    };
+  },
+
+  async forgotReset(correo, codigo, password) {
+    const { status, data } = await request('/account/forgot/reset', {
+      method: 'POST',
+      body: JSON.stringify({ correo, codigo, password })
+    });
+
+    if (status === 200) {
+      return { exito: true, mensaje: data?.mensaje || 'Contraseña actualizada' };
+    }
+
+    return {
+      exito: false,
+      expirado: status === 410,
+      mensaje: data?.error || 'Error al restablecer contraseña'
+    };
+  },
+
+  async forgotResend(correo) {
+    const { status, data } = await request('/account/forgot/resend', {
+      method: 'POST',
+      body: JSON.stringify({ correo })
+    });
+
+    if (status === 200) {
+      return { exito: true, mensaje: data?.mensaje || 'Código reenviado' };
+    }
+
+    return {
+      exito: false,
+      mensaje: data?.error || 'Error al reenviar código'
+    };
+  },
+
+  async getProfile() {
+    const { status, data } = await request('/account/me');
+
+    if (status === 200) {
+      return { exito: true, usuario: data };
+    }
+
+    return {
+      exito: false,
+      mensaje: data?.error || 'Sesión no válida'
     };
   }
 };

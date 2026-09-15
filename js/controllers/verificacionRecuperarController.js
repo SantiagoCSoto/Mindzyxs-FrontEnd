@@ -8,6 +8,13 @@ const btnModalContinuar = document.getElementById('btn-modal-continuar');
 
 let temporizadorExito = null;
 
+const correoRecuperacion = sessionStorage.getItem('correoRecuperacion');
+
+const spanCorreoEnviado = document.getElementById('correo-enviado');
+if (spanCorreoEnviado && correoRecuperacion) {
+  spanCorreoEnviado.textContent = correoRecuperacion;
+}
+
 function mostrarError(mensaje) {
   inputCodigo.classList.add('error');
   bannerError.textContent = mensaje;
@@ -26,8 +33,7 @@ inputCodigo.addEventListener('input', function () {
   if (bannerExito) bannerExito.style.display = 'none';
 });
 
-// Códigos de prueba para recuperación de contraseña
-formVerificacionRecuperar.addEventListener('submit', function (e) {
+formVerificacionRecuperar.addEventListener('submit', async function (e) {
   e.preventDefault();
   const codigo = inputCodigo.value.trim();
 
@@ -36,18 +42,26 @@ formVerificacionRecuperar.addEventListener('submit', function (e) {
     return;
   }
 
-  if (codigo === '000000') {
-    mostrarError('El código expiró. Reenvía el código');
+  if (!correoRecuperacion) {
+    mostrarError('No se encontró el correo. Vuelve a intentar desde el inicio.');
     return;
   }
 
-  if (codigo === '123456') {
-    ocultarError();
-    modalExito.classList.add('activo');
-    return;
-  }
+  try {
+    const { authService } = await import('../services/authService.js');
+    const resultado = await authService.forgotVerify(correoRecuperacion, codigo);
 
-  mostrarError('Código incorrecto. Inténtalo de nuevo.');
+    if (resultado.exito) {
+      ocultarError();
+      sessionStorage.setItem('codigoRecuperacion', codigo);
+      modalExito.classList.add('activo');
+    } else {
+      mostrarError(resultado.mensaje);
+    }
+  } catch (error) {
+    console.error('[verificacion-recuperar] Error:', error);
+    mostrarError('Error de conexión con el servidor');
+  }
 });
 
 modalExito.addEventListener('click', function (e) {
@@ -59,23 +73,37 @@ modalExito.addEventListener('click', function (e) {
 if (btnModalContinuar) {
   btnModalContinuar.addEventListener('click', function () {
     modalExito.classList.remove('activo');
-    // Redirigir a página de nueva contraseña
     window.location.href = 'nueva_contrasena.html';
   });
 }
 
 if (btnReenviar) {
-  btnReenviar.addEventListener('click', function () {
+  btnReenviar.addEventListener('click', async function () {
+    if (!correoRecuperacion) {
+      mostrarError('No se encontró el correo.');
+      return;
+    }
+
     ocultarError();
     inputCodigo.value = '';
-    inputCodigo.focus();
 
-    if (bannerExito) {
-      bannerExito.style.display = 'block';
-      clearTimeout(temporizadorExito);
-      temporizadorExito = setTimeout(() => {
-        bannerExito.style.display = 'none';
-      }, 4000);
+    try {
+      const { authService } = await import('../services/authService.js');
+      const resultado = await authService.forgotResend(correoRecuperacion);
+
+      if (bannerExito) {
+        bannerExito.textContent = resultado.mensaje || 'Se ha reenviado un nuevo código a tu correo.';
+        bannerExito.style.display = 'block';
+        clearTimeout(temporizadorExito);
+        temporizadorExito = setTimeout(() => {
+          bannerExito.style.display = 'none';
+        }, 4000);
+      }
+    } catch (error) {
+      console.error('[verificacion-recuperar] Error al reenviar:', error);
+      mostrarError('Error al reenviar el código');
     }
+
+    inputCodigo.focus();
   });
 }

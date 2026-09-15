@@ -21,9 +21,10 @@ function ocultarError() {
   }
 }
 
-function mostrarExito() {
+function mostrarExito(mensaje) {
   ocultarError();
   if (bannerExito) {
+    bannerExito.textContent = mensaje || 'Se ha enviado un código a tu correo.';
     bannerExito.style.display = 'block';
     setTimeout(() => {
       bannerExito.style.display = 'none';
@@ -31,48 +32,49 @@ function mostrarExito() {
   }
 }
 
-// Limpieza de errores en tiempo real al escribir
 if (inputEmail) {
   inputEmail.addEventListener('input', function () {
     ocultarError();
   });
 }
 
-// Usuarios de prueba que pueden recuperar contraseña
-const usuariosValidos = ['paciente@test.com', 'psicologo@test.com', 'admin@test.com'];
-
-// Validación y envío de código
 if (formRecuperar) {
-  formRecuperar.addEventListener('submit', function (e) {
+  formRecuperar.addEventListener('submit', async function (e) {
     e.preventDefault();
-    
+
     const email = inputEmail.value.trim().toLowerCase();
 
-    // Validación: campo vacío
     if (!email) {
       mostrarError('Este campo es obligatorio');
       return;
     }
 
-    // Validación: formato de correo (debe incluir @)
     if (!email.includes('@')) {
       mostrarError('Ingresa un correo válido');
       return;
     }
 
-    // Validación: usuario existe (simula búsqueda en BD)
-    if (!usuariosValidos.includes(email)) {
-      mostrarError('Mensaje genérico de seguridad');
-      return;
-    }
+    const btnSubmit = formRecuperar.querySelector('button[type="submit"]');
+    btnSubmit.disabled = true;
+    btnSubmit.textContent = 'Enviando...';
 
-    // Si todo es válido, mostrar éxito y redirigir
-    mostrarExito();
-    inputEmail.value = '';
-    
-    // Redirigir a verificación después de 2 segundos
-    setTimeout(() => {
-      window.location.href = 'verificacion_recuperar.html';
-    }, 2000);
+    try {
+      const { authService } = await import('../services/authService.js');
+      const resultado = await authService.forgot(email);
+
+      mostrarExito(resultado.mensaje);
+      sessionStorage.setItem('correoRecuperacion', email);
+      inputEmail.value = '';
+
+      setTimeout(() => {
+        window.location.href = 'verificacion_recuperar.html';
+      }, 2000);
+    } catch (error) {
+      console.error('[recuperar] Error:', error);
+      mostrarError('Error de conexión con el servidor');
+    } finally {
+      btnSubmit.disabled = false;
+      btnSubmit.textContent = 'Enviar código';
+    }
   });
 }
