@@ -37,13 +37,15 @@
     <section class="registro-card">
       <h1>Registrarse</h1>
 
+      <div id="banner-error-registro" class="alerta-error"></div>
+
       <form action="#" method="POST" enctype="multipart/form-data" class="form-registro">
         <div class="form-group">
           <label for="tipo-usuario">Tipo de usuario *</label>
           <select id="tipo-usuario" name="tipo_usuario" required>
             <option value="" disabled selected>Selecciona una opción</option>
-            <option value="paciente">Paciente</option>
-            <option value="psicologo">Psicólogo</option>
+            <option value="Paciente">Paciente</option>
+            <option value="Psicologo">Psicólogo</option>
           </select>
         </div>
 
@@ -71,42 +73,42 @@
 
         <div class="form-row">
           <div class="form-group">
-            <label for="nombres">Nombres</label>
+            <label for="nombres">Nombres *</label>
             <input type="text" id="nombres" name="nombres" placeholder="Ej. Sofía" required>
           </div>
 
           <div class="form-group">
-            <label for="apellidos">Apellidos</label>
+            <label for="apellidos">Apellidos *</label>
             <input type="text" id="apellidos" name="apellidos" placeholder="Ej. Martínez" required>
           </div>
         </div>
 
         <div class="form-row">
           <div class="form-group">
-            <label for="edad">Edad</label>
-            <input type="number" id="edad" name="edad" placeholder="Ej. 24" min="1" max="120">
+            <label for="edad">Edad *</label>
+            <input type="number" id="edad" name="edad" placeholder="Ej. 24" min="1" max="120" required>
           </div>
 
           <div class="form-group">
-            <label for="genero">Género</label>
-            <select id="genero" name="genero">
+            <label for="genero">Género *</label>
+            <select id="genero" name="genero" required>
               <option value="" disabled selected>Selecciona</option>
-              <option value="femenino">Femenino</option>
-              <option value="masculino">Masculino</option>
-              <option value="otro">Otro</option>
-              <option value="no-especifica">Prefiero no decir</option>
+              <option value="1">Masculino</option>
+              <option value="2">Femenino</option>
+              <option value="3">Otro</option>
+              <option value="4">Prefiero no decir</option>
             </select>
           </div>
         </div>
 
         <div class="form-group">
-          <label for="correo">Correo</label>
+          <label for="correo">Correo *</label>
           <input type="email" id="correo" name="correo" placeholder="tu@correo.com" required>
         </div>
 
         <div class="form-group">
-          <label for="contrasena">Contraseña</label>
-          <input type="password" id="contrasena" name="contrasena" placeholder="Mín. 6 caracteres" minlength="6"
+          <label for="contrasena">Contraseña *</label>
+          <input type="password" id="contrasena" name="contrasena" placeholder="Mín. 6 caracteres (letras y números)" minlength="6"
             required>
         </div>
 
