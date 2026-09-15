@@ -1,0 +1,224 @@
+/* Estilos para la página de inicio */
+
+/* Contenedor principal */
+.inicio-card {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 40px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* Sección de bienvenida */
+.bienvenida-contenedor {
+  text-align: center;
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.bienvenida-contenedor h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px;
+}
+
+.subtitulo {
+  font-size: 15px;
+  color: #64748b;
+  margin: 0 0 30px;
+}
+
+/* Información del usuario */
+.usuario-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.avatar-placeholder {
+  width: 60px;
+  height: 60px;
+  background-color: #ecf9f7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #56c5c0;
+}
+
+.avatar-placeholder svg {
+  width: 32px;
+  height: 32px;
+  stroke: #56c5c0;
+}
+
+.info-usuario {
+  text-align: left;
+}
+
+.saludo {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+.rol-usuario {
+  font-size: 13px;
+  color: #64748b;
+  margin: 4px 0 0;
+}
+
+/* Contenido principal */
+.contenido-principal {
+  margin-bottom: 40px;
+}
+
+.contenido-principal h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 24px;
+}
+
+/* Grid de opciones */
+.grid-opciones {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.opcion-card {
+  padding: 24px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.opcion-card:hover {
+  background-color: #ecf9f7;
+  border-color: #56c5c0;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(86, 197, 192, 0.1);
+}
+
+.opcion-icono {
+  width: 56px;
+  height: 56px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  color: #56c5c0;
+  transition: background-color 0.3s ease;
+}
+
+.opcion-card:hover .opcion-icono {
+  background-color: #ecf9f7;
+}
+
+.opcion-icono svg {
+  width: 28px;
+  height: 28px;
+  stroke: #56c5c0;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.opcion-card h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 8px;
+}
+
+.opcion-card p {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Sección de información del sprint */
+.info-sprint {
+  padding: 20px;
+  background-color: #f0fdf4;
+  border-left: 4px solid #56c5c0;
+  border-radius: 8px;
+}
+
+.info-sprint h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px;
+}
+
+.info-sprint p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Botón logout en header */
+.btn-logout {
+  background-color: #eb5771;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-logout:hover {
+  background-color: #d63a54;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .inicio-card {
+    margin: 20px auto;
+    padding: 24px;
+  }
+
+  .bienvenida-contenedor h1 {
+    font-size: 24px;
+  }
+
+  .usuario-info {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .info-usuario {
+    text-align: center;
+  }
+
+  .grid-opciones {
+    grid-template-columns: 1fr;
+  }
+
+  .header-auth-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn-logout {
+    width: 100%;
+  }
+}
