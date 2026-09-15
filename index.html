@@ -3,14 +3,19 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=views/login.html">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mindzyxs</title>
+  <title>Mindzyxs - Cargando...</title>
 </head>
 
 <body>
   <script>
-    window.location.href = "views/inicio.html";
+    // Si hay sesión activa, ir a inicio; sino, ir a login
+    const usuarioData = sessionStorage.getItem('usuario');
+    if (usuarioData) {
+      window.location.href = "views/inicio.html";
+    } else {
+      window.location.href = "views/login.html";
+    }
   </script>
 </body>
 
