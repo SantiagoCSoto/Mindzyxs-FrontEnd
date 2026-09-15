@@ -88,9 +88,11 @@ if (formularioRegistro) {
 
     await authService.register(datos);
 
-    alert(`¡Registro exitoso! Bienvenido a Mindzyxs, ${nombres}.`);
-    formularioRegistro.reset();
-    actualizarVisibilidadCredenciales();
+    if (datos.correo) {
+      sessionStorage.setItem('correoRegistro', datos.correo);
+    }
+
+    window.location.href = 'verificacion.html';
   });
 }
 

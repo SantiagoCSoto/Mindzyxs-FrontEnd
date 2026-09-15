@@ -15,6 +15,13 @@ const btnReenviar = document.getElementById('btn-reenviar');
 
 let temporizadorExito = null;
 
+// Mostrar dinámicamente el correo registrado si proviene del formulario
+const correoRegistrado = sessionStorage.getItem('correoRegistro');
+const chipCorreoStrong = document.querySelector('.chip-correo strong');
+if (correoRegistrado && chipCorreoStrong) {
+  chipCorreoStrong.textContent = correoRegistrado;
+}
+
 if (inputCodigo) {
   inputCodigo.addEventListener('input', function () {
     this.value = this.value.replace(/[^0-9]/g, '');
