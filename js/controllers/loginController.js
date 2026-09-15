@@ -16,7 +16,15 @@ const bannerError = document.getElementById('banner-error-login');
 const modalRol = document.getElementById('modal-rol');
 const modalTitulo = document.getElementById('modal-titulo');
 const modalSubtitulo = document.getElementById('modal-subtitulo');
+const btnLoginSubmit = document.getElementById('btn-login');
 const btnModalContinuar = document.getElementById('btn-modal-continuar');
+
+// Precargar correo si viene de registro o verificación
+const urlParams = new URLSearchParams(window.location.search);
+const correoInicial = urlParams.get('correo') || sessionStorage.getItem('correoRegistro');
+if (correoInicial && inputCorreo && !inputCorreo.value) {
+  inputCorreo.value = correoInicial;
+}
 
 // Limpieza de errores en tiempo real al escribir
 if (inputCorreo) {
@@ -74,15 +82,34 @@ if (formLogin) {
     const correo = inputCorreo.value.trim();
     const password = inputPassword.value.trim();
 
-    const resultado = await authService.login(correo, password);
+    if (btnLoginSubmit) {
+      btnLoginSubmit.disabled = true;
+      btnLoginSubmit.textContent = 'Iniciando sesión...';
+    }
 
-    if (resultado.exito) {
-      ocultarBanner(bannerError);
-      if (modalTitulo) modalTitulo.textContent = `Sesión iniciada \u2014 ${resultado.rol}`;
-      if (modalSubtitulo) modalSubtitulo.textContent = `Redirigiendo a: ${resultado.destino}`;
-      abrirModal(modalRol);
-    } else {
-      mostrarBanner(bannerError, resultado.mensaje);
+    try {
+      const resultado = await authService.login(correo, password);
+
+      if (btnLoginSubmit) {
+        btnLoginSubmit.disabled = false;
+        btnLoginSubmit.textContent = 'Iniciar sesión';
+      }
+
+      if (resultado.exito) {
+        ocultarBanner(bannerError);
+        if (modalTitulo) modalTitulo.textContent = `Sesión iniciada \u2014 ${resultado.rol}`;
+        if (modalSubtitulo) modalSubtitulo.textContent = `Redirigiendo a: ${resultado.destino}`;
+        abrirModal(modalRol);
+      } else {
+        mostrarBanner(bannerError, resultado.mensaje || 'Correo o contraseña incorrectos');
+      }
+    } catch (err) {
+      if (btnLoginSubmit) {
+        btnLoginSubmit.disabled = false;
+        btnLoginSubmit.textContent = 'Iniciar sesión';
+      }
+      mostrarBanner(bannerError, 'Error de conexión. Intenta de nuevo.');
+      console.error(err);
     }
   });
 }

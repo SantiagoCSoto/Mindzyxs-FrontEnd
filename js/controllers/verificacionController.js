@@ -11,14 +11,17 @@ const inputCodigo = document.getElementById('codigo-verificacion');
 const bannerError = document.getElementById('banner-error');
 const bannerExito = document.getElementById('banner-exito');
 const modalExito = document.getElementById('modal-exito');
+const btnVerificar = document.getElementById('btn-verificar');
 const btnReenviar = document.getElementById('btn-reenviar');
 
 let temporizadorExito = null;
 
-// Mostrar dinámicamente el correo registrado si proviene del formulario
-const correoRegistrado = sessionStorage.getItem('correoRegistro');
+// Obtener correo desde parámetros URL o sessionStorage
+const urlParams = new URLSearchParams(window.location.search);
+const correoRegistrado = (urlParams.get('correo') || sessionStorage.getItem('correoRegistro') || '').trim();
 const chipCorreoStrong = document.querySelector('.chip-correo strong');
-if (correoRegistrado && chipCorreoStrong) {
+
+if (chipCorreoStrong && correoRegistrado) {
   chipCorreoStrong.textContent = correoRegistrado;
 }
 
@@ -44,15 +47,38 @@ if (formVerificacion) {
       return;
     }
 
-    const resultado = await authService.verifyCode(codigo);
+    if (btnVerificar) {
+      btnVerificar.disabled = true;
+      btnVerificar.textContent = 'Verificando...';
+    }
+
+    const resultado = await authService.verifyCode(correoRegistrado, codigo);
+
+    if (btnVerificar) {
+      btnVerificar.disabled = false;
+      btnVerificar.textContent = 'Verificar';
+    }
 
     if (resultado.exito) {
       limpiarErrorInput(inputCodigo);
       ocultarBanner(bannerError);
+
+      // Personalizar mensaje de éxito según el rol/estado del backend
+      const tituloModal = modalExito?.querySelector('h2');
+      const textoModal = modalExito?.querySelector('p');
+
+      if (resultado.estado === 'PendienteAprobacion') {
+        if (tituloModal) tituloModal.textContent = 'Registro exitoso';
+        if (textoModal) textoModal.textContent = resultado.mensaje || 'Tu cuenta está pendiente de aprobación por el administrador. Te notificaremos cuando sea habilitada.';
+      } else {
+        if (tituloModal) tituloModal.textContent = resultado.mensaje || 'Registro exitoso. Ya puedes iniciar sesión';
+        if (textoModal) textoModal.textContent = 'Tu cuenta fue activada correctamente. Ahora puedes entrar al sistema.';
+      }
+
       abrirModal(modalExito);
     } else {
       marcarErrorInput(inputCodigo);
-      mostrarBanner(bannerError, resultado.mensaje);
+      mostrarBanner(bannerError, resultado.mensaje || 'Código incorrecto. Verifica e intenta nuevamente');
       ocultarBanner(bannerExito);
     }
   });
@@ -75,12 +101,18 @@ if (btnReenviar) {
     inputCodigo.value = '';
     inputCodigo.focus();
 
-    const resultado = await authService.resendCode();
+    btnReenviar.disabled = true;
+    const resultado = await authService.resendCode(correoRegistrado);
+    btnReenviar.disabled = false;
 
-    mostrarBanner(bannerExito, resultado.mensaje);
-    clearTimeout(temporizadorExito);
-    temporizadorExito = setTimeout(() => {
-      ocultarBanner(bannerExito);
-    }, 4000);
+    if (resultado.exito) {
+      mostrarBanner(bannerExito, resultado.mensaje || 'Se ha reenviado un nuevo código a tu correo.');
+      clearTimeout(temporizadorExito);
+      temporizadorExito = setTimeout(() => {
+        ocultarBanner(bannerExito);
+      }, 4000);
+    } else {
+      mostrarBanner(bannerError, resultado.mensaje || 'No se pudo reenviar el código.');
+    }
   });
 }

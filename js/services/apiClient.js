@@ -1,32 +1,125 @@
 /**
- * Cliente HTTP base para comunicación con el backend (API REST)
- * Contiene la configuración compartida y helpers de red.
+ * Cliente HTTP base para comunicación con el backend (ASP.NET Core Web API)
+ * Apunta a http://localhost:5015/api con soporte para JSON y multipart/form-data.
  */
 
-export const API_BASE_URL = 'http://localhost:3000/api';
+export const API_BASE_URL = 'http://localhost:5015/api';
 
-export async function request(endpoint, options = {}) {
+/**
+ * Petición POST con JSON
+ */
+export async function postJson(endpoint, data = {}, customHeaders = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
-  const defaultHeaders = {
-    'Content-Type': 'application/json'
-  };
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...customHeaders
+      },
+      body: JSON.stringify(data)
+    });
 
-  const config = {
-    ...options,
-    headers: {
-      ...defaultHeaders,
-      ...options.headers
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      return {
+        ok: false,
+        status: response.status,
+        error: result.error || 'Ocurrió un error en el servidor.'
+      };
     }
-  };
+
+    return {
+      ok: true,
+      status: response.status,
+      data: result
+    };
+  } catch (err) {
+    console.warn(`[apiClient] No se pudo conectar con el servidor en ${url}:`, err.message);
+    return {
+      ok: false,
+      isNetworkError: true,
+      error: 'No se pudo conectar con el servidor.'
+    };
+  }
+}
+
+/**
+ * Petición POST con FormData (para subida de archivos y formularios multipart)
+ */
+export async function postFormData(endpoint, formData, customHeaders = {}) {
+  const url = `${API_BASE_URL}${endpoint}`;
+  try {
+    // Al enviar FormData, NO se define 'Content-Type' manualmente
+    // para que el navegador genere automáticamente el boundary multipart
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        ...customHeaders
+      },
+      body: formData
+    });
+
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      return {
+        ok: false,
+        status: response.status,
+        error: result.error || 'Ocurrió un error al procesar el formulario.'
+      };
+    }
+
+    return {
+      ok: true,
+      status: response.status,
+      data: result
+    };
+  } catch (err) {
+    console.warn(`[apiClient] No se pudo conectar con el servidor en ${url}:`, err.message);
+    return {
+      ok: false,
+      isNetworkError: true,
+      error: 'No se pudo conectar con el servidor.'
+    };
+  }
+}
+
+/**
+ * Petición GET con soporte opcional para token Bearer
+ */
+export async function getJson(endpoint, token = null) {
+  const url = `${API_BASE_URL}${endpoint}`;
+  const headers = {};
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
 
   try {
-    const response = await fetch(url, config);
+    const response = await fetch(url, {
+      method: 'GET',
+      headers
+    });
+
+    const result = await response.json().catch(() => ({}));
     if (!response.ok) {
-      throw new Error(`HTTP Error: ${response.status}`);
+      return {
+        ok: false,
+        status: response.status,
+        error: result.error || 'Error al obtener datos.'
+      };
     }
-    return await response.json();
-  } catch (error) {
-    console.warn(`[apiClient] Petición a ${url} simulada o fallida:`, error.message);
-    throw error;
+
+    return {
+      ok: true,
+      status: response.status,
+      data: result
+    };
+  } catch (err) {
+    console.warn(`[apiClient] No se pudo conectar con el servidor en ${url}:`, err.message);
+    return {
+      ok: false,
+      isNetworkError: true,
+      error: 'No se pudo conectar con el servidor.'
+    };
   }
 }
