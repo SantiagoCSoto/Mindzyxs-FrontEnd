@@ -1,32 +1,123 @@
 /**
- * Cliente HTTP base para comunicación con el backend (API REST)
- * Contiene la configuración compartida y helpers de red.
+ * Cliente HTTP base para comunicación con el backend (API REST ASP.NET Core)
+ * Base URL: http://localhost:5015/api
  */
 
-export const API_BASE_URL = 'http://localhost:3000/api';
+export const API_BASE_URL = 'http://localhost:5015/api';
 
-export async function request(endpoint, options = {}) {
+/**
+ * Petición POST enviando un objeto JSON
+ */
+export async function postJson(endpoint, data) {
   const url = `${API_BASE_URL}${endpoint}`;
-  const defaultHeaders = {
-    'Content-Type': 'application/json'
-  };
-
-  const config = {
-    ...options,
-    headers: {
-      ...defaultHeaders,
-      ...options.headers
-    }
-  };
-
   try {
-    const response = await fetch(url, config);
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+
+    const isJson = response.headers.get('content-type')?.includes('application/json');
+    const resData = isJson ? await response.json() : null;
+
     if (!response.ok) {
-      throw new Error(`HTTP Error: ${response.status}`);
+      return {
+        ok: false,
+        status: response.status,
+        error: resData?.error || resData?.message || 'Error en la solicitud'
+      };
     }
-    return await response.json();
-  } catch (error) {
-    console.warn(`[apiClient] Petición a ${url} simulada o fallida:`, error.message);
-    throw error;
+
+    return {
+      ok: true,
+      status: response.status,
+      data: resData
+    };
+  } catch (err) {
+    console.warn(`[apiClient] Backend no disponible en ${url}:`, err.message);
+    return {
+      ok: false,
+      isNetworkError: true,
+      error: 'No fue posible conectar con el servidor backend.'
+    };
+  }
+}
+
+/**
+ * Petición POST enviando un FormData (multipart/form-data)
+ */
+export async function postFormData(endpoint, formData) {
+  const url = `${API_BASE_URL}${endpoint}`;
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: formData
+    });
+
+    const isJson = response.headers.get('content-type')?.includes('application/json');
+    const resData = isJson ? await response.json() : null;
+
+    if (!response.ok) {
+      return {
+        ok: false,
+        status: response.status,
+        error: resData?.error || resData?.message || 'Error en la solicitud'
+      };
+    }
+
+    return {
+      ok: true,
+      status: response.status,
+      data: resData
+    };
+  } catch (err) {
+    console.warn(`[apiClient] Backend no disponible en ${url}:`, err.message);
+    return {
+      ok: false,
+      isNetworkError: true,
+      error: 'No fue posible conectar con el servidor backend.'
+    };
+  }
+}
+
+/**
+ * Petición GET esperando respuesta JSON
+ */
+export async function getJson(endpoint) {
+  const url = `${API_BASE_URL}${endpoint}`;
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+
+    const isJson = response.headers.get('content-type')?.includes('application/json');
+    const resData = isJson ? await response.json() : null;
+
+    if (!response.ok) {
+      return {
+        ok: false,
+        status: response.status,
+        error: resData?.error || resData?.message || 'Error en la solicitud'
+      };
+    }
+
+    return {
+      ok: true,
+      status: response.status,
+      data: resData
+    };
+  } catch (err) {
+    console.warn(`[apiClient] Backend no disponible en ${url}:`, err.message);
+    return {
+      ok: false,
+      isNetworkError: true,
+      error: 'No fue posible conectar con el servidor backend.'
+    };
   }
 }

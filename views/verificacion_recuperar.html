@@ -52,18 +52,19 @@
       </form>
     </section>
 
-    <div id="modal-exito" class="modal">
+    <div id="modal-exito" class="modal-overlay">
       <div class="modal-contenido">
-        <div class="modal-encabezado">
-          <h2 id="modal-titulo">Código verificado</h2>
+        <div class="modal-badge-exito">
+          <span>&check;</span>
         </div>
+        <h2 id="modal-titulo">Código verificado</h2>
         <p id="modal-subtitulo">Tu código ha sido verificado correctamente. Ahora puedes establecer una nueva contraseña.</p>
-        <button id="btn-modal-continuar" class="btn-modal">Continuar</button>
+        <button type="button" id="btn-modal-continuar" class="btn-iniciar-sesion">Continuar</button>
       </div>
     </div>
   </main>
 
-  <script src="../js/controllers/verificacionRecuperarController.js"></script>
+  <script type="module" src="../js/controllers/verificacionRecuperarController.js"></script>
 
 </body>
 

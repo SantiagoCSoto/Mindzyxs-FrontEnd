@@ -1,33 +1,24 @@
 /**
- * Controlador para Página de Inicio / Bienvenida
- * Maneja la lógica de logout y carga de datos del usuario autenticado
+ * Controlador para Página de Inicio / Bienvenida (views/inicio.html)
+ * Maneja la visualización de datos de sesión activa y la lógica de cierre de sesión.
  */
+
+import { authService } from '../services/authService.js';
 
 const btnLogout = document.getElementById('btn-logout');
 const nombreUsuarioSpan = document.getElementById('nombre-usuario');
 const rolUsuarioSpan = document.getElementById('rol-usuario');
 
-// Cargar información del usuario desde sessionStorage
+// Cargar información del usuario desde authService
 function cargarDatosUsuario() {
-  // Obtener datos del usuario guardados en sessionStorage durante login
-  const usuarioData = sessionStorage.getItem('usuario');
-  
-  if (usuarioData) {
-    try {
-      const usuario = JSON.parse(usuarioData);
-      // Mostrar el nombre del usuario
-      const nombre = usuario.nombres || usuario.nombre || 'Usuario';
-      nombreUsuarioSpan.textContent = nombre;
-      
-      // Mostrar el rol del usuario
-      const rol = usuario.rol || usuario.tipo_usuario || 'Paciente';
-      rolUsuarioSpan.textContent = rol;
-    } catch (error) {
-      console.error('Error al parsear datos de usuario:', error);
-      // Valores por defecto
-      nombreUsuarioSpan.textContent = 'Usuario';
-      rolUsuarioSpan.textContent = 'Paciente';
-    }
+  const usuario = authService.getSesion();
+
+  if (usuario) {
+    const nombre = usuario.nombres || usuario.nombre || 'Usuario';
+    if (nombreUsuarioSpan) nombreUsuarioSpan.textContent = nombre;
+
+    const rol = usuario.rol || usuario.tipo_usuario || 'Paciente';
+    if (rolUsuarioSpan) rolUsuarioSpan.textContent = rol;
   } else {
     // Si no hay datos de sesión, redirigir a login
     console.warn('No hay sesión activa, redirigiendo a login');
@@ -37,25 +28,18 @@ function cargarDatosUsuario() {
 
 // Función de logout
 function logout() {
-  // Mostrar confirmación de cierre de sesión
   const confirmacion = confirm('¿Estás seguro de que deseas cerrar sesión?');
-  
+
   if (confirmacion) {
-    // Limpiar todos los datos de sesión y autenticación
-    sessionStorage.removeItem('usuario');
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('autenticado');
-    localStorage.removeItem('usuario');
-    localStorage.removeItem('token');
-    localStorage.removeItem('autenticado');
-    
-    // Redirigir a la página de login
+    authService.logout();
     window.location.href = 'login.html';
   }
 }
 
 // Event listeners
-btnLogout.addEventListener('click', logout);
+if (btnLogout) {
+  btnLogout.addEventListener('click', logout);
+}
 
-// Ejecutar al cargar la página
-document.addEventListener('DOMContentLoaded', cargarDatosUsuario);
+// Cargar datos del usuario
+cargarDatosUsuario();

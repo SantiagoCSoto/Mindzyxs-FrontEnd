@@ -1,78 +1,84 @@
+/**
+ * Controlador para views/recuperar_contrasena.html
+ * Gestiona la solicitud de código de recuperación por correo.
+ */
+
+import { authService } from '../services/authService.js';
+import { marcarErrorInput, limpiarErrorInput, mostrarBanner, ocultarBanner } from '../utils/alerts.js';
+
 const formRecuperar = document.querySelector('form');
 const inputEmail = document.getElementById('email');
 const bannerError = document.getElementById('banner-error');
 const bannerExito = document.getElementById('banner-exito');
-
-function mostrarError(mensaje) {
-  inputEmail.classList.add('error');
-  if (bannerError) {
-    bannerError.textContent = mensaje;
-    bannerError.style.display = 'block';
-  }
-  if (bannerExito) {
-    bannerExito.style.display = 'none';
-  }
-}
-
-function ocultarError() {
-  inputEmail.classList.remove('error');
-  if (bannerError) {
-    bannerError.style.display = 'none';
-  }
-}
-
-function mostrarExito() {
-  ocultarError();
-  if (bannerExito) {
-    bannerExito.style.display = 'block';
-    setTimeout(() => {
-      bannerExito.style.display = 'none';
-    }, 3000);
-  }
-}
+const btnSubmit = document.querySelector('.btn-recuperar-submit');
 
 // Limpieza de errores en tiempo real al escribir
 if (inputEmail) {
   inputEmail.addEventListener('input', function () {
-    ocultarError();
+    limpiarErrorInput(inputEmail);
+    ocultarBanner(bannerError);
+    ocultarBanner(bannerExito);
   });
 }
 
-// Usuarios de prueba que pueden recuperar contraseña
-const usuariosValidos = ['paciente@test.com', 'psicologo@test.com', 'admin@test.com'];
-
 // Validación y envío de código
 if (formRecuperar) {
-  formRecuperar.addEventListener('submit', function (e) {
+  formRecuperar.addEventListener('submit', async function (e) {
     e.preventDefault();
-    
+    ocultarBanner(bannerError);
+    ocultarBanner(bannerExito);
+
     const email = inputEmail.value.trim().toLowerCase();
 
     // Validación: campo vacío
     if (!email) {
-      mostrarError('Este campo es obligatorio');
+      marcarErrorInput(inputEmail);
+      mostrarBanner(bannerError, 'Este campo es obligatorio');
       return;
     }
 
-    // Validación: formato de correo (debe incluir @)
+    // Validación: formato de correo
     if (!email.includes('@')) {
-      mostrarError('Ingresa un correo válido');
+      marcarErrorInput(inputEmail);
+      mostrarBanner(bannerError, 'Ingresa un correo válido');
       return;
     }
 
-    // Validación: usuario existe (simula búsqueda en BD)
-    if (!usuariosValidos.includes(email)) {
-      mostrarError('Mensaje genérico de seguridad');
-      return;
+    if (btnSubmit) {
+      btnSubmit.disabled = true;
+      btnSubmit.textContent = 'Enviando...';
     }
 
-    // Si todo es válido, mostrar éxito y redirigir
-    mostrarExito();
-    inputEmail.value = '';
-    
-    // Redirigir a verificación después de 2 segundos
-    setTimeout(() => {
-      window.location.href = 'verificacion_recuperar.html';
-    }, 2000);
+    try {
+      const resultado = await authService.requestPasswordReset(email);
+
+      if (btnSubmit) {
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = 'Enviar código';
+      }
+
+      if (resultado.exito) {
+        // Guardar correo para las siguientes pantallas
+        sessionStorage.setItem('correoRecuperacion', email);
+
+        mostrarBanner(bannerExito, resultado.mensaje || 'Se ha enviado un código a tu correo.');
+        inputEmail.value = '';
+
+        setTimeout(() => {
+          window.location.href = 'verificacion_recuperar.html';
+        }, 1500);
+      } else {
+        marcarErrorInput(inputEmail);
+        mostrarBanner(bannerError, resultado.mensaje || 'Error al procesar la solicitud.');
+      }
+    } catch (err) {
+      if (btnSubmit) {
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = 'Enviar código';
+      }
+      mostrarBanner(bannerError, 'Error de conexión. Intenta de nuevo.');
+      console.error(err);
+    }
   });
 }
+
