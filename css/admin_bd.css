@@ -332,6 +332,23 @@
   text-align: left;
 }
 
+/* Botón logout en header (igual que inicio.css) */
+.btn-logout {
+  background-color: #eb5771;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-logout:hover {
+  background-color: #d63a54;
+}
+
 /* Responsividad (igual que inicio) */
 @media (max-width: 768px) {
   .inicio-hero {
@@ -367,5 +384,9 @@
   .header-auth-buttons {
     flex-direction: column;
     gap: 8px;
+  }
+
+  .btn-logout {
+    width: 100%;
   }
 }
