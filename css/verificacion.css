@@ -173,15 +173,6 @@ label {
   cursor: pointer;
 }
 
-/* Nota inferior para pruebas */
-.nota-pruebas {
-  margin-top: 20px;
-  margin-bottom: 0;
-  font-size: 11px;
-  color: #94a3b8;
-  text-align: center;
-}
-
 /* Modal de éxito */
 .modal-overlay {
   display: none;

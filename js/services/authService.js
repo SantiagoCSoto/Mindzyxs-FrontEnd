@@ -1,32 +1,9 @@
 /**
  * Servicio de Autenticación
  * Se comunica directamente con los endpoints del backend ASP.NET Core en http://localhost:5015/api/account/
- * Incluye fallback automático a simulación local si el backend no se encuentra activo.
  */
 
 import { postJson, postFormData, getJson } from './apiClient.js';
-
-// Base de datos simulada para fallback local
-const USUARIOS_PRUEBA = {
-  'paciente@test.com': {
-    password: '123456a',
-    nombre: 'Camila Rojas',
-    rol: 'Paciente',
-    destino: 'Panel del paciente'
-  },
-  'psicologo@test.com': {
-    password: '123456a',
-    nombre: 'Pedro López',
-    rol: 'Psicólogo',
-    destino: 'Panel del psicólogo'
-  },
-  'admin@test.com': {
-    password: '123456a',
-    nombre: 'Administrador',
-    rol: 'Administrador',
-    destino: 'Consola de administración'
-  }
-};
 
 export const authService = {
   /**
@@ -86,34 +63,10 @@ export const authService = {
       };
     }
 
-    // 3. Fallback si el backend está apagado: simulación local
-    console.info('[authService] Backend offline, usando simulación local de login.');
-    const usuarioSimulado = USUARIOS_PRUEBA[emailNormalizado];
-    if (usuarioSimulado && usuarioSimulado.password === pass) {
-      const usuarioObj = {
-        correo: emailNormalizado,
-        nombre: usuarioSimulado.nombre || emailNormalizado.split('@')[0],
-        nombres: usuarioSimulado.nombre || emailNormalizado.split('@')[0],
-        rol: usuarioSimulado.rol,
-        tipo_usuario: usuarioSimulado.rol
-      };
-
-      sessionStorage.setItem('usuario', JSON.stringify(usuarioObj));
-      sessionStorage.setItem('token', 'simulado_' + Date.now());
-      sessionStorage.setItem('autenticado', 'true');
-      localStorage.setItem('rol', usuarioSimulado.rol);
-
-      return {
-        exito: true,
-        rol: usuarioSimulado.rol,
-        destino: usuarioSimulado.destino,
-        usuario: usuarioObj
-      };
-    }
-
+    // 3. El backend no está disponible
     return {
       exito: false,
-      mensaje: 'Correo o contraseña incorrectos'
+      mensaje: res.error || 'No fue posible conectar con el servidor backend.'
     };
   },
 
@@ -138,11 +91,9 @@ export const authService = {
       };
     }
 
-    // Fallback si no hay conexión al backend
-    console.info('[authService] Backend offline, simulando registro exitoso.');
     return {
-      exito: true,
-      mensaje: 'Registro exitoso (Modo simulación)'
+      exito: false,
+      mensaje: res.error || 'No fue posible conectar con el servidor backend.'
     };
   },
 
@@ -174,27 +125,10 @@ export const authService = {
       };
     }
 
-    // Fallback si el backend está offline
-    console.info('[authService] Backend offline, simulando verificación.');
-    if (cod === '000000') {
-      return {
-        exito: false,
-        expirado: true,
-        mensaje: 'El código expiró. Reenvía el código'
-      };
-    }
-
-    if (cod === '123456') {
-      return {
-        exito: true,
-        mensaje: 'Registro exitoso. Ya puedes iniciar sesión'
-      };
-    }
-
     return {
       exito: false,
       expirado: false,
-      mensaje: 'Código incorrecto. Verifica e intenta nuevamente'
+      mensaje: res.error || 'No fue posible conectar con el servidor backend.'
     };
   },
 
@@ -223,8 +157,8 @@ export const authService = {
     }
 
     return {
-      exito: true,
-      mensaje: 'Se ha reenviado un nuevo código a tu correo.'
+      exito: false,
+      mensaje: res.error || 'No fue posible conectar con el servidor backend.'
     };
   },
 
@@ -237,18 +171,9 @@ export const authService = {
       return res.data;
     }
 
-    // Catálogos por defecto si el backend está apagado
     return {
-      tiposCuenta: [
-        { id: 1, codigo: 'Paciente' },
-        { id: 2, codigo: 'Psicologo' }
-      ],
-      generos: [
-        { id: 1, codigo: 'Masculino' },
-        { id: 2, codigo: 'Femenino' },
-        { id: 3, codigo: 'Otro' },
-        { id: 4, codigo: 'Prefiero no decir' }
-      ]
+      tiposCuenta: [],
+      generos: []
     };
   },
 
@@ -307,11 +232,9 @@ export const authService = {
       };
     }
 
-    // Fallback si el backend está offline
-    console.info('[authService] Backend offline, simulando envío de código de recuperación.');
     return {
-      exito: true,
-      mensaje: 'Se ha enviado un código de recuperación a tu correo.'
+      exito: false,
+      mensaje: res.error || 'No fue posible conectar con el servidor backend.'
     };
   },
 
@@ -342,15 +265,11 @@ export const authService = {
       };
     }
 
-    // Fallback si el backend está offline
-    console.info('[authService] Backend offline, simulando verificación de recuperación.');
-    if (cod === '000000') {
-      return { exito: false, expirado: true, mensaje: 'El código expiró. Reenvía el código' };
-    }
-    if (cod === '123456') {
-      return { exito: true, mensaje: 'Código verificado correctamente.' };
-    }
-    return { exito: false, mensaje: 'Código incorrecto. Inténtalo de nuevo.' };
+    return {
+      exito: false,
+      expirado: false,
+      mensaje: res.error || 'No fue posible conectar con el servidor backend.'
+    };
   },
 
   /**
@@ -376,8 +295,8 @@ export const authService = {
     }
 
     return {
-      exito: true,
-      mensaje: 'Se ha reenviado un nuevo código a tu correo.'
+      exito: false,
+      mensaje: res.error || 'No fue posible conectar con el servidor backend.'
     };
   },
 
@@ -409,11 +328,10 @@ export const authService = {
       };
     }
 
-    // Fallback si el backend está offline
-    console.info('[authService] Backend offline, simulando actualización de contraseña.');
     return {
-      exito: true,
-      mensaje: 'Contraseña actualizada correctamente.'
+      exito: false,
+      expirado: false,
+      mensaje: res.error || 'No fue posible conectar con el servidor backend.'
     };
   }
 };

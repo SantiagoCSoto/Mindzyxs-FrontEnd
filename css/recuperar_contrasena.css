@@ -142,24 +142,3 @@ label {
 .link-accion:hover {
   color: #3aa39e;
 }
-
-/* Texto informativo */
-.info-texto {
-  font-size: 12px;
-  color: #64748b;
-  line-height: 1.5;
-  margin-top: 14px;
-}
-
-.info-texto p {
-  margin-bottom: 8px;
-}
-
-.info-texto p:last-child {
-  margin-bottom: 0;
-}
-
-.info-texto strong {
-  color: #56c5c0;
-  font-weight: 600;
-}
