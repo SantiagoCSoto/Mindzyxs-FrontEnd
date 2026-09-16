@@ -1,30 +1,83 @@
-/* PB-27 — Administración de base de datos (estilo base del front) */
+/* PB-27 — Administración de base de datos (mismo estilo visual que inicio.css) */
 
-.admin-card {
-  max-width: 780px;
-  margin: 32px auto;
-  background-color: #ffffff;
-  padding: 28px 24px;
-  border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-  border: 1px solid #ede8f2;
+/* Hero principal (igual que la página de inicio) */
+.inicio-hero {
+  margin: 0 auto;
+  padding: 60px 40px;
+  background: linear-gradient(135deg, #f8fafc 0%, #ecf9f7 100%);
+  text-align: center;
 }
 
-.admin-card h1 {
-  font-size: 21px;
+.hero-contenido {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.saludo-principal h1 {
+  font-size: 36px;
   font-weight: 700;
   color: #1e293b;
-  margin: 0 0 6px;
-  text-align: center;
+  margin: 0 0 12px;
+  line-height: 1.2;
 }
 
-.admin-card .sub {
-  font-size: 12.5px;
+.mensaje-bienvenida {
+  font-size: 16px;
   color: #64748b;
-  text-align: center;
-  margin: 0 0 18px;
+  margin: 0 0 40px;
 }
 
+/* Tarjeta de sesión */
+.tarjeta-sesion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background-color: #ffffff;
+  padding: 24px 32px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.sesion-icono {
+  width: 56px;
+  height: 56px;
+  background-color: #ecf9f7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sesion-icono svg {
+  width: 28px;
+  height: 28px;
+  color: #56c5c0;
+  stroke: #56c5c0;
+}
+
+.sesion-info {
+  text-align: left;
+}
+
+.sesion-estado {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0 0 4px;
+  font-weight: 600;
+}
+
+.sesion-rol {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+/* Permiso denegado (se mantiene por funcionalidad) */
 .denied-box {
   display: none;
   background-color: #fff1f3;
@@ -52,32 +105,69 @@
   margin-top: 4px;
 }
 
+/* Sección acceso rápido (igual que la página de inicio) */
+.acceso-rapido {
+  max-width: 900px;
+  margin: 60px auto 40px;
+  padding: 0 40px;
+}
+
+.acceso-rapido h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 24px;
+  text-align: center;
+}
+
 .admin-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
 }
 
 .admin-tile {
-  border: 1px solid #dfdaee;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px 24px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
-  padding: 14px;
-  background: #ffffff;
+  text-decoration: none;
+  color: #1e293b;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
 .admin-tile h3 {
-  font-size: 13px;
+  margin: 0;
+  font-size: 14px;
   font-weight: 700;
-  margin: 0 0 4px;
+  color: #1e293b;
 }
 
 .admin-tile p {
-  font-size: 11px;
+  margin: 0;
+  font-size: 12px;
   color: #64748b;
-  margin: 0 0 10px;
-  line-height: 1.4;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
 }
 
+.admin-tile:hover {
+  background-color: #ecf9f7;
+  border-color: #56c5c0;
+  color: #56c5c0;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(86, 197, 192, 0.15);
+}
+
+/* Botones de acción (mismo lenguaje visual que inicio) */
 .btn-admin {
   width: 100%;
   height: 38px;
@@ -101,27 +191,23 @@
 }
 
 .btn-admin.secondary {
-  background: white;
+  background: #ffffff;
   color: #1e293b;
-  border: 1px solid #dfdaee;
+  border: 1px solid #e2e8f0;
 }
 
 .btn-admin.secondary:hover {
-  background: #f8fafc;
+  background: #ecf9f7;
+  color: #56c5c0;
+  border-color: #56c5c0;
 }
 
-.btn-admin.danger {
-  background-color: #eb5771;
-}
-
-.btn-admin.danger:hover {
-  background-color: #d94a64;
-}
-
+/* Progreso */
 .progress {
   display: none;
-  margin-top: 10px;
-  background: #f0eaf6;
+  width: 100%;
+  margin-top: 4px;
+  background: #f0fdf4;
   border-radius: 20px;
   overflow: hidden;
   height: 10px;
@@ -138,9 +224,11 @@
   transition: width 0.3s;
 }
 
+/* Mensajes */
 .msg-admin {
   display: none;
-  margin-top: 10px;
+  width: 100%;
+  margin-top: 8px;
   padding: 8px 10px;
   border-radius: 10px;
   font-size: 12px;
@@ -161,10 +249,12 @@
   color: #eb5771;
 }
 
+/* Lista de respaldos */
 .backup-list {
   display: none;
-  margin-top: 14px;
-  border: 1px solid #ede8f0;
+  width: 100%;
+  margin-top: 24px;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
   overflow: hidden;
 }
@@ -173,11 +263,11 @@
   display: grid;
   grid-template-columns: 1fr auto auto 32px;
   gap: 8px;
-  padding: 10px 12px;
-  background: #f9f7ff;
+  padding: 12px;
+  background: #ecf9f7;
   font-size: 11px;
   font-weight: 700;
-  color: #5a5d72;
+  color: #1e293b;
 }
 
 .backup-row {
@@ -185,9 +275,10 @@
   grid-template-columns: 1fr auto auto 32px;
   gap: 8px;
   align-items: center;
-  padding: 10px 12px;
-  border-top: 1px solid #f0eaf6;
+  padding: 12px;
+  border-top: 1px solid #f0faf9;
   font-size: 11px;
+  color: #64748b;
 }
 
 .btn-download {
@@ -206,39 +297,75 @@
 }
 
 .btn-download:hover {
-  background: #e8fff1;
+  background: #ecf9f7;
 }
 
+/* Consola de auditoría (estilo info-contenedor de inicio) */
 .audit-console {
-  margin-top: 12px;
-  border: 1px solid #ede6ff;
-  border-radius: 10px;
-  background: #fbfaff;
-  padding: 8px;
+  width: 100%;
+  margin-top: 24px;
+  padding: 20px;
+  background-color: #f0fdf4;
+  border-left: 4px solid #56c5c0;
+  border-radius: 8px;
 }
 
 .audit-console .title {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
-  color: #6b5bce;
+  color: #1e293b;
+  text-align: center;
 }
 
 .audit-console .log {
-  background: #f9f7ff;
-  border: 1px solid #ede6ff;
-  border-radius: 10px;
-  padding: 10px;
-  font-size: 10px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 11px;
   color: #64748b;
-  max-height: 100px;
+  max-height: 120px;
   overflow: auto;
-  margin-top: 8px;
+  margin-top: 10px;
   white-space: pre-wrap;
   font-family: 'Consolas', 'Courier New', monospace;
+  text-align: left;
 }
 
-@media (max-width: 640px) {
+/* Responsividad (igual que inicio) */
+@media (max-width: 768px) {
+  .inicio-hero {
+    padding: 40px 20px;
+  }
+
+  .saludo-principal h1 {
+    font-size: 24px;
+  }
+
+  .mensaje-bienvenida {
+    font-size: 14px;
+    margin-bottom: 30px;
+  }
+
+  .tarjeta-sesion {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .sesion-info {
+    text-align: center;
+  }
+
+  .acceso-rapido {
+    padding: 0 20px;
+  }
+
   .admin-grid {
     grid-template-columns: 1fr;
+  }
+
+  .header-auth-buttons {
+    flex-direction: column;
+    gap: 8px;
   }
 }
