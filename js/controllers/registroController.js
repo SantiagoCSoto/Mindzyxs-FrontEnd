@@ -65,6 +65,18 @@ function actualizarVisibilidadCredenciales() {
   }
 }
 
+// Fecha máxima permitida = hoy (el navegador bloquea fechas futuras)
+function fijarLimiteFechaNacimiento() {
+  const inputFecha = document.getElementById('fecha-nacimiento');
+  if (inputFecha) {
+    const hoy = new Date();
+    const yyyy = hoy.getFullYear();
+    const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+    const dd = String(hoy.getDate()).padStart(2, '0');
+    inputFecha.setAttribute('max', `${yyyy}-${mm}-${dd}`);
+  }
+}
+
 // Envío del formulario de registro hacia el backend
 if (formularioRegistro) {
   formularioRegistro.addEventListener('submit', async (e) => {
@@ -96,16 +108,43 @@ if (formularioRegistro) {
 
     const nombres = document.getElementById('nombres').value.trim();
     const apellidos = document.getElementById('apellidos').value.trim();
-    const edad = document.getElementById('edad').value.trim();
+    const fechaNacimiento = document.getElementById('fecha-nacimiento').value.trim();
     const idGenero = document.getElementById('genero').value;
     const correo = document.getElementById('correo').value.trim();
+
+    // Validación de fecha de nacimiento: obligatoria, no futura y al menos 14 años
+    if (!fechaNacimiento) {
+      mostrarBanner(bannerErrorRegistro, 'Este campo es obligatorio');
+      document.getElementById('fecha-nacimiento').focus();
+      return;
+    }
+
+    const hoy = new Date();
+    const fechaLimiteMinima = new Date(hoy.getFullYear() - 14, hoy.getMonth(), hoy.getDate());
+    const nacimiento = new Date(fechaNacimiento + 'T00:00:00');
+
+    if (isNaN(nacimiento.getTime())) {
+      mostrarBanner(bannerErrorRegistro, 'Ingresa una fecha de nacimiento válida');
+      document.getElementById('fecha-nacimiento').focus();
+      return;
+    }
+    if (nacimiento > hoy) {
+      mostrarBanner(bannerErrorRegistro, 'La fecha de nacimiento no puede ser en el futuro');
+      document.getElementById('fecha-nacimiento').focus();
+      return;
+    }
+    if (nacimiento > fechaLimiteMinima) {
+      mostrarBanner(bannerErrorRegistro, 'Debes tener al menos 14 años para registrarte');
+      document.getElementById('fecha-nacimiento').focus();
+      return;
+    }
 
     // Construcción de FormData para multipart/form-data según Dtos/AuthVm.cs:RegisterVm
     const formData = new FormData();
     formData.append('TipoUsuario', tipoUsuario);
     formData.append('Nombre', nombres);
     formData.append('Apellido', apellidos);
-    formData.append('Edad', parseInt(edad, 10));
+    formData.append('FechaNacimiento', fechaNacimiento);
     formData.append('IdGenero', parseInt(idGenero, 10));
     formData.append('Correo', correo);
     formData.append('Password', contrasena);
@@ -229,4 +268,5 @@ async function cargarCatalogos() {
 }
 
 actualizarVisibilidadCredenciales();
+fijarLimiteFechaNacimiento();
 cargarCatalogos();
