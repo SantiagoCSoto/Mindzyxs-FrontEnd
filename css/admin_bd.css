@@ -161,36 +161,6 @@
   color: #eb5771;
 }
 
-.restore-box {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: white;
-  border: 1px solid #dfdaee;
-  border-radius: 10px;
-  padding: 6px 8px;
-  margin-bottom: 8px;
-}
-
-.restore-box .btn-pick {
-  padding: 4px 10px;
-  border-radius: 20px;
-  border: 1px solid #dfdaee;
-  background: white;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.restore-box .file-name {
-  font-size: 11px;
-  color: #64748b;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  flex: 1;
-}
-
 .backup-list {
   display: none;
   margin-top: 14px;
@@ -265,68 +235,6 @@
   margin-top: 8px;
   white-space: pre-wrap;
   font-family: 'Consolas', 'Courier New', monospace;
-}
-
-.modal-action-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.35);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  z-index: 1000;
-}
-
-.modal-action-overlay.open {
-  display: flex;
-}
-
-.modal-action {
-  width: min(420px, 100%);
-  background: white;
-  border-radius: 14px;
-  padding: 20px;
-  text-align: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-}
-
-.modal-action h3 {
-  font-size: 15px;
-  font-weight: 700;
-  margin: 0 0 6px;
-}
-
-.modal-action p {
-  font-size: 12px;
-  color: #64748b;
-  margin: 0 0 16px;
-  line-height: 1.5;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 10px;
-}
-
-.btn-modal-action {
-  flex: 1;
-  height: 38px;
-  border-radius: 20px;
-  border: none;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.btn-modal-action.cancel {
-  border: 1px solid #dfdaee;
-  background: white;
-  color: #1e293b;
-}
-
-.btn-modal-action.go {
-  background: #56c5c0;
-  color: white;
 }
 
 @media (max-width: 640px) {

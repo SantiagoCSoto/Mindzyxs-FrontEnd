@@ -4,7 +4,7 @@
  * Los endpoints requieren token de sesión de un rol Administrador.
  */
 
-import { postJson, postFormData, getJson, getBlob } from './apiClient.js';
+import { postJson, getJson, getBlob } from './apiClient.js';
 
 export const adminService = {
   /**
@@ -22,31 +22,6 @@ export const adminService = {
     }
     if (!res.ok && !res.isNetworkError) {
       return { exito: false, mensaje: res.error || 'No fue posible crear el respaldo. Intente nuevamente' };
-    }
-    return { exito: false, mensaje: 'No fue posible conectar con el servidor backend.' };
-  },
-
-  /**
-   * Restaurar respaldo desde archivo (POST /api/admin/restore, multipart/form-data)
-   */
-  async restaurarRespaldo(archivo) {
-    if (!archivo) {
-      return { exito: false, mensaje: 'Debes seleccionar un archivo de respaldo (.backup) antes de restaurar' };
-    }
-
-    const fd = new FormData();
-    fd.append('archivo', archivo, archivo.name);
-
-    const res = await postFormData('/admin/restore', fd);
-
-    if (res.ok && res.data) {
-      return { exito: true, mensaje: res.data.mensaje || 'Respaldo restaurado correctamente' };
-    }
-    if (!res.ok && !res.isNetworkError) {
-      return {
-        exito: false,
-        mensaje: res.error || 'No fue posible restaurar el respaldo. Verifique el archivo e intente nuevamente'
-      };
     }
     return { exito: false, mensaje: 'No fue posible conectar con el servidor backend.' };
   },

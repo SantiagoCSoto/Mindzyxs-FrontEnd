@@ -1,38 +1,23 @@
 /**
  * Controlador para views/admin_bd.html (PB-27)
- * Administración de base de datos: crear/restaurar/ver respaldos y mantenimiento.
+ * Administración de base de datos: crear/ver/descargar respaldos y mantenimiento.
  * Solo rol Administrador. Consume los endpoints /api/admin/* del backend.
  */
 
 import { adminService } from '../services/adminService.js';
 import { authService } from '../services/authService.js';
-import { mostrarBanner, ocultarBanner, abrirModal, cerrarModal } from '../utils/alerts.js';
 
 const adminContent = document.getElementById('admin-content');
 const deniedBox = document.getElementById('denied-box');
 const rolUsuario = document.getElementById('rol-usuario');
 
 const msgBackup = document.getElementById('msg-backup');
-const msgRestore = document.getElementById('msg-restore');
 const msgMaintenance = document.getElementById('msg-maintenance');
 const progress = document.getElementById('progress');
 const bar = document.getElementById('bar');
 const backupList = document.getElementById('backup-list');
 const backupRows = document.getElementById('backup-rows');
 const auditLog = document.getElementById('audit-log');
-
-const restoreInput = document.getElementById('restore-input');
-const restoreFileName = document.getElementById('restore-file-name');
-const btnRestorePick = document.getElementById('btn-restore-pick');
-
-const confirmModal = document.getElementById('confirm-modal');
-const confirmTitle = document.getElementById('confirm-title');
-const confirmText = document.getElementById('confirm-text');
-const btnConfirmNo = document.getElementById('btn-confirm-no');
-const btnConfirmYes = document.getElementById('btn-confirm-yes');
-
-let restoreFile = null;
-let accionPendiente = null;
 
 function triggerDownload(blob, nombreArchivo) {
   const url = URL.createObjectURL(blob);
@@ -111,8 +96,9 @@ async function crearRespaldo() {
 
   if (resultado.exito) {
     const r = resultado.respaldo || {};
-    mostrarMsg(msgBackup, `${resultado.mensaje} — ${r.nombreArchivo || ''} (${r.tamano || ''})`, 'ok');
-    addLog(`BACKUP creado por admin: ${r.nombreArchivo || 'archivo'} (${r.tamano || ''})`);
+    const etiquetaTipo = (r.tipo || 'bak') === 'json' ? ' [snapshot JSON]' : ' [backup nativo]';
+    mostrarMsg(msgBackup, `${resultado.mensaje} — ${r.nombreArchivo || ''} (${r.tamano || ''})${etiquetaTipo}`, 'ok');
+    addLog(`BACKUP creado por admin: ${r.nombreArchivo || 'archivo'} (${r.tamano || ''})${etiquetaTipo}`);
 
     // Descargar el archivo al PC del administrador
     if (r.idRespaldo) {
@@ -135,20 +121,6 @@ async function verRespaldos(logear = true) {
   } else {
     mostrarMsg(msgBackup, resultado.mensaje || 'No fue posible consultar los respaldos. Intente nuevamente', 'err');
     addLog('VIEW RESPALDOS FALLIDO — ' + (resultado.mensaje || 'error'));
-  }
-}
-
-async function restaurarRespaldo() {
-  mostrarMsg(msgRestore, '', 'ok');
-  const resultado = await adminService.restaurarRespaldo(restoreFile);
-  if (resultado.exito) {
-    mostrarMsg(msgRestore, resultado.mensaje, 'ok');
-    addLog(`RESTORE exitoso por admin desde archivo: ${restoreFile?.name || ''}`);
-    restoreFile = null;
-    restoreFileName.textContent = 'Ningún archivo seleccionado';
-  } else {
-    mostrarMsg(msgRestore, resultado.mensaje || 'No fue posible restaurar el respaldo. Verifique el archivo e intente nuevamente', 'err');
-    addLog(`RESTORE FALLIDO por admin — ${restoreFile?.name || 'archivo'}`);
   }
 }
 
@@ -181,52 +153,6 @@ backupRows.addEventListener('click', async (e) => {
     addLog(`DOWNLOAD respaldo por admin: ${name || id}`);
   } else {
     mostrarMsg(msgBackup, dl.mensaje || 'No fue posible descargar el respaldo', 'err');
-  }
-});
-
-btnRestorePick.addEventListener('click', () => restoreInput.click());
-restoreInput.addEventListener('change', () => {
-  const f = restoreInput.files[0];
-  if (f) {
-    restoreFile = f;
-    restoreFileName.textContent = f.name;
-    restoreFileName.style.color = '#1e293b';
-  } else {
-    restoreFile = null;
-    restoreFileName.textContent = 'Ningún archivo seleccionado';
-    restoreFileName.style.color = '';
-  }
-  mostrarMsg(msgRestore, '', 'ok');
-});
-
-document.getElementById('btn-restore').addEventListener('click', () => {
-  mostrarMsg(msgRestore, '', 'ok');
-  if (!restoreFile) {
-    mostrarMsg(msgRestore, 'Debes seleccionar un archivo de respaldo (.backup) antes de restaurar', 'err');
-    return;
-  }
-  accionPendiente = 'restore';
-  confirmTitle.textContent = '¿Restaurar respaldo?';
-  confirmText.textContent = `Se restaurará el archivo "${restoreFile.name}" (${(restoreFile.size / 1024 / 1024).toFixed(2)} MB). Esta operación crítica requiere confirmación explícita y sobrescribirá los datos actuales.`;
-  abrirModal(confirmModal);
-});
-
-btnConfirmNo.addEventListener('click', () => {
-  cerrarModal(confirmModal);
-  accionPendiente = null;
-});
-
-btnConfirmYes.addEventListener('click', () => {
-  cerrarModal(confirmModal);
-  const accion = accionPendiente;
-  accionPendiente = null;
-  if (accion === 'restore') restaurarRespaldo();
-});
-
-confirmModal.addEventListener('click', (e) => {
-  if (e.target === confirmModal) {
-    cerrarModal(confirmModal);
-    accionPendiente = null;
   }
 });
 

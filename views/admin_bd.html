@@ -23,7 +23,6 @@
       <ul>
         <li><a href="inicio.html">Inicio</a></li>
         <li><a href="#respaldo">Respaldo</a></li>
-        <li><a href="#restaurar">Restaurar</a></li>
         <li><a href="#mantenimiento">Mantenimiento</a></li>
       </ul>
     </nav>
@@ -49,27 +48,15 @@
         <div class="admin-grid">
           <div class="admin-tile" id="respaldo">
             <h3>Crear respaldo</h3>
-            <p>Genera un respaldo local con los datos actuales del sistema (formato JSON, sin nube externa).</p>
+            <p>Genera un respaldo local (.bak de SQL Server) y lo descarga al equipo, sin nube externa.</p>
             <button class="btn-admin" id="btn-backup">Generar Respaldo Local</button>
             <div class="progress" id="progress"><div class="bar" id="bar"></div></div>
             <div class="msg-admin" id="msg-backup"></div>
           </div>
 
-          <div class="admin-tile" id="restaurar">
-            <h3>Restaurar respaldo</h3>
-            <p>Sube el archivo de respaldo (.backup, .json) y restaura. Requiere confirmación explícita.</p>
-            <div class="restore-box">
-              <button type="button" class="btn-pick" id="btn-restore-pick">Seleccionar archivo</button>
-              <span class="file-name" id="restore-file-name">Ningún archivo seleccionado</span>
-              <input type="file" id="restore-input" hidden accept=".backup,.json,.db,.sqlite">
-            </div>
-            <button class="btn-admin secondary" id="btn-restore">Restaurar respaldo</button>
-            <div class="msg-admin" id="msg-restore"></div>
-          </div>
-
           <div class="admin-tile">
             <h3>Ver respaldos</h3>
-            <p>Lista con fecha, tamaño e identificador.</p>
+            <p>Lista con fecha, tamaño e identificador, y descarga de respaldos existentes.</p>
             <button class="btn-admin secondary" id="btn-view-backups">Ver respaldos</button>
           </div>
 
@@ -87,23 +74,12 @@
         </div>
 
         <div class="audit-console">
-          <div class="title">▸ Consola de auditoría <span style="font-weight:400;color:#64748b">— logs de backup/restore/mantenimiento con fecha/hora y responsable</span></div>
+          <div class="title">▸ Consola de auditoría <span style="font-weight:400;color:#64748b">— respaldos y mantenimiento con fecha/hora y responsable</span></div>
           <div class="log" id="audit-log">LOG: esperando operaciones...</div>
         </div>
       </div>
     </section>
   </main>
-
-  <div class="modal-action-overlay" id="confirm-modal">
-    <div class="modal-action">
-      <h3 id="confirm-title">¿Confirmar operación?</h3>
-      <p id="confirm-text"></p>
-      <div class="modal-actions">
-        <button class="btn-modal-action cancel" id="btn-confirm-no">Cancelar</button>
-        <button class="btn-modal-action go" id="btn-confirm-yes">Confirmar</button>
-      </div>
-    </div>
-  </div>
 
   <script type="module" src="../js/controllers/adminBdController.js"></script>
 </body>
