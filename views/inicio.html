@@ -10,86 +10,210 @@
 </head>
 
 <body>
+  <!-- Fondo decorativo suave -->
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-pink"></div>
+    <div class="blob blob-lav"></div>
+  </div>
 
   <header class="header-nav">
     <div class="logo-container">
       <a href="inicio.html" class="logo-link">
         <img src="../assets/Logo1.png" alt="Logo Mindzyxs" class="logo-img">
-        Mindzyxs
+        <span>Mindzyxs</span>
       </a>
     </div>
 
-    <nav class="main-nav">
+    <nav class="main-nav" aria-label="Navegación principal">
       <ul>
-        <li><a href="inicio.html">Inicio</a></li>
+        <li><a href="inicio.html" class="active">Inicio</a></li>
         <li><a href="#nosotros">Nosotros</a></li>
         <li><a href="#ayuda">Ayuda</a></li>
       </ul>
     </nav>
 
-    <div class="header-auth-buttons">
-      <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
+    <div class="header-right">
+      <div class="role-indicator">
+        <span class="role-label">Rol:</span>
+        <span class="badge-role" id="roleBadge">Paciente</span>
+      </div>
+      <div class="header-auth-buttons">
+        <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
+      </div>
     </div>
   </header>
 
-  <main>
-    <section class="inicio-hero">
-      <div class="hero-contenido">
-        <div class="saludo-principal">
-          <h1>Bienvenido de nuevo, <span id="nombre-usuario">Usuario</span></h1>
-          <p class="mensaje-bienvenida">Tu bienestar mental es nuestra prioridad</p>
-        </div>
+  <main class="wrap">
+    <!-- Tarjeta de Bienvenida -->
+    <section class="card hero">
+      <h1>Bienvenido a Mindzyxs</h1>
+      <p>
+        Hola, <b id="nombre-usuario">Usuario</b>. Sistema de apoyo y <b>monitoreo emocional</b>.
+        Antes de usar cualquier funcionalidad sensible se muestra el <b>Mensaje aclaratorio</b>.
+      </p>
+      <div class="sesion-pill">
+        <span class="sesion-estado">Sesión activa como:</span>
+        <span class="sesion-rol" id="rol-usuario">Paciente</span>
+      </div>
+    </section>
 
-        <div class="tarjeta-sesion">
-          <div class="sesion-icono">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
+    <!-- Funcionalidades Sensibles -->
+    <section class="card section-sensibles">
+      <div class="section-header">
+        <span class="section-title">Funcionalidades sensibles</span>
+      </div>
+
+      <p class="demo-note">
+        <span class="demo-note-icon">⚠️</span>
+        <span>
+          Al hacer clic por <b>primera vez</b> en <b>Iniciar cuestionario</b>, <b>Ver resultados</b> o <b>Ver
+            recomendaciones</b>,
+          el sistema muestra automáticamente el Mensaje aclaratorio <b>antes de continuar</b>.
+          El enlace <b>Aviso: no diagnóstico</b> está siempre disponible en la barra inferior.
+        </span>
+      </p>
+
+      <div class="grid">
+        <!-- Cuestionario -->
+        <article class="tile">
+          <div class="tile-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
             </svg>
           </div>
-          <div class="sesion-info">
-            <p class="sesion-estado">Sesión iniciada como:</p>
-            <p class="sesion-rol" id="rol-usuario">Paciente</p>
+          <h3>Iniciar cuestionario</h3>
+          <p>Primera funcionalidad sensible de monitoreo</p>
+          <button type="button" class="btn btn-tile" data-feature="Iniciar cuestionario">Acceder</button>
+        </article>
+
+        <!-- Resultados -->
+        <article class="tile">
+          <div class="tile-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
           </div>
-        </div>
-      </div>
-    </section>
+          <h3>Ver resultados</h3>
+          <p>Resultados y seguimiento del bienestar</p>
+          <button type="button" class="btn btn-tile" data-feature="Ver resultados">Acceder</button>
+        </article>
 
-    <section class="acceso-rapido">
-      <h2>Acceso Rápido</h2>
-      <div class="botones-rapidos">
-        <a href="#" class="boton-rapido">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-          <span>Mi Perfil</span>
-        </a>
-        <a href="#" class="boton-rapido">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-          </svg>
-          <span>Mensajes</span>
-        </a>
-        <a href="#" class="boton-rapido">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"></path>
-            <path d="M3 7h18"></path>
-          </svg>
-          <span>Mis Citas</span>
-        </a>
+        <!-- Recomendaciones -->
+        <article class="tile">
+          <div class="tile-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18h6"></path>
+              <path d="M10 22h4"></path>
+              <path
+                d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z">
+              </path>
+            </svg>
+          </div>
+          <h3>Ver recomendaciones</h3>
+          <p>Recomendaciones personalizadas de apoyo</p>
+          <button type="button" class="btn btn-tile" data-feature="Ver recomendaciones">Acceder</button>
+        </article>
       </div>
-    </section>
 
-    <section class="informacion-sprint">
-      <div class="info-contenedor">
-        <h3>Sprint Actual</h3>
-        <p>Esta versión demuestra el funcionamiento de <strong>autenticación y cierre de sesión</strong>. 
-           Ya has iniciado sesión correctamente. Puedes cerrar tu sesión con el botón "Cerrar sesión" 
-           en la esquina superior derecha.</p>
+      <!-- Barra de pruebas interactivas -->
+      <div class="controls-panel">
+        <span class="controls-label">Demo:</span>
+        <button type="button" class="chip active" id="firstTimeChip" title="Simula ingreso por primera vez">Primera vez
+          (auto-mostrar)</button>
+        <button type="button" class="chip" id="resetAck" title="Limpia el estado de aceptación en la sesión">Resetear
+          aviso visto</button>
+        <button type="button" class="chip chip-err" id="errChip"
+          title="Simula error de comunicación con el backend">Simular error de carga del mensaje</button>
       </div>
+      <p class="logs-note">Cada visualización del mensaje y cada error se registran en logs internos para auditoría
+        (consola del navegador F12).</p>
     </section>
   </main>
+
+  <!-- Pie de página -->
+  <footer class="footer">
+    <div class="footer-in">
+      <a href="inicio.html">Inicio</a>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#ayuda">Ayuda</a>
+      <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog">
+        <span class="aviso-ico">ℹ️</span> Aviso: no diagnóstico
+      </a>
+    </div>
+  </footer>
+
+  <!-- Mensaje aclaratorio -->
+  <div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true" aria-labelledby="avisoTitle"
+    aria-hidden="true">
+    <div class="modal">
+      <div class="modal-icon" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+      </div>
+
+      <h3 id="avisoTitle">Mensaje aclaratorio</h3>
+
+      <div class="aviso-txt" id="avisoContent">
+        <p>
+          <b>Mindzyx</b> es una plataforma diseñada exclusivamente para el <b>monitoreo y apoyo del bienestar
+            emocional</b>.
+          Este sistema <span class="highlight">no realiza diagnósticos clínicos</span> y <span class="highlight">no
+            sustituye la atención de un profesional de la salud mental</span>.
+        </p>
+        <p>
+          Ante un <b>riesgo alto o una situación de urgencia</b>, busca ayuda profesional o utiliza las <b>líneas de
+            ayuda disponibles</b> en tu país (por ejemplo, servicios de emergencia o líneas de crisis locales).
+        </p>
+        <p>
+          Mindzyx es solo una <b>herramienta de apoyo y monitoreo emocional</b> y <b>no reemplaza la atención
+            profesional</b>.
+        </p>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-modal btn-close" id="btnCerrar">Cerrar</button>
+        <button type="button" class="btn-modal btn-ok" id="btnEntendido">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error al cargar aviso -->
+  <div class="modal-overlay" id="errModal" role="alertdialog" aria-modal="true" aria-labelledby="errTitle"
+    aria-hidden="true">
+    <div class="modal">
+      <div class="modal-icon modal-icon-err" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+      </div>
+
+      <h3 id="errTitle">Mensaje aclaratorio</h3>
+      <p class="err-desc" id="errDesc">No fue posible cargar el mensaje aclaratorio. Intente nuevamente</p>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-modal btn-ok" id="errOk">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notificación flotante -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script type="module" src="../js/controllers/inicioController.js"></script>
 </body>
