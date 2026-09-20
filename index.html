@@ -9,9 +9,10 @@
 
 <body>
   <script>
-    // Si hay sesión activa, ir a inicio; sino, ir a login
+    // Si hay sesión activa o modo invitado, ir a inicio; sino, ir a login
     const usuarioData = sessionStorage.getItem('usuario');
-    if (usuarioData) {
+    const esInvitado = sessionStorage.getItem('es_invitado') === 'true';
+    if (usuarioData || esInvitado) {
       window.location.href = "views/inicio.html";
     } else {
       window.location.href = "views/login.html";

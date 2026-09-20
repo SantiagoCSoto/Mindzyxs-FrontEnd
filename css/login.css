@@ -259,6 +259,72 @@ label {
   background-color: #48b4af;
 }
 
+/* Sección Modo Invitado (PB-06) */
+.divider-invitado {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 18px 0 14px;
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.divider-invitado::before,
+.divider-invitado::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: #e2e8f0;
+}
+
+.divider-invitado span {
+  padding: 0 12px;
+}
+
+.invitado-seccion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.invitado-subtexto {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0 0 10px;
+  line-height: 1.4;
+}
+
+.btn-modo-invitado {
+  width: 100%;
+  height: 44px;
+  background: linear-gradient(180deg, #6ECFD4, #5ABCC2);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(94, 188, 196, 0.3);
+  transition: all 0.2s ease;
+}
+
+.btn-modo-invitado:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(94, 188, 196, 0.4);
+}
+
+.btn-modo-invitado:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 /* Diseño responsivo */
 @media (max-width: 768px) {
   .login-card {

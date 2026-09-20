@@ -4,6 +4,7 @@
  */
 
 import { authService } from '../services/authService.js';
+import { invitadoService } from '../services/invitadoService.js';
 import { esCampoVacio, tieneArroba } from '../utils/validators.js';
 import { marcarErrorInput, limpiarErrorInput, mostrarBanner, ocultarBanner, abrirModal, cerrarModal } from '../utils/alerts.js';
 
@@ -18,6 +19,22 @@ const modalTitulo = document.getElementById('modal-titulo');
 const modalSubtitulo = document.getElementById('modal-subtitulo');
 const btnLoginSubmit = document.getElementById('btn-login');
 const btnModalContinuar = document.getElementById('btn-modal-continuar');
+const btnModoInvitado = document.getElementById('btn-modo-invitado');
+
+// Acción para entrar en Modo Invitado (PB-06)
+if (btnModoInvitado) {
+  btnModoInvitado.addEventListener('click', async () => {
+    btnModoInvitado.disabled = true;
+    btnModoInvitado.textContent = 'Accediendo...';
+    try {
+      await invitadoService.iniciarModoInvitado('login');
+      window.location.href = 'inicio.html';
+    } catch (err) {
+      console.error('Error al iniciar modo invitado:', err);
+      window.location.href = 'inicio.html';
+    }
+  });
+}
 
 // Precargar correo si proviene de registro o recuperación
 const urlParams = new URLSearchParams(window.location.search);
