@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nueva contraseña - Mindzyxs</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/nueva_contrasena.css">
+</head>
+
+<body>
+
+  <header class="header-nav">
+    <div class="logo-container">
+      <a href="login.html" class="logo-link">
+        <img src="../assets/Logo1.png" alt="Logo Mindzyxs" class="logo-img">
+        Mindzyxs
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="nueva-contrasena-card">
+      <h1>Nueva contraseña</h1>
+      <p class="nueva-contrasena-subtitulo">Establece tu nueva contraseña</p>
+
+      <div id="banner-error" class="alerta-error"></div>
+      <div id="banner-exito" class="alerta-exito"></div>
+
+      <form class="form-nueva-contrasena" id="form-nueva-contrasena" novalidate action="#">
+        <div class="form-group">
+          <label for="contrasena">Nueva contraseña</label>
+          <div class="input-password-wrapper">
+            <input type="password" id="contrasena" name="contrasena" placeholder="Mín. 6 caracteres" minlength="6" required>
+            <button type="button" class="btn-toggle-password" data-target="contrasena" aria-label="Mostrar/ocultar contraseña">
+              <svg class="icono-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+          <span id="error-contrasena" class="error-mensaje"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmar-contrasena">Confirmar contraseña</label>
+          <div class="input-password-wrapper">
+            <input type="password" id="confirmar-contrasena" name="confirmar_contrasena" placeholder="Repite tu contraseña" minlength="6" required>
+            <button type="button" class="btn-toggle-password" data-target="confirmar-contrasena" aria-label="Mostrar/ocultar contraseña">
+              <svg class="icono-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+          <span id="error-confirmar" class="error-mensaje"></span>
+        </div>
+
+        <button type="submit" id="btn-guardar" class="btn-nueva-contrasena">Guardar contraseña</button>
+
+        <div class="nueva-contrasena-enlaces">
+          <a href="login.html" id="link-cancelar" class="link-cancelar">Cancelar / Volver</a>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <div id="modal-exito" class="modal-overlay">
+    <div class="modal-contenido">
+      <div class="modal-badge-exito">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <h2>Contraseña actualizada</h2>
+      <p>Tu contraseña ha sido restablecida correctamente. Ya puedes iniciar sesión.</p>
+      <a href="login.html" class="btn-modal-continuar">Iniciar sesión</a>
+    </div>
+  </div>
+
+  <script type="module" src="../js/controllers/nuevaContrasenaController.js"></script>
+</body>
+
+</html>
