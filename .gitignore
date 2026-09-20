@@ -1,9 +1,0 @@
-# Backend folder temporal para desarrollo e inspección
-Mindzyxs-BackEnd-develop/
-*.zip
-
-# Sistema y editores
-.vscode/
-.idea/
-.DS_Store
-Thumbs.db
