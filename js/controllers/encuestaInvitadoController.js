@@ -4,9 +4,31 @@
  */
 
 const form = document.querySelector('form');
+const progressFill = document.getElementById('progress-fill');
+const progressText = document.getElementById('progress-text');
+
+const preguntasObligatorias = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9', 'q10'];
+
+function actualizarBarraProgreso() {
+  if (!progressFill || !progressText) {
+    return;
+  }
+
+  const respuestasContestadas = preguntasObligatorias.filter((key) => {
+    const radioSeleccionado = form?.querySelector(`input[name="${key}"]:checked`);
+    return Boolean(radioSeleccionado);
+  }).length;
+
+  const porcentaje = Math.round((respuestasContestadas / preguntasObligatorias.length) * 100);
+
+  progressFill.style.width = `${porcentaje}%`;
+  progressText.textContent = `${porcentaje}%`;
+}
 
 if (form) {
-  const preguntasObligatorias = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9', 'q10'];
+  form.querySelectorAll('input[type="radio"]').forEach((radio) => {
+    radio.addEventListener('change', actualizarBarraProgreso);
+  });
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -44,10 +66,13 @@ if (form) {
 
     alert('Encuesta enviada correctamente.');
     form.reset();
+    actualizarBarraProgreso();
 
     if (boton) {
       boton.disabled = false;
       boton.textContent = 'Enviar encuesta';
     }
   });
+
+  actualizarBarraProgreso();
 }
