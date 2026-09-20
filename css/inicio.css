@@ -243,37 +243,18 @@ body {
   display: inline-block;
 }
 
-.demo-note {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  font-size: 12px;
-  color: #5A5D72;
-  background: #FFF9E6;
-  border: 1px dashed #FFE29A;
-  padding: 12px 14px;
-  border-radius: 12px;
-  line-height: 1.5;
-  margin-bottom: 18px;
-}
-
-.demo-note-icon {
-  font-size: 15px;
-  flex-shrink: 0;
-  line-height: 1.2;
-}
-
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 14px;
-  margin-bottom: 16px;
+  margin-top: 16px;
+  margin-bottom: 8px;
 }
 
 .tile {
   border: 1px solid #DFDAEE;
   border-radius: 14px;
-  padding: 20px 14px;
+  padding: 22px 16px;
   background: #FFFFFF;
   text-align: center;
   display: flex;
@@ -289,28 +270,28 @@ body {
 }
 
 .tile-icon {
-  width: 44px;
-  height: 44px;
+  width: 46px;
+  height: 46px;
   border-radius: 12px;
   background: #E6F7F8;
   color: #56C5C0;
   display: grid;
   place-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .tile h3 {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--text);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .tile p {
-  font-size: 11px;
+  font-size: 12px;
   color: #8E91A3;
-  line-height: 1.4;
-  margin-bottom: 14px;
+  line-height: 1.45;
+  margin-bottom: 16px;
   flex: 1;
 }
 
@@ -322,7 +303,7 @@ body {
   background: var(--cyan);
   color: white;
   font-weight: 700;
-  font-size: 12px;
+  font-size: 12.5px;
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
@@ -333,60 +314,7 @@ body {
   box-shadow: 0 4px 10px rgba(110, 207, 212, 0.35);
 }
 
-/* --------------------------------------------------------------------------
-   Panel de Controles
-   -------------------------------------------------------------------------- */
-.controls-panel {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  align-items: center;
-  margin-top: 16px;
-  padding-top: 14px;
-  border-top: 1px solid #F1EDF5;
-}
 
-.controls-label {
-  font-size: 11px;
-  font-weight: 700;
-  color: #5A5D72;
-}
-
-.chip {
-  padding: 6px 14px;
-  border-radius: 20px;
-  border: 1px solid #DFDAEE;
-  background: #FFFFFF;
-  font-size: 11px;
-  font-weight: 600;
-  color: #2E2E33;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.chip:hover {
-  background: #F9F7FF;
-  border-color: #B8AEE0;
-}
-
-.chip.active {
-  background: var(--cyan);
-  color: white;
-  border-color: var(--cyan);
-}
-
-.chip-err.active {
-  background: var(--error);
-  color: white;
-  border-color: var(--error);
-}
-
-.logs-note {
-  font-size: 11px;
-  color: var(--muted);
-  text-align: center;
-  margin-top: 12px;
-}
 
 /* --------------------------------------------------------------------------
    Pie de Página (Footer) con enlace permanente
@@ -646,15 +574,6 @@ body {
 
   .role-indicator .role-label {
     display: none;
-  }
-
-  .controls-panel {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .chip {
-    text-align: center;
   }
 
   .modal-actions {

@@ -48,8 +48,7 @@
     <section class="card hero">
       <h1>Bienvenido a Mindzyxs</h1>
       <p>
-        Hola, <b id="nombre-usuario">Usuario</b>. Sistema de apoyo y <b>monitoreo emocional</b>.
-        Antes de usar cualquier funcionalidad sensible se muestra el <b>Mensaje aclaratorio</b>.
+        Hola, <b id="nombre-usuario">Usuario</b>. Tu espacio seguro para el apoyo y <b>monitoreo del bienestar emocional</b>.
       </p>
       <div class="sesion-pill">
         <span class="sesion-estado">Sesión activa como:</span>
@@ -57,21 +56,11 @@
       </div>
     </section>
 
-    <!-- Funcionalidades Sensibles -->
+    <!-- Funcionalidades / Servicios -->
     <section class="card section-sensibles">
       <div class="section-header">
-        <span class="section-title">Funcionalidades sensibles</span>
+        <span class="section-title">Servicios disponibles</span>
       </div>
-
-      <p class="demo-note">
-        <span class="demo-note-icon">⚠️</span>
-        <span>
-          Al hacer clic por <b>primera vez</b> en <b>Iniciar cuestionario</b>, <b>Ver resultados</b> o <b>Ver
-            recomendaciones</b>,
-          el sistema muestra automáticamente el Mensaje aclaratorio <b>antes de continuar</b>.
-          El enlace <b>Aviso: no diagnóstico</b> está siempre disponible en la barra inferior.
-        </span>
-      </p>
 
       <div class="grid">
         <!-- Cuestionario -->
@@ -87,7 +76,7 @@
             </svg>
           </div>
           <h3>Iniciar cuestionario</h3>
-          <p>Primera funcionalidad sensible de monitoreo</p>
+          <p>Realiza tu cuestionario de bienestar emocional</p>
           <button type="button" class="btn btn-tile" data-feature="Iniciar cuestionario">Acceder</button>
         </article>
 
@@ -102,7 +91,7 @@
             </svg>
           </div>
           <h3>Ver resultados</h3>
-          <p>Resultados y seguimiento del bienestar</p>
+          <p>Consulta el historial y seguimiento de tu bienestar</p>
           <button type="button" class="btn btn-tile" data-feature="Ver resultados">Acceder</button>
         </article>
 
@@ -119,23 +108,10 @@
             </svg>
           </div>
           <h3>Ver recomendaciones</h3>
-          <p>Recomendaciones personalizadas de apoyo</p>
+          <p>Accede a recomendaciones personalizadas de apoyo</p>
           <button type="button" class="btn btn-tile" data-feature="Ver recomendaciones">Acceder</button>
         </article>
       </div>
-
-      <!-- Barra de pruebas interactivas -->
-      <div class="controls-panel">
-        <span class="controls-label">Demo:</span>
-        <button type="button" class="chip active" id="firstTimeChip" title="Simula ingreso por primera vez">Primera vez
-          (auto-mostrar)</button>
-        <button type="button" class="chip" id="resetAck" title="Limpia el estado de aceptación en la sesión">Resetear
-          aviso visto</button>
-        <button type="button" class="chip chip-err" id="errChip"
-          title="Simula error de comunicación con el backend">Simular error de carga del mensaje</button>
-      </div>
-      <p class="logs-note">Cada visualización del mensaje y cada error se registran en logs internos para auditoría
-        (consola del navegador F12).</p>
     </section>
   </main>
 

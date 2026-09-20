@@ -25,13 +25,7 @@ const errOk = document.getElementById('errOk');
 const footerAviso = document.getElementById('footerAviso');
 const toast = document.getElementById('toast');
 
-// Elementos del DOM - Panel de pruebas (Demo)
-const firstTimeChip = document.getElementById('firstTimeChip');
-const resetAck = document.getElementById('resetAck');
-const errChip = document.getElementById('errChip');
-
 // Estado local de la vista
-let loadError = false;
 let pendingAction = null;
 
 /**
@@ -75,19 +69,11 @@ function cargarDatosUsuario() {
 }
 
 /**
- * Abre el modal del mensaje aclaratorio (o modal de error si está en modo fallo)
+ * Abre el modal del mensaje aclaratorio
  * @param {string|null} fromSensitive - Nombre de la funcionalidad sensible o null si viene del footer
  */
 async function openAviso(fromSensitive = null) {
   const rolActual = roleBadge?.textContent || 'Paciente';
-
-  // Si se simula un error de carga o falla el backend
-  if (loadError) {
-    if (errModal) errModal.classList.add('open');
-    avisoService.logAuditoria(`ERROR: no fue posible cargar el mensaje aclaratorio (rol: ${rolActual})`);
-    await avisoService.registrarVisualizacion(fromSensitive ? `auto:${fromSensitive}` : 'enlace', 'error');
-    return;
-  }
 
   pendingAction = fromSensitive;
   if (avisoModal) avisoModal.classList.add('open');
@@ -113,12 +99,6 @@ function inicializarAvisoAclaratorio() {
     btn.addEventListener('click', () => {
       const feature = btn.dataset.feature || btn.closest('.tile')?.querySelector('h3')?.textContent || 'Funcionalidad';
 
-      if (loadError) {
-        pendingAction = feature;
-        openAviso(feature);
-        return;
-      }
-
       // Si no ha aceptado el aviso en la sesión, se muestra el modal antes de continuar
       if (!avisoService.haAceptadoAviso()) {
         pendingAction = feature;
@@ -137,8 +117,6 @@ function inicializarAvisoAclaratorio() {
     btnEntendido.addEventListener('click', () => {
       if (avisoModal) avisoModal.classList.remove('open');
       avisoService.marcarAvisoAceptado();
-
-      if (firstTimeChip) firstTimeChip.classList.remove('active');
 
       if (pendingAction) {
         const accion = pendingAction;
@@ -180,37 +158,6 @@ function inicializarAvisoAclaratorio() {
     footerAviso.addEventListener('click', (e) => {
       e.preventDefault();
       openAviso(null);
-    });
-  }
-
-  // 6. Controles interactivos de prueba (Demo)
-  if (resetAck) {
-    resetAck.addEventListener('click', () => {
-      avisoService.resetearAviso();
-      if (firstTimeChip) firstTimeChip.classList.add('active');
-      showToast('Aviso reiniciado (se volverá a mostrar automáticamente al acceder)');
-    });
-  }
-
-  if (firstTimeChip) {
-    // Reflejar estado inicial según si ya aceptó o no
-    firstTimeChip.classList.toggle('active', !avisoService.haAceptadoAviso());
-
-    firstTimeChip.addEventListener('click', () => {
-      avisoService.resetearAviso();
-      firstTimeChip.classList.add('active');
-      showToast('Modo primera vez activado');
-    });
-  }
-
-  if (errChip) {
-    errChip.addEventListener('click', () => {
-      loadError = !loadError;
-      errChip.classList.toggle('active', loadError);
-      avisoService.logAuditoria(loadError
-        ? 'DEMO: modo error de carga ACTIVADO - el mensaje no podrá cargarse'
-        : 'DEMO: modo error de carga DESACTIVADO');
-      showToast(loadError ? 'Simulación de error ACTIVADA' : 'Simulación de error DESACTIVADA');
     });
   }
 
