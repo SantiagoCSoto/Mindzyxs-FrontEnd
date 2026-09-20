@@ -39,6 +39,7 @@
       </div>
       <div class="header-auth-buttons">
         <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
+        <a href="login.html" id="btn-login-header" class="btn-login-header" style="display: none;">Iniciar sesión</a>
       </div>
     </div>
   </header>
@@ -46,23 +47,27 @@
   <main class="wrap">
     <!-- Tarjeta de Bienvenida -->
     <section class="card hero">
-      <h1>Bienvenido a Mindzyxs</h1>
-      <p>
+      <div class="badge-guest-hero" id="badgeGuestHero" style="display: none;">
+        <span>👤 Modo invitado &mdash; sin cuenta</span>
+      </div>
+      <h1 id="heroTitulo">Bienvenido a Mindzyxs</h1>
+      <p id="heroSubtitulo">
         Hola, <b id="nombre-usuario">Usuario</b>. Tu espacio seguro para el apoyo y <b>monitoreo del bienestar emocional</b>.
       </p>
-      <div class="sesion-pill">
+      <div class="sesion-pill" id="sesionPill">
         <span class="sesion-estado">Sesión activa como:</span>
         <span class="sesion-rol" id="rol-usuario">Paciente</span>
       </div>
     </section>
 
-    <!-- Funcionalidades / Servicios -->
+    <!-- Sección 1: Funcionalidades / Disponibles para invitado -->
     <section class="card section-sensibles">
       <div class="section-header">
-        <span class="section-title">Servicios disponibles</span>
+        <span class="section-title" id="sectionTitleDisponibles">Servicios disponibles</span>
       </div>
 
-      <div class="grid">
+      <!-- Cuadrícula para Usuario Registrado -->
+      <div class="grid" id="gridRegistrado">
         <!-- Cuestionario -->
         <article class="tile">
           <div class="tile-icon" aria-hidden="true">
@@ -112,6 +117,98 @@
           <button type="button" class="btn btn-tile" data-feature="Ver recomendaciones">Acceder</button>
         </article>
       </div>
+
+      <!-- Cuadrícula para Modo Invitado (PB-06) -->
+      <div class="grid grid-avail" id="gridInvitado" style="display: none;">
+        <!-- Opción 1: Responder cuestionario -->
+        <article class="tile">
+          <div class="tile-icon tile-icon-cyan" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+          </div>
+          <h3>Responder cuestionario</h3>
+          <p>Cuestionario de bienestar emocional</p>
+          <button type="button" class="btn btn-tile" id="btn-invitado-cuestionario" data-feature="Responder cuestionario">Entrar</button>
+        </article>
+
+        <!-- Opción 2: Recomendaciones básicas -->
+        <article class="tile">
+          <div class="tile-icon tile-icon-yellow" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18h6"></path>
+              <path d="M10 22h4"></path>
+              <path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"></path>
+            </svg>
+          </div>
+          <h3>Ver recomendaciones básicas</h3>
+          <p>Consejos generales de cuidado</p>
+          <button type="button" class="btn btn-tile" id="btn-invitado-recomendaciones" data-feature="Ver recomendaciones básicas">Entrar</button>
+        </article>
+
+        <!-- Opción 3: Líneas de ayuda -->
+        <article class="tile">
+          <div class="tile-icon tile-icon-sos" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+          </div>
+          <h3>Líneas de ayuda</h3>
+          <p>Contactos de emergencia y apoyo</p>
+          <button type="button" class="btn btn-tile" id="btn-invitado-ayuda" data-feature="Líneas de ayuda">Entrar</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- Sección 2: Funciones Exclusivas (Bloqueadas para Invitados - PB-06) -->
+    <section class="card section-exclusivas" id="sectionExclusivas" style="display: none;">
+      <div class="section-header">
+        <span class="section-title">Funciones exclusivas &mdash; usuarios registrados</span>
+      </div>
+
+      <div class="grid grid-locked">
+        <!-- Función bloqueada 1 -->
+        <article class="tile tile-locked" data-exclusive="Historial emocional">
+          <div class="tile-icon tile-icon-locked" aria-hidden="true">🧠</div>
+          <h3>Historial emocional</h3>
+          <p>Registro de tus estados</p>
+          <span class="lock-badge">🔒 Exclusivo</span>
+        </article>
+
+        <!-- Función bloqueada 2 -->
+        <article class="tile tile-locked" data-exclusive="Gráficos de progreso">
+          <div class="tile-icon tile-icon-locked" aria-hidden="true">📈</div>
+          <h3>Gráficos de progreso</h3>
+          <p>Evolución por tiempo</p>
+          <span class="lock-badge">🔒 Exclusivo</span>
+        </article>
+
+        <!-- Función bloqueada 3 -->
+        <article class="tile tile-locked" data-exclusive="Recordatorios">
+          <div class="tile-icon tile-icon-locked" aria-hidden="true">⏰</div>
+          <h3>Recordatorios</h3>
+          <p>Avisos programados</p>
+          <span class="lock-badge">🔒 Exclusivo</span>
+        </article>
+
+        <!-- Función bloqueada 4 -->
+        <article class="tile tile-locked" data-exclusive="Autorización de psicólogo">
+          <div class="tile-icon tile-icon-locked" aria-hidden="true">🎓</div>
+          <h3>Autorización de psicólogo</h3>
+          <p>Vincular un profesional</p>
+          <span class="lock-badge">🔒 Exclusivo</span>
+        </article>
+      </div>
+
+      <p class="lock-note">
+        🔒 Estas funciones requieren <b>crear una cuenta o iniciar sesión</b>. Como invitado sólo podés usar las tres opciones básicas de arriba.
+      </p>
+
+      <!-- Botón para salir del modo invitado y volver al Login -->
+      <div class="guest-exit-container" id="guestExitContainer">
+        <button type="button" class="btn-volver-landing" id="btn-salir-invitado">&larr; Salir del modo invitado</button>
+      </div>
     </section>
   </main>
 
@@ -127,7 +224,7 @@
     </div>
   </footer>
 
-  <!-- Mensaje aclaratorio -->
+  <!-- Modal 1: Mensaje aclaratorio (PB-04) -->
   <div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true" aria-labelledby="avisoTitle"
     aria-hidden="true">
     <div class="modal">
@@ -166,7 +263,7 @@
     </div>
   </div>
 
-  <!-- Error al cargar aviso -->
+  <!-- Modal 2: Error al cargar aviso -->
   <div class="modal-overlay" id="errModal" role="alertdialog" aria-modal="true" aria-labelledby="errTitle"
     aria-hidden="true">
     <div class="modal">
@@ -184,6 +281,33 @@
 
       <div class="modal-actions">
         <button type="button" class="btn-modal btn-ok" id="errOk">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Líneas de ayuda (PB-06) -->
+  <div class="modal-overlay" id="modalLineasAyuda" role="dialog" aria-modal="true" aria-labelledby="ayudaTitle" aria-hidden="true">
+    <div class="modal">
+      <div class="modal-icon" style="background: #FFF1F3; color: #EB5771;" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+        </svg>
+      </div>
+
+      <h3 id="ayudaTitle">Líneas de ayuda y apoyo emocional</h3>
+      
+      <div class="aviso-txt" style="text-align: left;">
+        <p>Si te encuentras en una situación de crisis emocional o necesitas orientación profesional inmediata, puedes comunicarte a:</p>
+        <ul style="margin: 10px 0 10px 20px; line-height: 1.8;">
+          <li>📞 <b>Línea 106:</b> Ayuda psicológica y crisis emocional (24 horas, gratuita).</li>
+          <li>📞 <b>Línea 192:</b> Orientación en salud mental y apoyo psicosocial.</li>
+          <li>🚨 <b>Línea 123:</b> Emergencias y urgencias generales.</li>
+        </ul>
+        <p style="font-size: 11.5px; color: #8E91A3;">Recuerda que no estás solo y siempre hay ayuda disponible.</p>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-modal btn-ok" id="btnCerrarAyuda">Cerrar</button>
       </div>
     </div>
   </div>

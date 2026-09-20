@@ -1,27 +1,48 @@
 /**
  * Controlador para la Página de Inicio / Bienvenida (views/inicio.html)
  * Gestiona:
- * 1. Sesión activa y datos del usuario (o invitado)
- * 2. Cierre de sesión (logout)
- * 3. Funcionalidades sensibles con modal de Mensaje Aclaratorio
- * 4. Auditoría y logs internos en consola
+ * 1. Sesión activa y datos del usuario (o modo invitado PB-06)
+ * 2. Visualización condicional (servicios registrados vs opciones de invitado)
+ * 3. Bloqueo y auditoría de funciones exclusivas para invitados
+ * 4. Integración del Mensaje Aclaratorio (PB-04) antes del cuestionario
+ * 5. Cierre de sesión y retorno a landing
  */
 
 import { authService } from '../services/authService.js';
 import { avisoService } from '../services/avisoService.js';
+import { invitadoService } from '../services/invitadoService.js';
 
 // Elementos del DOM - Encabezado y Sesión
 const btnLogout = document.getElementById('btn-logout');
+const btnLoginHeader = document.getElementById('btn-login-header');
 const nombreUsuarioSpan = document.getElementById('nombre-usuario');
 const rolUsuarioSpan = document.getElementById('rol-usuario');
 const roleBadge = document.getElementById('roleBadge');
+const badgeGuestHero = document.getElementById('badgeGuestHero');
+const heroTitulo = document.getElementById('heroTitulo');
+const heroSubtitulo = document.getElementById('heroSubtitulo');
+const sesionPill = document.getElementById('sesionPill');
 
-// Elementos del DOM - Modales y Footer
+// Elementos del DOM - Secciones y Cuadrículas
+const sectionTitleDisponibles = document.getElementById('sectionTitleDisponibles');
+const gridRegistrado = document.getElementById('gridRegistrado');
+const gridInvitado = document.getElementById('gridInvitado');
+const sectionExclusivas = document.getElementById('sectionExclusivas');
+
+// Elementos del DOM - Botones de Modo Invitado (PB-06)
+const btnInvitadoCuestionario = document.getElementById('btn-invitado-cuestionario');
+const btnInvitadoRecomendaciones = document.getElementById('btn-invitado-recomendaciones');
+const btnInvitadoAyuda = document.getElementById('btn-invitado-ayuda');
+const btnSalirInvitado = document.getElementById('btn-salir-invitado');
+
+// Elementos del DOM - Modales y Notificaciones
 const avisoModal = document.getElementById('avisoModal');
 const errModal = document.getElementById('errModal');
 const btnEntendido = document.getElementById('btnEntendido');
 const btnCerrar = document.getElementById('btnCerrar');
 const errOk = document.getElementById('errOk');
+const modalLineasAyuda = document.getElementById('modalLineasAyuda');
+const btnCerrarAyuda = document.getElementById('btnCerrarAyuda');
 const footerAviso = document.getElementById('footerAviso');
 const toast = document.getElementById('toast');
 
@@ -42,34 +63,77 @@ function showToast(mensaje) {
 }
 
 /**
- * Carga los datos de la sesión activa
+ * Configura la interfaz según si es un usuario registrado o un invitado (PB-06)
  */
 function cargarDatosUsuario() {
+  const esInvitado = invitadoService.esInvitado();
   const usuario = authService.getSesion();
-  const esInvitado = sessionStorage.getItem('es_invitado') === 'true';
 
-  if (usuario) {
-    const nombre = usuario.nombres || usuario.nombre || usuario.correo?.split('@')[0] || 'Usuario';
-    const rol = usuario.rol || usuario.tipo_usuario || 'Paciente';
+  if (esInvitado) {
+    // -------------------------------------------------------------
+    // VISTA EN MODO INVITADO
+    // -------------------------------------------------------------
+    if (gridRegistrado) gridRegistrado.style.display = 'none';
+    if (gridInvitado) gridInvitado.style.display = 'grid';
+    if (sectionExclusivas) sectionExclusivas.style.display = 'block';
 
-    if (nombreUsuarioSpan) nombreUsuarioSpan.textContent = nombre;
-    if (rolUsuarioSpan) rolUsuarioSpan.textContent = rol;
-    if (roleBadge) roleBadge.textContent = rol;
-  } else if (esInvitado) {
+    if (btnLogout) btnLogout.style.display = 'none';
+    if (btnLoginHeader) btnLoginHeader.style.display = 'inline-flex';
+    if (badgeGuestHero) badgeGuestHero.style.display = 'inline-block';
+    if (sesionPill) sesionPill.style.display = 'none';
+
+    if (sectionTitleDisponibles) sectionTitleDisponibles.textContent = 'Opciones disponibles';
+    if (heroTitulo) heroTitulo.textContent = 'Inicio (Invitado)';
+    if (heroSubtitulo) {
+      heroSubtitulo.innerHTML = 'Bienvenido a Mindzyxs en <b>modo invitado</b>. Tu espacio seguro para el apoyo y <b>monitoreo del bienestar emocional</b>.';
+    }
+
+    if (roleBadge) {
+      roleBadge.textContent = 'Invitado';
+      roleBadge.style.color = '#B45309';
+      roleBadge.style.background = '#FFF4E5';
+      roleBadge.style.borderColor = '#FDE68A';
+    }
     if (nombreUsuarioSpan) nombreUsuarioSpan.textContent = 'Invitado';
     if (rolUsuarioSpan) rolUsuarioSpan.textContent = 'Invitado';
-    if (roleBadge) roleBadge.textContent = 'Invitado';
+
+    invitadoService.logAuditoria('Panel de inicio renderizado en MODO INVITADO: 3 opciones disponibles, 4 exclusivas bloqueadas');
   } else {
-    // Si no hay sesión ni modo invitado, permitir continuar como Paciente por defecto
-    // para pruebas locales sin forzar bloqueo
-    if (nombreUsuarioSpan) nombreUsuarioSpan.textContent = 'Paciente Invitado';
-    if (rolUsuarioSpan) rolUsuarioSpan.textContent = 'Paciente';
-    if (roleBadge) roleBadge.textContent = 'Paciente';
+    // -------------------------------------------------------------
+    // VISTA PARA USUARIO REGISTRADO (PACIENTE / PSICÓLOGO)
+    // -------------------------------------------------------------
+    if (gridRegistrado) gridRegistrado.style.display = 'grid';
+    if (gridInvitado) gridInvitado.style.display = 'none';
+    if (sectionExclusivas) sectionExclusivas.style.display = 'none';
+
+    if (btnLogout) btnLogout.style.display = 'inline-flex';
+    if (btnLoginHeader) btnLoginHeader.style.display = 'none';
+    if (badgeGuestHero) badgeGuestHero.style.display = 'none';
+    if (sesionPill) sesionPill.style.display = 'inline-flex';
+    if (sectionTitleDisponibles) sectionTitleDisponibles.textContent = 'Servicios disponibles';
+
+    if (usuario) {
+      const nombre = usuario.nombres || usuario.nombre || usuario.correo?.split('@')[0] || 'Usuario';
+      const rol = usuario.rol || usuario.tipo_usuario || 'Paciente';
+
+      if (nombreUsuarioSpan) nombreUsuarioSpan.textContent = nombre;
+      if (rolUsuarioSpan) rolUsuarioSpan.textContent = rol;
+      if (roleBadge) {
+        roleBadge.textContent = rol;
+        roleBadge.style.color = '';
+        roleBadge.style.background = '';
+        roleBadge.style.borderColor = '';
+      }
+    } else {
+      if (nombreUsuarioSpan) nombreUsuarioSpan.textContent = 'Paciente';
+      if (rolUsuarioSpan) rolUsuarioSpan.textContent = 'Paciente';
+      if (roleBadge) roleBadge.textContent = 'Paciente';
+    }
   }
 }
 
 /**
- * Abre el modal del mensaje aclaratorio
+ * Abre el modal del mensaje aclaratorio (PB-04)
  * @param {string|null} fromSensitive - Nombre de la funcionalidad sensible o null si viene del footer
  */
 async function openAviso(fromSensitive = null) {
@@ -90,29 +154,107 @@ async function openAviso(fromSensitive = null) {
 }
 
 /**
- * Inicializa los eventos de las funcionalidades sensibles y modales (PB-04)
+ * Inicializa los eventos interactivos específicos para el Modo Invitado (PB-06)
  */
-function inicializarAvisoAclaratorio() {
-  // 1. Clic en las 3 tarjetas de funcionalidades sensibles
-  const botonesTarjetas = document.querySelectorAll('.tile .btn-tile, [data-feature]');
-  botonesTarjetas.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const feature = btn.dataset.feature || btn.closest('.tile')?.querySelector('h3')?.textContent || 'Funcionalidad';
-
-      // Si no ha aceptado el aviso en la sesión, se muestra el modal antes de continuar
+function inicializarEventosInvitado() {
+  // 1. Opción disponible 1: Responder cuestionario (requiere aviso PB-04 si no ha sido aceptado)
+  if (btnInvitadoCuestionario) {
+    btnInvitadoCuestionario.addEventListener('click', () => {
+      const feature = 'Responder cuestionario';
       if (!avisoService.haAceptadoAviso()) {
-        pendingAction = feature;
-        avisoService.logAuditoria(`INTENTO de acceder por primera vez a: "${feature}" -> se muestra aviso antes de continuar`);
+        pendingAction = 'cuestionario_invitado';
+        avisoService.logAuditoria(`INTENTO de acceder por primera vez a: "${feature}" (Invitado) -> se muestra aviso antes de continuar`);
         openAviso(feature);
       } else {
-        // Si ya lo aceptó previamente en la sesión, accede directo
-        avisoService.logAuditoria(`ACCESO directo (aviso ya visualizado previamente): "${feature}"`);
-        showToast(`Accediendo a: ${feature} ✓`);
+        avisoService.logAuditoria(`ACCESO directo a "${feature}" (aviso ya aceptado) -> Navegando a encuesta_invitado.html`);
+        window.location.href = 'encuesta_invitado.html';
       }
+    });
+  }
+
+  // 2. Opción disponible 2: Ver recomendaciones básicas
+  if (btnInvitadoRecomendaciones) {
+    btnInvitadoRecomendaciones.addEventListener('click', () => {
+      invitadoService.logAuditoria('ACCESO a "Ver recomendaciones básicas"');
+      window.location.href = 'consultar_recomendaciones.html';
+    });
+  }
+
+  // 3. Opción disponible 3: Líneas de ayuda
+  if (btnInvitadoAyuda) {
+    btnInvitadoAyuda.addEventListener('click', () => {
+      invitadoService.logAuditoria('APERTURA de modal "Líneas de ayuda"');
+      if (modalLineasAyuda) modalLineasAyuda.classList.add('open');
+    });
+  }
+
+  // Cerrar modal de líneas de ayuda
+  if (btnCerrarAyuda) {
+    btnCerrarAyuda.addEventListener('click', () => {
+      if (modalLineasAyuda) modalLineasAyuda.classList.remove('open');
+    });
+  }
+
+  if (modalLineasAyuda) {
+    modalLineasAyuda.addEventListener('click', (e) => {
+      if (e.target === modalLineasAyuda) {
+        modalLineasAyuda.classList.remove('open');
+      }
+    });
+  }
+
+  // 4. Funciones exclusivas bloqueadas (4 tarjetas)
+  const tilesBloqueadas = document.querySelectorAll('.tile-locked');
+  tilesBloqueadas.forEach(tile => {
+    tile.addEventListener('click', async () => {
+      const nombreFuncion = tile.dataset.exclusive || tile.querySelector('h3')?.textContent || 'Función exclusiva';
+      showToast(`🔒 "${nombreFuncion}" requiere crear una cuenta o iniciar sesión`);
+      await invitadoService.registrarBloqueo(nombreFuncion);
     });
   });
 
-  // 2. Botón "Entendido" del modal
+  // 5. Botón inferior para salir del modo invitado y volver a la Landing
+  if (btnSalirInvitado) {
+    btnSalirInvitado.addEventListener('click', async () => {
+      await invitadoService.salirModoInvitado('panel');
+      window.location.href = 'login.html';
+    });
+  }
+
+  // 6. Botón superior del header para iniciar sesión
+  if (btnLoginHeader) {
+    btnLoginHeader.addEventListener('click', async (e) => {
+      e.preventDefault();
+      await invitadoService.salirModoInvitado('header');
+      window.location.href = 'login.html';
+    });
+  }
+}
+
+/**
+ * Inicializa los eventos del Mensaje Aclaratorio (PB-04) y servicios registrados
+ */
+function inicializarAvisoAclaratorio() {
+  // Clic en las tarjetas del usuario registrado
+  if (gridRegistrado) {
+    const botonesRegistrados = gridRegistrado.querySelectorAll('.btn-tile, [data-feature]');
+    botonesRegistrados.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const feature = btn.dataset.feature || btn.closest('.tile')?.querySelector('h3')?.textContent || 'Funcionalidad';
+
+        if (!avisoService.haAceptadoAviso()) {
+          pendingAction = feature;
+          avisoService.logAuditoria(`INTENTO de acceder por primera vez a: "${feature}" -> se muestra aviso antes de continuar`);
+          openAviso(feature);
+        } else {
+          avisoService.logAuditoria(`ACCESO directo (aviso ya visualizado previamente): "${feature}"`);
+          showToast(`Accediendo a: ${feature} ✓`);
+        }
+      });
+    });
+  }
+
+  // Botón "Entendido" del modal aclaratorio
   if (btnEntendido) {
     btnEntendido.addEventListener('click', () => {
       if (avisoModal) avisoModal.classList.remove('open');
@@ -121,13 +263,19 @@ function inicializarAvisoAclaratorio() {
       if (pendingAction) {
         const accion = pendingAction;
         pendingAction = null;
-        avisoService.logAuditoria(`ACCESO PERMITIDO tras aceptar aviso: "${accion}"`);
-        showToast(`Accediendo a: ${accion} ✓`);
+
+        if (accion === 'cuestionario_invitado' || accion === 'Responder cuestionario') {
+          avisoService.logAuditoria('ACCESO PERMITIDO tras aceptar aviso -> Redirigiendo a encuesta_invitado.html');
+          window.location.href = 'encuesta_invitado.html';
+        } else {
+          avisoService.logAuditoria(`ACCESO PERMITIDO tras aceptar aviso: "${accion}"`);
+          showToast(`Accediendo a: ${accion} ✓`);
+        }
       }
     });
   }
 
-  // 3. Botón "Cerrar" del modal (cancela el acceso y retorna a la pantalla anterior sin alterar nada)
+  // Botón "Cerrar" del modal aclaratorio (cancela el acceso y retorna)
   if (btnCerrar) {
     btnCerrar.addEventListener('click', () => {
       if (avisoModal) avisoModal.classList.remove('open');
@@ -135,14 +283,14 @@ function inicializarAvisoAclaratorio() {
 
       if (pendingAction) {
         const accion = pendingAction;
-        avisoService.logAuditoria(`ACCESO CANCELADO por "Cerrar": "${accion}"`);
-        showToast(`Acceso a "${accion}" cancelado - retornaste a la pantalla de inicio`);
         pendingAction = null;
+        avisoService.logAuditoria(`ACCESO CANCELADO por "Cerrar": "${accion}"`);
+        showToast(`Acceso cancelado - retornaste a la pantalla de inicio`);
       }
     });
   }
 
-  // 4. Botón "Entendido" del modal de error
+  // Botón del modal de error
   if (errOk) {
     errOk.addEventListener('click', () => {
       if (errModal) errModal.classList.remove('open');
@@ -153,7 +301,7 @@ function inicializarAvisoAclaratorio() {
     });
   }
 
-  // 5. Enlace permanente del pie de página "Aviso: no diagnóstico"
+  // Enlace permanente del pie de página "Aviso: no diagnóstico"
   if (footerAviso) {
     footerAviso.addEventListener('click', (e) => {
       e.preventDefault();
@@ -161,12 +309,11 @@ function inicializarAvisoAclaratorio() {
     });
   }
 
-  // Log inicial de sistema listo
   avisoService.logAuditoria('Sistema listo - el enlace "Aviso: no diagnóstico" está disponible en la barra inferior');
 }
 
 /**
- * Función de cierre de sesión
+ * Función de cierre de sesión para usuarios registrados
  */
 function logout() {
   const confirmacion = confirm('¿Estás seguro de que deseas cerrar sesión?');
@@ -183,6 +330,7 @@ if (btnLogout) {
   btnLogout.addEventListener('click', logout);
 }
 
-// Cargar datos y arrancar controlador
+// Cargar datos de sesión e inicializar componentes
 cargarDatosUsuario();
+inicializarEventosInvitado();
 inicializarAvisoAclaratorio();
