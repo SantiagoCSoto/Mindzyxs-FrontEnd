@@ -42,7 +42,12 @@ const ICON_PATHS = {
   target: '<circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle>',
   pen: '<rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="M12 11h4"></path><path d="M12 16h4"></path><path d="M8 11h.01"></path><path d="M8 16h.01"></path>',
   help: '<circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><path d="m4.93 4.93 4.24 4.24"></path><path d="m14.83 9.17 4.24-4.24"></path><path d="m14.83 14.83 4.24 4.24"></path><path d="m9.17 14.83-4.24 4.24"></path>',
-  alert: '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path>'
+  alert: '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path>',
+  wind: '<path d="M12.8 19.6A2 2 0 1 0 14 16H2"></path><path d="M17.5 8a2.5 2.5 0 1 1 2 4H2"></path><path d="M9.8 4.4A2 2 0 1 1 11 8H2"></path>',
+  sprout: '<path d="M7 20h10"></path><path d="M10 20c5.5-2.5.8-6.4 3-10"></path><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"></path><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"></path>',
+  siren: '<path d="M7 18v-6a5 5 0 1 1 10 0v6"></path><path d="M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2z"></path><path d="M21 12h1"></path><path d="M18.5 4.5 18 5"></path>',
+  sparkles: '<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path>',
+  moon: '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>'
 };
 
 const ICON_COLOR = {
@@ -51,7 +56,12 @@ const ICON_COLOR = {
   target: '#B3541E',
   pen: '#6B5BCE',
   help: '#E85D7A',
-  alert: '#E8A347'
+  alert: '#E8A347',
+  wind: '#2A8A94',
+  sprout: '#1BBF6B',
+  siren: '#E85D7A',
+  sparkles: '#6B5BCE',
+  moon: '#6B5BCE'
 };
 
 function SvgIcon(name, size) {
@@ -60,7 +70,10 @@ function SvgIcon(name, size) {
 }
 
 function iconFor(emoji) {
-  const map = { '💡': 'bulb', '🧘': 'heart', '📝': 'pen', '🆘': 'help', '⚠️': 'alert', '🎯': 'target' };
+  const map = {
+    '💡': 'bulb', '🧘': 'heart', '📝': 'pen', '🆘': 'help', '⚠️': 'alert', '🎯': 'target',
+    '🌬': 'wind', '🌱': 'sprout', '🚨': 'siren', '💆': 'sparkles', '🌙': 'moon'
+  };
   return SvgIcon(map[emoji], 20);
 }
 
@@ -141,14 +154,15 @@ function renderState() {
 
   recList.innerHTML = '';
   recData.forEach((r) => {
+    const esPrioritaria = r.prioritaria === true || (riesgo && r.nivel_riesgo === riesgo);
     const item = document.createElement('div');
-    item.className = 'rec-item' + (r.prioritaria ? ' prio' : '');
+    item.className = 'rec-item' + (esPrioritaria ? ' prio' : '');
     item.innerHTML =
       '<div class="rec-ico">' + iconFor(r.icono) + '</div>' +
       '<div class="rec-info">' +
         '<h4>' + escapeHtml(r.titulo) + '</h4>' +
         '<p>' + escapeHtml(r.intro || '') + '</p>' +
-        (r.prioritaria ? '<span class="prio-tag">Prioritaria para tu nivel</span>' : '') +
+        (esPrioritaria ? '<span class="prio-tag">Prioritaria para tu nivel</span>' : '') +
       '</div>' +
       '<button class="btn-ver" data-id="' + r.id + '">Ver / Abrir</button>';
     item.querySelector('.btn-ver').addEventListener('click', () => openDetail(r.id));
@@ -179,7 +193,10 @@ async function showDetail(id) {
   document.getElementById('detIntro').textContent = r.intro || '';
   const steps = document.getElementById('detSteps');
   steps.innerHTML = '';
-  (r.pasos || []).forEach((s) => {
+  const pasos = Array.isArray(r.pasos)
+    ? r.pasos
+    : String(r.pasos || '').split(/[\r\n]+/).filter(Boolean);
+  pasos.forEach((s) => {
     const li = document.createElement('li');
     li.textContent = s;
     steps.appendChild(li);

@@ -15,65 +15,94 @@ const DEMO_AVISO = {
 const DEMO_RECOMENDACIONES = [
   {
     id: 1,
-    icono: '💡',
-    titulo: 'Respiración consciente',
-    intro: 'Técnica rápida para calmar la ansiedad en momentos de tensión.',
-    duracion: '5 min',
-    prioritaria: true,
+    icono: '🌬',
+    titulo: 'Respiración guiada',
+    intro: 'Ejercicio simple de respiración consciente para reducir la tensión del momento.',
+    duracion: 'Duración sugerida: 5 minutos',
+    nivel_riesgo: 'Bajo',
     pasos: [
-      'Siéntate en una posición cómoda con la espalda recta.',
-      'Inhala por la nariz contando hasta 4.',
-      'Sostén el aire contando hasta 4.',
-      'Exhala lentamente por la boca contando hasta 6.',
-      'Repite durante 5 minutos.'
+      'Siéntate o recuéstate en una posición cómoda y cierra los ojos si lo prefieres.',
+      'Inhala lentamente por la nariz contando hasta 4.',
+      'Sostén la respiración contando hasta 4.',
+      'Exhala por la boca contando hasta 6.',
+      'Repite el ciclo durante 5 minutos, llevando tu atención solo a la respiración.'
     ],
-    instrucciones: 'Practica esta técnica cuando notes los primeros signos de ansiedad. Úsala 2 o 3 veces al día si lo necesitas.'
+    instrucciones: 'Realiza este ejercicio en un lugar tranquilo. Si sientes mareo, vuelve a la respiración normal y descansa. No reemplaza la supervisión de un profesional de la salud.'
   },
   {
     id: 2,
-    icono: '🧘',
-    titulo: 'Pausa de mindfulness',
-    intro: 'Un espacio de atención plena para reconectar con el presente.',
-    duracion: '10 min',
-    prioritaria: false,
+    icono: '🌱',
+    titulo: 'Puedes mejorar paso a paso',
+    intro: 'Está bien no sentirse bien siempre: pequeños pasos también cuentan.',
+    duracion: 'Duración sugerida: 5 minutos',
+    nivel_riesgo: 'Medio',
     pasos: [
-      'Busca un lugar tranquilo y sin interrupciones.',
-      'Coloca la atención en tu respiración sin juzgarla.',
-      'Si tu mente divaga, vuelve con suavidad a la respiración.',
-      'Observa tu cuerpo y las sensaciones del momento.',
-      'Cierra la sesión estirando suavemente el cuerpo.'
+      'Haz una pausa consciente de 3 minutos y observa cómo te sientes.',
+      'Elige una sola cosa pequeña de la lista de recomendaciones y pruébala hoy.',
+      'Registra cómo te sientes mañana para notar tu propio avance.'
     ],
-    instrucciones: 'Realízalo una vez al día, preferiblemente a la misma hora, para crear un hábito estable.'
+    instrucciones: 'No te exijas resultados inmediatos: el bienestar se cultiva por pasos. Si lo necesitas, revisa las demás recomendaciones básicas.'
   },
   {
     id: 3,
-    icono: '🆘',
-    titulo: 'Contacta con líneas de ayuda',
-    intro: 'Canales de apoyo disponibles si sientes que necesitas hablar con alguien.',
-    duracion: 'Cuando lo necesites',
-    prioritaria: true,
+    icono: '🚨',
+    titulo: 'Alerta: busca apoyo ahora',
+    intro: 'Si estás en riesgo, busca apoyo ahora: no te quedes solo con esto.',
+    duracion: 'Ahora mismo',
+    nivel_riesgo: 'Alto',
     pasos: [
-      'Identifica la línea de ayuda de tu país.',
-      'Marca el número desde un lugar seguro y privado.',
-      'Describe cómo te sientes de forma honesta.',
-      'Sigue las indicaciones del personal que te atiende.'
+      'Contacta ahora a una línea de ayuda de tu país.',
+      'Si puedes, avisa a alguien de confianza cómo te sientes.',
+      'Busca ayuda profesional o acude al servicio de urgencias más cercano.'
     ],
-    instrucciones: 'Si estás en crisis, no esperes a estar peor: llama o escribe de inmediato. Es una señal de fortaleza pedir ayuda.'
+    instrucciones: 'En riesgo: consulta a las líneas de ayuda o a un profesional de la salud mental. Ante urgencia, usa los servicios de emergencia.'
   },
   {
     id: 4,
-    icono: '📝',
-    titulo: 'Diario de emociones',
-    intro: 'Registra cómo te sientes para identificar patrones y desahogarte.',
-    duracion: '5 min diarios',
-    prioritaria: false,
+    icono: '💆',
+    titulo: 'Relajación muscular',
+    intro: 'Técnica de tensión y distensión muscular para soltar la tensión acumulada.',
+    duracion: 'Duración sugerida: 10 minutos',
+    nivel_riesgo: 'Medio',
     pasos: [
-      'Elige un momento fijo del día para escribir.',
-      'Anota la emoción principal que sentiste.',
-      'Describe qué la provocó en una o dos frases.',
-      'Escribe una acción de cuidado para el día siguiente.'
+      'Acuéstate o siéntate cómodamente.',
+      'Tensa los músculos de los pies durante 5 segundos y luego suelta.',
+      'Sube por cada grupo muscular: piernas, abdomen, manos, brazos, hombros, cuello y rostro.',
+      'En cada zona tensa 5 segundos y relaja 10 segundos.',
+      'Termina respirando despacio durante 1 minuto.'
     ],
-    instrucciones: 'No busques redacción perfecta. El objetivo es reconocer y verbalizar tus emociones, no escribir un informe.'
+    instrucciones: 'Evita tensar zonas con dolor o lesión. Si el dolor aumenta, detén el ejercicio. Es autocuidado básico y no sustituye un tratamiento clínico.'
+  },
+  {
+    id: 5,
+    icono: '🧘',
+    titulo: 'Pausa consciente',
+    intro: 'Toma un momento para reconectar con el presente y calmar la mente.',
+    duracion: 'Duración sugerida: 3 minutos',
+    nivel_riesgo: null,
+    pasos: [
+      'Detén cualquier actividad y deja a un lado distracciones.',
+      'Observa tu entorno: nombra 3 cosas que ves, 2 que escuchas y 1 que sientes.',
+      'Lleva tu atención a la respiración durante 1 minuto.',
+      'Pregúntate cómo te sientes en este momento, sin juzgar la respuesta.'
+    ],
+    instrucciones: 'Puedes hacer esta pausa varias veces al día cuando te sientas abrumado. Es autocuidado básico, no un tratamiento clínico.'
+  },
+  {
+    id: 6,
+    icono: '🌙',
+    titulo: 'Higiene del sueño',
+    intro: 'Hábitos simples para favorecer un descanso de mejor calidad.',
+    duracion: 'Duración sugerida: 15 minutos (rutina nocturna)',
+    nivel_riesgo: null,
+    pasos: [
+      'Define una hora fija para ir a dormir y para despertar.',
+      '30 minutos antes, apaga pantallas y baja las luces.',
+      'Evita cafeína y comidas pesadas cerca de la hora de dormir.',
+      'Crea una rutina relajante: lectura breve, respiración suave o música tranquila.',
+      'Mantén el dormitorio oscuro, fresco y silencioso.'
+    ],
+    instrucciones: 'Establece estos hábitos de forma progresiva. Si los problemas de sueño persisten, consulta a un profesional de la salud. Es autocuidado básico, no tratamiento clínico.'
   }
 ];
 
