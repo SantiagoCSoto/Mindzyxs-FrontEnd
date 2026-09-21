@@ -21,7 +21,7 @@ export const PANEL_INVITADO_DEFAULT = {
       codigo: 'recomendaciones',
       titulo: 'Ver recomendaciones básicas',
       descripcion: 'Consejos generales de cuidado',
-      ruta: 'consultar_recomendaciones.html',
+      ruta: 'recomendaciones_invitado.html',
       sensible: false
     },
     {

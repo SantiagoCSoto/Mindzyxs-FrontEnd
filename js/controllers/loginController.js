@@ -21,17 +21,17 @@ const btnLoginSubmit = document.getElementById('btn-login');
 const btnModalContinuar = document.getElementById('btn-modal-continuar');
 const btnModoInvitado = document.getElementById('btn-modo-invitado');
 
-// Acción para entrar en Modo Invitado (PB-06)
+// Acción para entrar en Modo Invitado (PB-06) -> Panel del invitado (PB-09)
 if (btnModoInvitado) {
   btnModoInvitado.addEventListener('click', async () => {
     btnModoInvitado.disabled = true;
     btnModoInvitado.textContent = 'Accediendo...';
     try {
       await invitadoService.iniciarModoInvitado('login');
-      window.location.href = 'inicio.html';
+      window.location.href = 'recomendaciones_invitado.html';
     } catch (err) {
       console.error('Error al iniciar modo invitado:', err);
-      window.location.href = 'inicio.html';
+      window.location.href = 'recomendaciones_invitado.html';
     }
   });
 }

@@ -176,7 +176,7 @@ function inicializarEventosInvitado() {
   if (btnInvitadoRecomendaciones) {
     btnInvitadoRecomendaciones.addEventListener('click', () => {
       invitadoService.logAuditoria('ACCESO a "Ver recomendaciones básicas"');
-      window.location.href = 'consultar_recomendaciones.html';
+      window.location.href = 'recomendaciones_invitado.html';
     });
   }
 
