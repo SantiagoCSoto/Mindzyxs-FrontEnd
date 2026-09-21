@@ -1,13 +1,30 @@
 /**
  * Front-end de la encuesta de invitado.
- * Solo valida y procesa la interacción en el navegador.
+ * Valida el formulario, envía las respuestas al backend (POST /api/encuesta/invitado)
+ * y, si el invitado quiere recomendaciones, redirige al panel con su nivel de riesgo.
  */
+
+import { enviarEncuestaInvitado } from '../services/encuestaService.js';
 
 const form = document.querySelector('form');
 const progressFill = document.getElementById('progress-fill');
 const progressText = document.getElementById('progress-text');
 
 const preguntasObligatorias = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9', 'q10'];
+
+// Preguntas de escala (q4 binaria Si/No no entra al promedio del nivel).
+const preguntasEscala = ['q1', 'q2', 'q3', 'q5', 'q6', 'q7', 'q8', 'q9', 'q10'];
+
+function calcularNivelLocal(respuestas) {
+  const valores = preguntasEscala
+    .map((key) => Number.parseInt(respuestas[key], 10))
+    .filter((valor) => Number.isFinite(valor));
+  if (valores.length === 0) {
+    return null;
+  }
+  const promedio = Math.round(valores.reduce((a, b) => a + b, 0) / valores.length);
+  return promedio <= 2 ? 'Bajo' : promedio === 3 ? 'Medio' : 'Alto';
+}
 
 function actualizarBarraProgreso() {
   if (!progressFill || !progressText) {
@@ -30,7 +47,7 @@ if (form) {
     radio.addEventListener('change', actualizarBarraProgreso);
   });
 
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const formData = new FormData(form);
@@ -62,9 +79,28 @@ if (form) {
       respuestas
     };
 
+    const resultado = await enviarEncuestaInvitado(payload);
+
+    if (!resultado.ok) {
+      alert(resultado.error || 'No se pudo enviar la encuesta. Inténtalo de nuevo.');
+      if (boton) {
+        boton.disabled = false;
+        boton.textContent = 'Enviar encuesta';
+      }
+      return;
+    }
+
+    const quiereRecomendaciones = respuestas.q4 === '1';
+    const nivel = resultado.data?.nivel || calcularNivelLocal(respuestas);
+
     localStorage.setItem('encuesta_invitado_front', JSON.stringify(payload));
 
-    alert('Encuesta enviada correctamente.');
+    if (quiereRecomendaciones && nivel) {
+      window.location.href = 'recomendaciones_invitado.html?nivel=' + encodeURIComponent(nivel);
+      return;
+    }
+
+    alert(resultado.message || 'Encuesta enviada correctamente.');
     form.reset();
     actualizarBarraProgreso();
 
