@@ -1,0 +1,392 @@
+/* PB-27 — Administración de base de datos (mismo estilo visual que inicio.css) */
+
+/* Hero principal (igual que la página de inicio) */
+.inicio-hero {
+  margin: 0 auto;
+  padding: 60px 40px;
+  background: linear-gradient(135deg, #f8fafc 0%, #ecf9f7 100%);
+  text-align: center;
+}
+
+.hero-contenido {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.saludo-principal h1 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 12px;
+  line-height: 1.2;
+}
+
+.mensaje-bienvenida {
+  font-size: 16px;
+  color: #64748b;
+  margin: 0 0 40px;
+}
+
+/* Tarjeta de sesión */
+.tarjeta-sesion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background-color: #ffffff;
+  padding: 24px 32px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.sesion-icono {
+  width: 56px;
+  height: 56px;
+  background-color: #ecf9f7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sesion-icono svg {
+  width: 28px;
+  height: 28px;
+  color: #56c5c0;
+  stroke: #56c5c0;
+}
+
+.sesion-info {
+  text-align: left;
+}
+
+.sesion-estado {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0 0 4px;
+  font-weight: 600;
+}
+
+.sesion-rol {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+/* Permiso denegado (se mantiene por funcionalidad) */
+.denied-box {
+  display: none;
+  background-color: #fff1f3;
+  border: 1px solid #ffe0e6;
+  padding: 16px;
+  border-radius: 12px;
+  text-align: center;
+  margin-top: 12px;
+}
+
+.denied-box.show {
+  display: block;
+}
+
+.denied-box .denied-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #eb5771;
+  margin-top: 6px;
+}
+
+.denied-box .denied-sub {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+/* Sección acceso rápido (igual que la página de inicio) */
+.acceso-rapido {
+  max-width: 900px;
+  margin: 60px auto 40px;
+  padding: 0 40px;
+}
+
+.acceso-rapido h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 24px;
+  text-align: center;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.admin-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px 24px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #1e293b;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.admin-tile h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.admin-tile p {
+  margin: 0;
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.admin-tile:hover {
+  background-color: #ecf9f7;
+  border-color: #56c5c0;
+  color: #56c5c0;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(86, 197, 192, 0.15);
+}
+
+/* Botones de acción (mismo lenguaje visual que inicio) */
+.btn-admin {
+  width: 100%;
+  height: 38px;
+  border-radius: 20px;
+  border: none;
+  background-color: #56c5c0;
+  color: white;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-admin:hover {
+  background-color: #48b4af;
+}
+
+.btn-admin:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-admin.secondary {
+  background: #ffffff;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-admin.secondary:hover {
+  background: #ecf9f7;
+  color: #56c5c0;
+  border-color: #56c5c0;
+}
+
+/* Progreso */
+.progress {
+  display: none;
+  width: 100%;
+  margin-top: 4px;
+  background: #f0fdf4;
+  border-radius: 20px;
+  overflow: hidden;
+  height: 10px;
+}
+
+.progress.show {
+  display: block;
+}
+
+.progress .bar {
+  height: 100%;
+  width: 0%;
+  background: #56c5c0;
+  transition: width 0.3s;
+}
+
+/* Mensajes */
+.msg-admin {
+  display: none;
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.msg-admin.ok {
+  display: block;
+  background: #e8fff1;
+  border: 1px solid #c6f5d9;
+  color: #0e8f4b;
+}
+
+.msg-admin.err {
+  display: block;
+  background: #fff1f3;
+  border: 1px solid #ffe0e6;
+  color: #eb5771;
+}
+
+/* Lista de respaldos */
+.backup-list {
+  display: none;
+  width: 100%;
+  margin-top: 24px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.backup-list-head {
+  display: grid;
+  grid-template-columns: 1fr auto auto 32px;
+  gap: 8px;
+  padding: 12px;
+  background: #ecf9f7;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.backup-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto 32px;
+  gap: 8px;
+  align-items: center;
+  padding: 12px;
+  border-top: 1px solid #f0faf9;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.btn-download {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid #56c5c0;
+  background: white;
+  color: #56c5c0;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.btn-download:hover {
+  background: #ecf9f7;
+}
+
+/* Consola de auditoría (estilo info-contenedor de inicio) */
+.audit-console {
+  width: 100%;
+  margin-top: 24px;
+  padding: 20px;
+  background-color: #f0fdf4;
+  border-left: 4px solid #56c5c0;
+  border-radius: 8px;
+}
+
+.audit-console .title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+  text-align: center;
+}
+
+.audit-console .log {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 11px;
+  color: #64748b;
+  max-height: 120px;
+  overflow: auto;
+  margin-top: 10px;
+  white-space: pre-wrap;
+  font-family: 'Consolas', 'Courier New', monospace;
+  text-align: left;
+}
+
+/* Botón logout en header (igual que inicio.css) */
+.btn-logout {
+  background-color: #eb5771;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-logout:hover {
+  background-color: #d63a54;
+}
+
+/* Responsividad (igual que inicio) */
+@media (max-width: 768px) {
+  .inicio-hero {
+    padding: 40px 20px;
+  }
+
+  .saludo-principal h1 {
+    font-size: 24px;
+  }
+
+  .mensaje-bienvenida {
+    font-size: 14px;
+    margin-bottom: 30px;
+  }
+
+  .tarjeta-sesion {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .sesion-info {
+    text-align: center;
+  }
+
+  .acceso-rapido {
+    padding: 0 20px;
+  }
+
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header-auth-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn-logout {
+    width: 100%;
+  }
+}
