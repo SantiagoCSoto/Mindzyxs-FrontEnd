@@ -7,6 +7,21 @@
 import { postJson } from './apiClient.js';
 
 const STORAGE_KEY = 'encuesta_invitado_ultima';
+const STORAGE_KEY_SESION = 'encuesta_invitado_front';
+
+/**
+ * Guarda las respuestas temporalmente en la sesión del invitado (PB-07).
+ * sessionStorage dura lo que dura la sesión del navegador.
+ */
+export function guardarEncuestaTemporal(payload) {
+  const datos = {
+    ...payload,
+    completado: true,
+    fecha: new Date().toISOString()
+  };
+  sessionStorage.setItem(STORAGE_KEY_SESION, JSON.stringify(datos));
+  return datos;
+}
 
 export async function enviarEncuestaInvitado(payload) {
   try {
