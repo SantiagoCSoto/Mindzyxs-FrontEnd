@@ -251,7 +251,7 @@ if (btnSalirSi) {
     sessionStorage.removeItem(KEY_SESION);
     sessionStorage.removeItem(KEY_NIVEL);
     registrarLog('SALIDA del cuestionario confirmada — sin guardar como completado');
-    window.location.href = 'inicio.html';
+    window.location.href = 'panel_invitado.html';
   });
 }
 
@@ -271,8 +271,8 @@ if (btnVerResultado) {
 
 if (btnVolverInicio) {
   btnVolverInicio.addEventListener('click', () => {
-    registrarLog('Volver al inicio desde "Cuestionario completado"');
-    window.location.href = 'inicio.html';
+    registrarLog('Volver al panel desde "Cuestionario completado"');
+    window.location.href = 'panel_invitado.html';
   });
 }
 
