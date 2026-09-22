@@ -750,3 +750,17 @@ body {
   .dash-hero { grid-template-columns: 1fr; }
   .dash-hero-actions { align-items: stretch; }
 }
+
+/* Landing publica (inicio): heroe, features, nosotros, ayuda */
+.hero-landing { text-align: center; padding: 34px 24px; }
+.eyebrow { display: inline-block; font-size: 11px; font-weight: 700; color: #2A8A94; background: #E6F7F8; padding: 5px 12px; border-radius: 20px; margin-bottom: 10px; }
+.hero-landing h1 { font-size: 30px; }
+.hero-desc { font-size: 14px; color: #475467; line-height: 1.7; margin-top: 12px; max-width: 640px; margin-left: auto; margin-right: auto; }
+.hero-ctas { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+.btn-cta { display: inline-block; padding: 12px 22px; border-radius: 20px; font-weight: 700; font-size: 14px; text-decoration: none; border: 1px solid #DFDAEE; background: #fff; color: var(--text); cursor: pointer; font-family: inherit; }
+.btn-cta.primary { background: linear-gradient(180deg,#6ECFD4,#5ABCC2); color: #fff; border: none; box-shadow: 0 4px 12px rgba(94,188,196,.35); }
+.btn-cta.ghost { background: #EDE7FF; border-color: #EDE7FF; color: #5A45C9; }
+.grid-features { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.section-text { font-size: 13px; color: #475467; line-height: 1.7; margin-top: 10px; }
+.mail-link { color: #2A8A94; font-weight: 700; }
+.btn-registro-header { display: inline-flex; align-items: center; padding: 9px 18px; border-radius: 20px; font-weight: 700; font-size: 13px; text-decoration: none; background: linear-gradient(180deg,#6ECFD4,#5ABCC2); color: #fff; box-shadow: 0 4px 12px rgba(94,188,196,.35); }
