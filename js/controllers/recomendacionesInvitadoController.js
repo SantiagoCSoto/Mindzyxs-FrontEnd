@@ -222,18 +222,18 @@ document.getElementById('openCuestionario').addEventListener('click', async () =
 
 document.querySelectorAll('.mini-opts .tile[data-out]').forEach((t) => {
   t.addEventListener('click', () => {
-    showToast('Líneas de ayuda — fuera del alcance de esta pantalla (ver PB-06)');
+    showToast('Líneas de ayuda — fuera del alcance de esta pantalla');
   });
 });
 
 document.getElementById('panelExit').addEventListener('click', async () => {
-  addLog('SALIDA del modo invitado — vuelve al login');
+  addLog('SALIDA del modo invitado — vuelve a la landing');
   await invitadoService.salirModoInvitado('panel');
-  window.location.href = 'login.html';
+  window.location.href = 'inicio.html';
 });
 
 document.getElementById('volverRecom').addEventListener('click', () => {
-  showScreen('panel');
+  window.location.href = 'panel_invitado.html';
   addLog('NAVEGACIÓN: Volver desde Recomendaciones básicas — regresa al panel de invitado');
 });
 
@@ -266,14 +266,15 @@ document.getElementById('detBack').addEventListener('click', () => {
 });
 
 document.getElementById('detHome').addEventListener('click', () => {
-  showScreen('panel');
+  window.location.href = 'panel_invitado.html';
   addLog('NAVEGACIÓN: "Volver al inicio (Invitado)" — regresa al panel de invitado');
 });
 
 document.getElementById('emptyBack').addEventListener('click', () => {
-  showScreen('panel');
+  window.location.href = 'panel_invitado.html';
   addLog('NAVEGACIÓN: "Volver al inicio (Invitado)" desde estado vacío');
 });
 
 loadList();
+showScreen('recom');
 addLog('Sistema listo — recomendaciones dinámicas por API (priorizadas por nivel de la sesión)');

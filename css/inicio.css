@@ -764,3 +764,5 @@ body {
 .section-text { font-size: 13px; color: #475467; line-height: 1.7; margin-top: 10px; }
 .mail-link { color: #2A8A94; font-weight: 700; }
 .btn-registro-header { display: inline-flex; align-items: center; padding: 9px 18px; border-radius: 20px; font-weight: 700; font-size: 13px; text-decoration: none; background: linear-gradient(180deg,#6ECFD4,#5ABCC2); color: #fff; box-shadow: 0 4px 12px rgba(94,188,196,.35); }
+
+a.btn-tile { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; line-height: 38px; }
