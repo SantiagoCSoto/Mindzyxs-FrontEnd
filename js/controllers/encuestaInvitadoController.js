@@ -268,16 +268,9 @@ if (btnSalirNo) {
 
 if (btnVerResultado) {
   btnVerResultado.addEventListener('click', () => {
-    // PR2 (PB-08) re-apunta a la pantalla de riesgo; por ahora usa el nivel
-    // de la sesión para priorizar recomendaciones (página existente).
-    let nivel = null;
-    try {
-      const raw = sessionStorage.getItem(KEY_NIVEL);
-      nivel = raw ? JSON.parse(raw) : null;
-    } catch (_) { nivel = null; }
-
-    registrarLog(`Ver resultado solicitado (nivel de riesgo: ${nivel ?? 'no calculable'})`);
-    window.location.href = 'recomendaciones_invitado.html' + (nivel ? '?nivel=' + encodeURIComponent(nivel) : '');
+    // PB-08: la pantalla de riesgo valida la sesión, calcula el nivel y lo presenta.
+    registrarLog('Ver resultado solicitado — va a la pantalla Resultado del riesgo');
+    window.location.href = 'resultado_riesgo.html';
   });
 }
 
