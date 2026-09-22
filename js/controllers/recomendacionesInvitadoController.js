@@ -82,7 +82,7 @@ function escapeHtml(s) {
 }
 
 function addLog(msg) {
-  console.log('[HU1-PB9]', new Date().toLocaleTimeString(), msg);
+  void msg;
 }
 
 function showToast(msg) {
@@ -136,7 +136,6 @@ async function loadList() {
   renderState();
   addLog(
     'CONSULTA de recomendaciones (invitado)' +
-    (res.localOnly ? ' — MODO DEMO (backend no disponible)' : '') +
     (riesgo ? (' — nivel ' + riesgoLabel[riesgo] + ', orden priorizado') : ' — orden estándar')
   );
 }

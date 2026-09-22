@@ -41,14 +41,9 @@ let preguntas = [];       // preguntas del catálogo (ordenadas)
 let indiceActual = 0;
 const respuestas = {};    // preguntaId -> opcionId
 
-// --- Logs (front): bitácora en sesión + consola ---
+// --- Logs desactivados en producción (la trazabilidad vive en dbo.auth) ---
 function registrarLog(mensaje) {
-  try {
-    const lista = JSON.parse(sessionStorage.getItem(KEY_LOG) || '[]');
-    lista.push({ fecha: new Date().toISOString(), mensaje });
-    sessionStorage.setItem(KEY_LOG, JSON.stringify(lista));
-  } catch (_) { /* sesión no disponible: solo consola */ }
-  console.info(`[Encuesta invitado] ${mensaje}`);
+  void mensaje;
 }
 
 function escapar(s) {

@@ -39,7 +39,6 @@ function mostrarError(mensaje) {
   document.querySelector('.result-card').hidden = true;
   errorMsg.textContent = mensaje || 'No se encontraron respuestas para calcular el riesgo. Por favor responde el cuestionario nuevamente';
   errorCard.hidden = false;
-  console.info('[Riesgo invitado] ' + errorMsg.textContent);
 }
 
 function pintarResultado(r) {
@@ -53,8 +52,6 @@ function pintarResultado(r) {
   lineasBtn.classList.toggle('urgente', !!alto);
   lineasBtn.textContent = alto ? '🚨 Líneas de ayuda (urgente)' : 'Líneas de ayuda';
   btnRecom.href = 'recomendaciones_invitado.html?nivel=' + encodeURIComponent(r.nivel);
-
-  console.info(`[Riesgo invitado] CÁLCULO — puntaje ${r.puntaje} → nivel "${r.nivel}"` + (alto ? ' — ALERTA de urgencia' : ''));
 }
 
 async function mostrarAvisoSiAplica() {
@@ -109,7 +106,6 @@ lineasBtn?.addEventListener('click', async () => {
       (l.cobertura ? '<br>📍 ' + escapar(l.cobertura) : '') +
       '</div>'
     ).join('') : '<div class="line-item">No hay líneas de ayuda disponibles en este momento.</div>';
-    console.info('[Riesgo invitado] VISUALIZACIÓN de líneas de ayuda (' + lineas.length + ')');
   } catch (error) {
     list.innerHTML = '<div class="line-item">No fue posible cargar las líneas de ayuda. Intente nuevamente.</div>';
   }

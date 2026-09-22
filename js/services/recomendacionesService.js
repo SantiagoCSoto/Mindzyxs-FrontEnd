@@ -1,7 +1,7 @@
 /**
  * Servicio para la pantalla "Recomendaciones básicas (Invitado)" (PB-09).
  * Consume los endpoints del backend en http://localhost:5015/api.
- * Si el backend no está disponible, responde con contenido de demostración
+ * Si el backend no está disponible, responde con contenido local de respaldo
  * para no romper el flujo invitado.
  */
 
