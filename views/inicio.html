@@ -118,46 +118,62 @@
         </article>
       </div>
 
-      <!-- Cuadrícula para Modo Invitado (PB-06) -->
-      <div class="grid grid-avail" id="gridInvitado" style="display: none;">
-        <!-- Opción 1: Responder cuestionario -->
-        <article class="tile">
-          <div class="tile-icon tile-icon-cyan" aria-hidden="true">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 20h9"></path>
-              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-            </svg>
+      <!-- Dashboard de Modo Invitado (PB-06, estilo Main/Index del proyecto original) -->
+      <div class="dash-invitado" id="dashInvitado" style="display: none;">
+        <div class="dash-hero">
+          <div class="dash-hero-text">
+            <h3>Mindzyxs</h3>
+            <p>Tu espacio de apoyo y seguimiento emocional.</p>
           </div>
-          <h3>Responder cuestionario</h3>
-          <p>Cuestionario de bienestar emocional</p>
-          <button type="button" class="btn btn-tile" id="btn-invitado-cuestionario" data-feature="Responder cuestionario">Entrar</button>
-        </article>
+          <div class="dash-hero-actions">
+            <button type="button" class="action-btn primary" id="btn-invitado-cuestionario" data-feature="Responder cuestionario">🌿 Responder cuestionario</button>
+            <a class="action-btn" id="btn-invitado-crear-cuenta" href="registro.html">✨ Crear cuenta</a>
+          </div>
+        </div>
 
-        <!-- Opción 2: Recomendaciones básicas -->
-        <article class="tile">
-          <div class="tile-icon tile-icon-yellow" aria-hidden="true">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 18h6"></path>
-              <path d="M10 22h4"></path>
-              <path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"></path>
-            </svg>
+        <div class="feed-title">Explora como invitado</div>
+        <div class="action-list">
+          <div class="action-item">
+            <div class="action-meta">
+              <div class="action-icon">🧾</div>
+              <div class="action-text">
+                <strong>Ver resultado</strong>
+                <span>Consulta tu nivel de riesgo emocional.</span>
+              </div>
+            </div>
+            <button type="button" class="action-link" id="btn-invitado-resultado">Abrir</button>
           </div>
-          <h3>Ver recomendaciones básicas</h3>
-          <p>Consejos generales de cuidado</p>
-          <button type="button" class="btn btn-tile" id="btn-invitado-recomendaciones" data-feature="Ver recomendaciones básicas">Entrar</button>
-        </article>
-
-        <!-- Opción 3: Líneas de ayuda -->
-        <article class="tile">
-          <div class="tile-icon tile-icon-sos" aria-hidden="true">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-            </svg>
+          <div class="action-item">
+            <div class="action-meta">
+              <div class="action-icon">💡</div>
+              <div class="action-text">
+                <strong>Recomendaciones</strong>
+                <span>Consejos básicos de autocuidado.</span>
+              </div>
+            </div>
+            <button type="button" class="action-link" id="btn-invitado-recomendaciones" data-feature="Ver recomendaciones básicas">Abrir</button>
           </div>
-          <h3>Líneas de ayuda</h3>
-          <p>Contactos de emergencia y apoyo</p>
-          <button type="button" class="btn btn-tile" id="btn-invitado-ayuda" data-feature="Líneas de ayuda">Entrar</button>
-        </article>
+          <div class="action-item">
+            <div class="action-meta">
+              <div class="action-icon">🆘</div>
+              <div class="action-text">
+                <strong>Líneas de ayuda</strong>
+                <span>Contactos de emergencia y apoyo.</span>
+              </div>
+            </div>
+            <button type="button" class="action-link" id="btn-invitado-ayuda" data-feature="Líneas de ayuda">Abrir</button>
+          </div>
+          <div class="action-item">
+            <div class="action-meta">
+              <div class="action-icon">⚠️</div>
+              <div class="action-text">
+                <strong>Aviso importante</strong>
+                <span>Información clave sobre el uso de la plataforma.</span>
+              </div>
+            </div>
+            <button type="button" class="action-link" id="btn-invitado-aviso">Leer</button>
+          </div>
+        </div>
       </div>
     </section>
 

@@ -26,13 +26,15 @@ const sesionPill = document.getElementById('sesionPill');
 // Elementos del DOM - Secciones y Cuadrículas
 const sectionTitleDisponibles = document.getElementById('sectionTitleDisponibles');
 const gridRegistrado = document.getElementById('gridRegistrado');
-const gridInvitado = document.getElementById('gridInvitado');
+const dashInvitado = document.getElementById('dashInvitado');
 const sectionExclusivas = document.getElementById('sectionExclusivas');
 
-// Elementos del DOM - Botones de Modo Invitado (PB-06)
+// Elementos del DOM - Botones de Modo Invitado (PB-06, dashboard estilo Main/Index)
 const btnInvitadoCuestionario = document.getElementById('btn-invitado-cuestionario');
 const btnInvitadoRecomendaciones = document.getElementById('btn-invitado-recomendaciones');
 const btnInvitadoAyuda = document.getElementById('btn-invitado-ayuda');
+const btnInvitadoResultado = document.getElementById('btn-invitado-resultado');
+const btnInvitadoAviso = document.getElementById('btn-invitado-aviso');
 const btnSalirInvitado = document.getElementById('btn-salir-invitado');
 
 // Elementos del DOM - Modales y Notificaciones
@@ -71,10 +73,10 @@ function cargarDatosUsuario() {
 
   if (esInvitado) {
     // -------------------------------------------------------------
-    // VISTA EN MODO INVITADO
+    // DASHBOARD EN MODO INVITADO (estilo Main/Index del proyecto original)
     // -------------------------------------------------------------
     if (gridRegistrado) gridRegistrado.style.display = 'none';
-    if (gridInvitado) gridInvitado.style.display = 'grid';
+    if (dashInvitado) dashInvitado.style.display = 'block';
     if (sectionExclusivas) sectionExclusivas.style.display = 'block';
 
     if (btnLogout) btnLogout.style.display = 'none';
@@ -82,10 +84,10 @@ function cargarDatosUsuario() {
     if (badgeGuestHero) badgeGuestHero.style.display = 'inline-block';
     if (sesionPill) sesionPill.style.display = 'none';
 
-    if (sectionTitleDisponibles) sectionTitleDisponibles.textContent = 'Opciones disponibles';
-    if (heroTitulo) heroTitulo.textContent = 'Inicio (Invitado)';
+    if (sectionTitleDisponibles) sectionTitleDisponibles.textContent = 'Explora como invitado';
+    if (heroTitulo) heroTitulo.textContent = 'Mindzyxs';
     if (heroSubtitulo) {
-      heroSubtitulo.innerHTML = 'Bienvenido a Mindzyxs en <b>modo invitado</b>. Tu espacio seguro para el apoyo y <b>monitoreo del bienestar emocional</b>.';
+      heroSubtitulo.innerHTML = 'Tu espacio de apoyo y <b>seguimiento emocional</b>.';
     }
 
     if (roleBadge) {
@@ -97,13 +99,13 @@ function cargarDatosUsuario() {
     if (nombreUsuarioSpan) nombreUsuarioSpan.textContent = 'Invitado';
     if (rolUsuarioSpan) rolUsuarioSpan.textContent = 'Invitado';
 
-    invitadoService.logAuditoria('Panel de inicio renderizado en MODO INVITADO: 3 opciones disponibles, 4 exclusivas bloqueadas');
+    invitadoService.logAuditoria('Panel de inicio renderizado en MODO INVITADO (dashboard): cuestionario, resultado, recomendaciones, aviso y exclusivas bloqueadas');
   } else {
     // -------------------------------------------------------------
     // VISTA PARA USUARIO REGISTRADO (PACIENTE / PSICÓLOGO)
     // -------------------------------------------------------------
     if (gridRegistrado) gridRegistrado.style.display = 'grid';
-    if (gridInvitado) gridInvitado.style.display = 'none';
+    if (dashInvitado) dashInvitado.style.display = 'none';
     if (sectionExclusivas) sectionExclusivas.style.display = 'none';
 
     if (btnLogout) btnLogout.style.display = 'inline-flex';
@@ -172,11 +174,26 @@ function inicializarEventosInvitado() {
     });
   }
 
-  // 2. Opción disponible 2: Ver recomendaciones básicas
+  // 2. Ver recomendaciones básicas (dashboard invitado)
   if (btnInvitadoRecomendaciones) {
     btnInvitadoRecomendaciones.addEventListener('click', () => {
       invitadoService.logAuditoria('ACCESO a "Ver recomendaciones básicas"');
       window.location.href = 'recomendaciones_invitado.html';
+    });
+  }
+
+  // 2b. Ver resultado (dashboard invitado -> pantalla de riesgo PB-08)
+  if (btnInvitadoResultado) {
+    btnInvitadoResultado.addEventListener('click', () => {
+      invitadoService.logAuditoria('ACCESO a "Ver resultado" (dashboard invitado)');
+      window.location.href = 'resultado_riesgo.html';
+    });
+  }
+
+  // 2c. Aviso importante (dashboard invitado -> modal aclaratorio PB-04)
+  if (btnInvitadoAviso) {
+    btnInvitadoAviso.addEventListener('click', () => {
+      openAviso(null);
     });
   }
 
