@@ -222,7 +222,7 @@ document.getElementById('openCuestionario').addEventListener('click', async () =
 
 document.querySelectorAll('.mini-opts .tile[data-out]').forEach((t) => {
   t.addEventListener('click', () => {
-    showToast('Líneas de ayuda — fuera del alcance de esta pantalla (ver PB-06)');
+    showToast('Líneas de ayuda — fuera del alcance de esta pantalla');
   });
 });
 
@@ -233,7 +233,7 @@ document.getElementById('panelExit').addEventListener('click', async () => {
 });
 
 document.getElementById('volverRecom').addEventListener('click', () => {
-  showScreen('panel');
+  window.location.href = 'panel_invitado.html';
   addLog('NAVEGACIÓN: Volver desde Recomendaciones básicas — regresa al panel de invitado');
 });
 

@@ -44,61 +44,45 @@
         <span>👤 Modo invitado &mdash; sin cuenta</span>
       </div>
 
-      <!-- Dashboard de Modo Invitado (PB-06, estilo Main/Index del proyecto original) -->
+      <!-- Opciones de Modo Invitado (PB-06) -->
       <div class="dash-invitado" id="dashInvitado">
-        <div class="dash-hero">
-          <div class="dash-hero-text">
-            <h3>Mindzyxs</h3>
-            <p>Tu espacio de apoyo y seguimiento emocional.</p>
-          </div>
-          <div class="dash-hero-actions">
-            <button type="button" class="action-btn primary" id="btn-invitado-cuestionario" data-feature="Responder cuestionario">🌿 Responder cuestionario</button>
-            <a class="action-btn" id="btn-invitado-crear-cuenta" href="registro.html">✨ Crear cuenta</a>
-          </div>
-        </div>
-
-        <div class="feed-title">Explora como invitado</div>
-        <div class="action-list">
-          <div class="action-item">
-            <div class="action-meta">
-              <div class="action-icon">🧾</div>
-              <div class="action-text">
-                <strong>Ver resultado</strong>
-                <span>Consulta tu nivel de riesgo emocional.</span>
-              </div>
-            </div>
-            <button type="button" class="action-link" id="btn-invitado-resultado">Abrir</button>
-          </div>
-          <div class="action-item">
-            <div class="action-meta">
-              <div class="action-icon">💡</div>
-              <div class="action-text">
-                <strong>Recomendaciones</strong>
-                <span>Consejos básicos de autocuidado.</span>
-              </div>
-            </div>
-            <button type="button" class="action-link" id="btn-invitado-recomendaciones" data-feature="Ver recomendaciones básicas">Abrir</button>
-          </div>
-          <div class="action-item">
-            <div class="action-meta">
-              <div class="action-icon">🆘</div>
-              <div class="action-text">
-                <strong>Líneas de ayuda</strong>
-                <span>Contactos de emergencia y apoyo.</span>
-              </div>
-            </div>
-            <button type="button" class="action-link" id="btn-invitado-ayuda" data-feature="Líneas de ayuda">Abrir</button>
-          </div>
-          <div class="action-item">
-            <div class="action-meta">
-              <div class="action-icon">⚠️</div>
-              <div class="action-text">
-                <strong>Aviso importante</strong>
-                <span>Información clave sobre el uso de la plataforma.</span>
-              </div>
-            </div>
-            <button type="button" class="action-link" id="btn-invitado-aviso">Leer</button>
-          </div>
+        <div class="grid grid-avail">
+          <article class="tile">
+            <div class="tile-icon tile-icon-cyan" aria-hidden="true">🌿</div>
+            <h3>Responder cuestionario</h3>
+            <p>Cuestionario de bienestar emocional</p>
+            <button type="button" class="btn btn-tile" id="btn-invitado-cuestionario" data-feature="Responder cuestionario">Entrar</button>
+          </article>
+          <article class="tile">
+            <div class="tile-icon" aria-hidden="true">✨</div>
+            <h3>Crear cuenta</h3>
+            <p>Accede a todas las funciones</p>
+            <a class="btn btn-tile" id="btn-invitado-crear-cuenta" href="registro.html">Entrar</a>
+          </article>
+          <article class="tile">
+            <div class="tile-icon" aria-hidden="true">🧾</div>
+            <h3>Ver resultado</h3>
+            <p>Consulta tu nivel de riesgo emocional</p>
+            <button type="button" class="btn btn-tile" id="btn-invitado-resultado">Abrir</button>
+          </article>
+          <article class="tile">
+            <div class="tile-icon tile-icon-yellow" aria-hidden="true">💡</div>
+            <h3>Recomendaciones</h3>
+            <p>Consejos básicos de autocuidado</p>
+            <button type="button" class="btn btn-tile" id="btn-invitado-recomendaciones" data-feature="Ver recomendaciones básicas">Abrir</button>
+          </article>
+          <article class="tile">
+            <div class="tile-icon tile-icon-sos" aria-hidden="true">🆘</div>
+            <h3>Líneas de ayuda</h3>
+            <p>Contactos de emergencia y apoyo</p>
+            <button type="button" class="btn btn-tile" id="btn-invitado-ayuda" data-feature="Líneas de ayuda">Abrir</button>
+          </article>
+          <article class="tile">
+            <div class="tile-icon" aria-hidden="true">⚠️</div>
+            <h3>Aviso importante</h3>
+            <p>Información clave de la plataforma</p>
+            <button type="button" class="btn btn-tile" id="btn-invitado-aviso">Leer</button>
+          </article>
         </div>
       </div>
     </section>
