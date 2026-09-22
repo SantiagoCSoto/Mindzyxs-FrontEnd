@@ -114,7 +114,7 @@ export const invitadoService = {
         resultado: 'ok'
       });
     } catch (err) {
-      console.warn('[invitadoService] No se pudo registrar el acceso en el backend:', err.message);
+      void err;
     }
   },
 
@@ -130,7 +130,7 @@ export const invitadoService = {
         funcion: funcion
       });
     } catch (err) {
-      console.warn('[invitadoService] No se pudo registrar el bloqueo en el backend:', err.message);
+      void err;
     }
   },
 
@@ -146,7 +146,7 @@ export const invitadoService = {
         origen: origen
       });
     } catch (err) {
-      console.warn('[invitadoService] No se pudo registrar la salida en el backend:', err.message);
+      void err;
     }
 
     sessionStorage.removeItem(STORAGE_KEY_INVITADO);
@@ -162,9 +162,10 @@ export const invitadoService = {
   },
 
   /**
-   * Emite logs de auditoría en consola con formato [HU1-PB6]
+   * Auditoría local desactivada en producción (antes: logs de consola [HU1-PB6]).
+   * La trazabilidad real vive en dbo.auth vía los endpoints del backend.
    */
   logAuditoria(mensaje) {
-    console.log('[HU1-PB6]', new Date().toLocaleTimeString(), mensaje);
+    void mensaje;
   }
 };

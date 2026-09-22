@@ -21,17 +21,15 @@ const btnLoginSubmit = document.getElementById('btn-login');
 const btnModalContinuar = document.getElementById('btn-modal-continuar');
 const btnModoInvitado = document.getElementById('btn-modo-invitado');
 
-// Acción para entrar en Modo Invitado (PB-06) -> Panel del invitado (PB-09)
+// Acción para entrar en Modo Invitado (PB-06) -> Panel del invitado
 if (btnModoInvitado) {
   btnModoInvitado.addEventListener('click', async () => {
     btnModoInvitado.disabled = true;
     btnModoInvitado.textContent = 'Accediendo...';
     try {
       await invitadoService.iniciarModoInvitado('login');
-      window.location.href = 'recomendaciones_invitado.html';
-    } catch (err) {
-      console.error('Error al iniciar modo invitado:', err);
-      window.location.href = 'recomendaciones_invitado.html';
+    } finally {
+      window.location.href = 'panel_invitado.html';
     }
   });
 }
@@ -131,7 +129,6 @@ if (formLogin) {
         btnLoginSubmit.textContent = 'Iniciar sesión';
       }
       mostrarBanner(bannerError, 'Error de conexión. Intenta de nuevo.');
-      console.error(err);
     }
   });
 }

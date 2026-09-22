@@ -82,7 +82,7 @@ function escapeHtml(s) {
 }
 
 function addLog(msg) {
-  console.log('[HU1-PB9]', new Date().toLocaleTimeString(), msg);
+  void msg;
 }
 
 function showToast(msg) {
@@ -136,7 +136,6 @@ async function loadList() {
   renderState();
   addLog(
     'CONSULTA de recomendaciones (invitado)' +
-    (res.localOnly ? ' — MODO DEMO (backend no disponible)' : '') +
     (riesgo ? (' — nivel ' + riesgoLabel[riesgo] + ', orden priorizado') : ' — orden estándar')
   );
 }
@@ -154,7 +153,9 @@ function renderState() {
 
   recList.innerHTML = '';
   recData.forEach((r) => {
-    const esPrioritaria = r.prioritaria === true || (riesgo && r.nivel_riesgo === riesgo);
+    // El backend devuelve `nivel` (el demo local usa `nivel_riesgo`): aceptar ambos.
+    const nivelItem = r.nivel ?? r.nivel_riesgo;
+    const esPrioritaria = r.prioritaria === true || (riesgo && nivelItem === riesgo);
     const item = document.createElement('div');
     item.className = 'rec-item' + (esPrioritaria ? ' prio' : '');
     item.innerHTML =
@@ -221,18 +222,18 @@ document.getElementById('openCuestionario').addEventListener('click', async () =
 
 document.querySelectorAll('.mini-opts .tile[data-out]').forEach((t) => {
   t.addEventListener('click', () => {
-    showToast('Líneas de ayuda — fuera del alcance de esta pantalla (ver PB-06)');
+    showToast('Líneas de ayuda — fuera del alcance de esta pantalla');
   });
 });
 
 document.getElementById('panelExit').addEventListener('click', async () => {
-  addLog('SALIDA del modo invitado — vuelve al login');
+  addLog('SALIDA del modo invitado — vuelve a la landing');
   await invitadoService.salirModoInvitado('panel');
-  window.location.href = 'login.html';
+  window.location.href = 'inicio.html';
 });
 
 document.getElementById('volverRecom').addEventListener('click', () => {
-  showScreen('panel');
+  window.location.href = 'panel_invitado.html';
   addLog('NAVEGACIÓN: Volver desde Recomendaciones básicas — regresa al panel de invitado');
 });
 
@@ -265,14 +266,15 @@ document.getElementById('detBack').addEventListener('click', () => {
 });
 
 document.getElementById('detHome').addEventListener('click', () => {
-  showScreen('panel');
+  window.location.href = 'panel_invitado.html';
   addLog('NAVEGACIÓN: "Volver al inicio (Invitado)" — regresa al panel de invitado');
 });
 
 document.getElementById('emptyBack').addEventListener('click', () => {
-  showScreen('panel');
+  window.location.href = 'panel_invitado.html';
   addLog('NAVEGACIÓN: "Volver al inicio (Invitado)" desde estado vacío');
 });
 
 loadList();
+showScreen('recom');
 addLog('Sistema listo — recomendaciones dinámicas por API (priorizadas por nivel de la sesión)');

@@ -71,7 +71,6 @@ export const avisoService = {
       });
       return res.ok;
     } catch (err) {
-      console.warn('[avisoService] No se pudo persistir la auditoría en el backend:', err.message);
       return false;
     }
   },
@@ -92,17 +91,17 @@ export const avisoService = {
   },
 
   /**
-   * Reinicia la aceptación del aviso (útil para pruebas y demo)
+   * Reinicia la aceptación del aviso (al cerrar sesión)
    */
   resetearAviso() {
     sessionStorage.removeItem(STORAGE_KEY_AVISO);
-    this.logAuditoria('DEMO: aviso reiniciado - la próxima función sensible volverá a mostrarlo automáticamente');
   },
 
   /**
-   * Emite logs de auditoría en consola con el formato exacto del requerimiento HU1-PB4
+   * Auditoría local desactivada en producción (antes: logs de consola [HU1-PB4]).
+   * La trazabilidad real vive en dbo.auth vía los endpoints del backend.
    */
   logAuditoria(mensaje) {
-    console.log('[HU1-PB4]', new Date().toLocaleTimeString(), mensaje);
+    void mensaje;
   }
 };

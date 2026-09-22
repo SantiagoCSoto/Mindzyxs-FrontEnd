@@ -9,13 +9,12 @@
 
 <body>
   <script>
-    // Si hay sesión activa o modo invitado, ir a inicio; sino, ir a login
-    const usuarioData = sessionStorage.getItem('usuario');
+    // Si hay modo invitado, ir a su panel; en cualquier otro caso, a la landing
     const esInvitado = sessionStorage.getItem('es_invitado') === 'true';
-    if (usuarioData || esInvitado) {
-      window.location.href = "views/inicio.html";
+    if (esInvitado) {
+      window.location.href = "views/panel_invitado.html";
     } else {
-      window.location.href = "views/login.html";
+      window.location.href = "views/inicio.html";
     }
   </script>
 </body>

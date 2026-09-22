@@ -1,13 +1,56 @@
 /**
- * Servicio para la encuesta de invitado.
- * Permite enviar la encuesta al backend, y si no está disponible
- * guarda la información localmente para no romper el flujo.
+ * Servicio para el cuestionario de invitado (PB-07 HU1-PB7).
+ * Contrato real del backend (http://localhost:5015/api):
+ *   GET  /cuestionario/invitado?excluidos=1,2  -> pendiente con rotación
+ *   POST /cuestionario/invitado/inicio         -> { cuestionarioId }
+ *   POST /cuestionario/invitado/finalizar      -> { cuestionarioId, respuestas: [{ preguntaId, opcionId }] }
+ * Si el backend no responde, las funciones lanzan el error para que el
+ * controlador muestre el estado de error con reintento (no se finge envío).
  */
 
-import { postJson } from './apiClient.js';
+import { getJson, postJson } from './apiClient.js';
 
-const STORAGE_KEY = 'encuesta_invitado_ultima';
-const STORAGE_KEY_SESION = 'encuesta_invitado_front';
+const KEY_SESION = 'encuesta_invitado_front';
+const KEY_NIVEL = 'encuesta_invitado_nivel';
+
+/**
+ * Siguiente cuestionario pendiente (rotación por excluidos = cookies cuest_*).
+ */
+export async function obtenerPendiente(excluidos) {
+  const qs = excluidos && excluidos.length
+    ? '?excluidos=' + encodeURIComponent(excluidos.join(','))
+    : '';
+  const res = await getJson('/cuestionario/invitado' + qs);
+  if (!res.ok) {
+    throw new Error(res.error || 'No fue posible cargar el cuestionario. Intente nuevamente');
+  }
+  return res.data;
+}
+
+/**
+ * Registra el inicio en el backend (log CUESTIONARIO_INVITADO_INICIO).
+ * No bloquea: si falla, solo se registra en consola.
+ */
+export async function registrarInicio(cuestionarioId) {
+  try {
+    await postJson('/cuestionario/invitado/inicio', { cuestionarioId });
+  } catch (error) {
+    void error;
+  }
+}
+
+/**
+ * Finaliza al 100%: valida en backend, calcula puntaje/nivel y registra el fin.
+ * Devuelve { mensaje, cuestionarioId, puntaje, nivel, totalPreguntas, respondidas }.
+ * Lanza Error con el mensaje exacto del backend (400/404).
+ */
+export async function finalizarCuestionarioBack(cuestionarioId, respuestas) {
+  const res = await postJson('/cuestionario/invitado/finalizar', { cuestionarioId, respuestas });
+  if (!res.ok) {
+    throw new Error(res.error || 'Debes seleccionar una respuesta para continuar');
+  }
+  return res.data;
+}
 
 /**
  * Guarda las respuestas temporalmente en la sesión del invitado (PB-07).
@@ -19,56 +62,31 @@ export function guardarEncuestaTemporal(payload) {
     completado: true,
     fecha: new Date().toISOString()
   };
-  sessionStorage.setItem(STORAGE_KEY_SESION, JSON.stringify(datos));
+  sessionStorage.setItem(KEY_SESION, JSON.stringify(datos));
   return datos;
 }
 
-export async function enviarEncuestaInvitado(payload) {
+export function guardarNivel(nivel) {
+  if (nivel) sessionStorage.setItem(KEY_NIVEL, JSON.stringify(nivel));
+}
+
+export function leerNivel() {
   try {
-    const result = await postJson('/encuesta/invitado', payload);
-
-    if (result.ok) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        enviado: true,
-        fecha: new Date().toISOString(),
-        payload
-      }));
-      return { ok: true, data: result.data ?? payload };
-    }
-
-    if (result.isNetworkError) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        enviado: false,
-        fecha: new Date().toISOString(),
-        payload,
-        error: result.error
-      }));
-
-      return {
-        ok: true,
-        localOnly: true,
-        message: 'La encuesta se guardó localmente porque el servidor no respondió.',
-        data: payload
-      };
-    }
-
-    return {
-      ok: false,
-      error: result.error || 'No se pudo enviar la encuesta.'
-    };
-  } catch (error) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      enviado: false,
-      fecha: new Date().toISOString(),
-      payload,
-      error: error.message
-    }));
-
-    return {
-      ok: true,
-      localOnly: true,
-      message: 'La encuesta fue guardada localmente.',
-      data: payload
-    };
+    const raw = sessionStorage.getItem(KEY_NIVEL);
+    return raw ? JSON.parse(raw) : null;
+  } catch (_) {
+    return null;
   }
+}
+
+// --- Sesión del invitado (cookies): cuest_<id>=1 marca cuestionario hecho al 100% ---
+export function marcarHecho(id) {
+  document.cookie = `cuest_${id}=1;max-age=31536000;path=/;SameSite=Lax`;
+}
+
+export function getHechos() {
+  return document.cookie.split(';').map((s) => s.trim())
+    .filter((s) => s.startsWith('cuest_'))
+    .map((s) => s.split('=')[0].replace('cuest_', ''))
+    .filter((v) => /^\d+$/.test(v));
 }

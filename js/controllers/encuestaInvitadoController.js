@@ -1,15 +1,20 @@
 /**
- * Front-end de la encuesta de invitado (PB-07 HU1-PB7).
- * Muestra una pregunta a la vez, valida que haya una respuesta antes de
- * avanzar (no permite avanzar vacía), permite salir con confirmación y
- * guarda las respuestas temporalmente en la sesión del invitado.
- * El envío intenta el backend (/api/encuesta/invitado) y si no responde
- * se guarda localmente para no romper el flujo (patrón existente).
+ * Front-end del cuestionario de invitado (PB-07 HU1-PB7).
+ * Catálogo dinámico desde el backend con rotación (N preguntas, M opciones):
+ *   GET  /cuestionario/invitado?excluidos=  -> pendiente (cookies cuest_*)
+ *   POST /cuestionario/invitado/inicio      -> log de inicio (no bloquea)
+ *   POST /cuestionario/invitado/finalizar   -> valida 100%, devuelve puntaje/nivel
+ * Muestra una pregunta a la vez, valida respuesta antes de avanzar
+ * ("Debes seleccionar una respuesta para continuar"), permite salir con
+ * confirmación (sin guardar como completado) y marca cuest_<id> al 100%.
  */
 
 import { abrirModal, cerrarModal } from '../utils/alerts.js';
 import { avisoService } from '../services/avisoService.js';
-import { enviarEncuestaInvitado, guardarEncuestaTemporal } from '../services/encuestaService.js';
+import {
+  obtenerPendiente, registrarInicio, finalizarCuestionarioBack,
+  guardarEncuestaTemporal, guardarNivel, marcarHecho, getHechos
+} from '../services/encuestaService.js';
 
 const form = document.getElementById('encuestaForm');
 const progressFill = document.getElementById('progress-fill');
@@ -24,84 +29,139 @@ const btnSalirSi = document.getElementById('btn-salir-si');
 const btnSalirNo = document.getElementById('btn-salir-no');
 const btnVerResultado = document.getElementById('btn-ver-resultado');
 const btnVolverInicio = document.getElementById('btn-volver-inicio');
-
-const pasos = Array.from(form.querySelectorAll('.step[data-step]'));
-const preguntas = pasos.filter((paso) => paso.dataset.step.startsWith('q'));
-const preguntasObligatorias = preguntas.map((paso) => paso.dataset.step);
-
-// q4 es binaria (Sí/No) y no entra al cálculo del nivel de riesgo
-const preguntasEscala = preguntasObligatorias.filter((key) => key !== 'q4');
+const contenedor = document.getElementById('preguntas-dinamicas');
 
 const KEY_SESION = 'encuesta_invitado_front';
 const KEY_NIVEL = 'encuesta_invitado_nivel';
 const KEY_LOG = 'encuesta_invitado_log';
 
+let quiz = null;          // catálogo pendiente del backend
+let pasos = [];           // secciones del flujo actual
+let preguntas = [];       // preguntas del catálogo (ordenadas)
 let indiceActual = 0;
-const respuestas = {};
+const respuestas = {};    // preguntaId -> opcionId
 
-// --- Logs (front): bitácora en sesión + consola ---
+// --- Logs desactivados en producción (la trazabilidad vive en dbo.auth) ---
 function registrarLog(mensaje) {
-  const lista = JSON.parse(sessionStorage.getItem(KEY_LOG) || '[]');
-  lista.push({ fecha: new Date().toISOString(), mensaje });
-  sessionStorage.setItem(KEY_LOG, JSON.stringify(lista));
-  console.info(`[Encuesta invitado] ${mensaje}`);
+  void mensaje;
+}
+
+function escapar(s) {
+  return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+// --- Carga del catálogo con rotación ---
+async function cargarCuestionario() {
+  mostrarCargando();
+  try {
+    const q = await obtenerPendiente(getHechos());
+    if (!q || q.disponible === false) {
+      quiz = null;
+      const msg = (q && q.mensaje) || 'No tienes cuestionarios pendientes por responder.';
+      document.getElementById('sin-pendientes-msg').textContent = msg;
+      setFlujo(['aviso', 'sin-pendientes']);
+      registrarLog('Sin cuestionarios pendientes — no se puede responder más');
+      return;
+    }
+    quiz = q;
+    construirPreguntas(q);
+    setFlujo(['aviso', ...q.preguntas.map((p) => 'q' + p.id), 'completado']);
+    registrarLog(`Cuestionario pendiente cargado: "${q.titulo}" (${q.preguntas.length} preguntas)`);
+  } catch (error) {
+    quiz = null;
+    setFlujo(['aviso', 'error-carga']);
+    registrarLog('ERROR de carga del cuestionario: ' + error.message);
+  }
+}
+
+function mostrarCargando() {
+  if (helperInfo) helperInfo.textContent = 'Cargando cuestionario…';
+  setFlujo(['aviso']);
+}
+
+function construirPreguntas(q) {
+  preguntas = q.preguntas;
+  contenedor.innerHTML = '';
+  q.preguntas.forEach((p, i) => {
+    const sec = document.createElement('section');
+    sec.className = 'step question';
+    sec.dataset.step = 'q' + p.id;
+    const opts = p.opciones.map((o, j) => (
+      `<div class="option"><input type="radio" id="q${p.id}-${j}" name="q${p.id}" value="${o.id}"><label for="q${p.id}-${j}">${escapar(o.texto)}</label></div>`
+    )).join('');
+    sec.innerHTML = `<div class="question-title"><span class="question-number">${i + 1}</span><span>${escapar(p.texto)}</span></div><div class="options">${opts}</div>`;
+    contenedor.appendChild(sec);
+  });
+}
+
+function setFlujo(steps) {
+  pasos = steps
+    .map((s) => form.querySelector(`.step[data-step="${s}"]`))
+    .filter(Boolean);
+  Object.keys(respuestas).forEach((k) => delete respuestas[k]);
+  indiceActual = 0;
+  mostrarPaso();
 }
 
 // --- Navegación entre pasos ---
 function esPregunta(paso) {
-  return paso.dataset.step.startsWith('q');
+  return paso && paso.dataset.step.startsWith('q');
 }
 
 function esUltimaPregunta(paso) {
-  return paso.dataset.step === preguntasObligatorias[preguntasObligatorias.length - 1];
+  const qs = pasos.filter(esPregunta);
+  return paso === qs[qs.length - 1];
 }
 
 function limpiarError() {
   if (errorMensaje) errorMensaje.textContent = '';
 }
 
-function mostrarError() {
-  if (errorMensaje) errorMensaje.textContent = 'Debes seleccionar una respuesta para continuar';
+function mostrarError(texto) {
+  if (errorMensaje) errorMensaje.textContent = texto || 'Debes seleccionar una respuesta para continuar';
 }
 
 function actualizarProgreso() {
   if (!progressFill || !progressText) return;
-
-  const contestadas = preguntasObligatorias.filter((key) => Boolean(respuestas[key])).length;
-  const porcentaje = Math.round((contestadas / preguntasObligatorias.length) * 100);
-
+  const qs = pasos.filter(esPregunta);
+  const contestadas = qs.filter((paso) => {
+    const id = Number(paso.dataset.step.slice(1));
+    return respuestas[id] != null;
+  }).length;
+  const porcentaje = qs.length ? Math.round((contestadas / qs.length) * 100) : 0;
   progressFill.style.width = `${porcentaje}%`;
   progressText.textContent = `${porcentaje}%`;
 }
 
 function actualizarBotones() {
   if (!actions) return;
-
   const paso = pasos[indiceActual];
-  const enAviso = paso.dataset.step === 'aviso';
-  const enCompletado = paso.dataset.step === 'completado';
+  if (!paso) { actions.style.display = 'none'; return; }
+  const key = paso.dataset.step;
+  const especial = key === 'completado' || key === 'sin-pendientes' || key === 'error-carga';
+  actions.style.display = especial ? 'none' : '';
 
-  actions.style.display = enCompletado ? 'none' : '';
-
-  if (helperInfo) helperInfo.textContent = enAviso
+  if (helperInfo) helperInfo.textContent = key === 'aviso'
     ? 'Antes de iniciar, por favor lee este mensaje.'
     : 'Todas las preguntas son obligatorias.';
 
-  if (enCompletado) return;
+  if (especial) return;
 
   if (btnSiguiente) {
-    btnSiguiente.textContent = enAviso
+    btnSiguiente.textContent = key === 'aviso'
       ? 'Entendido'
       : esUltimaPregunta(paso) ? 'Finalizar' : 'Siguiente';
   }
 
   if (btnVolver) {
-    btnVolver.textContent = (enAviso || paso.dataset.step === 'q1') ? 'Cancelar' : 'Volver';
+    const qs = pasos.filter(esPregunta);
+    btnVolver.textContent = (key === 'aviso' || (qs.length && paso === qs[0])) ? 'Cancelar' : 'Volver';
   }
 }
 
 function mostrarPaso() {
-  pasos.forEach((paso, i) => paso.classList.toggle('activo', i === indiceActual));
+  form.querySelectorAll('.step[data-step]').forEach((s) => s.classList.remove('activo'));
+  if (pasos[indiceActual]) pasos[indiceActual].classList.add('activo');
   actualizarProgreso();
   limpiarError();
   actualizarBotones();
@@ -113,43 +173,26 @@ function avanzaA(siguiente) {
   mostrarPaso();
 }
 
-// --- Nivel de riesgo local (fallback si el backend no lo calcula) ---
-function calcularNivelLocal() {
-  const valores = preguntasEscala
-    .map((key) => Number.parseInt(respuestas[key], 10))
-    .filter((valor) => Number.isFinite(valor));
-
-  if (valores.length === 0) return null;
-
-  const promedio = Math.round(valores.reduce((a, b) => a + b, 0) / valores.length);
-  return promedio <= 2 ? 'Bajo' : promedio === 3 ? 'Medio' : 'Alto';
-}
-
-// --- Finalización del cuestionario (PB-07) ---
+// --- Finalización contra el backend (PB-07) ---
 async function finalizarCuestionario() {
-  const payload = {
-    tipo: 'invitado',
-    fecha: new Date().toISOString(),
-    respuestas: { ...respuestas },
-    completado: true
-  };
+  const lista = Object.entries(respuestas).map(([preguntaId, opcionId]) => ({
+    preguntaId: Number(preguntaId), opcionId
+  }));
 
-  // Intentar envío al backend; si no responde, el servicio guarda localmente (no rompe el flujo)
-  const resultado = await enviarEncuestaInvitado(payload);
+  try {
+    const r = await finalizarCuestionarioBack(quiz.id, lista);
 
-  guardarEncuestaTemporal(payload);
+    marcarHecho(quiz.id);
+    guardarEncuestaTemporal({ cuestionarioId: quiz.id, respuestas: lista, puntaje: r.puntaje, nivel: r.nivel });
+    guardarNivel(r.nivel);
 
-  if (resultado.data?.nivel) {
-    sessionStorage.setItem(KEY_NIVEL, JSON.stringify(resultado.data.nivel));
+    registrarLog(`FINALIZACIÓN al 100% — puntaje ${r.puntaje}, nivel ${r.nivel}, cookie cuest_${quiz.id}`);
+    quiz = null;
+    avanzaA(pasos.findIndex((p) => p.dataset.step === 'completado'));
+  } catch (error) {
+    mostrarError(error.message);
+    registrarLog('VALIDACIÓN fallida al finalizar: ' + error.message);
   }
-
-  registrarLog(
-    `FINALIZACIÓN del cuestionario como invitado — respuestas guardadas en sesión${
-      resultado.localOnly ? ' (sin conexión con el backend)' : ''
-    }`
-  );
-
-  avanzaA(pasos.length - 1);
 }
 
 // --- Eventos ---
@@ -160,21 +203,22 @@ if (btnSiguiente) {
 
     if (paso.dataset.step === 'aviso') {
       avisoService.marcarAvisoAceptado();
+      if (quiz) registrarInicio(quiz.id);
       registrarLog('INICIO del cuestionario como invitado (aviso aceptado con Entendido)');
       avanzaA(indiceActual + 1);
       return;
     }
 
     if (esPregunta(paso)) {
-      const nombre = paso.dataset.step;
-      const elegida = form?.querySelector(`input[name="${nombre}"]:checked`);
+      const preguntaId = Number(paso.dataset.step.slice(1));
+      const elegida = paso.querySelector(`input[name="q${preguntaId}"]:checked`);
 
       if (!elegida) {
         mostrarError();
         return;
       }
 
-      respuestas[nombre] = elegida.value;
+      respuestas[preguntaId] = Number(elegida.value);
     }
 
     if (esUltimaPregunta(paso)) {
@@ -192,7 +236,8 @@ if (btnVolver) {
     if (!paso) return;
 
     // En aviso o primera pregunta el botón es "Cancelar" -> confirmar salida
-    if (paso.dataset.step === 'aviso' || paso.dataset.step === 'q1') {
+    const qs = pasos.filter(esPregunta);
+    if (paso.dataset.step === 'aviso' || (qs.length && paso === qs[0])) {
       if (modalSalir) abrirModal(modalSalir);
       return;
     }
@@ -206,7 +251,7 @@ if (btnSalirSi) {
     sessionStorage.removeItem(KEY_SESION);
     sessionStorage.removeItem(KEY_NIVEL);
     registrarLog('SALIDA del cuestionario confirmada — sin guardar como completado');
-    window.location.href = 'inicio.html';
+    window.location.href = 'panel_invitado.html';
   });
 }
 
@@ -218,23 +263,16 @@ if (btnSalirNo) {
 
 if (btnVerResultado) {
   btnVerResultado.addEventListener('click', () => {
-    const nivel = sessionStorage.getItem(KEY_NIVEL)
-      ? JSON.parse(sessionStorage.getItem(KEY_NIVEL))
-      : calcularNivelLocal();
-
-    if (nivel) {
-      sessionStorage.setItem(KEY_NIVEL, JSON.stringify(nivel));
-    }
-
-    registrarLog(`Ver resultado solicitado (nivel de riesgo: ${nivel ?? 'no calculable'})`);
-    window.location.href = 'recomendaciones_invitado.html?nivel=' + encodeURIComponent(nivel ?? '');
+    // PB-08: la pantalla de riesgo valida la sesión, calcula el nivel y lo presenta.
+    registrarLog('Ver resultado solicitado — va a la pantalla Resultado del riesgo');
+    window.location.href = 'resultado_riesgo.html';
   });
 }
 
 if (btnVolverInicio) {
   btnVolverInicio.addEventListener('click', () => {
-    registrarLog('Volver al inicio desde "Cuestionario completado"');
-    window.location.href = 'inicio.html';
+    registrarLog('Volver al panel desde "Cuestionario completado"');
+    window.location.href = 'panel_invitado.html';
   });
 }
 
@@ -242,11 +280,15 @@ if (form) {
   form.addEventListener('submit', (event) => event.preventDefault());
 }
 
-// Si el aviso aclaratorio ya fue aceptado (PB-04), se salta el paso de aviso
-if (avisoService.haAceptadoAviso()) {
-  indiceActual = 1;
-}
+document.getElementById('btn-reintentar')?.addEventListener('click', () => {
+  cargarCuestionario();
+});
 
-// Registrar inicio del cuestionario (PB-07: logs)
-registrarLog('INICIO del cuestionario como invitado');
-mostrarPaso();
+// Si el aviso aclaratorio ya fue aceptado (PB-04), se salta el paso de aviso
+cargarCuestionario().then(() => {
+  if (avisoService.haAceptadoAviso() && pasos.length > 1) {
+    indiceActual = 1;
+    mostrarPaso();
+  }
+  registrarLog('INICIO del cuestionario como invitado');
+});
