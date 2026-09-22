@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mindzyx — Resultado del riesgo (Invitado) | PB-08</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/resultado_riesgo.css" />
+</head>
+
+<body>
+  <div class="bg-blobs">
+    <div class="blob blob-pink"></div>
+    <div class="blob blob-lav"></div>
+  </div>
+
+  <header class="header">
+    <div class="logo">
+      <img src="../assets/Logo1.png" alt="Mindzyx Logo" class="logo-img">
+    </div>
+    <nav class="nav">
+      <a href="inicio.html" class="active">Inicio</a>
+      <a href="inicio.html#nosotros">Nosotros</a>
+      <a href="inicio.html#ayuda">Ayuda</a>
+    </nav>
+    <span class="guest-pill">Modo invitado</span>
+  </header>
+
+  <main class="wrap">
+    <div class="card result-card">
+      <span class="result-title">Resultado del riesgo (Invitado)</span>
+      <div class="result-level" id="resLevel">…</div>
+      <div class="result-score" id="resScore">Calculando…</div>
+      <div class="alert-urgente" id="alertUrgente">
+        <span class="ico">🚨</span>
+        <div>
+          <b>Riesgo alto detectado. Busca ayuda profesional o comunícate con una línea de ayuda</b>
+          <p>Tu bienestar es lo más importante. Te recomendamos contactar a un profesional de la salud mental o a una línea de ayuda disponible en tu país.</p>
+        </div>
+      </div>
+      <div class="result-expl" id="resExpl"></div>
+      <div class="result-actions">
+        <a class="btn-help" id="btnRecom" href="recomendaciones_invitado.html">Ver recomendaciones básicas</a>
+        <button class="btn-help lineas" id="btnLineas">Líneas de ayuda</button>
+        <a class="btn-help volver" href="inicio.html">Volver al inicio (Invitado)</a>
+      </div>
+      <p class="hint">⚠️ Este resultado <b>no es un diagnóstico clínico</b>. Mindzyx es solo una herramienta de apoyo y monitoreo emocional.</p>
+    </div>
+
+    <div class="card error-card" id="errorCard" hidden>
+      <h2>No se pudo calcular el riesgo</h2>
+      <p id="errorMsg">No se encontraron respuestas para calcular el riesgo. Por favor responde el cuestionario nuevamente</p>
+      <div class="result-actions">
+        <a class="btn-help" href="encuesta_invitado.html">Responder cuestionario</a>
+        <a class="btn-help volver" href="inicio.html">Volver al inicio (Invitado)</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-in">
+      <a href="inicio.html">Inicio</a>
+      <a href="inicio.html#nosotros">Nosotros</a>
+      <a href="inicio.html#ayuda">Ayuda</a>
+      <a href="#" class="aviso" id="footerAviso">⚠️ Aviso: no diagnóstico</a>
+    </div>
+  </footer>
+
+  <div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="modal-icon">⚠️</div>
+      <h3>Mensaje aclaratorio</h3>
+      <div class="aviso-txt" id="avisoText">
+        <b>Mindzyx</b> es una plataforma de <b>monitoreo y apoyo del bienestar emocional</b>.
+        Este sistema <b>no realiza diagnósticos clínicos</b> y <b>no sustituye la atención de un profesional de la salud mental</b>.
+        <br><br>
+        El resultado mostrado es solo una <b>estimación orientativa</b> del nivel de riesgo emocional.
+      </div>
+      <div class="modal-actions">
+        <button class="btn-modal close" id="avisoCerrar">Cerrar</button>
+        <button class="btn-modal ok" id="avisoOk">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="lineasModal" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="modal-icon info">🆘</div>
+      <h3>Líneas de ayuda</h3>
+      <p class="sub">Líneas de emergencia y acompañamiento emocional.</p>
+      <div id="lineasList" style="display:flex;flex-direction:column;gap:10px;margin-top:14px;text-align:left"></div>
+      <div class="modal-actions">
+        <button class="btn-modal close" id="lineasClose">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../js/controllers/resultadoRiesgoController.js"></script>
+</body>
+
+</html>
