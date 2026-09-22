@@ -5,5 +5,6 @@ Mindzyxs-BackEnd-develop/
 # Sistema y editores
 .vscode/
 .idea/
+.vs/
 .DS_Store
 Thumbs.db
