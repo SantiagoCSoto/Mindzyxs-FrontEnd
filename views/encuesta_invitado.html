@@ -11,7 +11,7 @@
 <body>
   <div class="page">
     <header class="topbar">
-      <a href="#" class="brand" aria-label="Mindzyxs inicio">
+      <a href="../index.html" class="brand" aria-label="Mindzyxs inicio">
         <img src="../assets/Logo1.png" alt="Logo Mindzyxs" class="brand-logo">
         <span>Mindzyxs</span>
       </a>
@@ -35,156 +35,185 @@
           </div>
         </div>
 
-        <form>
-          <section class="question">
-            <div class="question-title">
-              <span class="question-number">A</span>
-              <span>Cuestionario de bienestar emocional</span>
-            </div>
-
-            <div class="question-block">
-              <div class="question-title subquestion">
-                <span class="question-number">1</span>
-                <span>¿Con qué frecuencia te has sentido triste o desanimado en las últimas dos semanas?</span>
-              </div>
-              <div class="options">
-                <div class="option"><input type="radio" id="q1-1" name="q1" value="1" required><label for="q1-1">Nunca</label></div>
-                <div class="option"><input type="radio" id="q1-2" name="q1" value="2"><label for="q1-2">A veces</label></div>
-                <div class="option"><input type="radio" id="q1-3" name="q1" value="3"><label for="q1-3">A menudo</label></div>
-                <div class="option"><input type="radio" id="q1-4" name="q1" value="4"><label for="q1-4">Casi siempre</label></div>
-              </div>
-            </div>
-
-            <div class="question-block">
-              <div class="question-title subquestion">
-                <span class="question-number">2</span>
-                <span>¿Has tenido dificultades para dormir o te has sentido cansado(a)?</span>
-              </div>
-              <div class="options">
-                <div class="option"><input type="radio" id="q2-1" name="q2" value="1" required><label for="q2-1">Nunca</label></div>
-                <div class="option"><input type="radio" id="q2-2" name="q2" value="2"><label for="q2-2">A veces</label></div>
-                <div class="option"><input type="radio" id="q2-3" name="q2" value="3"><label for="q2-3">A menudo</label></div>
-                <div class="option"><input type="radio" id="q2-4" name="q2" value="4"><label for="q2-4">Casi siempre</label></div>
-              </div>
-            </div>
-
-            <div class="question-block">
-              <div class="question-title subquestion">
-                <span class="question-number">3</span>
-                <span>¿Te ha costado concentrarte o tomar decisiones?</span>
-              </div>
-              <div class="options">
-                <div class="option"><input type="radio" id="q3-1" name="q3" value="1" required><label for="q3-1">Nunca</label></div>
-                <div class="option"><input type="radio" id="q3-2" name="q3" value="2"><label for="q3-2">A veces</label></div>
-                <div class="option"><input type="radio" id="q3-3" name="q3" value="3"><label for="q3-3">A menudo</label></div>
-                <div class="option"><input type="radio" id="q3-4" name="q3" value="4"><label for="q3-4">Casi siempre</label></div>
-              </div>
-            </div>
-
-            <div class="question-block">
-              <div class="question-title subquestion">
-                <span class="question-number">4</span>
-                <span>¿Deseas recibir recomendaciones básicas al finalizar?</span>
-              </div>
-              <div class="options">
-                <div class="option"><input type="radio" id="q4-1" name="q4" value="1" required><label for="q4-1">Sí</label></div>
-                <div class="option"><input type="radio" id="q4-2" name="q4" value="0"><label for="q4-2">No</label></div>
-              </div>
-            </div>
-
-            <div class="question-block">
-              <div class="question-title subquestion">
-                <span class="question-number">5</span>
-                <span>¿Has sentido ansiedad o nerviosismo sin razón aparente?</span>
-              </div>
-              <div class="options">
-                <div class="option"><input type="radio" id="q5-1" name="q5" value="1" required><label for="q5-1">Nunca</label></div>
-                <div class="option"><input type="radio" id="q5-2" name="q5" value="2"><label for="q5-2">A veces</label></div>
-                <div class="option"><input type="radio" id="q5-3" name="q5" value="3"><label for="q5-3">A menudo</label></div>
-                <div class="option"><input type="radio" id="q5-4" name="q5" value="4"><label for="q5-4">Casi siempre</label></div>
-              </div>
-            </div>
-
-            <div class="question-block">
-              <div class="question-title subquestion">
-                <span class="question-number">6</span>
-                <span>¿Has perdido interés o placer en actividades que antes disfrutabas?</span>
-              </div>
-              <div class="options">
-                <div class="option"><input type="radio" id="q6-1" name="q6" value="1" required><label for="q6-1">Nunca</label></div>
-                <div class="option"><input type="radio" id="q6-2" name="q6" value="2"><label for="q6-2">A veces</label></div>
-                <div class="option"><input type="radio" id="q6-3" name="q6" value="3"><label for="q6-3">A menudo</label></div>
-                <div class="option"><input type="radio" id="q6-4" name="q6" value="4"><label for="q6-4">Casi siempre</label></div>
-              </div>
+        <form id="encuestaForm">
+          <!-- Paso 0: Mensaje aclaratorio (PB-07: mostrar antes de iniciar con botón Entendido) -->
+          <section class="step aviso activo" data-step="aviso">
+            <div class="aviso-card">
+              <h2>Mensaje aclaratorio</h2>
+              <p>
+                Mindzyxs es una herramienta de apoyo emocional. No realiza diagnósticos clínicos ni sustituye la
+                atención profesional. Si presentas síntomas intensos o riesgo alto, busca ayuda profesional o contacta
+                una línea de ayuda.
+              </p>
             </div>
           </section>
 
-          <section class="question">
+          <!-- Pasos: una pregunta a la vez (PB-07 HU1-PB7) -->
+          <section class="step question" data-step="q1">
             <div class="question-title">
-              <span class="question-number">B</span>
-              <span>Chequeo breve de ánimo</span>
+              <span class="question-number">1</span>
+              <span>¿Con qué frecuencia te has sentido triste o desanimado en las últimas dos semanas?</span>
             </div>
-
-            <div class="question-block">
-              <div class="question-title subquestion">
-                <span class="question-number">1</span>
-                <span>¿Te has sentido irritable o de mal humor sin un motivo claro?</span>
-              </div>
-              <div class="options">
-                <div class="option"><input type="radio" id="q7-1" name="q7" value="1" required><label for="q7-1">Nunca</label></div>
-                <div class="option"><input type="radio" id="q7-2" name="q7" value="2"><label for="q7-2">A veces</label></div>
-                <div class="option"><input type="radio" id="q7-3" name="q7" value="3"><label for="q7-3">A menudo</label></div>
-                <div class="option"><input type="radio" id="q7-4" name="q7" value="4"><label for="q7-4">Casi siempre</label></div>
-              </div>
+            <div class="options">
+              <div class="option"><input type="radio" id="q1-1" name="q1" value="1"><label for="q1-1">Nunca</label></div>
+              <div class="option"><input type="radio" id="q1-2" name="q1" value="2"><label for="q1-2">A veces</label></div>
+              <div class="option"><input type="radio" id="q1-3" name="q1" value="3"><label for="q1-3">A menudo</label></div>
+              <div class="option"><input type="radio" id="q1-4" name="q1" value="4"><label for="q1-4">Casi siempre</label></div>
             </div>
+          </section>
 
-            <div class="question-block">
-              <div class="question-title subquestion">
-                <span class="question-number">2</span>
-                <span>¿Has tenido preocupaciones o pensamientos repetitivos difíciles de controlar?</span>
-              </div>
-              <div class="options">
-                <div class="option"><input type="radio" id="q8-1" name="q8" value="1" required><label for="q8-1">Nunca</label></div>
-                <div class="option"><input type="radio" id="q8-2" name="q8" value="2"><label for="q8-2">A veces</label></div>
-                <div class="option"><input type="radio" id="q8-3" name="q8" value="3"><label for="q8-3">A menudo</label></div>
-                <div class="option"><input type="radio" id="q8-4" name="q8" value="4"><label for="q8-4">Casi siempre</label></div>
-              </div>
+          <section class="step question" data-step="q2">
+            <div class="question-title">
+              <span class="question-number">2</span>
+              <span>¿Has tenido dificultades para dormir o te has sentido cansado(a)?</span>
             </div>
-
-            <div class="question-block">
-              <div class="question-title subquestion">
-                <span class="question-number">3</span>
-                <span>¿Te has sentido con poca energía para tus actividades diarias?</span>
-              </div>
-              <div class="options">
-                <div class="option"><input type="radio" id="q9-1" name="q9" value="1" required><label for="q9-1">Nunca</label></div>
-                <div class="option"><input type="radio" id="q9-2" name="q9" value="2"><label for="q9-2">A veces</label></div>
-                <div class="option"><input type="radio" id="q9-3" name="q9" value="3"><label for="q9-3">A menudo</label></div>
-                <div class="option"><input type="radio" id="q9-4" name="q9" value="4"><label for="q9-4">Casi siempre</label></div>
-              </div>
+            <div class="options">
+              <div class="option"><input type="radio" id="q2-1" name="q2" value="1"><label for="q2-1">Nunca</label></div>
+              <div class="option"><input type="radio" id="q2-2" name="q2" value="2"><label for="q2-2">A veces</label></div>
+              <div class="option"><input type="radio" id="q2-3" name="q2" value="3"><label for="q2-3">A menudo</label></div>
+              <div class="option"><input type="radio" id="q2-4" name="q2" value="4"><label for="q2-4">Casi siempre</label></div>
             </div>
+          </section>
 
-            <div class="question-block">
-              <div class="question-title subquestion">
-                <span class="question-number">4</span>
-                <span>¿Has notado cambios en tu apetito (comer mucho más o mucho menos)?</span>
-              </div>
-              <div class="options">
-                <div class="option"><input type="radio" id="q10-1" name="q10" value="1" required><label for="q10-1">Nunca</label></div>
-                <div class="option"><input type="radio" id="q10-2" name="q10" value="2"><label for="q10-2">A veces</label></div>
-                <div class="option"><input type="radio" id="q10-3" name="q10" value="3"><label for="q10-3">A menudo</label></div>
-                <div class="option"><input type="radio" id="q10-4" name="q10" value="4"><label for="q10-4">Casi siempre</label></div>
+          <section class="step question" data-step="q3">
+            <div class="question-title">
+              <span class="question-number">3</span>
+              <span>¿Te ha costado concentrarte o tomar decisiones?</span>
+            </div>
+            <div class="options">
+              <div class="option"><input type="radio" id="q3-1" name="q3" value="1"><label for="q3-1">Nunca</label></div>
+              <div class="option"><input type="radio" id="q3-2" name="q3" value="2"><label for="q3-2">A veces</label></div>
+              <div class="option"><input type="radio" id="q3-3" name="q3" value="3"><label for="q3-3">A menudo</label></div>
+              <div class="option"><input type="radio" id="q3-4" name="q3" value="4"><label for="q3-4">Casi siempre</label></div>
+            </div>
+          </section>
+
+          <section class="step question" data-step="q4">
+            <div class="question-title">
+              <span class="question-number">4</span>
+              <span>¿Deseas recibir recomendaciones básicas al finalizar?</span>
+            </div>
+            <div class="options">
+              <div class="option"><input type="radio" id="q4-1" name="q4" value="1"><label for="q4-1">Sí</label></div>
+              <div class="option"><input type="radio" id="q4-2" name="q4" value="0"><label for="q4-2">No</label></div>
+            </div>
+          </section>
+
+          <section class="step question" data-step="q5">
+            <div class="question-title">
+              <span class="question-number">5</span>
+              <span>¿Has sentido ansiedad o nerviosismo sin razón aparente?</span>
+            </div>
+            <div class="options">
+              <div class="option"><input type="radio" id="q5-1" name="q5" value="1"><label for="q5-1">Nunca</label></div>
+              <div class="option"><input type="radio" id="q5-2" name="q5" value="2"><label for="q5-2">A veces</label></div>
+              <div class="option"><input type="radio" id="q5-3" name="q5" value="3"><label for="q5-3">A menudo</label></div>
+              <div class="option"><input type="radio" id="q5-4" name="q5" value="4"><label for="q5-4">Casi siempre</label></div>
+            </div>
+          </section>
+
+          <section class="step question" data-step="q6">
+            <div class="question-title">
+              <span class="question-number">6</span>
+              <span>¿Has perdido interés o placer en actividades que antes disfrutabas?</span>
+            </div>
+            <div class="options">
+              <div class="option"><input type="radio" id="q6-1" name="q6" value="1"><label for="q6-1">Nunca</label></div>
+              <div class="option"><input type="radio" id="q6-2" name="q6" value="2"><label for="q6-2">A veces</label></div>
+              <div class="option"><input type="radio" id="q6-3" name="q6" value="3"><label for="q6-3">A menudo</label></div>
+              <div class="option"><input type="radio" id="q6-4" name="q6" value="4"><label for="q6-4">Casi siempre</label></div>
+            </div>
+          </section>
+
+          <section class="step question" data-step="q7">
+            <div class="question-title">
+              <span class="question-number">7</span>
+              <span>¿Te has sentido irritable o de mal humor sin un motivo claro?</span>
+            </div>
+            <div class="options">
+              <div class="option"><input type="radio" id="q7-1" name="q7" value="1"><label for="q7-1">Nunca</label></div>
+              <div class="option"><input type="radio" id="q7-2" name="q7" value="2"><label for="q7-2">A veces</label></div>
+              <div class="option"><input type="radio" id="q7-3" name="q7" value="3"><label for="q7-3">A menudo</label></div>
+              <div class="option"><input type="radio" id="q7-4" name="q7" value="4"><label for="q7-4">Casi siempre</label></div>
+            </div>
+          </section>
+
+          <section class="step question" data-step="q8">
+            <div class="question-title">
+              <span class="question-number">8</span>
+              <span>¿Has tenido preocupaciones o pensamientos repetitivos difíciles de controlar?</span>
+            </div>
+            <div class="options">
+              <div class="option"><input type="radio" id="q8-1" name="q8" value="1"><label for="q8-1">Nunca</label></div>
+              <div class="option"><input type="radio" id="q8-2" name="q8" value="2"><label for="q8-2">A veces</label></div>
+              <div class="option"><input type="radio" id="q8-3" name="q8" value="3"><label for="q8-3">A menudo</label></div>
+              <div class="option"><input type="radio" id="q8-4" name="q8" value="4"><label for="q8-4">Casi siempre</label></div>
+            </div>
+          </section>
+
+          <section class="step question" data-step="q9">
+            <div class="question-title">
+              <span class="question-number">9</span>
+              <span>¿Te has sentido con poca energía para tus actividades diarias?</span>
+            </div>
+            <div class="options">
+              <div class="option"><input type="radio" id="q9-1" name="q9" value="1"><label for="q9-1">Nunca</label></div>
+              <div class="option"><input type="radio" id="q9-2" name="q9" value="2"><label for="q9-2">A veces</label></div>
+              <div class="option"><input type="radio" id="q9-3" name="q9" value="3"><label for="q9-3">A menudo</label></div>
+              <div class="option"><input type="radio" id="q9-4" name="q9" value="4"><label for="q9-4">Casi siempre</label></div>
+            </div>
+          </section>
+
+          <section class="step question" data-step="q10">
+            <div class="question-title">
+              <span class="question-number">10</span>
+              <span>¿Has notado cambios en tu apetito (comer mucho más o mucho menos)?</span>
+            </div>
+            <div class="options">
+              <div class="option"><input type="radio" id="q10-1" name="q10" value="1"><label for="q10-1">Nunca</label></div>
+              <div class="option"><input type="radio" id="q10-2" name="q10" value="2"><label for="q10-2">A veces</label></div>
+              <div class="option"><input type="radio" id="q10-3" name="q10" value="3"><label for="q10-3">A menudo</label></div>
+              <div class="option"><input type="radio" id="q10-4" name="q10" value="4"><label for="q10-4">Casi siempre</label></div>
+            </div>
+          </section>
+
+          <!-- Paso final: confirmación Cuestionario completado (PB-07 con botón Ver resultado) -->
+          <section class="step completado" data-step="completado">
+            <div class="aviso-card">
+              <h2>Cuestionario completado</h2>
+              <p>Gracias por participar. Tus respuestas fueron registradas.</p>
+              <div class="modal-actions">
+                <button type="button" id="btn-volver-inicio" class="button button-secondary">Volver al inicio</button>
+                <button type="button" id="btn-ver-resultado" class="button">Ver resultado</button>
               </div>
             </div>
           </section>
 
           <div class="actions">
-            <span class="helper">Todas las preguntas son obligatorias.</span>
-            <button class="button" type="submit">Enviar encuesta</button>
+            <div class="actions-info">
+              <span class="helper" id="helper-info">Todas las preguntas son obligatorias.</span>
+              <p class="error-msg" id="error-mensaje" role="alert"></p>
+            </div>
+            <div class="actions-buttons">
+              <button type="button" id="btn-volver" class="button button-secondary">Volver</button>
+              <button type="button" id="btn-siguiente" class="button">Entendido</button>
+            </div>
           </div>
         </form>
       </div>
     </main>
+  </div>
+
+  <!-- Modal de confirmación para salir del cuestionario (PB-07: Sí, salir / No, continuar) -->
+  <div class="modal-overlay" id="modal-salir">
+    <div class="modal-card">
+      <h2>Salir del cuestionario</h2>
+      <p>¿Deseas salir del cuestionario? Se perderán tus respuestas</p>
+      <div class="modal-actions">
+        <button type="button" id="btn-salir-no" class="button button-secondary">No, continuar</button>
+        <button type="button" id="btn-salir-si" class="button button-danger">Sí, salir</button>
+      </div>
+    </div>
   </div>
 
   <script type="module" src="../js/controllers/encuestaInvitadoController.js"></script>
