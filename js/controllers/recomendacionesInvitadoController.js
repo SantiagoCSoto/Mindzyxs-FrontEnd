@@ -154,7 +154,9 @@ function renderState() {
 
   recList.innerHTML = '';
   recData.forEach((r) => {
-    const esPrioritaria = r.prioritaria === true || (riesgo && r.nivel_riesgo === riesgo);
+    // El backend devuelve `nivel` (el demo local usa `nivel_riesgo`): aceptar ambos.
+    const nivelItem = r.nivel ?? r.nivel_riesgo;
+    const esPrioritaria = r.prioritaria === true || (riesgo && nivelItem === riesgo);
     const item = document.createElement('div');
     item.className = 'rec-item' + (esPrioritaria ? ' prio' : '');
     item.innerHTML =
