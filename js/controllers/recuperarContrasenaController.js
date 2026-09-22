@@ -77,7 +77,6 @@ if (formRecuperar) {
         btnSubmit.textContent = 'Enviar código';
       }
       mostrarBanner(bannerError, 'Error de conexión. Intenta de nuevo.');
-      console.error(err);
     }
   });
 }

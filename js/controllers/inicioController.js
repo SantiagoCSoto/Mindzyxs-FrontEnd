@@ -32,20 +32,12 @@ function showToast(mensaje) {
   }, 2500);
 }
 
-// Encabezado según estado: sesión activa (rol + salir) o accesos públicos.
+// Encabezado según estado: sesión registrada (rol + salir) o accesos públicos.
+// El invitado trabaja en su panel: aquí siempre se muestra la landing pública.
 function pintarEncabezado() {
-  const esInvitado = invitadoService.esInvitado();
   const usuario = authService.getSesion();
 
-  if (esInvitado) {
-    // El invitado trabaja en su panel; si cae aquí, se le ofrece volver.
-    if (headerGuest) headerGuest.style.display = 'none';
-    if (headerSesion) headerSesion.style.display = 'inline-flex';
-    if (roleBadge) roleBadge.textContent = 'Invitado';
-    return;
-  }
-
-  if (usuario) {
+  if (usuario && !invitadoService.esInvitado()) {
     const rol = usuario.rol || usuario.tipo_usuario || 'Paciente';
     if (headerGuest) headerGuest.style.display = 'none';
     if (headerSesion) headerSesion.style.display = 'inline-flex';

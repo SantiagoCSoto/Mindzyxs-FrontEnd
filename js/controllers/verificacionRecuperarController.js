@@ -80,7 +80,6 @@ if (formVerificacionRecuperar) {
         btnVerificar.textContent = 'Verificar';
       }
       mostrarBanner(bannerError, 'Error al verificar el código. Intenta de nuevo.');
-      console.error(err);
     }
   });
 }

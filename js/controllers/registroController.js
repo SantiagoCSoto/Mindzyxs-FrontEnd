@@ -184,7 +184,6 @@ if (formularioRegistro) {
         btnSubmit.innerHTML = 'Continuar &rarr;';
       }
       mostrarBanner(bannerErrorRegistro, 'Error de conexión. Intenta de nuevo.');
-      console.error(err);
     }
   });
 }
@@ -263,7 +262,6 @@ async function cargarCatalogos() {
 
     actualizarVisibilidadCredenciales();
   } catch (err) {
-    console.warn('[registro] No se pudieron cargar los catálogos:', err);
   }
 }
 

@@ -44,7 +44,6 @@ export async function postJson(endpoint, data, opciones = {}) {
       data: resData
     };
   } catch (err) {
-    console.warn(`[apiClient] Backend no disponible en ${url}:`, err.message);
     return {
       ok: false,
       isNetworkError: true,
@@ -85,7 +84,6 @@ export async function postFormData(endpoint, formData, opciones = {}) {
       data: resData
     };
   } catch (err) {
-    console.warn(`[apiClient] Backend no disponible en ${url}:`, err.message);
     return {
       ok: false,
       isNetworkError: true,
@@ -126,7 +124,6 @@ export async function getJson(endpoint, opciones = {}) {
       data: resData
     };
   } catch (err) {
-    console.warn(`[apiClient] Backend no disponible en ${url}:`, err.message);
     return {
       ok: false,
       isNetworkError: true,
@@ -162,7 +159,6 @@ export async function getBlob(endpoint, opciones = {}) {
     const blob = await response.blob();
     return { ok: true, status: response.status, blob };
   } catch (err) {
-    console.warn(`[apiClient] Backend no disponible en ${url}:`, err.message);
     return { ok: false, isNetworkError: true, error: 'No fue posible conectar con el servidor backend.' };
   }
 }

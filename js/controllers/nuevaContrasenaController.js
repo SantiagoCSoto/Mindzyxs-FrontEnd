@@ -132,7 +132,6 @@ if (formNuevaContrasena) {
       }
     } catch (err) {
       mostrarBanner(bannerError, 'Error al guardar la contraseña. Intenta de nuevo.');
-      console.error(err);
     } finally {
       if (btnGuardar) {
         btnGuardar.disabled = false;
@@ -149,4 +148,4 @@ if (modalExito) {
       window.location.href = 'login.html';
     }
   });
-}
+}

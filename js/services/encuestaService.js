@@ -35,7 +35,7 @@ export async function registrarInicio(cuestionarioId) {
   try {
     await postJson('/cuestionario/invitado/inicio', { cuestionarioId });
   } catch (error) {
-    console.warn('[encuestaService] Log de inicio (no bloquea):', error?.message);
+    void error;
   }
 }
 
