@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mindzyxs — Chat de soporte</title>
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/inicio.css" />
+  <link rel="stylesheet" href="../css/chat.css" />
+</head>
+
+<body>
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-pink"></div>
+    <div class="blob blob-lav"></div>
+  </div>
+
+  <header class="header-nav">
+    <div class="logo-container">
+      <a href="inicio.html" class="logo-link">
+        <img src="../assets/Logo1.png" alt="Logo Mindzyxs" class="logo-img" />
+        <span>Mindzyxs</span>
+      </a>
+    </div>
+
+    <nav class="main-nav" aria-label="Navegación principal">
+      <ul>
+        <li><a href="inicio.html">Inicio</a></li>
+        <li><a href="inicio.html#nosotros">Nosotros</a></li>
+        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-right">
+      <div class="role-indicator">
+        <span class="role-label">Sesión:</span>
+        <span class="badge-role" id="roleBadge">—</span>
+      </div>
+      <div class="header-auth-buttons">
+        <button type="button" id="btn-volver" class="btn-logout">Volver</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap wrap-chat">
+    <section class="card">
+      <div class="section-header">
+        <span class="section-title">Chat de soporte</span>
+        <span class="conn-badge" id="connBadge">Conectando…</span>
+      </div>
+
+      <div class="chat-grid">
+        <aside class="chat-list">
+          <h3>Conversaciones</h3>
+          <div id="convList"><p class="hint">Cargando…</p></div>
+
+          <div id="offerBox" hidden>
+            <h3>Ofrecer chat</h3>
+            <div class="offer-row">
+              <input type="number" id="offerPacienteId" min="1" placeholder="ID paciente" />
+              <button type="button" class="btn btn-tile" id="btnOfrecer">Ofrecer</button>
+            </div>
+          </div>
+        </aside>
+
+        <div class="chat-window">
+          <div class="chat-head">
+            <div>
+              <h3 id="chatTitulo">Seleccioná una conversación</h3>
+              <p class="hint" id="chatEstado"></p>
+            </div>
+            <div class="chat-head-actions">
+              <button type="button" class="btn-secondary" id="btnBloquear" hidden>Bloquear</button>
+              <button type="button" class="btn-secondary" id="btnDesbloquear" hidden>Desbloquear</button>
+            </div>
+          </div>
+
+          <div class="blocked-banner" id="blockedBanner" hidden>
+            🚫 Has bloqueado a este usuario. No puede escribirte.
+          </div>
+
+          <div class="messages" id="messages"></div>
+
+          <form class="composer" id="composer">
+            <input type="text" id="msgInput" maxlength="1000" placeholder="Escribí tu mensaje…" autocomplete="off" />
+            <button type="submit" class="btn btn-tile" id="btnEnviar">Enviar</button>
+          </form>
+          <p class="hint">Los mensajes viajan en tiempo real por Firebase. Quedan registrados en la auditoría del sistema.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-in">
+      <a href="inicio.html">Inicio</a>
+      <a href="inicio.html#nosotros">Nosotros</a>
+      <a href="inicio.html#ayuda">Ayuda</a>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script type="module" src="../js/controllers/chatController.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,38 @@
+/* Chat psicólogo-paciente (PB-31) */
+.wrap-chat { max-width: 960px; }
+.conn-badge { font-size: 11px; font-weight: 700; color: #8A6A00; background: #FFF8E6; padding: 5px 12px; border-radius: 20px; }
+.conn-badge.ok { color: #0E8F4B; background: #E8FFF1; }
+.conn-badge.err { color: #C2274F; background: #FFF1F3; }
+.chat-grid { display: grid; grid-template-columns: 280px 1fr; gap: 16px; margin-top: 14px; }
+.chat-list h3 { font-size: 13px; margin-bottom: 8px; }
+.conv-item { border: 1px solid #DFDAEE; border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; cursor: pointer; background: #fff; }
+.conv-item:hover { border-color: var(--cyan); }
+.conv-item.active { border-color: var(--cyan); background: #E6F7F8; }
+.conv-item h4 { font-size: 13px; }
+.conv-item p { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.conv-item .st { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: #F3F1FA; color: #5A5D72; margin-top: 4px; }
+.conv-item .st.pend { background: #FFF8E6; color: #8A6A00; }
+.conv-item .st.ok { background: #E8FFF1; color: #0E8F4B; }
+.conv-item .st.block { background: #FFF1F3; color: #C2274F; }
+.conv-actions { display: flex; gap: 6px; margin-top: 8px; }
+.conv-actions button { flex: 1; height: 32px; border-radius: 16px; border: 1px solid #DFDAEE; background: #fff; font-size: 11px; font-weight: 700; cursor: pointer; }
+.conv-actions .acc { background: var(--cyan); border-color: var(--cyan); color: #fff; }
+#offerBox { margin-top: 14px; border-top: 1px dashed #DFDAEE; padding-top: 12px; }
+.offer-row { display: flex; gap: 8px; }
+.offer-row input { flex: 1; height: 38px; border: 1px solid #DFDAEE; border-radius: 12px; padding: 0 12px; font-family: inherit; }
+.chat-window { display: flex; flex-direction: column; min-height: 420px; }
+.chat-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.chat-head h3 { font-size: 15px; }
+.chat-head-actions { display: flex; gap: 8px; }
+.messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding: 12px; margin: 12px 0; background: #F9F8FC; border: 1px solid #EDE8F0; border-radius: 12px; min-height: 260px; max-height: 380px; }
+.msg { max-width: 75%; padding: 8px 12px; border-radius: 12px; font-size: 13px; line-height: 1.5; }
+.msg small { display: block; font-size: 10px; color: var(--muted); margin-top: 3px; }
+.msg.mine { align-self: flex-end; background: var(--cyan); color: #fff; }
+.msg.mine small { color: rgba(255,255,255,.8); }
+.msg.theirs { align-self: flex-start; background: #fff; border: 1px solid #DFDAEE; }
+.blocked-banner { display: none; background: #FFF1F3; border: 1px solid #FFBFCF; color: #C2274F; font-size: 12px; font-weight: 600; border-radius: 12px; padding: 10px 14px; margin-bottom: 10px; }
+.blocked-banner.show { display: block; }
+.composer { display: flex; gap: 8px; }
+.composer input { flex: 1; height: 44px; border: 1px solid #DFDAEE; border-radius: 20px; padding: 0 16px; font-family: inherit; font-size: 13px; }
+.composer input:disabled { background: #F3F1FA; }
+@media (max-width: 760px) { .chat-grid { grid-template-columns: 1fr; } }
