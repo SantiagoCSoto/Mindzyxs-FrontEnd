@@ -9,7 +9,7 @@ import {
   obtenerTokenChat, obtenerConversaciones, buscarPacientes, ofrecerChat,
   responderSolicitud, bloquearChat, desbloquearChat, avisarMensaje,
   conectarRtdb, suscribirMensajes, enviarMensaje, marcarPresencia,
-  escucharEscribiendo, avisarEscribiendo, escucharMeta, leerUltimoMensaje
+  escucharPresencia, escucharEscribiendo, avisarEscribiendo, escucharMeta, leerUltimoMensaje
 } from '../services/chatService.js';
 
 const $ = (id) => document.getElementById(id);
