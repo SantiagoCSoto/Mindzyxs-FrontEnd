@@ -98,14 +98,23 @@ function renderConvs() {
   if (vacio) vacio.remove();
   // Crea o actualiza en su lugar (sin limpiar la lista).
   conversaciones.forEach((c) => {
-    let div = nodosConv.get(c.id);
-    if (!div) {
-      div = document.createElement('button');
-      div.addEventListener('click', () => openConv(c.id));
-      nodosConv.set(c.id, div);
+    try {
+      let div = nodosConv.get(c.id);
+      if (!div) {
+        div = document.createElement('button');
+        div.type = 'button';
+        div.dataset.convId = c.id;
+        div.addEventListener('click', () => openConv(c.id));
+        nodosConv.set(c.id, div);
+        convList.appendChild(div);
+      }
+      pintarNodo(div, c);
+    } catch (error) {
+      const div = document.createElement('div');
+      div.className = 'conv';
+      div.innerHTML = '<div class="conv-preview">Error pintando chat ' + escapar(c && c.id) + ': ' + escapar(error.message) + '</div>';
       convList.appendChild(div);
     }
-    pintarNodo(div, c);
     // Preview en segundo plano sobre el nodo ya pintado.
     leerUltimoMensaje(db, c.id)
       .then((last) => {
