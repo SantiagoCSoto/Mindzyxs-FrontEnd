@@ -26,7 +26,16 @@ export async function obtenerTokenChat() {
 
 export async function obtenerConversaciones() {
   const res = await getJson('/chat/conversaciones');
-  if (!res.ok) throw new Error(res.error || 'No fue posible cargar las conversaciones');
+  if (!res.ok) {
+    if (res.status === 404) throw new Error('Back sin endpoints de chat (¿API en rama PB31?)');
+    throw new Error(res.error || 'No fue posible cargar las conversaciones');
+  }
+  return res.data ?? [];
+}
+
+export async function buscarPacientes(q) {
+  const res = await getJson('/chat/pacientes' + (q ? '?q=' + encodeURIComponent(q) : ''));
+  if (!res.ok) throw new Error(res.error || 'No fue posible buscar pacientes');
   return res.data ?? [];
 }
 

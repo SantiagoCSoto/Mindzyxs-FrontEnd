@@ -5,7 +5,7 @@
  */
 
 import {
-  obtenerTokenChat, obtenerConversaciones, ofrecerChat,
+  obtenerTokenChat, obtenerConversaciones, buscarPacientes, ofrecerChat,
   responderSolicitud, bloquearChat, desbloquearChat, avisarMensaje,
   conectarRtdb, suscribirMensajes, enviarMensaje, marcarPresencia
 } from '../services/chatService.js';
@@ -43,6 +43,12 @@ function escapar(s) {
   return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
+function inicialesDe(nombre) {
+  const partes = String(nombre || '').trim().split(/\s+/).filter(Boolean);
+  if (!partes.length) return '?';
+  return (partes[0][0] + (partes.length > 1 ? partes[partes.length - 1][0] : '')).toUpperCase();
+}
+
 function sesion() {
   try {
     return JSON.parse(sessionStorage.getItem('usuario'));
@@ -61,7 +67,8 @@ function pintarLista() {
     const div = document.createElement('div');
     div.className = 'conv-item' + (activa && activa.id === c.id ? ' active' : '');
     const cls = c.estado === 'Pendiente' ? 'pend' : (c.estado === 'Aceptada' ? 'ok' : (c.estado === 'Bloqueada' ? 'block' : ''));
-    div.innerHTML = `<h4>${escapar(c.contraparte.Nombre)}</h4><p>${escapar(c.contraparte.Rol)}</p><span class="st ${cls}">${escapar(c.estado)}</span>`;
+    const iniciales = inicialesDe(c.contraparte.nombre);
+    div.innerHTML = `<div class="conv-top"><span class="avatar">${escapar(iniciales)}</span><div><h4>${escapar(c.contraparte.nombre)}</h4><p>${escapar(c.contraparte.rol)}</p></div></div><span class="st ${cls}">${escapar(c.estado)}</span>`;
     if (c.estado === 'Pendiente' && yo.rol === 'Paciente') {
       const row = document.createElement('div');
       row.className = 'conv-actions';
@@ -76,11 +83,16 @@ function pintarLista() {
 }
 
 async function recargar() {
-  conversaciones = await obtenerConversaciones();
+  try {
+    conversaciones = await obtenerConversaciones();
+  } catch (error) {
+    convList.innerHTML = `<p class="hint">No fue posible cargar: ${escapar(error.message)}</p>`;
+    return;
+  }
   pintarLista();
   if (activa) {
     const act = conversaciones.find((c) => c.id === activa.id);
-    if (act) abrirConversacion(act.Id, true);
+    if (act) abrirConversacion(act.id, true);
   }
 }
 
@@ -99,18 +111,18 @@ function pintarMensaje(m) {
   const div = document.createElement('div');
   div.className = 'msg ' + (propio ? 'mine' : 'theirs');
   const hora = m.fecha ? new Date(m.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
-  div.innerHTML = `${escapar(m.texto)}<small>${propio ? 'Vos' : escapar(activa.contraparte.Nombre)} · ${hora}</small>`;
+  div.innerHTML = `${escapar(m.texto)}<small>${propio ? 'Vos' : escapar(activa.contraparte.nombre)} · ${hora}</small>`;
   messagesEl.appendChild(div);
   messagesEl.scrollTop = messagesEl.scrollHeight;
 }
 
 async function abrirConversacion(id, mantener = false) {
-  const c = conversaciones.find((x) => x.Id === id);
+  const c = conversaciones.find((x) => x.id === id);
   if (!c) return;
   if (offSuscripcion) { offSuscripcion(); offSuscripcion = null; }
   activa = c;
   messagesEl.innerHTML = '';
-  chatTitulo.textContent = c.contraparte.Nombre;
+  chatTitulo.textContent = c.contraparte.nombre;
   chatEstado.textContent = `Estado: ${c.estado}`;
   pintarLista();
 
@@ -172,16 +184,39 @@ btnDesbloquear.addEventListener('click', async () => {
   }
 });
 
-document.getElementById('btnOfrecer')?.addEventListener('click', async () => {
-  const idPaciente = Number(document.getElementById('offerPacienteId').value);
-  if (!idPaciente) { showToast('Ingresá el ID del paciente'); return; }
+document.getElementById('btnBuscar')?.addEventListener('click', async () => {
+  const q = document.getElementById('searchPaciente').value.trim();
+  const box = document.getElementById('searchResults');
+  box.innerHTML = '<p class="hint">Buscando…</p>';
   try {
-    await ofrecerChat(idPaciente);
-    showToast('Solicitud enviada');
-    document.getElementById('offerPacienteId').value = '';
-    await recargar();
+    const res = await buscarPacientes(q);
+    if (!res.length) {
+      box.innerHTML = '<p class="hint">Sin coincidencias.</p>';
+      return;
+    }
+    box.innerHTML = '';
+    res.forEach((p) => {
+      const nivel = p.ultimoNivel
+        ? `<span class="risk-tag ${p.ultimoNivel.toLowerCase()}">Riesgo ${escapar(p.ultimoNivel)}${p.ultimoPuntaje != null ? ' · ' + p.ultimoPuntaje : ''}</span>`
+        : '<span class="risk-tag none">Sin datos</span>';
+      const div = document.createElement('div');
+      div.className = 'search-item';
+      div.innerHTML = `<div class="conv-top"><span class="avatar">${escapar(inicialesDe(p.nombre))}</span><div><h4>${escapar(p.nombre)}</h4><p>${escapar(p.correo)}</p>${nivel}</div></div><button class="btn btn-tile">Ofrecer</button>`;
+      div.querySelector('button').addEventListener('click', async () => {
+        try {
+          await ofrecerChat(p.id);
+          showToast('Solicitud enviada a ' + p.nombre);
+          box.innerHTML = '';
+          document.getElementById('searchPaciente').value = '';
+          await recargar();
+        } catch (error) {
+          showToast(error.message);
+        }
+      });
+      box.appendChild(div);
+    });
   } catch (error) {
-    showToast(error.message);
+    box.innerHTML = `<p class="hint">No fue posible buscar: ${escapar(error.message)}</p>`;
   }
 });
 

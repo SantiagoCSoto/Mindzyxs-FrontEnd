@@ -56,11 +56,12 @@
           <div id="convList"><p class="hint">Cargando…</p></div>
 
           <div id="offerBox" hidden>
-            <h3>Ofrecer chat</h3>
+            <h3>Buscar paciente</h3>
             <div class="offer-row">
-              <input type="number" id="offerPacienteId" min="1" placeholder="ID paciente" />
-              <button type="button" class="btn btn-tile" id="btnOfrecer">Ofrecer</button>
+              <input type="text" id="searchPaciente" maxlength="60" placeholder="Nombre o correo…" autocomplete="off" />
+              <button type="button" class="btn btn-tile" id="btnBuscar">Buscar</button>
             </div>
+            <div id="searchResults"></div>
           </div>
         </aside>
 
