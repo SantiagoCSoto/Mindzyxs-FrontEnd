@@ -1,199 +1,257 @@
 /**
- * Controlador del chat psicólogo-paciente (PB-31).
- * Sesión Bearer (login) -> token Firebase -> RTDB en vivo (mensajes,
- * presencia) + endpoints SQL (solicitudes, aceptar/rechazar, bloqueo).
+ * Controlador del chat psicólogo-paciente (PB-31) — fiel al mockup.
+ * Tabs Conversaciones/Solicitudes, previews, typing, presencia,
+ * modales de bloqueo/autorización + buscador de pacientes con riesgo.
+ * Sesión Bearer (login) -> token Firebase -> RTDB en vivo + endpoints SQL.
  */
 
 import {
   obtenerTokenChat, obtenerConversaciones, buscarPacientes, ofrecerChat,
   responderSolicitud, bloquearChat, desbloquearChat, avisarMensaje,
-  conectarRtdb, suscribirMensajes, enviarMensaje, marcarPresencia
+  conectarRtdb, suscribirMensajes, enviarMensaje, marcarPresencia,
+  escucharEscribiendo, avisarEscribiendo, escucharMeta, leerUltimoMensaje
 } from '../services/chatService.js';
 
-const roleBadge = document.getElementById('roleBadge');
-const connBadge = document.getElementById('connBadge');
-const convList = document.getElementById('convList');
-const offerBox = document.getElementById('offerBox');
-const chatTitulo = document.getElementById('chatTitulo');
-const chatEstado = document.getElementById('chatEstado');
-const messagesEl = document.getElementById('messages');
-const composer = document.getElementById('composer');
-const msgInput = document.getElementById('msgInput');
-const btnEnviar = document.getElementById('btnEnviar');
-const btnBloquear = document.getElementById('btnBloquear');
-const btnDesbloquear = document.getElementById('btnDesbloquear');
-const blockedBanner = document.getElementById('blockedBanner');
-const toast = document.getElementById('toast');
+const $ = (id) => document.getElementById(id);
+const rolePill = $('rolePill'), convList = $('convList'), convCount = $('convCount');
+const msgs = $('msgs'), msgInput = $('msgInput'), sendBtn = $('sendBtn');
+const blockBtn = $('blockBtn'), blockedBanner = $('blockedBanner'), typing = $('typing');
+const toast = $('toast'), reqBadge = $('reqBadge'), reqList = $('reqList');
+const tabChat = $('tabChat'), tabReq = $('tabReq'), panelChat = $('panelChat'), panelReq = $('panelReq');
+const blockModal = $('blockModal'), authModal = $('authModal');
 
-let yo = null;          // { uid, rol }
+let yo = null; // { uid, rol }
 let db = null;
 let conversaciones = [];
-let activa = null;
-let offSuscripcion = null;
+let activaId = null;
+let offMsgs = null, offMeta = null, offTyping = null, offPresence = null;
+let typingTimer = null;
 
-function showToast(mensaje) {
-  if (!toast) return;
-  toast.textContent = mensaje;
-  toast.classList.add('show');
-  clearTimeout(showToast._timer);
-  showToast._timer = setTimeout(() => toast.classList.remove('show'), 2500);
+function showToast(msg) {
+  toast.textContent = msg; toast.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => toast.classList.remove('show'), 2400);
 }
-
 function escapar(s) {
   return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
-
 function inicialesDe(nombre) {
-  const partes = String(nombre || '').trim().split(/\s+/).filter(Boolean);
-  if (!partes.length) return '?';
-  return (partes[0][0] + (partes.length > 1 ? partes[partes.length - 1][0] : '')).toUpperCase();
+  const p = String(nombre || '').trim().split(/\s+/).filter(Boolean);
+  if (!p.length) return '?';
+  return (p[0][0] + (p.length > 1 ? p[p.length - 1][0] : '')).toUpperCase();
 }
-
+function horaDe(fecha) {
+  if (!fecha) return '';
+  return new Date(fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+function diaDe(fecha) {
+  if (!fecha) return '';
+  return new Date(fecha).toLocaleDateString('es-ES');
+}
 function sesion() {
-  try {
-    return JSON.parse(sessionStorage.getItem('usuario'));
-  } catch (_) {
-    return null;
-  }
+  try { return JSON.parse(sessionStorage.getItem('usuario')); } catch (_) { return null; }
+}
+function esMio(conv) {
+  return conv.contraparte.rol === 'Paciente' ? yo.rol === 'Paciente' : yo.rol === 'Psicologo';
+}
+function soyPaciente() { return yo && yo.rol === 'Paciente'; }
+function pendientesAccionables() {
+  return conversaciones.filter((c) => c.estado === 'Pendiente' && soyPaciente() && c.contraparte.rol === 'Psicologo');
 }
 
-function pintarLista() {
-  if (!conversaciones.length) {
-    convList.innerHTML = '<p class="hint">Sin conversaciones. Un psicólogo puede ofrecerte chat desde aquí.</p>';
-    return;
-  }
+// ---------- Tabs ----------
+function setTab(isReq) {
+  tabChat.classList.toggle('active', !isReq);
+  tabReq.classList.toggle('active', isReq);
+  panelChat.style.display = isReq ? 'none' : 'block';
+  panelReq.style.display = isReq ? 'block' : 'none';
+}
+
+// ---------- Lista (con previews en vivo) ----------
+async function renderConvs() {
   convList.innerHTML = '';
-  conversaciones.forEach((c) => {
-    const div = document.createElement('div');
-    div.className = 'conv-item' + (activa && activa.id === c.id ? ' active' : '');
-    const cls = c.estado === 'Pendiente' ? 'pend' : (c.estado === 'Aceptada' ? 'ok' : (c.estado === 'Bloqueada' ? 'block' : ''));
-    const iniciales = inicialesDe(c.contraparte.nombre);
-    div.innerHTML = `<div class="conv-top"><span class="avatar">${escapar(iniciales)}</span><div><h4>${escapar(c.contraparte.nombre)}</h4><p>${escapar(c.contraparte.rol)}</p></div></div><span class="st ${cls}">${escapar(c.estado)}</span>`;
-    if (c.estado === 'Pendiente' && yo.rol === 'Paciente') {
-      const row = document.createElement('div');
-      row.className = 'conv-actions';
-      row.innerHTML = `<button data-acc="1">Aceptar</button><button data-acc="0">Rechazar</button>`;
-      row.querySelector('[data-acc="1"]').addEventListener('click', (e) => { e.stopPropagation(); responder(c.id, true); });
-      row.querySelector('[data-acc="0"]').addEventListener('click', (e) => { e.stopPropagation(); responder(c.id, false); });
-      div.appendChild(row);
-    }
-    div.addEventListener('click', () => abrirConversacion(c.id));
-    convList.appendChild(div);
-  });
+  convCount.textContent = conversaciones.length;
+  const pend = pendientesAccionables();
+  reqBadge.hidden = !pend.length;
+  reqBadge.textContent = pend.length;
+  for (const c of conversaciones) {
+    const b = document.createElement('button');
+    b.className = 'conv' + (c.id === activaId ? ' active' : '');
+    let preview = 'Sin mensajes';
+    try {
+      const last = await leerUltimoMensaje(db, c.id);
+      if (last) preview = (String(last.remitenteUid) === String(yo.uid) ? 'Vos: ' : c.contraparte.nombre.split(' ')[0] + ': ') + last.texto;
+    } catch (_) { /* sin preview */ }
+    b.innerHTML = '<div class="conv-top"><div class="avatar">' + escapar(inicialesDe(c.contraparte.nombre)) + '</div>' +
+      '<div><b>' + escapar(c.contraparte.nombre) + '</b><small>' + escapar(c.contraparte.rol) + ' • ' + escapar(c.estado) + '</small></div></div>' +
+      '<div class="conv-preview">' + escapar(preview) + '</div>';
+    b.addEventListener('click', () => openConv(c.id));
+    convList.appendChild(b);
+  }
+  if (!conversaciones.length) convList.innerHTML = '<div class="empty">Sin conversaciones todavía.</div>';
 }
 
-async function recargar() {
+async function recargar(mantener = true) {
   try {
     conversaciones = await obtenerConversaciones();
   } catch (error) {
-    convList.innerHTML = `<p class="hint">No fue posible cargar: ${escapar(error.message)}</p>`;
+    convList.innerHTML = '<div class="empty">No fue posible cargar: ' + escapar(error.message) + '</div>';
     return;
   }
-  pintarLista();
-  if (activa) {
-    const act = conversaciones.find((c) => c.id === activa.id);
-    if (act) abrirConversacion(act.id, true);
+  await renderConvs();
+  renderReqs();
+  if (mantener && activaId && conversaciones.some((c) => c.id === activaId)) {
+    await openConv(activaId, true);
+  }
+}
+
+// ---------- Chat abierto ----------
+function limpiarSuscripciones() {
+  [offMsgs, offMeta, offTyping, offPresence].forEach((off) => { try { off && off(); } catch (_) { } });
+  offMsgs = offMeta = offTyping = offPresence = null;
+}
+
+async function openConv(id, mantener = false) {
+  const c = conversaciones.find((x) => x.id === id);
+  if (!c) { authModal.classList.add('open'); return; }
+  limpiarSuscripciones();
+  activaId = id;
+  renderConvs();
+  $('chatName').textContent = c.contraparte.nombre;
+  $('chatAvatar').textContent = inicialesDe(c.contraparte.nombre);
+  $('chatStatus').innerHTML = 'En línea • ' + escapar(c.contraparte.rol);
+  msgs.innerHTML = '';
+  actualizarBloqueo(c);
+
+  if (c.estado !== 'Aceptada') {
+    $('chatStatus').textContent = 'Estado: ' + c.estado + ' — los mensajes se habilitan al aceptar.';
+    return;
+  }
+
+  // Meta en vivo: si cambia estado/bloqueo afuera, se refleja aquí.
+  offMeta = escucharMeta(db, c.id, async () => { await recargar(true); });
+  // Presencia del otro.
+  const otroUid = c.contraparte.id;
+  offPresence = escucharPresencia(db, c.id, otroUid, (enLinea) => {
+    $('chatStatus').innerHTML = (enLinea ? '<span class="dot"></span>En línea' : 'Desconectado') + ' • ' + escapar(c.contraparte.rol);
+  });
+  marcarPresencia(db, c.id, yo.uid);
+  // Typing del otro.
+  offTyping = escucharEscribiendo(db, c.id, otroUid, (escribiendo) => {
+    typing.classList.toggle('show', !!escribiendo);
+  });
+  // Mensajes en vivo.
+  offMsgs = suscribirMensajes(db, c.id, (m) => pintarMensaje(m, c));
+  if (!mantener) showToast('Chat en vivo conectado');
+}
+
+function actualizarBloqueo(c) {
+  const bloqueada = c.estado === 'Bloqueada';
+  const bloqueoYo = bloqueada && c.bloqueadaPorMi;
+  blockedBanner.classList.toggle('show', bloqueada);
+  msgInput.disabled = bloqueada;
+  sendBtn.disabled = bloqueada;
+  blockBtn.disabled = bloqueada;
+  blockBtn.textContent = soyPaciente() ? '⛔ Bloquear psicólogo' : '⛔ Bloquear paciente';
+  blockBtn.hidden = !(soyPaciente() && (c.estado === 'Aceptada' || bloqueoYo));
+  if (bloqueada) {
+    $('chatStatus').textContent = bloqueoYo
+      ? 'Bloqueado por vos — no puede escribirte.'
+      : 'Bloqueado — no podés escribir en este chat.';
+  }
+}
+
+function pintarMensaje(m, c) {
+  const propio = String(m.remitenteUid) === String(yo.uid);
+  const day = diaDe(m.fecha);
+  const lastDay = msgs.querySelector('.day:last-of-type');
+  if (!lastDay || lastDay.textContent !== day) {
+    const d = document.createElement('div');
+    d.className = 'day'; d.textContent = day || 'Hoy';
+    msgs.appendChild(d);
+  }
+  const div = document.createElement('div');
+  div.className = 'msg ' + (propio ? 'out' : 'in');
+  const quien = propio ? 'Vos' : c.contraparte.nombre;
+  div.innerHTML = '<b>' + escapar(quien) + '</b><div>' + escapar(m.texto) + '</div><small>' + escapar(horaDe(m.fecha)) + '</small>';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+async function sendMessage() {
+  const c = conversaciones.find((x) => x.id === activaId);
+  if (!c || msgInput.disabled) return;
+  const texto = msgInput.value.trim();
+  if (!texto) { showToast('Escribe un mensaje primero'); return; }
+  msgInput.value = '';
+  avisarEscribiendo(db, c.id, yo.uid, false);
+  try {
+    await enviarMensaje(db, c.id, yo.uid, texto);
+    avisarMensaje(c.id);
+  } catch (error) {
+    showToast(error.message || 'No fue posible enviar (¿bloqueado o sin estado Aceptada?)');
+  }
+}
+
+// ---------- Solicitudes ----------
+function renderReqs() {
+  const pend = pendientesAccionables();
+  reqList.innerHTML = '';
+  if (!pend.length && yo.rol !== 'Psicologo') {
+    reqList.innerHTML = '<div class="empty">No tienes solicitudes pendientes. 🎉</div>';
+    return;
+  }
+  pend.forEach((c) => {
+    const div = document.createElement('div');
+    div.className = 'req-card';
+    div.innerHTML = '<div class="conv-top"><div class="avatar">' + escapar(inicialesDe(c.contraparte.nombre)) + '</div>' +
+      '<div><h3>' + escapar(c.contraparte.nombre) + '</h3><p style="margin:0">Solicitud • ' + escapar(c.contraparte.rol) + '</p></div></div>' +
+      '<p>Quiere iniciar un chat de apoyo contigo.</p>' +
+      '<div class="req-actions"><button class="btn-accept">Aceptar</button><button class="btn-reject">Rechazar</button></div>';
+    div.querySelector('.btn-accept').addEventListener('click', () => responder(c.id, true));
+    div.querySelector('.btn-reject').addEventListener('click', () => responder(c.id, false));
+    reqList.appendChild(div);
+  });
+  if (yo.rol === 'Psicologo') {
+    const enviadas = conversaciones.filter((c) => c.estado === 'Pendiente');
+    if (enviadas.length) {
+      const p = document.createElement('p');
+      p.className = 'hint';
+      p.textContent = `Tenés ${enviadas.length} solicitud(es) esperando respuesta del paciente.`;
+      reqList.appendChild(p);
+    } else if (!pend.length) {
+      const p = document.createElement('p');
+      p.className = 'hint';
+      p.textContent = 'Sin solicitudes. Buscá un paciente abajo para ofrecerle chat.';
+      reqList.appendChild(p);
+    }
   }
 }
 
 async function responder(id, aceptar) {
   try {
     await responderSolicitud(id, aceptar);
-    showToast(aceptar ? 'Chat aceptado' : 'Solicitud rechazada');
-    await recargar();
+    showToast(aceptar ? 'Conversación iniciada ✓' : 'Solicitud rechazada');
+    await recargar(false);
+    if (aceptar) { setTab(false); await openConv(id); }
   } catch (error) {
-    showToast(error.message);
+    if (/permiso|autoriz/i.test(error.message)) {
+      $('authText').textContent = error.message;
+      authModal.classList.add('open');
+    } else {
+      showToast(error.message);
+    }
   }
 }
 
-function pintarMensaje(m) {
-  const propio = String(m.remitenteUid) === String(yo.uid);
-  const div = document.createElement('div');
-  div.className = 'msg ' + (propio ? 'mine' : 'theirs');
-  const hora = m.fecha ? new Date(m.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
-  div.innerHTML = `${escapar(m.texto)}<small>${propio ? 'Vos' : escapar(activa.contraparte.nombre)} · ${hora}</small>`;
-  messagesEl.appendChild(div);
-  messagesEl.scrollTop = messagesEl.scrollHeight;
-}
-
-async function abrirConversacion(id, mantener = false) {
-  const c = conversaciones.find((x) => x.id === id);
-  if (!c) return;
-  if (offSuscripcion) { offSuscripcion(); offSuscripcion = null; }
-  activa = c;
-  messagesEl.innerHTML = '';
-  chatTitulo.textContent = c.contraparte.nombre;
-  chatEstado.textContent = `Estado: ${c.estado}`;
-  pintarLista();
-
-  const puedoEscribir = c.estado === 'Aceptada' && !c.bloqueadaPorMi;
-  const bloqueadoYo = c.estado === 'Bloqueada' && !c.bloqueadaPorMi;
-  msgInput.disabled = !puedoEscribir;
-  btnEnviar.disabled = !puedoEscribir;
-  blockedBanner.classList.toggle('show', c.estado === 'Bloqueada');
-  btnBloquear.hidden = !(yo.rol === 'Paciente' && c.estado === 'Aceptada');
-  btnDesbloquear.hidden = !(yo.rol === 'Paciente' && c.estado === 'Bloqueada' && c.bloqueadaPorMi);
-
-  if (bloqueadoYo) {
-    chatEstado.textContent = 'Estado: Bloqueada — no podés escribir en este chat.';
-    return;
-  }
-  if (c.estado !== 'Aceptada') {
-    chatEstado.textContent = `Estado: ${c.estado} — los mensajes se habilitan al aceptar.`;
-    return;
-  }
-
-  offSuscripcion = suscribirMensajes(db, c.id, pintarMensaje);
-  marcarPresencia(db, c.id, yo.uid);
-  if (!mantener) showToast('Chat en vivo conectado');
-}
-
-composer.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  if (!activa || msgInput.disabled) return;
-  const texto = msgInput.value.trim();
-  if (!texto) return;
-  msgInput.value = '';
-  try {
-    await enviarMensaje(db, activa.id, yo.uid, texto);
-    avisarMensaje(activa.id);
-  } catch (error) {
-    showToast(error.message || 'No fue posible enviar (¿bloqueado o sin estado Aceptada?)');
-  }
-});
-
-btnBloquear.addEventListener('click', async () => {
-  if (!activa || !confirm('¿Bloquear a este usuario? No podrá escribirte.')) return;
-  try {
-    await bloquearChat(activa.id);
-    showToast('Usuario bloqueado');
-    await recargar();
-  } catch (error) {
-    showToast(error.message);
-  }
-});
-
-btnDesbloquear.addEventListener('click', async () => {
-  if (!activa) return;
-  try {
-    await desbloquearChat(activa.id);
-    showToast('Usuario desbloqueado');
-    await recargar();
-  } catch (error) {
-    showToast(error.message);
-  }
-});
-
-document.getElementById('btnBuscar')?.addEventListener('click', async () => {
-  const q = document.getElementById('searchPaciente').value.trim();
-  const box = document.getElementById('searchResults');
+// ---------- Buscador (psicólogo) ----------
+async function buscar() {
+  const q = $('searchPaciente').value.trim();
+  const box = $('searchResults');
   box.innerHTML = '<p class="hint">Buscando…</p>';
   try {
     const res = await buscarPacientes(q);
-    if (!res.length) {
-      box.innerHTML = '<p class="hint">Sin coincidencias.</p>';
-      return;
-    }
+    if (!res.length) { box.innerHTML = '<p class="hint">Sin coincidencias.</p>'; return; }
     box.innerHTML = '';
     res.forEach((p) => {
       const nivel = p.ultimoNivel
@@ -204,11 +262,13 @@ document.getElementById('btnBuscar')?.addEventListener('click', async () => {
       div.innerHTML = `<div class="conv-top"><span class="avatar">${escapar(inicialesDe(p.nombre))}</span><div><h4>${escapar(p.nombre)}</h4><p>${escapar(p.correo)}</p>${nivel}</div></div><button class="btn btn-tile">Ofrecer</button>`;
       div.querySelector('button').addEventListener('click', async () => {
         try {
-          await ofrecerChat(p.id);
+          const conv = await ofrecerChat(p.id);
           showToast('Solicitud enviada a ' + p.nombre);
+          $('searchPaciente').value = '';
           box.innerHTML = '';
-          document.getElementById('searchPaciente').value = '';
-          await recargar();
+          await recargar(false);
+          setTab(false);
+          await openConv(conv.id);
         } catch (error) {
           showToast(error.message);
         }
@@ -218,34 +278,70 @@ document.getElementById('btnBuscar')?.addEventListener('click', async () => {
   } catch (error) {
     box.innerHTML = `<p class="hint">No fue posible buscar: ${escapar(error.message)}</p>`;
   }
-});
+}
 
-document.getElementById('btn-volver')?.addEventListener('click', () => {
-  window.history.back();
+// ---------- Eventos ----------
+sendBtn.addEventListener('click', sendMessage);
+msgInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { sendMessage(); return; }
+  const c = conversaciones.find((x) => x.id === activaId);
+  if (!c || msgInput.disabled) return;
+  avisarEscribiendo(db, c.id, yo.uid, true);
+  clearTimeout(avisarEscribiendo._t);
+  avisarEscribiendo._t = setTimeout(() => avisarEscribiendo(db, c.id, yo.uid, false), 2000);
 });
+tabChat.addEventListener('click', () => setTab(false));
+tabReq.addEventListener('click', () => setTab(true));
+$('btnBuscar')?.addEventListener('click', buscar);
+$('searchPaciente')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') buscar(); });
+
+blockBtn.addEventListener('click', () => {
+  const c = conversaciones.find((x) => x.id === activaId);
+  if (!c) return;
+  $('blockTitle').textContent = soyPaciente() ? 'Bloquear psicólogo' : 'Bloquear paciente';
+  $('blockText').textContent = 'Al bloquear a ' + c.contraparte.nombre + ', no podrás enviar ni recibir mensajes. Podrás desbloquearlo más tarde desde este mismo chat. ¿Deseas continuar?';
+  blockModal.classList.add('open');
+});
+$('blockCancel').addEventListener('click', () => blockModal.classList.remove('open'));
+$('blockConfirm').addEventListener('click', async () => {
+  blockModal.classList.remove('open');
+  try {
+    await bloquearChat(activaId);
+    showToast('Contacto bloqueado ⛔');
+    await recargar(true);
+  } catch (error) {
+    showToast(error.message);
+  }
+});
+$('unblockBtn').addEventListener('click', async () => {
+  try {
+    await desbloquearChat(activaId);
+    showToast('Contacto desbloqueado ✓');
+    await recargar(true);
+  } catch (error) {
+    showToast(error.message);
+  }
+});
+$('authOk').addEventListener('click', () => authModal.classList.remove('open'));
+
+// Refresco periódico suave (por si algo cambió fuera del chat).
+setInterval(() => { recargar(true).catch(() => { }); }, 20000);
+window.addEventListener('focus', () => { recargar(true).catch(() => { }); });
 
 async function iniciar() {
-  const u = sesion();
-  if (!u) {
-    window.location.href = 'login.html';
-    return;
-  }
+  if (!sesion()) { window.location.href = 'login.html'; return; }
   try {
     const t = await obtenerTokenChat();
     yo = { uid: t.uid, rol: t.rol };
-    if (roleBadge) roleBadge.textContent = t.rol;
+    $('rolePill').textContent = t.rol === 'Paciente' ? '👩 Paciente' : '🧠 Psicólogo';
+    $('searchBox').hidden = t.rol !== 'Psicologo';
+    blockBtn.textContent = t.rol === 'Paciente' ? '⛔ Bloquear psicólogo' : '⛔ Bloquear paciente';
     db = await conectarRtdb(t.firebaseToken, t.databaseUrl);
-    if (connBadge) {
-      connBadge.textContent = 'En vivo';
-      connBadge.classList.add('ok');
-    }
-    if (t.rol === 'Psicologo' && offerBox) offerBox.hidden = false;
-    await recargar();
+    await recargar(false);
+    const primero = conversaciones.find((c) => c.estado === 'Aceptada') || conversaciones[0];
+    if (primero) await openConv(primero.id);
   } catch (error) {
-    if (connBadge) {
-      connBadge.textContent = 'Sin conexión';
-      connBadge.classList.add('err');
-    }
+    convList.innerHTML = '<div class="empty">No fue posible conectar: ' + escapar(error.message) + '</div>';
     showToast(error.message);
   }
 }

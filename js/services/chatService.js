@@ -101,3 +101,37 @@ export function marcarPresencia(db, conversacionId, uid) {
   ref.set({ enLinea: true, fecha: new Date().toISOString() });
   ref.onDisconnect().remove();
 }
+
+export function escucharPresencia(db, conversacionId, uid, onCambio) {
+  const ref = db.ref(`conversaciones/${conversacionId}/presencia/${uid}`);
+  const handler = (snap) => onCambio(!!snap.val());
+  ref.on('value', handler);
+  return () => ref.off('value', handler);
+}
+
+export function avisarEscribiendo(db, conversacionId, uid, escribiendo) {
+  try {
+    db.ref(`conversaciones/${conversacionId}/typing/${uid}`).set(escribiendo ? { fecha: new Date().toISOString() } : null);
+  } catch (_) { /* best-effort */ }
+}
+
+export function escucharEscribiendo(db, conversacionId, uid, onCambio) {
+  const ref = db.ref(`conversaciones/${conversacionId}/typing/${uid}`);
+  const handler = (snap) => onCambio(!!snap.val());
+  ref.on('value', handler);
+  return () => ref.off('value', handler);
+}
+
+export function escucharMeta(db, conversacionId, onCambio) {
+  const ref = db.ref(`conversaciones/${conversacionId}/meta`);
+  const handler = (snap) => { if (snap.val()) onCambio(snap.val()); };
+  ref.on('value', handler);
+  return () => ref.off('value', handler);
+}
+
+export async function leerUltimoMensaje(db, conversacionId) {
+  const snap = await db.ref(`conversaciones/${conversacionId}/mensajes`).limitToLast(1).once('value');
+  let ultimo = null;
+  snap.forEach((hijo) => { ultimo = { id: hijo.key, ...hijo.val() }; });
+  return ultimo;
+}

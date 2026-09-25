@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mindzyxs — Chat de soporte</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/base.css" />
   <link rel="stylesheet" href="../css/inicio.css" />
   <link rel="stylesheet" href="../css/chat.css" />
@@ -33,64 +34,61 @@
     </nav>
 
     <div class="header-right">
-      <div class="role-indicator">
-        <span class="role-label">Sesión:</span>
-        <span class="badge-role" id="roleBadge">—</span>
-      </div>
-      <div class="header-auth-buttons">
-        <button type="button" id="btn-volver" class="btn-logout">Volver</button>
-      </div>
+      <span class="role-pill" id="rolePill">Chat</span>
     </div>
   </header>
 
   <main class="wrap wrap-chat">
-    <section class="card">
-      <div class="section-header">
-        <span class="section-title">Chat de soporte</span>
-        <span class="conn-badge" id="connBadge">Conectando…</span>
-      </div>
+    <div class="card hero">
+      <h1>💬 Chat psicólogo-paciente</h1>
+      <p>Conversaciones ordenadas por fecha y hora, con remitente y contenido. <b>Solo ves tus conversaciones aceptadas.</b></p>
+    </div>
 
-      <div class="chat-grid">
-        <aside class="chat-list">
-          <h3>Conversaciones</h3>
-          <div id="convList"><p class="hint">Cargando…</p></div>
+    <div class="tabs">
+      <button class="tab active" id="tabChat">💬 Conversaciones</button>
+      <button class="tab" id="tabReq">📩 Solicitudes <span class="badge" id="reqBadge" hidden>0</span></button>
+    </div>
 
-          <div id="offerBox" hidden>
-            <h3>Buscar paciente</h3>
-            <div class="offer-row">
-              <input type="text" id="searchPaciente" maxlength="60" placeholder="Nombre o correo…" autocomplete="off" />
-              <button type="button" class="btn btn-tile" id="btnBuscar">Buscar</button>
-            </div>
-            <div id="searchResults"></div>
-          </div>
-        </aside>
-
-        <div class="chat-window">
+    <div class="card" id="panelChat">
+      <div class="layout">
+        <div>
+          <div class="list-title">CONVERSACIONES ACTIVAS (<span id="convCount">0</span>)</div>
+          <div class="conv-list" id="convList"></div>
+        </div>
+        <div class="chat">
           <div class="chat-head">
-            <div>
-              <h3 id="chatTitulo">Seleccioná una conversación</h3>
-              <p class="hint" id="chatEstado"></p>
+            <div class="who">
+              <div class="avatar" id="chatAvatar">?</div>
+              <div><b id="chatName">Seleccioná una conversación</b><small id="chatStatus"></small></div>
             </div>
-            <div class="chat-head-actions">
-              <button type="button" class="btn-secondary" id="btnBloquear" hidden>Bloquear</button>
-              <button type="button" class="btn-secondary" id="btnDesbloquear" hidden>Desbloquear</button>
-            </div>
+            <button class="btn-block" id="blockBtn" hidden>⛔ Bloquear</button>
           </div>
-
-          <div class="blocked-banner" id="blockedBanner" hidden>
-            🚫 Has bloqueado a este usuario. No puede escribirte.
+          <div class="msgs" id="msgs"></div>
+          <div class="typing" id="typing">Escribiendo…</div>
+          <div class="blocked-banner" id="blockedBanner">
+            🚫 Has bloqueado a este contacto. No puedes enviar ni recibir mensajes.<br />
+            <button id="unblockBtn">Desbloquear</button>
           </div>
-
-          <div class="messages" id="messages"></div>
-
-          <form class="composer" id="composer">
-            <input type="text" id="msgInput" maxlength="1000" placeholder="Escribí tu mensaje…" autocomplete="off" />
-            <button type="submit" class="btn btn-tile" id="btnEnviar">Enviar</button>
-          </form>
-          <p class="hint">Los mensajes viajan en tiempo real por Firebase. Quedan registrados en la auditoría del sistema.</p>
+          <div class="composer">
+            <input id="msgInput" type="text" placeholder="Escribe un mensaje…" maxlength="1000" autocomplete="off" />
+            <button class="btn-send" id="sendBtn">Enviar</button>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
+
+    <div class="card" id="panelReq" hidden>
+      <div class="list-title">SOLICITUDES DE CHAT</div>
+      <div id="reqList"></div>
+      <div id="searchBox" hidden>
+        <div class="list-title" style="margin-top:16px">BUSCAR PACIENTE</div>
+        <div class="offer-row">
+          <input type="text" id="searchPaciente" maxlength="60" placeholder="Nombre o correo…" autocomplete="off" />
+          <button type="button" class="btn btn-tile" id="btnBuscar">Buscar</button>
+        </div>
+        <div id="searchResults"></div>
+      </div>
+    </div>
   </main>
 
   <footer class="footer">
@@ -98,10 +96,32 @@
       <a href="inicio.html">Inicio</a>
       <a href="inicio.html#nosotros">Nosotros</a>
       <a href="inicio.html#ayuda">Ayuda</a>
+      <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog"><span class="aviso-ico">ℹ️</span> Aviso: no diagnóstico</a>
     </div>
   </footer>
 
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="modal-overlay" id="blockModal" role="alertdialog" aria-modal="true">
+    <div class="modal">
+      <div class="modal-icon">⛔</div>
+      <h3 id="blockTitle">Bloquear contacto</h3>
+      <p class="sub" id="blockText">Al bloquear, no podrás enviar ni recibir mensajes. Podrás desbloquearlo más tarde desde este mismo chat. ¿Deseas continuar?</p>
+      <div class="modal-actions">
+        <button class="btn-modal close" id="blockCancel">Cancelar</button>
+        <button class="btn-modal danger" id="blockConfirm">Bloquear</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="authModal" role="alertdialog" aria-modal="true">
+    <div class="modal">
+      <div class="modal-icon">🔒</div>
+      <h3>No autorizado</h3>
+      <p class="sub" id="authText">No tienes autorización para ver esta conversación. Solo puedes acceder a tus conversaciones vinculadas y aceptadas.</p>
+      <div class="modal-actions"><button class="btn-modal ok" id="authOk">Entendido</button></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
 
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
