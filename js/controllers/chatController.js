@@ -67,41 +67,85 @@ function setTab(isReq) {
   panelReq.style.display = isReq ? 'block' : 'none';
 }
 
-// ---------- Lista (con previews en vivo) ----------
-async function renderConvs() {
-  convList.innerHTML = '';
-  convCount.textContent = conversaciones.length;
+// ---------- Lista con reconciliación (sin parpadeo: nunca se vacía y re-llena) ----------
+const nodosConv = new Map(); // id -> button
+const metaEstado = {};       // id -> último estado visto en RTDB (evita loops del evento inicial)
+
+function claseEstado(estado) {
+  return estado === 'Pendiente' ? 'pend' : (estado === 'Aceptada' ? 'ok' : (estado === 'Bloqueada' ? 'block' : ''));
+}
+
+function pintarNodo(div, c) {
+  div.className = 'conv' + (c.id === activaId ? ' active' : '');
+  div.innerHTML = '<div class="conv-top"><div class="avatar">' + escapar(inicialesDe(c.contraparte.nombre)) + '</div>' +
+    '<div><b>' + escapar(c.contraparte.nombre) + '</b><small>' + escapar(c.contraparte.rol) + ' • ' + escapar(c.estado) + '</small></div></div>' +
+    '<div class="conv-preview">…</div>';
+}
+
+function renderConvs() {
+  // Quita solo las que ya no existen.
+  for (const [id, nodo] of [...nodosConv]) {
+    if (!conversaciones.some((c) => c.id === id)) {
+      nodo.remove();
+      nodosConv.delete(id);
+    }
+  }
+  if (!conversaciones.length) {
+    convList.innerHTML = '<div class="empty">Sin conversaciones todavía.</div>';
+    return;
+  }
+  const vacio = convList.querySelector('.empty');
+  if (vacio) vacio.remove();
+  // Crea o actualiza en su lugar (sin limpiar la lista).
+  conversaciones.forEach((c) => {
+    let div = nodosConv.get(c.id);
+    if (!div) {
+      div = document.createElement('button');
+      div.addEventListener('click', () => openConv(c.id));
+      nodosConv.set(c.id, div);
+      convList.appendChild(div);
+    }
+    pintarNodo(div, c);
+    // Preview en segundo plano sobre el nodo ya pintado.
+    leerUltimoMensaje(db, c.id)
+      .then((last) => {
+        const vivo = nodosConv.get(c.id);
+        if (!vivo || !vivo.isConnected) return;
+        const pv = vivo.querySelector('.conv-preview');
+        if (pv) pv.textContent = last
+          ? ((String(last.remitenteUid) === String(yo.uid) ? 'Vos: ' : c.contraparte.nombre.split(' ')[0] + ': ') + last.texto)
+          : 'Sin mensajes';
+      })
+      .catch(() => { });
+  });
   const pend = pendientesAccionables();
   reqBadge.hidden = !pend.length;
   reqBadge.textContent = pend.length;
-  for (const c of conversaciones) {
-    const b = document.createElement('button');
-    b.className = 'conv' + (c.id === activaId ? ' active' : '');
-    let preview = 'Sin mensajes';
-    try {
-      const last = await leerUltimoMensaje(db, c.id);
-      if (last) preview = (String(last.remitenteUid) === String(yo.uid) ? 'Vos: ' : c.contraparte.nombre.split(' ')[0] + ': ') + last.texto;
-    } catch (_) { /* sin preview */ }
-    b.innerHTML = '<div class="conv-top"><div class="avatar">' + escapar(inicialesDe(c.contraparte.nombre)) + '</div>' +
-      '<div><b>' + escapar(c.contraparte.nombre) + '</b><small>' + escapar(c.contraparte.rol) + ' • ' + escapar(c.estado) + '</small></div></div>' +
-      '<div class="conv-preview">' + escapar(preview) + '</div>';
-    b.addEventListener('click', () => openConv(c.id));
-    convList.appendChild(b);
-  }
-  if (!conversaciones.length) convList.innerHTML = '<div class="empty">Sin conversaciones todavía.</div>';
+  convCount.textContent = conversaciones.length;
 }
 
-async function recargar(mantener = true) {
+async function recargar() {
   try {
     conversaciones = await obtenerConversaciones();
   } catch (error) {
-    convList.innerHTML = '<div class="empty">No fue posible cargar: ' + escapar(error.message) + '</div>';
+    if (!conversaciones.length) {
+      convList.innerHTML = '<div class="empty">No fue posible cargar: ' + escapar(error.message) + '</div>';
+    }
     return;
   }
-  await renderConvs();
+  renderConvs();
   renderReqs();
-  if (mantener && activaId && conversaciones.some((c) => c.id === activaId)) {
-    await openConv(activaId, true);
+  // Refresca la abierta en su lugar (sin re-suscribir ni limpiar mensajes).
+  if (activaId) {
+    const c = conversaciones.find((x) => x.id === activaId);
+    if (c) {
+      metaEstado[c.id] = c.estado;
+      $('chatName').textContent = c.contraparte.nombre;
+      actualizarBloqueo(c);
+      if (c.estado !== 'Aceptada') {
+        $('chatStatus').textContent = 'Estado: ' + c.estado + ' — los mensajes se habilitan al aceptar.';
+      }
+    }
   }
 }
 
@@ -128,8 +172,16 @@ async function openConv(id, mantener = false) {
     return;
   }
 
-  // Meta en vivo: si cambia estado/bloqueo afuera, se refleja aquí.
-  offMeta = escucharMeta(db, c.id, async () => { await recargar(true); });
+  // Meta en vivo: solo reacciona si el estado REALMENTE cambió
+  // (el evento inicial al suscribirse se ignora vía metaEstado).
+  metaEstado[c.id] = c.estado;
+  offMeta = escucharMeta(db, c.id, async (meta) => {
+    const nuevo = meta && meta.estado;
+    if (!nuevo || nuevo === metaEstado[c.id]) return;
+    metaEstado[c.id] = nuevo;
+    showToast('La conversación cambió a: ' + nuevo);
+    await recargar();
+  });
   // Presencia del otro.
   const otroUid = c.contraparte.id;
   offPresence = escucharPresencia(db, c.id, otroUid, (enLinea) => {
