@@ -59,6 +59,9 @@
 .empty { font-size: 12px; color: var(--muted); text-align: center; padding: 18px; line-height: 1.6; }
 .offer-row { display: flex; gap: 8px; margin-top: 8px; }
 .offer-row input { flex: 1; height: 38px; border: 1px solid #DFDAEE; border-radius: 12px; padding: 0 12px; font-family: inherit; }
+.filters { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+.filters input, .filters select { height: 38px; border: 1px solid #DFDAEE; border-radius: 12px; padding: 0 12px; font-family: inherit; font-size: 12px; background: #fff; color: var(--text); }
+.filters .btn { grid-column: 1 / -1; }
 .search-item { border: 1px solid #DFDAEE; border-radius: 12px; padding: 10px 12px; margin-top: 8px; background: #fff; }
 .search-item h4 { font-size: 13px; }
 .search-item p { font-size: 11px; color: var(--muted); }

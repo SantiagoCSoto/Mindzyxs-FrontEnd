@@ -60,7 +60,7 @@
           <div class="chat-head">
             <div class="who">
               <div class="avatar" id="chatAvatar">?</div>
-              <div><b id="chatName">Seleccioná una conversación</b><small id="chatStatus"></small></div>
+              <div><b id="chatName">Seleccione una conversación</b><small id="chatStatus"></small></div>
             </div>
             <button class="btn-block" id="blockBtn" hidden>⛔ Bloquear</button>
           </div>
@@ -71,7 +71,7 @@
             <button id="unblockBtn">Desbloquear</button>
           </div>
           <div class="composer">
-            <input id="msgInput" type="text" placeholder="Escribe un mensaje…" maxlength="1000" autocomplete="off" />
+            <input id="msgInput" type="text" placeholder="Escriba un mensaje…" maxlength="1000" autocomplete="off" />
             <button class="btn-send" id="sendBtn">Enviar</button>
           </div>
         </div>
@@ -83,8 +83,20 @@
       <div id="reqList"></div>
       <div id="searchBox" hidden>
         <div class="list-title" style="margin-top:16px">BUSCAR PACIENTE</div>
-        <div class="offer-row">
-          <input type="text" id="searchPaciente" maxlength="60" placeholder="Nombre o correo…" autocomplete="off" />
+        <div class="filters">
+          <input type="text" id="searchPaciente" maxlength="60" placeholder="Nombre o correo (opcional)" autocomplete="off" />
+          <select id="filterNivel" aria-label="Nivel de riesgo">
+            <option value="">Nivel: cualquiera</option>
+            <option value="Bajo">Riesgo bajo</option>
+            <option value="Medio">Riesgo medio</option>
+            <option value="Alto">Riesgo alto</option>
+          </select>
+          <input type="number" id="filterMinCuest" min="1" max="99" placeholder="Mín. cuestionarios" aria-label="Mínimo de cuestionarios" />
+          <select id="filterPsicologos" aria-label="Con psicólogo">
+            <option value="">Psicólogos: cualquiera</option>
+            <option value="true">Con psicólogo</option>
+            <option value="false">Sin psicólogo</option>
+          </select>
           <button type="button" class="btn btn-tile" id="btnBuscar">Buscar</button>
         </div>
         <div id="searchResults"></div>

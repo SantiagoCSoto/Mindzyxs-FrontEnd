@@ -33,8 +33,16 @@ export async function obtenerConversaciones() {
   return res.data ?? [];
 }
 
-export async function buscarPacientes(q) {
-  const res = await getJson('/chat/pacientes' + (q ? '?q=' + encodeURIComponent(q) : ''));
+export async function buscarPacientes(q, filtros = {}) {
+  const params = new URLSearchParams();
+  if (q) params.set('q', q);
+  if (filtros.nivel) params.set('nivel', filtros.nivel);
+  if (filtros.minCuestionarios) params.set('minCuestionarios', filtros.minCuestionarios);
+  if (filtros.tienePsicologo !== undefined && filtros.tienePsicologo !== '') {
+    params.set('tienePsicologo', filtros.tienePsicologo);
+  }
+  const qs = params.toString();
+  const res = await getJson('/chat/pacientes' + (qs ? '?' + qs : ''));
   if (!res.ok) throw new Error(res.error || 'No fue posible buscar pacientes');
   return res.data ?? [];
 }

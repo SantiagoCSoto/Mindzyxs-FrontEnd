@@ -122,7 +122,7 @@ function renderConvs() {
         if (!vivo || !vivo.isConnected) return;
         const pv = vivo.querySelector('.conv-preview');
         if (pv) pv.textContent = last
-          ? ((String(last.remitenteUid) === String(yo.uid) ? 'Vos: ' : c.contraparte.nombre.split(' ')[0] + ': ') + last.texto)
+          ? ((String(last.remitenteUid) === String(yo.uid) ? 'Usted: ' : c.contraparte.nombre.split(' ')[0] + ': ') + last.texto)
           : 'Sin mensajes';
       })
       .catch(() => { });
@@ -218,7 +218,7 @@ function actualizarBloqueo(c) {
   if (bloqueada) {
     $('chatStatus').textContent = bloqueoYo
       ? 'Bloqueado por vos — no puede escribirte.'
-      : 'Bloqueado — no podés escribir en este chat.';
+      : 'Bloqueado — no puede escribir en este chat.';
   }
 }
 
@@ -233,7 +233,7 @@ function pintarMensaje(m, c) {
   }
   const div = document.createElement('div');
   div.className = 'msg ' + (propio ? 'out' : 'in');
-  const quien = propio ? 'Vos' : c.contraparte.nombre;
+  const quien = propio ? 'Usted' : c.contraparte.nombre;
   div.innerHTML = '<b>' + escapar(quien) + '</b><div>' + escapar(m.texto) + '</div><small>' + escapar(horaDe(m.fecha)) + '</small>';
   msgs.appendChild(div);
   msgs.scrollTop = msgs.scrollHeight;
@@ -243,7 +243,7 @@ async function sendMessage() {
   const c = conversaciones.find((x) => x.id === activaId);
   if (!c || msgInput.disabled) return;
   const texto = msgInput.value.trim();
-  if (!texto) { showToast('Escribe un mensaje primero'); return; }
+  if (!texto) { showToast('Escriba un mensaje primero'); return; }
   msgInput.value = '';
   avisarEscribiendo(db, c.id, yo.uid, false);
   try {
@@ -278,7 +278,7 @@ function renderReqs() {
     if (enviadas.length) {
       const p = document.createElement('p');
       p.className = 'hint';
-      p.textContent = `Tenés ${enviadas.length} solicitud(es) esperando respuesta del paciente.`;
+      p.textContent = `Tiene ${enviadas.length} solicitud(es) esperando respuesta del paciente.`;
       reqList.appendChild(p);
     } else if (!pend.length) {
       const p = document.createElement('p');
@@ -308,10 +308,21 @@ async function responder(id, aceptar) {
 // ---------- Buscador (psicólogo) ----------
 async function buscar() {
   const q = $('searchPaciente').value.trim();
+  const nivel = $('filterNivel').value;
+  const minCuest = Number($('filterMinCuest').value) || undefined;
+  const tienePsi = $('filterPsicologos').value;
+  if (!q && !nivel && !minCuest && tienePsi === '') {
+    showToast('Seleccione al menos un filtro antes de buscar.');
+    return;
+  }
   const box = $('searchResults');
   box.innerHTML = '<p class="hint">Buscando…</p>';
   try {
-    const res = await buscarPacientes(q);
+    const res = await buscarPacientes(q, {
+      nivel: nivel || undefined,
+      minCuestionarios: minCuest,
+      tienePsicologo: tienePsi === '' ? undefined : tienePsi
+    });
     if (!res.length) { box.innerHTML = '<p class="hint">Sin coincidencias.</p>'; return; }
     box.innerHTML = '';
     res.forEach((p) => {
@@ -320,19 +331,26 @@ async function buscar() {
         : '<span class="risk-tag none">Sin datos</span>';
       const div = document.createElement('div');
       div.className = 'search-item';
-      div.innerHTML = `<div class="conv-top"><span class="avatar">${escapar(inicialesDe(p.nombre))}</span><div><h4>${escapar(p.nombre)}</h4><p>${escapar(p.correo)}</p>${nivel}</div></div><button class="btn btn-tile">Ofrecer</button>`;
+      div.innerHTML = `<div class="conv-top"><span class="avatar">${escapar(inicialesDe(p.nombre))}</span><div><h4>${escapar(p.nombre)}</h4><p>${escapar(p.correo)}</p>${nivel}<p>${p.cuestionariosRespondidos} cuestionario(s) · ${p.psicologos} psicólogo(s)</p></div></div><button class="btn btn-tile">Ofrecer</button>`;
       div.querySelector('button').addEventListener('click', async () => {
         try {
           const conv = await ofrecerChat(p.id);
           showToast('Solicitud enviada a ' + p.nombre);
           $('searchPaciente').value = '';
           box.innerHTML = '';
-          await recargar(false);
+          await recargar();
           setTab(false);
           await openConv(conv.id);
         } catch (error) {
           showToast(error.message);
         }
+      });
+      box.appendChild(div);
+    });
+  } catch (error) {
+    box.innerHTML = `<p class="hint">No fue posible buscar: ${escapar(error.message)}</p>`;
+  }
+}
       });
       box.appendChild(div);
     });
