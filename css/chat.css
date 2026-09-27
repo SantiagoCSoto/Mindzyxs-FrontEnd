@@ -34,16 +34,16 @@
 .day { font-size: 10px; font-weight: 700; color: var(--muted); text-align: center; background: #F3F1FA; border-radius: 20px; padding: 4px 12px; align-self: center; }
 .day-sticky { position: sticky; top: 0; z-index: 5; align-self: center; font-size: 11px; font-weight: 700; color: #5A5D72; background: #EDE7FF; border-radius: 999px; padding: 5px 14px; box-shadow: 0 2px 8px rgba(0,0,0,.08); margin-bottom: 4px; }
 .ticks { font-size: 12px; margin-left: 5px; color: #8E91A3; }
-.ticks.t0 { color: #B9B1D8; }
-.ticks.t1 { color: #8E91A3; }
-.ticks.t2b { color: #2A9AA0; }
+.ticks.t0 { color: #0E7490; }
+.ticks.t1 { color: #0E7490; }
+.ticks.t2b { color: #0369A1; }
 .msg { max-width: 78%; padding: 10px 12px; border-radius: 14px; font-size: 13px; line-height: 1.5; }
 .msg small { display: block; font-size: 10px; margin-top: 6px; opacity: .75; }
 .msg.in { background: #F3F1FA; border-bottom-left-radius: 4px; align-self: flex-start; }
 .msg.in small { color: var(--muted); }
 .msg.in b { font-size: 11px; }
-.msg.out { background: linear-gradient(180deg,#6ECFD4,#5ABCC2); color: white; border-bottom-right-radius: 4px; align-self: flex-end; }
-.msg.out small { color: rgba(255,255,255,.85); }
+.msg.out { background: linear-gradient(180deg,#6ECFD4,#5ABCC2); color: #07332F; border-bottom-right-radius: 4px; align-self: flex-end; }
+.msg.out small { color: rgba(7,51,47,.75); }
 .typing { font-size: 11px; color: var(--muted); font-style: italic; display: none; padding: 0 14px 6px; }
 .typing.show { display: block; }
 .blocked-banner { display: none; background: #FFF1F3; border-top: 1px solid #F5C2CE; color: #A63A52; font-size: 12px; font-weight: 600; text-align: center; padding: 12px; line-height: 1.5; }
