@@ -369,13 +369,6 @@ async function buscar() {
     box.innerHTML = `<p class="hint">No fue posible buscar: ${escapar(error.message)}</p>`;
   }
 }
-      });
-      box.appendChild(div);
-    });
-  } catch (error) {
-    box.innerHTML = `<p class="hint">No fue posible buscar: ${escapar(error.message)}</p>`;
-  }
-}
 
 // ---------- Eventos ----------
 sendBtn.addEventListener('click', sendMessage);
