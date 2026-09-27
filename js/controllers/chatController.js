@@ -210,22 +210,44 @@ async function openConv(id, mantener = false) {
     showToast('La conversación cambió a: ' + nuevo);
     await recargar();
   });
-  // Visto del otro: palomitas azules en mis mensajes.
-  offVisto = escucharVisto(db, c.id, () => marcarVistos(c.id));
+  // Visto del otro: estado persistente (sobrevive recargas).
+  let vistoMapa = {};
+  let otroEnLineaFlag = false;
+  const otroUidStr = String(c.contraparte.id);
+  const aplicarTick = (el, mid) => {
+    if (!el) return;
+    if ((vistoMapa[mid] || {})[otroUidStr]) {
+      el.classList.remove('t0', 't1');
+      el.classList.add('t2b');
+      el.textContent = '●';
+    } else if (otroEnLineaFlag && !el.classList.contains('t2b')) {
+      el.classList.remove('t0');
+      el.classList.add('t1');
+      el.textContent = 'ⓜ';
+    }
+  };
+  const refrescarTicks = () => {
+    msgs.querySelectorAll('.ticks[data-mid]').forEach((el) => aplicarTick(el, el.dataset.mid));
+  };
+  offVisto = escucharVisto(db, c.id, () => {
+    leerVisto(db, c.id).then((m) => { vistoMapa = m || {}; refrescarTicks(); }).catch(() => { });
+  });
   // Presencia del otro.
   const otroUid = c.contraparte.id;
-  let otroEnLinea = false;
   offPresence = escucharPresencia(db, c.id, otroUid, (enLinea) => {
-    otroEnLinea = !!enLinea;
+    otroEnLineaFlag = !!enLinea;
     $('chatStatus').innerHTML = (enLinea ? '<span class="dot"></span>En línea' : 'Desconectado') + ' • ' + escapar(c.contraparte.rol);
-    if (enLinea) subirTicks(); // entregado: doble gris
+    refrescarTicks(); // entregado: gris con m
   });
   marcarPresencia(db, c.id, yo.uid);
+  // Estado inicial (para recargas): visto + presencia de una vez.
+  leerVisto(db, c.id).then((m) => { vistoMapa = m || {}; refrescarTicks(); }).catch(() => { });
   // Typing del otro.
   offTyping = escucharEscribiendo(db, c.id, otroUid, (escribiendo) => {
     typing.classList.toggle('show', !!escribiendo);
   });
   // Mensajes en vivo.
+  window.__aplicarTick = aplicarTick;
   offMsgs = suscribirMensajes(db, c.id, (m) => pintarMensaje(m, c));
   if (!mantener) showToast('Chat en vivo conectado');
 }
@@ -251,31 +273,7 @@ function actualizarBloqueo(c) {
 }
 
 // Bolitas propias: ○ enviada · ⓜ entregada (gris) · ● leída (llena).
-function subirTicks() {
-  msgs.querySelectorAll('.ticks.t0').forEach((el) => {
-    el.classList.remove('t0');
-    el.classList.add('t1');
-    el.textContent = 'ⓜ';
-  });
-}
-
-// Marca llena la bolita de los mensajes que el otro ya leyó (nodo visto/).
-function marcarVistos(convId) {
-  leerVisto(db, convId).then((mapa) => {
-    const otroUid = String((conversaciones.find((x) => x.id === convId) || {}).contraparte?.id || '');
-    Object.keys(mapa || {}).forEach((mid) => {
-      const vieron = mapa[mid] || {};
-      if (otroUid && vieron[otroUid]) {
-        const el = msgs.querySelector(`.ticks[data-mid="${mid}"]`);
-        if (el) {
-          el.classList.remove('t0', 't1', 't2');
-          el.classList.add('t2b');
-          el.textContent = '●';
-        }
-      }
-    });
-  }).catch(() => { });
-}
+// (La lógica vive en aplicarTick dentro de openConv.)
 
 function pintarMensaje(m, c) {
   const propio = String(m.remitenteUid) === String(yo.uid);
@@ -285,6 +283,7 @@ function pintarMensaje(m, c) {
   const ticks = propio ? `<span class="ticks t0" data-mid="${escapar(m.id)}">○</span>` : '';
   div.innerHTML = '<b>' + escapar(quien) + '</b><div>' + escapar(m.texto) + '</div><small>' + escapar(horaDe(m.fecha)) + ticks + '</small>';
   msgs.appendChild(div);
+  if (propio && window.__aplicarTick) window.__aplicarTick(div.querySelector('.ticks'), m.id);
   msgs.scrollTop = msgs.scrollHeight;
 }
 
