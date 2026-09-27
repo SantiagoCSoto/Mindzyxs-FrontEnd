@@ -250,16 +250,16 @@ function actualizarBloqueo(c) {
   }
 }
 
-// Sube mis ticks a doble gris (entregado). El azul lo pone marcarVistos().
+// Bolitas propias: ○ enviada · ⓜ entregada (gris) · ● leída (llena).
 function subirTicks() {
-  msgs.querySelectorAll('.ticks.t1').forEach((el) => {
-    el.classList.remove('t1');
-    el.classList.add('t2');
-    el.textContent = '✓✓';
+  msgs.querySelectorAll('.ticks.t0').forEach((el) => {
+    el.classList.remove('t0');
+    el.classList.add('t1');
+    el.textContent = 'ⓜ';
   });
 }
 
-// Marca en azul los mensajes que el otro ya vio (nodo visto/).
+// Marca llena la bolita de los mensajes que el otro ya leyó (nodo visto/).
 function marcarVistos(convId) {
   leerVisto(db, convId).then((mapa) => {
     const otroUid = String((conversaciones.find((x) => x.id === convId) || {}).contraparte?.id || '');
@@ -268,9 +268,9 @@ function marcarVistos(convId) {
       if (otroUid && vieron[otroUid]) {
         const el = msgs.querySelector(`.ticks[data-mid="${mid}"]`);
         if (el) {
-          el.classList.remove('t1', 't2');
+          el.classList.remove('t0', 't1');
           el.classList.add('t2b');
-          el.textContent = '✓✓';
+          el.textContent = '●';
         }
       }
     });
@@ -279,17 +279,11 @@ function marcarVistos(convId) {
 
 function pintarMensaje(m, c) {
   const propio = String(m.remitenteUid) === String(yo.uid);
-  const day = diaDe(m.fecha);
-  const lastDay = msgs.querySelector('.day:last-of-type');
-  if (!lastDay || lastDay.textContent !== day) {
-    const d = document.createElement('div');
-    d.className = 'day'; d.textContent = day || 'Hoy';
-    msgs.appendChild(d);
-  }
   const div = document.createElement('div');
   div.className = 'msg ' + (propio ? 'out' : 'in');
   const quien = propio ? 'Usted' : c.contraparte.nombre;
-  div.innerHTML = '<b>' + escapar(quien) + '</b><div>' + escapar(m.texto) + '</div><small>' + escapar(horaDe(m.fecha)) + '</small>';
+  const ticks = propio ? `<span class="ticks t0" data-mid="${escapar(m.id)}">○</span>` : '';
+  div.innerHTML = '<b>' + escapar(quien) + '</b><div>' + escapar(m.texto) + '</div><small>' + escapar(horaDe(m.fecha)) + ticks + '</small>';
   msgs.appendChild(div);
   msgs.scrollTop = msgs.scrollHeight;
 }
