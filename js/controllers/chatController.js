@@ -20,6 +20,24 @@ const toast = $('toast'), reqBadge = $('reqBadge'), reqList = $('reqList');
 const tabChat = $('tabChat'), tabReq = $('tabReq'), panelChat = $('panelChat'), panelReq = $('panelReq');
 const blockModal = $('blockModal'), authModal = $('authModal');
 
+// Autochequeo de versión: si falta algún id, la vista es vieja (caché) y nada funcionará.
+(function verificarVista() {
+  const ids = ['rolePill', 'convList', 'convCount', 'msgs', 'msgInput', 'sendBtn', 'blockBtn',
+    'blockedBanner', 'typing', 'toast', 'reqBadge', 'reqList', 'tabChat', 'tabReq',
+    'panelChat', 'panelReq', 'blockModal', 'authModal', 'searchBox', 'searchPaciente',
+    'filterNivel', 'filterMinCuest', 'filterPsicologos', 'btnBuscar', 'searchResults',
+    'chatName', 'chatAvatar', 'chatStatus', 'blockTitle', 'blockText', 'blockCancel',
+    'blockConfirm', 'unblockBtn', 'authText', 'authOk'];
+  const faltan = ids.filter((id) => !$(id));
+  if (faltan.length) {
+    document.body.innerHTML = '<div style="font-family:sans-serif;padding:40px;text-align:center">' +
+      '<h2>Vista desactualizada</h2><p>Esta página cargó archivos viejos desde la caché. ' +
+      'Recargá con <b>Ctrl+Shift+R</b>.</p><p style="color:#8E91A3;font-size:12px">Faltan: ' +
+      faltan.join(', ') + '</p></div>';
+    throw new Error('Vista desactualizada (caché): faltan ' + faltan.join(', '));
+  }
+})();
+
 let yo = null; // { uid, rol }
 let db = null;
 let conversaciones = [];
