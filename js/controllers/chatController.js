@@ -277,6 +277,10 @@ function actualizarBloqueo(c) {
 
 function pintarMensaje(m, c) {
   const propio = String(m.remitenteUid) === String(yo.uid);
+  if (!propio) {
+    // Lo estoy viendo ahora mismo: marcar leído (best-effort, el otro lo ve azul).
+    marcarVisto(db, c.id, m.id, yo.uid);
+  }
   const div = document.createElement('div');
   div.className = 'msg ' + (propio ? 'out' : 'in');
   const quien = propio ? 'Usted' : c.contraparte.nombre;
