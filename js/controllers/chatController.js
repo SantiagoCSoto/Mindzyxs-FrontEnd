@@ -268,7 +268,7 @@ function marcarVistos(convId) {
       if (otroUid && vieron[otroUid]) {
         const el = msgs.querySelector(`.ticks[data-mid="${mid}"]`);
         if (el) {
-          el.classList.remove('t0', 't1');
+          el.classList.remove('t0', 't1', 't2');
           el.classList.add('t2b');
           el.textContent = '●';
         }
