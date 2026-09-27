@@ -133,9 +133,48 @@ export async function getJson(endpoint, opciones = {}) {
 }
 
 /**
- * Petición GET devolviendo un Blob (para descarga de archivos).
+ * Petición DELETE esperando respuesta JSON
  */
-export async function getBlob(endpoint, opciones = {}) {
+export async function deleteJson(endpoint, opciones = {}) {
+  const url = `${API_BASE_URL}${endpoint}`;
+  try {
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+        ...authHeaders(),
+        ...opciones.headers
+      }
+    });
+
+    const isJson = response.headers.get('content-type')?.includes('application/json');
+    const resData = isJson ? await response.json() : null;
+
+    if (!response.ok) {
+      return {
+        ok: false,
+        status: response.status,
+        error: resData?.error || resData?.message || 'Error en la solicitud'
+      };
+    }
+
+    return {
+      ok: true,
+      status: response.status,
+      data: resData
+    };
+  } catch (err) {
+    return {
+      ok: false,
+      isNetworkError: true,
+      error: 'No fue posible conectar con el servidor backend.'
+    };
+  }
+}
+
+/**
+ * Petición GET devolviendo un Blob (para descarga de archivos).
+ */export async function getBlob(endpoint, opciones = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
   try {
     const response = await fetch(url, {
