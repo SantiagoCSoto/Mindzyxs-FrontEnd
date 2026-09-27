@@ -251,17 +251,6 @@ function actualizarBloqueo(c) {
 }
 
 // Sube mis ticks a doble gris (entregado). El azul lo pone marcarVistos().
-function subirTicks(convId, forzar) {
-  msgs.querySelectorAll('.ticks[data-mid]').forEach((el) => {
-    if (forzar || !el.classList.contains('t2b')) {
-      el.classList.remove('t1');
-      el.classList.add('t2');
-      el.textContent = '✓✓';
-    }
-  });
-}
-
-// Sube mis ticks a doble gris (entregado). El azul lo pone marcarVistos().
 function subirTicks() {
   msgs.querySelectorAll('.ticks.t1').forEach((el) => {
     el.classList.remove('t1');
