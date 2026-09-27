@@ -143,3 +143,25 @@ export async function leerUltimoMensaje(db, conversacionId) {
   snap.forEach((hijo) => { ultimo = { id: hijo.key, ...hijo.val() }; });
   return ultimo;
 }
+
+// Marca un mensaje como visto por mí (best-effort).
+export function marcarVisto(db, conversacionId, msgId, uid) {
+  if (!msgId) return;
+  try {
+    db.ref(`conversaciones/${conversacionId}/visto/${msgId}/${uid}`).set(true);
+  } catch (_) { /* best-effort */ }
+}
+
+// Lee todo el mapa visto/{msgId}/{uid} de una conversación.
+export async function leerVisto(db, conversacionId) {
+  const snap = await db.ref(`conversaciones/${conversacionId}/visto`).once('value');
+  return snap.val() || {};
+}
+
+// Escucha cambios en visto (palomitas azules en vivo).
+export function escucharVisto(db, conversacionId, onCambio) {
+  const ref = db.ref(`conversaciones/${conversacionId}/visto`);
+  const handler = () => onCambio();
+  ref.on('value', handler);
+  return () => ref.off('value', handler);
+}

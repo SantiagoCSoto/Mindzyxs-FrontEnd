@@ -9,7 +9,8 @@ import {
   obtenerTokenChat, obtenerConversaciones, buscarPacientes, ofrecerChat,
   responderSolicitud, bloquearChat, desbloquearChat, avisarMensaje,
   conectarRtdb, suscribirMensajes, enviarMensaje, marcarPresencia,
-  escucharPresencia, escucharEscribiendo, avisarEscribiendo, escucharMeta, leerUltimoMensaje
+  escucharPresencia, escucharEscribiendo, avisarEscribiendo, escucharMeta, leerUltimoMensaje,
+  marcarVisto, escucharVisto, leerVisto
 } from '../services/chatService.js';
 
 const $ = (id) => document.getElementById(id);
@@ -42,7 +43,7 @@ let yo = null; // { uid, rol }
 let db = null;
 let conversaciones = [];
 let activaId = null;
-let offMsgs = null, offMeta = null, offTyping = null, offPresence = null;
+let offMsgs = null, offMeta = null, offTyping = null, offPresence = null, offVisto = null;
 let typingTimer = null;
 
 function showToast(msg) {
@@ -178,8 +179,8 @@ async function recargar() {
 
 // ---------- Chat abierto ----------
 function limpiarSuscripciones() {
-  [offMsgs, offMeta, offTyping, offPresence].forEach((off) => { try { off && off(); } catch (_) { } });
-  offMsgs = offMeta = offTyping = offPresence = null;
+  [offMsgs, offMeta, offTyping, offPresence, offVisto].forEach((off) => { try { off && off(); } catch (_) { } });
+  offMsgs = offMeta = offTyping = offPresence = offVisto = null;
 }
 
 async function openConv(id, mantener = false) {
@@ -209,10 +210,15 @@ async function openConv(id, mantener = false) {
     showToast('La conversación cambió a: ' + nuevo);
     await recargar();
   });
+  // Visto del otro: palomitas azules en mis mensajes.
+  offVisto = escucharVisto(db, c.id, () => marcarVistos(c.id));
   // Presencia del otro.
   const otroUid = c.contraparte.id;
+  let otroEnLinea = false;
   offPresence = escucharPresencia(db, c.id, otroUid, (enLinea) => {
+    otroEnLinea = !!enLinea;
     $('chatStatus').innerHTML = (enLinea ? '<span class="dot"></span>En línea' : 'Desconectado') + ' • ' + escapar(c.contraparte.rol);
+    if (enLinea) subirTicks(); // entregado: doble gris
   });
   marcarPresencia(db, c.id, yo.uid);
   // Typing del otro.
@@ -228,6 +234,10 @@ function actualizarBloqueo(c) {
   const bloqueada = c.estado === 'Bloqueada';
   const bloqueoYo = bloqueada && c.bloqueadaPorMi;
   blockedBanner.classList.toggle('show', bloqueada);
+  $('blockedText').textContent = bloqueoYo
+    ? '🚫 Usted bloqueó a este contacto. No puede escribirle.'
+    : '🚫 Usted fue bloqueado por este usuario. No puede escribir en este chat.';
+  $('unblockBtn').style.display = bloqueoYo ? '' : 'none';
   msgInput.disabled = bloqueada;
   sendBtn.disabled = bloqueada;
   blockBtn.disabled = bloqueada;
@@ -235,9 +245,47 @@ function actualizarBloqueo(c) {
   blockBtn.hidden = !(soyPaciente() && (c.estado === 'Aceptada' || bloqueoYo));
   if (bloqueada) {
     $('chatStatus').textContent = bloqueoYo
-      ? 'Bloqueado por vos — no puede escribirte.'
+      ? 'Bloqueado por usted.'
       : 'Bloqueado — no puede escribir en este chat.';
   }
+}
+
+// Sube mis ticks a doble gris (entregado). El azul lo pone marcarVistos().
+function subirTicks(convId, forzar) {
+  msgs.querySelectorAll('.ticks[data-mid]').forEach((el) => {
+    if (forzar || !el.classList.contains('t2b')) {
+      el.classList.remove('t1');
+      el.classList.add('t2');
+      el.textContent = '✓✓';
+    }
+  });
+}
+
+// Sube mis ticks a doble gris (entregado). El azul lo pone marcarVistos().
+function subirTicks() {
+  msgs.querySelectorAll('.ticks.t1').forEach((el) => {
+    el.classList.remove('t1');
+    el.classList.add('t2');
+    el.textContent = '✓✓';
+  });
+}
+
+// Marca en azul los mensajes que el otro ya vio (nodo visto/).
+function marcarVistos(convId) {
+  leerVisto(db, convId).then((mapa) => {
+    const otroUid = String((conversaciones.find((x) => x.id === convId) || {}).contraparte?.id || '');
+    Object.keys(mapa || {}).forEach((mid) => {
+      const vieron = mapa[mid] || {};
+      if (otroUid && vieron[otroUid]) {
+        const el = msgs.querySelector(`.ticks[data-mid="${mid}"]`);
+        if (el) {
+          el.classList.remove('t1', 't2');
+          el.classList.add('t2b');
+          el.textContent = '✓✓';
+        }
+      }
+    });
+  }).catch(() => { });
 }
 
 function pintarMensaje(m, c) {

@@ -32,6 +32,10 @@
 .btn-block:disabled { opacity: .5; cursor: not-allowed; }
 .msgs { flex: 1; padding: 16px 14px; display: flex; flex-direction: column; gap: 10px; background: #FFF; max-height: 340px; overflow-y: auto; }
 .day { font-size: 10px; font-weight: 700; color: var(--muted); text-align: center; background: #F3F1FA; border-radius: 20px; padding: 4px 12px; align-self: center; }
+.day-sticky { position: sticky; top: 0; z-index: 5; align-self: center; font-size: 11px; font-weight: 700; color: #5A5D72; background: #EDE7FF; border-radius: 999px; padding: 5px 14px; box-shadow: 0 2px 8px rgba(0,0,0,.08); margin-bottom: 4px; }
+.ticks { font-size: 11px; margin-left: 4px; color: #8E91A3; }
+.ticks.t2 { color: #8E91A3; letter-spacing: -3px; }
+.ticks.t2b { color: #34B7F1; letter-spacing: -3px; }
 .msg { max-width: 78%; padding: 10px 12px; border-radius: 14px; font-size: 13px; line-height: 1.5; }
 .msg small { display: block; font-size: 10px; margin-top: 6px; opacity: .75; }
 .msg.in { background: #F3F1FA; border-bottom-left-radius: 4px; align-self: flex-start; }
