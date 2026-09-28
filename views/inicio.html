@@ -26,6 +26,7 @@
     <nav class="main-nav" aria-label="Navegación principal">
       <ul>
         <li><a href="inicio.html" class="active">Inicio</a></li>
+        <li id="navPerfil" style="display: none;"><a href="perfil.html">Perfil</a></li>
         <li><a href="#nosotros">Nosotros</a></li>
         <li><a href="#ayuda">Ayuda</a></li>
       </ul>
@@ -38,11 +39,12 @@
       </div>
     </div>
     <div class="header-right" id="headerSesion" style="display: none;">
-      <div class="role-indicator">
+      <a href="perfil.html" class="role-indicator" style="text-decoration: none;" title="Ver mi perfil">
         <span class="role-label">Sesión:</span>
         <span class="badge-role" id="roleBadge">Paciente</span>
-      </div>
+      </a>
       <div class="header-auth-buttons">
+        <a href="perfil.html" class="btn-perfil-header" id="btn-perfil-header">👤 Mi Perfil</a>
         <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
       </div>
     </div>
