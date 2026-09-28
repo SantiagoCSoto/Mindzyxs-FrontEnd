@@ -9,6 +9,7 @@
 import { abrirModal, cerrarModal } from '../utils/alerts.js';
 import { avisoService } from '../services/avisoService.js';
 import { calcularRiesgo, obtenerLineas } from '../services/riesgoService.js';
+import { leerRiesgos } from '../services/encuestaService.js';
 
 const KEY_SESION = 'encuesta_invitado_front';
 
@@ -41,13 +42,13 @@ function mostrarError(mensaje) {
   errorCard.hidden = false;
 }
 
-function pintarResultado(r) {
+function pintarResultado(r, esPrevio = false) {
   resLevel.textContent = 'Riesgo ' + r.nivel;
   resLevel.className = 'result-level ' + String(r.nivel).toLowerCase();
-  resScore.textContent = 'Puntaje ' + r.puntaje + ' / 5';
-  resExpl.textContent = r.explicacion;
+  resScore.textContent = 'Puntaje ' + r.puntaje + ' / 5' + (esPrevio ? ' (resultado anterior)' : '');
+  resExpl.textContent = r.explicacion || '';
 
-  const alto = r.alerta && r.alerta.mostrar;
+  const alto = (r.alerta && r.alerta.mostrar) || r.alerta === true || (esPrevio && String(r.nivel).toLowerCase() === 'alto');
   alertEl.classList.toggle('show', !!alto);
   lineasBtn.classList.toggle('urgente', !!alto);
   lineasBtn.textContent = alto ? '🚨 Líneas de ayuda (urgente)' : 'Líneas de ayuda';
@@ -67,22 +68,40 @@ async function mostrarAvisoSiAplica() {
 
 async function iniciar() {
   const sesion = leerSesion();
-  if (!sesion || !sesion.cuestionarioId || !sesion.respuestas || !sesion.respuestas.length) {
-    mostrarError();
+  if (sesion && sesion.cuestionarioId && sesion.respuestas && sesion.respuestas.length) {
+    // Flujo normal: calcula con las respuestas de la sesión.
+    await mostrarAvisoSiAplica();
+    avisoService.registrarVisualizacion('resultado-riesgo', 'ok');
+    if (avisoModal) abrirModal(avisoModal);
+
+    try {
+      const r = await calcularRiesgo(sesion.cuestionarioId, sesion.respuestas);
+      pintarResultado(r);
+    } catch (error) {
+      mostrarError(error.message);
+    }
     return;
   }
 
-  // Mensaje aclaratorio junto al resultado (PB-04, si aplica).
-  await mostrarAvisoSiAplica();
-  avisoService.registrarVisualizacion('resultado-riesgo', 'ok');
-  if (avisoModal) abrirModal(avisoModal);
-
-  try {
-    const r = await calcularRiesgo(sesion.cuestionarioId, sesion.respuestas);
-    pintarResultado(r);
-  } catch (error) {
-    mostrarError(error.message);
+  // Sin sesión (reentró como invitado): usa el riesgo guardado en cookies.
+  const params = new URLSearchParams(location.search);
+  const pedido = Number(params.get('cuestionarioId'));
+  const previos = leerRiesgos();
+  const previo = previos.find((p) => p.cuestionarioId === pedido) || previos[previos.length - 1];
+  if (previo) {
+    pintarResultado(
+      {
+        nivel: previo.nivel,
+        puntaje: previo.puntaje,
+        explicacion: previo.explicacion || '',
+        alerta: previo.alerta
+      },
+      true
+    );
+    return;
   }
+
+  mostrarError();
 }
 
 document.getElementById('avisoOk')?.addEventListener('click', () => cerrarModal(avisoModal));
