@@ -154,6 +154,27 @@ body {
   transform: translateY(-1px);
 }
 
+.btn-perfil-header {
+  border: 1px solid #DFDAEE;
+  background: white;
+  color: var(--text);
+  padding: 7px 14px;
+  border-radius: 20px;
+  font-size: 12.5px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+}
+
+.btn-perfil-header:hover {
+  background: #F8FAFC;
+  border-color: #B8AEE0;
+  transform: translateY(-1px);
+}
+
 .btn-login-header {
   background: linear-gradient(135deg, #6ECFD4, #5ABCC2);
   color: white;

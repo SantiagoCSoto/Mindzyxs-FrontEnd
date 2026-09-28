@@ -13,6 +13,8 @@ import { invitadoService } from '../services/invitadoService.js';
 const headerGuest = document.getElementById('headerGuest');
 const headerSesion = document.getElementById('headerSesion');
 const roleBadge = document.getElementById('roleBadge');
+const navPerfil = document.getElementById('navPerfil');
+const navHistorial = document.getElementById('navHistorial');
 const btnLogout = document.getElementById('btn-logout');
 const btnModoInvitado = document.getElementById('btn-modo-invitado');
 
@@ -42,9 +44,13 @@ function pintarEncabezado() {
     if (headerGuest) headerGuest.style.display = 'none';
     if (headerSesion) headerSesion.style.display = 'inline-flex';
     if (roleBadge) roleBadge.textContent = rol;
+    if (navPerfil) navPerfil.style.display = 'inline-block';
+    if (navHistorial) navHistorial.style.display = 'inline-block';
   } else {
     if (headerGuest) headerGuest.style.display = 'inline-flex';
     if (headerSesion) headerSesion.style.display = 'none';
+    if (navPerfil) navPerfil.style.display = 'none';
+    if (navHistorial) navHistorial.style.display = 'none';
   }
 }
 
