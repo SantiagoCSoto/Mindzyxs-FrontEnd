@@ -102,6 +102,12 @@ if (btnCerrarAyuda) {
     if (modalLineasAyuda) modalLineasAyuda.classList.remove('open');
   });
 }
+const btnXAyuda = document.getElementById('btnXAyuda');
+if (btnXAyuda) {
+  btnXAyuda.addEventListener('click', () => {
+    if (modalLineasAyuda) modalLineasAyuda.classList.remove('open');
+  });
+}
 if (modalLineasAyuda) {
   modalLineasAyuda.addEventListener('click', (e) => {
     if (e.target === modalLineasAyuda) modalLineasAyuda.classList.remove('open');
@@ -135,10 +141,8 @@ if (btnEntendido) {
       const accion = pendingAction;
       pendingAction = null;
       if (accion === 'cuestionario_invitado' || accion === 'Responder cuestionario') {
-        invitadoService.logAuditoria('ACCESO PERMITIDO tras aceptar aviso -> encuesta_invitado.html');
+        avisoService.logAuditoria('ACCESO PERMITIDO tras aceptar aviso -> Redirigiendo a encuesta_invitado.html');
         window.location.href = 'encuesta_invitado.html';
-      } else {
-        showToast(`Accediendo a: ${accion} ✓`);
       }
     }
   });
@@ -149,7 +153,7 @@ if (btnCerrar) {
     invitadoService.logAuditoria('AVISO CERRADO - retorna al panel sin alterar información');
     if (pendingAction) {
       pendingAction = null;
-      showToast('Acceso cancelado - retornaste al panel de invitado');
+      showToast('Acceso cancelado - retornó al panel de invitado');
     }
   });
 }

@@ -9,6 +9,7 @@
 import { abrirModal, cerrarModal } from '../utils/alerts.js';
 import { avisoService } from '../services/avisoService.js';
 import { calcularRiesgo, obtenerLineas } from '../services/riesgoService.js';
+import { leerRiesgos } from '../services/encuestaService.js';
 
 const KEY_SESION = 'encuesta_invitado_front';
 
@@ -41,13 +42,13 @@ function mostrarError(mensaje) {
   errorCard.hidden = false;
 }
 
-function pintarResultado(r) {
+function pintarResultado(r, esPrevio = false) {
   resLevel.textContent = 'Riesgo ' + r.nivel;
   resLevel.className = 'result-level ' + String(r.nivel).toLowerCase();
-  resScore.textContent = 'Puntaje ' + r.puntaje + ' / 5';
-  resExpl.textContent = r.explicacion;
+  resScore.textContent = 'Puntaje ' + r.puntaje + ' / 5' + (esPrevio ? ' (resultado anterior)' : '');
+  resExpl.textContent = r.explicacion || '';
 
-  const alto = r.alerta && r.alerta.mostrar;
+  const alto = (r.alerta && r.alerta.mostrar) || r.alerta === true || (esPrevio && String(r.nivel).toLowerCase() === 'alto');
   alertEl.classList.toggle('show', !!alto);
   lineasBtn.classList.toggle('urgente', !!alto);
   lineasBtn.textContent = alto ? '🚨 Líneas de ayuda (urgente)' : 'Líneas de ayuda';
@@ -67,22 +68,40 @@ async function mostrarAvisoSiAplica() {
 
 async function iniciar() {
   const sesion = leerSesion();
-  if (!sesion || !sesion.cuestionarioId || !sesion.respuestas || !sesion.respuestas.length) {
-    mostrarError();
+  if (sesion && sesion.cuestionarioId && sesion.respuestas && sesion.respuestas.length) {
+    // Flujo normal: calcula con las respuestas de la sesión.
+    await mostrarAvisoSiAplica();
+    avisoService.registrarVisualizacion('resultado-riesgo', 'ok');
+    if (avisoModal) abrirModal(avisoModal);
+
+    try {
+      const r = await calcularRiesgo(sesion.cuestionarioId, sesion.respuestas);
+      pintarResultado(r);
+    } catch (error) {
+      mostrarError(error.message);
+    }
     return;
   }
 
-  // Mensaje aclaratorio junto al resultado (PB-04, si aplica).
-  await mostrarAvisoSiAplica();
-  avisoService.registrarVisualizacion('resultado-riesgo', 'ok');
-  if (avisoModal) abrirModal(avisoModal);
-
-  try {
-    const r = await calcularRiesgo(sesion.cuestionarioId, sesion.respuestas);
-    pintarResultado(r);
-  } catch (error) {
-    mostrarError(error.message);
+  // Sin sesión (reentró como invitado): usa el riesgo guardado en cookies.
+  const params = new URLSearchParams(location.search);
+  const pedido = Number(params.get('cuestionarioId'));
+  const previos = leerRiesgos();
+  const previo = previos.find((p) => p.cuestionarioId === pedido) || previos[previos.length - 1];
+  if (previo) {
+    pintarResultado(
+      {
+        nivel: previo.nivel,
+        puntaje: previo.puntaje,
+        explicacion: previo.explicacion || '',
+        alerta: previo.alerta
+      },
+      true
+    );
+    return;
   }
+
+  mostrarError();
 }
 
 document.getElementById('avisoOk')?.addEventListener('click', () => cerrarModal(avisoModal));
@@ -97,19 +116,51 @@ lineasBtn?.addEventListener('click', async () => {
   list.innerHTML = '<div class="line-item">Cargando…</div>';
   abrirModal(lineasModal);
   try {
-    const lineas = await obtenerLineas();
-    list.innerHTML = lineas.length ? lineas.map((l) =>
-      '<div class="line-item">🆘 <b>' + escapar(l.nombre) + '</b>' +
-      (l.telefono ? '<br>📞 ' + escapar(l.telefono) : '') +
-      (l.url ? '<br>🌐 ' + escapar(l.url) : '') +
-      (l.horario ? '<br>🕒 ' + escapar(l.horario) : '') +
-      (l.cobertura ? '<br>📍 ' + escapar(l.cobertura) : '') +
-      '</div>'
-    ).join('') : '<div class="line-item">No hay líneas de ayuda disponibles en este momento.</div>';
+    lineasCache = await obtenerLineas();
+    pintarLineas();
   } catch (error) {
     list.innerHTML = '<div class="line-item">No fue posible cargar las líneas de ayuda. Intente nuevamente.</div>';
   }
 });
 document.getElementById('lineasClose')?.addEventListener('click', () => cerrarModal(lineasModal));
+document.getElementById('lineasX')?.addEventListener('click', () => cerrarModal(lineasModal));
+document.getElementById('lineasQ')?.addEventListener('input', pintarLineas);
+document.getElementById('lineasTipo')?.addEventListener('change', pintarLineas);
+
+let lineasCache = [];
+
+function pintarLineas() {
+  const list = document.getElementById('lineasList');
+  const q = (document.getElementById('lineasQ')?.value || '').trim().toLowerCase();
+  const tipo = document.getElementById('lineasTipo')?.value || '';
+  const fil = lineasCache.filter((l) =>
+    (!tipo || (l.tipoAtencion || '') === tipo) &&
+    (!q || [l.nombre, l.departamento, l.municipio, l.cobertura].filter(Boolean).join(' ').toLowerCase().includes(q))
+  );
+  list.innerHTML = fil.length ? fil.map((l) =>
+    '<div class="line-item">🆘 <b>' + escapar(l.nombre) + '</b>' +
+    (l.telefono ? '<br>📞 ' + escapar(l.telefono) : '') +
+    (l.whatsapp ? '<br>💬 WhatsApp: ' + escapar(l.whatsapp) : '') +
+    (l.url ? '<br>🌐 ' + escapar(l.url) : '') +
+    (l.horario ? '<br>🕒 ' + escapar(l.horario) : '') +
+    (l.cobertura ? '<br>📍 ' + escapar(l.cobertura) : '') +
+    `<div class="linea-tags">` +
+    (l.tipoAtencion ? `<span class="linea-tag">${escapar(tipoLabel(l.tipoAtencion))}</span>` : '') +
+    (l.departamento ? `<span class="linea-tag">${escapar(l.departamento)}</span>` : '') +
+    (l.fuente ? `<span class="linea-tag">Fuente: ${escapar(l.fuente)}</span>` : '') +
+    `</div></div>`
+  ).join('') : '<div class="line-item">Sin coincidencias. Probá con otra búsqueda.</div>';
+}
+
+function tipoLabel(t) {
+  return {
+    apoyo_emocional: 'Apoyo emocional',
+    intervencion_crisis: 'Intervención en crisis',
+    emergencia: 'Emergencia',
+    violencia_genero: 'Violencia de género',
+    infancia_adolescencia: 'Infancia y adolescencia',
+    orientacion_institucional: 'Orientación institucional'
+  }[t] || t;
+}
 
 iniciar();
