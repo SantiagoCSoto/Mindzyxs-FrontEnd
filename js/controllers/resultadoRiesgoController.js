@@ -116,19 +116,51 @@ lineasBtn?.addEventListener('click', async () => {
   list.innerHTML = '<div class="line-item">Cargando…</div>';
   abrirModal(lineasModal);
   try {
-    const lineas = await obtenerLineas();
-    list.innerHTML = lineas.length ? lineas.map((l) =>
-      '<div class="line-item">🆘 <b>' + escapar(l.nombre) + '</b>' +
-      (l.telefono ? '<br>📞 ' + escapar(l.telefono) : '') +
-      (l.url ? '<br>🌐 ' + escapar(l.url) : '') +
-      (l.horario ? '<br>🕒 ' + escapar(l.horario) : '') +
-      (l.cobertura ? '<br>📍 ' + escapar(l.cobertura) : '') +
-      '</div>'
-    ).join('') : '<div class="line-item">No hay líneas de ayuda disponibles en este momento.</div>';
+    lineasCache = await obtenerLineas();
+    pintarLineas();
   } catch (error) {
     list.innerHTML = '<div class="line-item">No fue posible cargar las líneas de ayuda. Intente nuevamente.</div>';
   }
 });
 document.getElementById('lineasClose')?.addEventListener('click', () => cerrarModal(lineasModal));
+document.getElementById('lineasX')?.addEventListener('click', () => cerrarModal(lineasModal));
+document.getElementById('lineasQ')?.addEventListener('input', pintarLineas);
+document.getElementById('lineasTipo')?.addEventListener('change', pintarLineas);
+
+let lineasCache = [];
+
+function pintarLineas() {
+  const list = document.getElementById('lineasList');
+  const q = (document.getElementById('lineasQ')?.value || '').trim().toLowerCase();
+  const tipo = document.getElementById('lineasTipo')?.value || '';
+  const fil = lineasCache.filter((l) =>
+    (!tipo || (l.tipoAtencion || '') === tipo) &&
+    (!q || [l.nombre, l.departamento, l.municipio, l.cobertura].filter(Boolean).join(' ').toLowerCase().includes(q))
+  );
+  list.innerHTML = fil.length ? fil.map((l) =>
+    '<div class="line-item">🆘 <b>' + escapar(l.nombre) + '</b>' +
+    (l.telefono ? '<br>📞 ' + escapar(l.telefono) : '') +
+    (l.whatsapp ? '<br>💬 WhatsApp: ' + escapar(l.whatsapp) : '') +
+    (l.url ? '<br>🌐 ' + escapar(l.url) : '') +
+    (l.horario ? '<br>🕒 ' + escapar(l.horario) : '') +
+    (l.cobertura ? '<br>📍 ' + escapar(l.cobertura) : '') +
+    `<div class="linea-tags">` +
+    (l.tipoAtencion ? `<span class="linea-tag">${escapar(tipoLabel(l.tipoAtencion))}</span>` : '') +
+    (l.departamento ? `<span class="linea-tag">${escapar(l.departamento)}</span>` : '') +
+    (l.fuente ? `<span class="linea-tag">Fuente: ${escapar(l.fuente)}</span>` : '') +
+    `</div></div>`
+  ).join('') : '<div class="line-item">Sin coincidencias. Probá con otra búsqueda.</div>';
+}
+
+function tipoLabel(t) {
+  return {
+    apoyo_emocional: 'Apoyo emocional',
+    intervencion_crisis: 'Intervención en crisis',
+    emergencia: 'Emergencia',
+    violencia_genero: 'Violencia de género',
+    infancia_adolescencia: 'Infancia y adolescencia',
+    orientacion_institucional: 'Orientación institucional'
+  }[t] || t;
+}
 
 iniciar();

@@ -102,6 +102,12 @@ if (btnCerrarAyuda) {
     if (modalLineasAyuda) modalLineasAyuda.classList.remove('open');
   });
 }
+const btnXAyuda = document.getElementById('btnXAyuda');
+if (btnXAyuda) {
+  btnXAyuda.addEventListener('click', () => {
+    if (modalLineasAyuda) modalLineasAyuda.classList.remove('open');
+  });
+}
 if (modalLineasAyuda) {
   modalLineasAyuda.addEventListener('click', (e) => {
     if (e.target === modalLineasAyuda) modalLineasAyuda.classList.remove('open');
