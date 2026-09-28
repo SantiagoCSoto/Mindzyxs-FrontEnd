@@ -13,7 +13,7 @@ import { abrirModal, cerrarModal } from '../utils/alerts.js';
 import { avisoService } from '../services/avisoService.js';
 import {
   obtenerPendiente, registrarInicio, finalizarCuestionarioBack,
-  guardarEncuestaTemporal, guardarNivel, guardarRiesgo, marcarHecho, getHechos
+  guardarEncuestaTemporal, guardarNivel, marcarHecho, getHechos
 } from '../services/encuestaService.js';
 
 const form = document.getElementById('encuestaForm');
@@ -185,7 +185,6 @@ async function finalizarCuestionario() {
     marcarHecho(quiz.id);
     guardarEncuestaTemporal({ cuestionarioId: quiz.id, respuestas: lista, puntaje: r.puntaje, nivel: r.nivel });
     guardarNivel(r.nivel);
-    guardarRiesgo(quiz.id, r);
 
     registrarLog(`FINALIZACIÓN al 100% — puntaje ${r.puntaje}, nivel ${r.nivel}, cookie cuest_${quiz.id}`);
     quiz = null;
