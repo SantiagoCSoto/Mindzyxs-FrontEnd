@@ -27,7 +27,7 @@ export async function obtenerTokenChat() {
 export async function obtenerConversaciones() {
   const res = await getJson('/chat/conversaciones');
   if (!res.ok) {
-    if (res.status === 404) throw new Error('Back sin endpoints de chat (¿API en rama PB31?)');
+    if (res.status === 404) throw new Error('No fue posible conectar con el chat. Intente nuevamente');
     throw new Error(res.error || 'No fue posible cargar las conversaciones');
   }
   return res.data ?? [];

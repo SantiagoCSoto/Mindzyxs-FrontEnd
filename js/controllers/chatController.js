@@ -249,7 +249,6 @@ async function openConv(id, mantener = false) {
   // Mensajes en vivo.
   window.__aplicarTick = aplicarTick;
   offMsgs = suscribirMensajes(db, c.id, (m) => pintarMensaje(m, c));
-  if (!mantener) showToast('Chat en vivo conectado');
 }
 
 function actualizarBloqueo(c) {
@@ -302,7 +301,7 @@ async function sendMessage() {
     await enviarMensaje(db, c.id, yo.uid, texto);
     avisarMensaje(c.id);
   } catch (error) {
-    showToast(error.message || 'No fue posible enviar (¿bloqueado o sin estado Aceptada?)');
+    showToast(error.message || 'No fue posible enviar el mensaje. Intente nuevamente');
   }
 }
 
@@ -335,7 +334,7 @@ function renderReqs() {
     } else if (!pend.length) {
       const p = document.createElement('p');
       p.className = 'hint';
-      p.textContent = 'Sin solicitudes. Buscá un paciente abajo para ofrecerle chat.';
+      p.textContent = 'Sin solicitudes. Busque un paciente abajo para ofrecerle chat.';
       reqList.appendChild(p);
     }
   }
@@ -423,7 +422,7 @@ blockBtn.addEventListener('click', () => {
   const c = conversaciones.find((x) => x.id === activaId);
   if (!c) return;
   $('blockTitle').textContent = soyPaciente() ? 'Bloquear psicólogo' : 'Bloquear paciente';
-  $('blockText').textContent = 'Al bloquear a ' + c.contraparte.nombre + ', no podrás enviar ni recibir mensajes. Podrás desbloquearlo más tarde desde este mismo chat. ¿Deseas continuar?';
+  $('blockText').textContent = 'Al bloquear a ' + c.contraparte.nombre + ', no podrá enviar ni recibir mensajes. Podrá desbloquearlo más tarde desde este mismo chat. ¿Desea continuar?';
   blockModal.classList.add('open');
 });
 $('blockCancel').addEventListener('click', () => blockModal.classList.remove('open'));
