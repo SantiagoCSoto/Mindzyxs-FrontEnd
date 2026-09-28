@@ -129,7 +129,7 @@ function renderHistorial(items) {
     const resumen = item.resumen || 'Cuestionario guardado';
     li.innerHTML =
       '<span>Cuestionario ' + fecha + ' — ' + escapar(resumen) + '</span>' +
-      '<span class="date">guardado ✓</span>';
+      '<span class="date"><svg class="icon-inline" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg> guardado</span>';
     histList.appendChild(li);
   });
 }
@@ -224,7 +224,7 @@ async function finalizarCuestionario() {
       });
       showToast('Sin conexión con el servidor — resultado guardado localmente');
     } else {
-      showToast('Cuestionario guardado en tu historial ✓');
+      showToast('Cuestionario guardado en tu historial');
     }
   } catch (error) {
     mostrarError(error.message);
