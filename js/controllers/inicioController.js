@@ -16,6 +16,7 @@ const roleBadge = document.getElementById('roleBadge');
 const navPerfil = document.getElementById('navPerfil');
 const navProgreso = document.getElementById('navProgreso');
 const navHistorial = document.getElementById('navHistorial');
+const navRecordatorios = document.getElementById('navRecordatorios');
 const btnLogout = document.getElementById('btn-logout');
 const btnModoInvitado = document.getElementById('btn-modo-invitado');
 
@@ -44,18 +45,21 @@ function pintarEncabezado() {
     const rol = usuario.rol || usuario.tipo_usuario || 'Paciente';
     const rolLower = rol.toLowerCase();
     const esPsicologo = rolLower.includes('psicolog') || rolLower.includes('admin');
+    const esPaciente = rolLower.includes('paciente') || rolLower.includes('admin');
 
     if (headerGuest) headerGuest.style.display = 'none';
     if (headerSesion) headerSesion.style.display = 'inline-flex';
     if (roleBadge) roleBadge.textContent = rol;
     if (navPerfil) navPerfil.style.display = 'inline-block';
-    if (navHistorial) navHistorial.style.display = 'inline-block';
+    if (navHistorial) navHistorial.style.display = esPaciente ? 'inline-block' : 'none';
+    if (navRecordatorios) navRecordatorios.style.display = esPaciente ? 'inline-block' : 'none';
     if (navProgreso) navProgreso.style.display = esPsicologo ? 'inline-block' : 'none';
   } else {
     if (headerGuest) headerGuest.style.display = 'inline-flex';
     if (headerSesion) headerSesion.style.display = 'none';
     if (navPerfil) navPerfil.style.display = 'none';
     if (navHistorial) navHistorial.style.display = 'none';
+    if (navRecordatorios) navRecordatorios.style.display = 'none';
     if (navProgreso) navProgreso.style.display = 'none';
   }
 }

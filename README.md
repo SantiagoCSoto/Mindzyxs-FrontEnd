@@ -40,6 +40,7 @@ Mindzyxs-FrontEnd/
 │   ├── perfil.css               # Perfil de usuario (paciente) y modal de verificación (PB-10)
 │   ├── historial.css            # Historial emocional: tarjetas de eventos, filtros y detalle (PB-13)
 │   ├── progreso_emocional.css   # Progreso emocional del paciente (rol psicólogo, PB-14)
+│   ├── recordatorios.css        # Configuración de recordatorios emocionales (PB-15)
 │   └── admin_bd.css             # Consola de administración de BD (PB-27)
 ├── views/                       # Las páginas (una por archivo)
 │   ├── login.html               # Iniciar sesión y acceso a Modo Invitado
@@ -53,6 +54,7 @@ Mindzyxs-FrontEnd/
 │   ├── historial.html           # Historial emocional del paciente: lista, filtros por fecha y modal de detalle (PB-13)
 │   ├── perfil.html              # Perfil de paciente: visualización, edición y verificación de correo (PB-10)
 │   ├── progreso_emocional.html  # Progreso emocional: gráfico SVG, selector de pacientes y KPIs (PB-14)
+│   ├── recordatorios.html       # Configuración de recordatorios de registro emocional (PB-15)
 │   ├── encuesta_invitado.html   # Cuestionario de bienestar para invitados
 │   └── admin_bd.html            # Consola admin: respaldos y mantenimiento (PB-27)
 └── js/
@@ -63,6 +65,7 @@ Mindzyxs-FrontEnd/
     │   ├── historialService.js  # PB-13: consulta de historial por fechas, detalle de evento y auditoría
     │   ├── perfilService.js     # PB-10: actualización de perfil, solicitud y confirmación de cambio de correo
     │   ├── progresoService.js   # PB-14: consulta de pacientes autorizados y serie de progreso emocional
+    │   ├── recordatorioService.js # PB-15: configuración de frecuencia, horario y avisos de hoy
     │   ├── adminService.js      # PB-27: crear/listar/descargar respaldos y mantenimiento
     │   ├── avisoService.js      # PB-04: visualización y aceptación del mensaje aclaratorio
     │   └── invitadoService.js   # PB-06: modo invitado, auditoría de accesos y bloqueos
@@ -78,6 +81,7 @@ Mindzyxs-FrontEnd/
     │   ├── historialController.js
     │   ├── perfilController.js
     │   ├── progresoController.js
+    │   ├── recordatorioController.js
     │   └── adminBdController.js
     └── utils/
         ├── validators.js        # esCampoVacio, tieneArroba, etc.
@@ -100,6 +104,7 @@ Mindzyxs-FrontEnd/
 | Historial emocional | `views/historial.html` | `historialController.js` | Consulta de eventos emocionales y cuestionarios ordenados por fecha (recientes primero). Filtro por rango de fechas (`GET /api/historial?desde=&hasta=`) y visualización de detalle con notas, respuestas y observaciones (`GET /api/historial/{id}`) (PB-13) |
 | Perfil (Paciente) | `views/perfil.html` | `perfilController.js` | Visualiza y edita datos personales (nombres, apellidos, fecha de nacimiento, género y correo). `PUT /api/account/perfil` para actualización directa; `POST /api/account/correo/solicitar` y `POST /api/account/correo/confirmar` con código de 6 dígitos si se cambia el correo (PB-10) |
 | Progreso emocional (Psicólogo) | `views/progreso_emocional.html` | `progresoController.js` | Exclusivo rol Psicólogo. Lista pacientes autorizados (`GET /api/progreso/pacientes`), filtra por rango de fechas y grafica la evolución emocional (1–5) mediante SVG dinámico. Calcula 3 KPIs (Promedio, Tendencia, Registros) y gestiona estados sin datos y paciente no autorizado 403 (PB-14) |
+| Recordatorios (Paciente) | `views/recordatorios.html` | `recordatorioController.js` | Configuración de avisos para registro emocional con frecuencia diaria o semanal (días específicos), horario programado, switch toggle de activación (`POST /api/recordatorios`) y consulta de avisos vencidos hoy (`GET /api/recordatorios/hoy`) (PB-15) |
 | Encuesta de invitado | `views/encuesta_invitado.html` | — | Cuestionario de bienestar emocional accesible para invitados |
 | Consola admin BD (PB-27) | `views/admin_bd.html` | `adminBdController.js` | `POST /api/admin/backup`, `GET /api/admin/backups`, `GET /api/admin/backups/{id}/download`, `POST /api/admin/maintenance` |
 
@@ -176,6 +181,19 @@ Gestiona la consulta del progreso emocional de pacientes autorizados asignados a
 | `formatearFechaCorta(fechaStr)` | — | Convierte fechas ISO a formato `DD/MM` para los nodos y el eje X |
 | `logAuditoria(accion, detalle)` | — | Emite logs estructurados en consola con prefijo `[HU1-PB14]` |
 
+### `js/services/recordatorioService.js` (PB-15)
+
+Gestiona la configuración y consulta de avisos periódicos para el registro emocional del paciente (`/api/recordatorios`).
+
+| Método | Endpoint | Uso |
+|--------|----------|-----|
+| `obtenerConfiguracion()` | `GET /recordatorios` | Consulta la configuración actual del paciente (frecuencia, hora, días, estado activo) o 204 si nunca configuró |
+| `guardarConfiguracion(datos)` | `POST /recordatorios` | Guarda o actualiza la configuración (valida frecuencia y hora obligatorias; días 1-7 si es semanal) |
+| `obtenerAvisosHoy()` | `GET /recordatorios/hoy` | Consulta los avisos programados vencidos hoy para notificación al paciente |
+| `normalizarConfig(data)` | — | Estructura homogénea de campos, días numéricos y nombres legibles |
+| `formatearTextoResumen(config)` | — | Genera texto descriptivo para el banner de estado actual (`Diaria 08:00 · Activa`, etc.) |
+| `logAuditoria(accion, detalle)` | — | Emite logs estructurados en consola con prefijo `[HU1-PB15]` |
+
 ### `js/services/avisoService.js` (PB-04)
 
 Gestiona la visualización obligatoria previa del mensaje aclaratorio (no diagnóstico ni sustituto clínico) y el enlace permanente del pie de página.
@@ -232,4 +250,5 @@ Controla el flujo de acceso sin cuenta a la plataforma y audita ingresos, bloque
 * **PB-10 (Editar perfil de paciente):** permite visualizar el perfil con avatar generado dinámicamente con las iniciales, nombres, apellidos, fecha de nacimiento calculando la edad en años (mínimo 14 años, sin fechas futuras), género y correo. Si el correo se modifica, se activa un modal de verificación con código numérico de 6 dígitos y reenvío.
 * **PB-13 (Historial emocional del paciente):** permite visualizar el registro cronológico (recientes primero) de estados de ánimo y cuestionarios respondidos. Incluye filtro interactivo por rango de fechas (desde / hasta), estado vacío con botón de registro si no hay eventos y modal interactivo para consultar el detalle (notas personales "Cómo me sentí", respuestas del cuestionario y notas de apoyo del psicólogo asignado).
 * **PB-14 (Progreso emocional del paciente - Rol Psicólogo):** Permite al profesional de la salud mental consultar la evolución emocional (escala de 1 a 5) de sus pacientes autorizados a través de un gráfico SVG dinámico (`viewBox="0 0 620 280"`) con guía punteada de estabilidad en nivel 3, filtros de fecha desde/hasta con validación cronológica, 3 KPIs (Promedio, Tendencia direccional y Total de registros) y manejo de estados especiales (bloqueo por 403 no autorizado con solicitud de acceso, estado vacío para `< 2` registros y estado sin pacientes asignados).
+* **PB-15 (Recordatorios para el registro emocional - Rol Paciente):** Permite al paciente programar avisos para registrar su bienestar emocional con periodicidad diaria o semanal (seleccionando días específicos de 1 a 7), definir la hora del aviso mediante un selector nativo, activar/desactivar recordatorios con un switch toggle sin perder la configuración guardada, consultar el resumen en un panel de estado visual y recibir notificaciones periódicas sincronizadas con el backend (`/api/recordatorios`).
 * El front de PB-27 (consola admin) no incluye restauración de respaldos — solo crear, listar/descargar y mantenimiento.
