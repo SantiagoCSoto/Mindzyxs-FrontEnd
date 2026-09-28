@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mindzyx — Registrar estado emocional (Paciente)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/registro_emocional.css" />
+</head>
+
+<body>
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-pink"></div>
+    <div class="blob blob-lav"></div>
+  </div>
+
+  <header class="header-nav">
+    <div class="logo-container">
+      <a href="inicio.html" class="logo-link">
+        <img src="../assets/Logo1.png" alt="Logo Mindzyxs" class="logo-img" />
+        <span>Mindzyxs</span>
+      </a>
+    </div>
+    <nav class="main-nav" aria-label="Navegación principal">
+      <ul>
+        <li><a href="inicio.html" class="active">Inicio</a></li>
+        <li><a href="#historias">Historial</a></li>
+        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+      </ul>
+    </nav>
+    <div class="header-right">
+      <span class="badge-role"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B5BCE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Paciente autenticado</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- Pantalla del panel del paciente (PB-12) -->
+    <div class="screen active" id="panelScreen">
+      <div class="card hero">
+        <span class="badge-patient">Sesión de paciente</span>
+        <h1>Mi panel</h1>
+        <p>Registra cómo te sientes hoy. La escala va de <b>1 (Muy mal)</b> a <b>5 (Excelente)</b> y puedes agregar una nota opcional.</p>
+        <button class="btn-main" id="goRegister">
+          <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+          Registrar estado emocional
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="saved" id="savedCard">
+          <h3><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg> Último registro guardado</h3>
+          <p id="savedText"></p>
+          <small id="savedDate"></small>
+        </div>
+        <p class="empty-note" id="emptyNote">Aún no tienes registros emocionales. El primero aparecerá aquí cuando lo guardes.</p>
+      </div>
+    </div>
+
+    <!-- Pantalla del formulario: registrar estado emocional -->
+    <div class="screen" id="formScreen">
+      <div class="card">
+        <div class="panel-head">
+          <span class="badge-patient">Registro emocional</span>
+          <h2>Registrar estado emocional</h2>
+          <p class="sub">¿Cómo te sientes ahora? La fecha y hora se asignan automáticamente al guardar.</p>
+        </div>
+
+        <label class="field-label" for="scale">¿Cómo te sientes? *</label>
+        <div class="scale" id="scale" role="radiogroup" aria-label="Estado emocional">
+          <button type="button" class="pill" data-val="1" role="radio" aria-checked="false">
+            <span class="face" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M8.5 9.5h2.5"></path><path d="M13 9.5h2.5"></path><path d="M8.5 17q3.5-4 7 0"></path></svg></span>
+            <span class="num">1</span>
+            <span class="lbl">Muy mal</span>
+          </button>
+          <button type="button" class="pill" data-val="2" role="radio" aria-checked="false">
+            <span class="face" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M8.5 9.5h2.5"></path><path d="M13 9.5h2.5"></path><path d="M9 16.5q3-2.5 6 0"></path></svg></span>
+            <span class="num">2</span>
+            <span class="lbl">Mal</span>
+          </button>
+          <button type="button" class="pill" data-val="3" role="radio" aria-checked="false">
+            <span class="face" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9 10h.01"></path><path d="M15 10h.01"></path><path d="M9 15.5h6"></path></svg></span>
+            <span class="num">3</span>
+            <span class="lbl">Regular</span>
+          </button>
+          <button type="button" class="pill" data-val="4" role="radio" aria-checked="false">
+            <span class="face" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9 10h.01"></path><path d="M15 10h.01"></path><path d="M9 14.5q3 2 6 0"></path></svg></span>
+            <span class="num">4</span>
+            <span class="lbl">Bien</span>
+          </button>
+          <button type="button" class="pill" data-val="5" role="radio" aria-checked="false">
+            <span class="face" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9 10h.01"></path><path d="M15 10h.01"></path><path d="M8.5 13.5q3.5 3 7 0"></path></svg></span>
+            <span class="num">5</span>
+            <span class="lbl">Excelente</span>
+          </button>
+        </div>
+
+        <label class="field-label" for="notes">Notas</label>
+        <p class="field-hint">¿Quieres agregar una nota? (opcional)</p>
+        <textarea id="notes" placeholder="Cuéntanos con tus palabras cómo te sientes..."></textarea>
+
+        <div class="err-msg" id="errMsg">Debes seleccionar un estado emocional para guardar</div>
+
+        <div class="actions">
+          <button class="btn-cancel" id="btnCancel">Cancelar / Volver</button>
+          <button class="btn-save" id="btnSave">Guardar</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-in">
+      <a href="inicio.html">Inicio</a>
+      <a href="inicio.html#nosotros">Nosotros</a>
+      <a href="inicio.html#ayuda">Ayuda</a>
+      <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog"><span class="aviso-ico"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5A45C9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span> Aviso: no diagnóstico</a>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="../js/controllers/registroEmocionalController.js"></script>
+</body>
+
+</html>
