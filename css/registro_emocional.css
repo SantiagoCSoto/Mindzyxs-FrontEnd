@@ -253,6 +253,10 @@ button {
   background: #F2FCFD;
   border-radius: 12px;
   padding: 14px;
+  display: none;
+}
+
+.saved.show {
   display: block;
 }
 
