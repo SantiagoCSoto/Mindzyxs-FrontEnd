@@ -36,6 +36,7 @@ Mindzyxs-FrontEnd/
 │   ├── nueva_contrasena.css     # Definición de la nueva contraseña
 │   ├── inicio.css               # Página de inicio / bienvenida (paciente e invitado, PB-06)
 │   ├── encuesta_invitado.css    # Cuestionario de bienestar para modo invitado
+│   ├── perfil.css               # Perfil de usuario (paciente) y modal de verificación (PB-10)
 │   └── admin_bd.css             # Consola de administración de BD (PB-27)
 ├── views/                       # Las páginas (una por archivo)
 │   ├── login.html               # Iniciar sesión y acceso a Modo Invitado
@@ -45,13 +46,15 @@ Mindzyxs-FrontEnd/
 │   ├── verificacion_recuperar.html # Código de recuperación
 │   ├── nueva_contrasena.html    # Nueva contraseña
 │   ├── inicio.html              # Inicio (paciente / invitado con 4 exclusivas bloqueadas)
+│   ├── perfil.html              # Perfil de paciente: visualización, edición y verificación de correo (PB-10)
 │   ├── encuesta_invitado.html   # Cuestionario de bienestar para invitados
 │   ├── consultar_recomendaciones.html # Consulta de recomendaciones de apoyo
 │   └── admin_bd.html            # Consola admin: respaldos y mantenimiento (PB-27)
 └── js/
     ├── services/                # Comunicación con la API
-    │   ├── apiClient.js         # Cliente HTTP base: postJson, postFormData, getJson, getBlob
+    │   ├── apiClient.js         # Cliente HTTP base: postJson, postFormData, getJson, putJson, getBlob
     │   ├── authService.js       # Login, registro, verificación, recuperación, logout
+    │   ├── perfilService.js     # PB-10: actualización de perfil, solicitud y confirmación de cambio de correo
     │   ├── adminService.js      # PB-27: crear/listar/descargar respaldos y mantenimiento
     │   ├── avisoService.js      # PB-04: visualización y aceptación del mensaje aclaratorio
     │   └── invitadoService.js   # PB-06: modo invitado, auditoría de accesos y bloqueos
@@ -63,6 +66,7 @@ Mindzyxs-FrontEnd/
     │   ├── verificacionRecuperarController.js
     │   ├── nuevaContrasenaController.js
     │   ├── inicioController.js
+    │   ├── perfilController.js
     │   └── adminBdController.js
     └── utils/
         ├── validators.js        # esCampoVacio, tieneArroba, etc.
@@ -81,6 +85,7 @@ Mindzyxs-FrontEnd/
 | Verificar código recuperación | `views/verificacion_recuperar.html` | `verificacionRecuperarController.js` | `POST /api/account/forgot/verify` + `resend` |
 | Nueva contraseña | `views/nueva_contrasena.html` | `nuevaContrasenaController.js` | `POST /api/account/forgot/reset` |
 | Inicio (Paciente e Invitado) | `views/inicio.html` | `inicioController.js` | Modo invitado: 3 opciones básicas y 4 exclusivas bloqueadas (`POST /api/invitado/bloqueo`). Registrado: servicios completos. Integra mensaje aclaratorio (PB-04) |
+| Perfil (Paciente) | `views/perfil.html` | `perfilController.js` | Visualiza y edita datos personales (nombres, apellidos, fecha de nacimiento, género y correo). `PUT /api/account/perfil` para actualización directa; `POST /api/account/correo/solicitar` y `POST /api/account/correo/confirmar` con código de 6 dígitos si se cambia el correo (PB-10) |
 | Encuesta de invitado | `views/encuesta_invitado.html` | — | Cuestionario de bienestar emocional accesible para invitados |
 | Recomendaciones | `views/consultar_recomendaciones.html` | — | Consejos y recomendaciones generales de bienestar |
 | Consola admin BD (PB-27) | `views/admin_bd.html` | `adminBdController.js` | `POST /api/admin/backup`, `GET /api/admin/backups`, `GET /api/admin/backups/{id}/download`, `POST /api/admin/maintenance` |
@@ -94,6 +99,7 @@ Base URL fija `http://localhost:5015/api`. Expone:
 * `postJson(endpoint, data, opciones)` — POST JSON.
 * `postFormData(endpoint, formData, opciones)` — POST `multipart/form-data`.
 * `getJson(endpoint, opciones)` — GET JSON.
+* `putJson(endpoint, data, opciones)` — PUT JSON.
 * `getBlob(endpoint, opciones)` — GET como Blob (descarga de archivos).
 
 Agrega automáticamente `Authorization: Bearer <token>` si existe `token` en `localStorage`/`sessionStorage`. Errores: devuelven `{ ok:false, status, error }`; si no hay backend → `{ ok:false, isNetworkError:true, error:"No fue posible conectar con el servidor backend." }`.
@@ -115,6 +121,21 @@ Agrega automáticamente `Authorization: Bearer <token>` si existe `token` en `lo
 | `resetPassword(correo, codigo, nueva)` | `POST /account/forgot/reset` | Guarda la nueva contraseña |
 
 Los métodos devuelven `{ exito:boolean, mensaje }` — nunca lanzan excepción hacia el controlador. `expirado: res.status === 410` en verificación/reinicio para mostrar el enlace "Reenviar código".
+
+### `js/services/perfilService.js` (PB-10)
+
+Gestiona la actualización de datos personales del paciente y el flujo de verificación al modificar el correo electrónico.
+
+| Método | Endpoint | Uso |
+|--------|----------|-----|
+| `actualizarPerfil(datos)` | `PUT /account/perfil` | Actualiza nombres, apellidos, fechaNacimiento e idGenero |
+| `solicitarCambioCorreo(nuevoCorreo)` | `POST /account/correo/solicitar` | Solicita envío de código de 6 dígitos al nuevo correo (retorna 409 si ya existe) |
+| `confirmarCambioCorreo(nuevoCorreo, codigo)` | `POST /account/correo/confirmar` | Valida código de 6 dígitos y confirma el cambio de correo |
+| `obtenerPerfilActual()` | — | Lee los datos de la sesión actual (`sessionStorage`/`localStorage`) con fallback estructurado |
+| `guardarPerfilEnSesion(nuevosDatos)` | — | Actualiza el objeto de usuario en sesión y almacenamiento local |
+| `calcularEdad(fechaStr)` | — | Calcula la edad exacta en años a partir de la fecha de nacimiento |
+| `formatearFecha(fechaStr)` | — | Convierte fecha YYYY-MM-DD a formato amigable DD/MM/YYYY |
+| `logAuditoria(accion, detalle)` | — | Emite logs estructurados en consola con prefijo `[HU1-PB10]` |
 
 ### `js/services/avisoService.js` (PB-04)
 
@@ -169,4 +190,5 @@ Controla el flujo de acceso sin cuenta a la plataforma y audita ingresos, bloque
 * La página de bienvenida (`inicio.html`) es la referencia de estilo; se adapta dinámicamente según el rol o si el usuario navega en modo invitado.
 * **PB-04 (Mensaje aclaratorio):** se muestra obligatoriamente la primera vez que un paciente o invitado intenta acceder al cuestionario en la sesión, además de estar disponible permanentemente desde el enlace del footer.
 * **PB-06 (Modo invitado):** ofrece 3 opciones permitidas (cuestionario, recomendaciones básicas y modal de líneas de ayuda) y bloquea 4 funciones exclusivas con toast explicativo y auditoría en consola/backend.
+* **PB-10 (Editar perfil de paciente):** permite visualizar el perfil con avatar generado dinámicamente con las iniciales, nombres, apellidos, fecha de nacimiento calculando la edad en años (mínimo 14 años, sin fechas futuras), género y correo. Si el correo se modifica, se activa un modal de verificación con código numérico de 6 dígitos y reenvío.
 * El front de PB-27 (consola admin) no incluye restauración de respaldos — solo crear, listar/descargar y mantenimiento.
