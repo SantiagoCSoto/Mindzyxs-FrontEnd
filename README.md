@@ -36,7 +36,9 @@ Mindzyxs-FrontEnd/
 │   ├── nueva_contrasena.css     # Definición de la nueva contraseña
 │   ├── inicio.css               # Página de inicio / bienvenida (paciente e invitado, PB-06)
 │   ├── encuesta_invitado.css    # Cuestionario de bienestar para modo invitado
+│   ├── cuestionario_paciente.css # Cuestionario de bienestar para pacientes autenticados (PB-11)
 │   ├── perfil.css               # Perfil de usuario (paciente) y modal de verificación (PB-10)
+│   ├── historial.css            # Historial emocional: tarjetas de eventos, filtros y detalle (PB-13)
 │   └── admin_bd.css             # Consola de administración de BD (PB-27)
 ├── views/                       # Las páginas (una por archivo)
 │   ├── login.html               # Iniciar sesión y acceso a Modo Invitado
@@ -46,14 +48,17 @@ Mindzyxs-FrontEnd/
 │   ├── verificacion_recuperar.html # Código de recuperación
 │   ├── nueva_contrasena.html    # Nueva contraseña
 │   ├── inicio.html              # Inicio (paciente / invitado con 4 exclusivas bloqueadas)
+│   ├── cuestionario_paciente.html # Cuestionario de bienestar emocional para paciente (PB-11)
+│   ├── historial.html           # Historial emocional del paciente: lista, filtros por fecha y modal de detalle (PB-13)
 │   ├── perfil.html              # Perfil de paciente: visualización, edición y verificación de correo (PB-10)
 │   ├── encuesta_invitado.html   # Cuestionario de bienestar para invitados
-│   ├── consultar_recomendaciones.html # Consulta de recomendaciones de apoyo
 │   └── admin_bd.html            # Consola admin: respaldos y mantenimiento (PB-27)
 └── js/
     ├── services/                # Comunicación con la API
     │   ├── apiClient.js         # Cliente HTTP base: postJson, postFormData, getJson, putJson, getBlob
     │   ├── authService.js       # Login, registro, verificación, recuperación, logout
+    │   ├── cuestionarioService.js # PB-11: cuestionario de paciente y guardado en historial
+    │   ├── historialService.js  # PB-13: consulta de historial por fechas, detalle de evento y auditoría
     │   ├── perfilService.js     # PB-10: actualización de perfil, solicitud y confirmación de cambio de correo
     │   ├── adminService.js      # PB-27: crear/listar/descargar respaldos y mantenimiento
     │   ├── avisoService.js      # PB-04: visualización y aceptación del mensaje aclaratorio
@@ -66,6 +71,8 @@ Mindzyxs-FrontEnd/
     │   ├── verificacionRecuperarController.js
     │   ├── nuevaContrasenaController.js
     │   ├── inicioController.js
+    │   ├── cuestionarioPacienteController.js
+    │   ├── historialController.js
     │   ├── perfilController.js
     │   └── adminBdController.js
     └── utils/
@@ -85,9 +92,10 @@ Mindzyxs-FrontEnd/
 | Verificar código recuperación | `views/verificacion_recuperar.html` | `verificacionRecuperarController.js` | `POST /api/account/forgot/verify` + `resend` |
 | Nueva contraseña | `views/nueva_contrasena.html` | `nuevaContrasenaController.js` | `POST /api/account/forgot/reset` |
 | Inicio (Paciente e Invitado) | `views/inicio.html` | `inicioController.js` | Modo invitado: 3 opciones básicas y 4 exclusivas bloqueadas (`POST /api/invitado/bloqueo`). Registrado: servicios completos. Integra mensaje aclaratorio (PB-04) |
+| Cuestionario (Paciente) | `views/cuestionario_paciente.html` | `cuestionarioPacienteController.js` | Cuestionario de 5 preguntas sobre bienestar emocional para pacientes autenticados; guarda respuestas en historial (`POST /api/cuestionario/paciente/finalizar`) (PB-11) |
+| Historial emocional | `views/historial.html` | `historialController.js` | Consulta de eventos emocionales y cuestionarios ordenados por fecha (recientes primero). Filtro por rango de fechas (`GET /api/historial?desde=&hasta=`) y visualización de detalle con notas, respuestas y observaciones (`GET /api/historial/{id}`) (PB-13) |
 | Perfil (Paciente) | `views/perfil.html` | `perfilController.js` | Visualiza y edita datos personales (nombres, apellidos, fecha de nacimiento, género y correo). `PUT /api/account/perfil` para actualización directa; `POST /api/account/correo/solicitar` y `POST /api/account/correo/confirmar` con código de 6 dígitos si se cambia el correo (PB-10) |
 | Encuesta de invitado | `views/encuesta_invitado.html` | — | Cuestionario de bienestar emocional accesible para invitados |
-| Recomendaciones | `views/consultar_recomendaciones.html` | — | Consejos y recomendaciones generales de bienestar |
 | Consola admin BD (PB-27) | `views/admin_bd.html` | `adminBdController.js` | `POST /api/admin/backup`, `GET /api/admin/backups`, `GET /api/admin/backups/{id}/download`, `POST /api/admin/maintenance` |
 
 ## 4. Servicios
@@ -136,6 +144,19 @@ Gestiona la actualización de datos personales del paciente y el flujo de verifi
 | `calcularEdad(fechaStr)` | — | Calcula la edad exacta en años a partir de la fecha de nacimiento |
 | `formatearFecha(fechaStr)` | — | Convierte fecha YYYY-MM-DD a formato amigable DD/MM/YYYY |
 | `logAuditoria(accion, detalle)` | — | Emite logs estructurados en consola con prefijo `[HU1-PB10]` |
+
+### `js/services/historialService.js` (PB-13)
+
+Gestiona la consulta del historial de eventos emocionales y cuestionarios del paciente con filtros por rango de fechas y detalle interactivo.
+
+| Método | Endpoint | Uso |
+|--------|----------|-----|
+| `obtenerHistorial(desde, hasta)` | `GET /historial` | Consulta el historial propio con filtros opcionales de fecha (`?desde=&hasta=`) |
+| `obtenerDetalle(id)` | `GET /historial/{id}` | Obtiene nota propia, respuestas de cuestionario y observaciones del psicólogo |
+| `normalizarItem(item)` | — | Mapea fecha, hora, categorías visuales (`pos`, `neu`, `low`) y emojis |
+| `normalizarDetalle(detalle)` | — | Estructura respuestas y observaciones para el modal de detalle |
+| `obtenerHistorialFallback(desde, hasta)` | — | Datos de respaldo para pruebas sin conexión |
+| `logAuditoria(accion, detalle)` | — | Emite logs estructurados en consola con prefijo `[HU1-PB13]` |
 
 ### `js/services/avisoService.js` (PB-04)
 
@@ -191,4 +212,5 @@ Controla el flujo de acceso sin cuenta a la plataforma y audita ingresos, bloque
 * **PB-04 (Mensaje aclaratorio):** se muestra obligatoriamente la primera vez que un paciente o invitado intenta acceder al cuestionario en la sesión, además de estar disponible permanentemente desde el enlace del footer.
 * **PB-06 (Modo invitado):** ofrece 3 opciones permitidas (cuestionario, recomendaciones básicas y modal de líneas de ayuda) y bloquea 4 funciones exclusivas con toast explicativo y auditoría en consola/backend.
 * **PB-10 (Editar perfil de paciente):** permite visualizar el perfil con avatar generado dinámicamente con las iniciales, nombres, apellidos, fecha de nacimiento calculando la edad en años (mínimo 14 años, sin fechas futuras), género y correo. Si el correo se modifica, se activa un modal de verificación con código numérico de 6 dígitos y reenvío.
+* **PB-13 (Historial emocional del paciente):** permite visualizar el registro cronológico (recientes primero) de estados de ánimo y cuestionarios respondidos. Incluye filtro interactivo por rango de fechas (desde / hasta), estado vacío con botón de registro si no hay eventos y modal interactivo para consultar el detalle (notas personales "Cómo me sentí", respuestas del cuestionario y notas de apoyo del psicólogo asignado).
 * El front de PB-27 (consola admin) no incluye restauración de respaldos — solo crear, listar/descargar y mantenimiento.
