@@ -37,6 +37,7 @@ Mindzyxs-FrontEnd/
 │   ├── inicio.css               # Página de inicio / bienvenida (paciente e invitado, PB-06)
 │   ├── encuesta_invitado.css    # Cuestionario de bienestar para modo invitado
 │   ├── perfil.css               # Perfil de usuario (paciente) y modal de verificación (PB-10)
+│   ├── progreso_emocional.css   # Progreso emocional del paciente (rol psicólogo, PB-14)
 │   └── admin_bd.css             # Consola de administración de BD (PB-27)
 ├── views/                       # Las páginas (una por archivo)
 │   ├── login.html               # Iniciar sesión y acceso a Modo Invitado
@@ -47,6 +48,7 @@ Mindzyxs-FrontEnd/
 │   ├── nueva_contrasena.html    # Nueva contraseña
 │   ├── inicio.html              # Inicio (paciente / invitado con 4 exclusivas bloqueadas)
 │   ├── perfil.html              # Perfil de paciente: visualización, edición y verificación de correo (PB-10)
+│   ├── progreso_emocional.html  # Progreso emocional: gráfico SVG, selector de pacientes y KPIs (PB-14)
 │   ├── encuesta_invitado.html   # Cuestionario de bienestar para invitados
 │   ├── consultar_recomendaciones.html # Consulta de recomendaciones de apoyo
 │   └── admin_bd.html            # Consola admin: respaldos y mantenimiento (PB-27)
@@ -55,6 +57,7 @@ Mindzyxs-FrontEnd/
     │   ├── apiClient.js         # Cliente HTTP base: postJson, postFormData, getJson, putJson, getBlob
     │   ├── authService.js       # Login, registro, verificación, recuperación, logout
     │   ├── perfilService.js     # PB-10: actualización de perfil, solicitud y confirmación de cambio de correo
+    │   ├── progresoService.js   # PB-14: consulta de pacientes autorizados y serie de progreso emocional
     │   ├── adminService.js      # PB-27: crear/listar/descargar respaldos y mantenimiento
     │   ├── avisoService.js      # PB-04: visualización y aceptación del mensaje aclaratorio
     │   └── invitadoService.js   # PB-06: modo invitado, auditoría de accesos y bloqueos
@@ -67,6 +70,7 @@ Mindzyxs-FrontEnd/
     │   ├── nuevaContrasenaController.js
     │   ├── inicioController.js
     │   ├── perfilController.js
+    │   ├── progresoController.js
     │   └── adminBdController.js
     └── utils/
         ├── validators.js        # esCampoVacio, tieneArroba, etc.
@@ -86,6 +90,7 @@ Mindzyxs-FrontEnd/
 | Nueva contraseña | `views/nueva_contrasena.html` | `nuevaContrasenaController.js` | `POST /api/account/forgot/reset` |
 | Inicio (Paciente e Invitado) | `views/inicio.html` | `inicioController.js` | Modo invitado: 3 opciones básicas y 4 exclusivas bloqueadas (`POST /api/invitado/bloqueo`). Registrado: servicios completos. Integra mensaje aclaratorio (PB-04) |
 | Perfil (Paciente) | `views/perfil.html` | `perfilController.js` | Visualiza y edita datos personales (nombres, apellidos, fecha de nacimiento, género y correo). `PUT /api/account/perfil` para actualización directa; `POST /api/account/correo/solicitar` y `POST /api/account/correo/confirmar` con código de 6 dígitos si se cambia el correo (PB-10) |
+| Progreso emocional (Psicólogo) | `views/progreso_emocional.html` | `progresoController.js` | Exclusivo rol Psicólogo. Lista pacientes autorizados (`GET /api/progreso/pacientes`), filtra por rango de fechas y grafica la evolución emocional (1–5) mediante SVG dinámico. Calcula 3 KPIs (Promedio, Tendencia, Registros) y gestiona estados sin datos y paciente no autorizado 403 (PB-14) |
 | Encuesta de invitado | `views/encuesta_invitado.html` | — | Cuestionario de bienestar emocional accesible para invitados |
 | Recomendaciones | `views/consultar_recomendaciones.html` | — | Consejos y recomendaciones generales de bienestar |
 | Consola admin BD (PB-27) | `views/admin_bd.html` | `adminBdController.js` | `POST /api/admin/backup`, `GET /api/admin/backups`, `GET /api/admin/backups/{id}/download`, `POST /api/admin/maintenance` |
@@ -136,6 +141,19 @@ Gestiona la actualización de datos personales del paciente y el flujo de verifi
 | `calcularEdad(fechaStr)` | — | Calcula la edad exacta en años a partir de la fecha de nacimiento |
 | `formatearFecha(fechaStr)` | — | Convierte fecha YYYY-MM-DD a formato amigable DD/MM/YYYY |
 | `logAuditoria(accion, detalle)` | — | Emite logs estructurados en consola con prefijo `[HU1-PB10]` |
+
+### `js/services/progresoService.js` (PB-14)
+
+Gestiona la consulta del progreso emocional de pacientes autorizados asignados al psicólogo en sesión (`/api/progreso`).
+
+| Método | Endpoint | Uso |
+|--------|----------|-----|
+| `obtenerPacientesAutorizados()` | `GET /progreso/pacientes` | Lista los pacientes autorizados asignados al psicólogo |
+| `obtenerProgresoPaciente(idPaciente, desde, hasta)` | `GET /progreso/{idPaciente}?desde=&hasta=` | Obtiene serie temporal, promedio, tendencia, distribución y total de registros (maneja 403 Forbidden) |
+| `normalizarProgreso(data)` | — | Normaliza datos del backend a estructura homogénea para el gráfico y KPIs |
+| `formatearTendencia(tendencia)` | — | Convierte tendencia del backend a texto con indicador direccional (`↗ Mejorando`, `↘ Bajando`, `→ Estable`) |
+| `formatearFechaCorta(fechaStr)` | — | Convierte fechas ISO a formato `DD/MM` para los nodos y el eje X |
+| `logAuditoria(accion, detalle)` | — | Emite logs estructurados en consola con prefijo `[HU1-PB14]` |
 
 ### `js/services/avisoService.js` (PB-04)
 
@@ -191,4 +209,5 @@ Controla el flujo de acceso sin cuenta a la plataforma y audita ingresos, bloque
 * **PB-04 (Mensaje aclaratorio):** se muestra obligatoriamente la primera vez que un paciente o invitado intenta acceder al cuestionario en la sesión, además de estar disponible permanentemente desde el enlace del footer.
 * **PB-06 (Modo invitado):** ofrece 3 opciones permitidas (cuestionario, recomendaciones básicas y modal de líneas de ayuda) y bloquea 4 funciones exclusivas con toast explicativo y auditoría en consola/backend.
 * **PB-10 (Editar perfil de paciente):** permite visualizar el perfil con avatar generado dinámicamente con las iniciales, nombres, apellidos, fecha de nacimiento calculando la edad en años (mínimo 14 años, sin fechas futuras), género y correo. Si el correo se modifica, se activa un modal de verificación con código numérico de 6 dígitos y reenvío.
+* **PB-14 (Progreso emocional del paciente - Rol Psicólogo):** Permite al profesional de la salud mental consultar la evolución emocional (escala de 1 a 5) de sus pacientes autorizados a través de un gráfico SVG dinámico (`viewBox="0 0 620 280"`) con guía punteada de estabilidad en nivel 3, filtros de fecha desde/hasta con validación cronológica, 3 KPIs (Promedio, Tendencia direccional y Total de registros) y manejo de estados especiales (bloqueo por 403 no autorizado con solicitud de acceso, estado vacío para `< 2` registros y estado sin pacientes asignados).
 * El front de PB-27 (consola admin) no incluye restauración de respaldos — solo crear, listar/descargar y mantenimiento.

@@ -14,6 +14,7 @@ const headerGuest = document.getElementById('headerGuest');
 const headerSesion = document.getElementById('headerSesion');
 const roleBadge = document.getElementById('roleBadge');
 const navPerfil = document.getElementById('navPerfil');
+const navProgreso = document.getElementById('navProgreso');
 const btnLogout = document.getElementById('btn-logout');
 const btnModoInvitado = document.getElementById('btn-modo-invitado');
 
@@ -40,14 +41,19 @@ function pintarEncabezado() {
 
   if (usuario && !invitadoService.esInvitado()) {
     const rol = usuario.rol || usuario.tipo_usuario || 'Paciente';
+    const rolLower = rol.toLowerCase();
+    const esPsicologo = rolLower.includes('psicolog') || rolLower.includes('admin');
+
     if (headerGuest) headerGuest.style.display = 'none';
     if (headerSesion) headerSesion.style.display = 'inline-flex';
     if (roleBadge) roleBadge.textContent = rol;
     if (navPerfil) navPerfil.style.display = 'inline-block';
+    if (navProgreso) navProgreso.style.display = esPsicologo ? 'inline-block' : 'none';
   } else {
     if (headerGuest) headerGuest.style.display = 'inline-flex';
     if (headerSesion) headerSesion.style.display = 'none';
     if (navPerfil) navPerfil.style.display = 'none';
+    if (navProgreso) navProgreso.style.display = 'none';
   }
 }
 
