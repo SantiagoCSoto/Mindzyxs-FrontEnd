@@ -245,6 +245,13 @@ button {
   box-shadow: 0 4px 10px rgba(110, 207, 212, 0.35);
 }
 
+.btn-big:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .btn-secondary {
   width: 100%;
   max-width: 340px;
