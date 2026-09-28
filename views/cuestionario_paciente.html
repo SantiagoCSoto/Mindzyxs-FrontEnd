@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mindzyx — Cuestionario emocional (Paciente)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/cuestionario_paciente.css" />
+</head>
+
+<body>
+  <div class="bg-blobs">
+    <div class="blob blob-pink"></div>
+    <div class="blob blob-lav"></div>
+  </div>
+
+  <header class="header-nav">
+    <div class="logo-container">
+      <a href="inicio.html" class="logo-link">
+        <img src="../assets/Logo1.png" alt="Logo Mindzyxs" class="logo-img" />
+        <span>Mindzyxs</span>
+      </a>
+    </div>
+    <nav class="main-nav" aria-label="Navegación principal">
+      <ul>
+        <li><a href="inicio.html" class="active">Inicio</a></li>
+        <li><a href="#historial">Historial</a></li>
+        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+      </ul>
+    </nav>
+    <div class="header-right">
+      <span class="badge-role"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B5BCE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Paciente autenticado</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- Pantalla de inicio del paciente -->
+    <div class="screen active" id="homeScreen">
+      <div class="card hero">
+        <span class="badge-patient">Sesión de paciente</span>
+        <h1>Cuestionario emocional</h1>
+        <p>Responde 5 preguntas sobre tu bienestar. Tus respuestas se <b>guardan en tu historial</b>.</p>
+      </div>
+
+      <div class="card">
+        <div class="panel-head">
+          <h2>¿Cómo te has sentido últimamente?</h2>
+          <p class="sub">Escala: Nunca / A veces / A menudo / Casi siempre. Una pregunta a la vez.</p>
+        </div>
+        <button class="btn-big" id="startBtn">Responder cuestionario</button>
+        <div class="hist" id="histBox">
+          <h3><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg> Mi historial reciente</h3>
+          <ul id="histList">
+            <li><span>Cuestionario 12/09 — 5 respuestas</span><span class="date">guardado ✓</span></li>
+            <li><span>Cuestionario 02/09 — 5 respuestas</span><span class="date">guardado ✓</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pantalla de cuestionario en curso -->
+    <div class="screen" id="quizScreen">
+      <div class="card">
+        <div class="panel-head">
+          <span class="badge-patient">Cuestionario en curso</span>
+          <h2 id="quizTitle">Pregunta 1 de 5</h2>
+        </div>
+        <div class="progress"><div id="bar"></div></div>
+        <p class="q-count" id="qCount">Pregunta 1 de 5</p>
+        <p class="q-text" id="qText"></p>
+        <div class="extra-wrap" id="extraWrap"></div>
+        <div class="opts" id="opts"></div>
+        <div class="err-msg" id="errMsg">Debes seleccionar una respuesta para continuar.</div>
+        <div class="quiz-actions">
+          <button class="btn-modal close" id="cancelBtn">Cancelar</button>
+          <button class="btn-modal ok" id="nextBtn">Siguiente</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pantalla de resultado -->
+    <div class="screen" id="resultScreen">
+      <div class="card text-center">
+        <div class="result-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+        </div>
+        <h2 class="result-title">Resultado del cuestionario</h2>
+        <p class="sub">Tus respuestas fueron guardadas en tu historial.</p>
+        <div class="result-list" id="resultList"></div>
+        <div class="save-note"><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg> Cuestionario <b>guardado en tu historial</b> como paciente autenticado (a diferencia del modo invitado).</div>
+        <button class="btn-big" id="continueBtn">Continuar</button>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-in">
+      <a href="inicio.html">Inicio</a>
+      <a href="inicio.html#nosotros">Nosotros</a>
+      <a href="inicio.html#ayuda">Ayuda</a>
+      <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog"><span class="aviso-ico"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5A45C9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span> Aviso: no diagnóstico</a>
+    </div>
+  </footer>
+
+  <!-- Aviso: no es un diagnóstico -->
+  <div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true" aria-labelledby="avisoTitle">
+    <div class="modal">
+      <div class="modal-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+      </div>
+      <h3 id="avisoTitle">Aviso: no es un diagnóstico</h3>
+      <div class="aviso-txt">
+        <b>Mindzyx</b> es una herramienta de <b>monitoreo y apoyo del bienestar emocional</b>.
+        Este cuestionario <span class="highlight">no realiza diagnósticos clínicos</span> y <span class="highlight">no sustituye la atención profesional</span>.
+        <br><br>
+        Si presentas <b>riesgo alto o urgencia</b>, busca ayuda profesional o usa las <b>líneas de ayuda</b> de tu país.
+      </div>
+      <div class="modal-actions">
+        <button class="btn-modal close" id="avisoCerrar">Cerrar</button>
+        <button class="btn-modal ok" id="avisoOk">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirmar salida del cuestionario -->
+  <div class="modal-overlay" id="exitModal" role="alertdialog" aria-modal="true">
+    <div class="modal">
+      <div class="modal-icon err">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+      </div>
+      <h3>Salir del cuestionario</h3>
+      <p class="sub">¿Deseas salir del cuestionario? Se perderán tus respuestas no guardadas.</p>
+      <div class="modal-actions">
+        <button class="btn-modal danger" id="exitYes">Sí, salir</button>
+        <button class="btn-modal close" id="exitNo">No, continuar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+</body>
+
+</html>
