@@ -63,12 +63,3 @@ body { font-family: 'Inter', Arial, sans-serif; background: #FFF; color: var(--t
 .btn-modal.ok { background: var(--cyan); color: white; }
 .btn-modal.close { border: 1px solid #DFDAEE; background: white; color: var(--text); }
 @media(max-width:560px) { .header { padding: 0 14px; } .nav { font-size: 12px; gap: 12px; } }
-
-.modal-wide { width: min(560px,100%); }
-.modal-x { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 50%; border: 1px solid #DFDAEE; background: #fff; font-size: 14px; font-weight: 700; color: var(--muted); cursor: pointer; }
-.modal-x:hover { border-color: var(--cyan); color: var(--text); }
-.modal { position: relative; }
-.lineas-filtros { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
-.lineas-filtros input, .lineas-filtros select { height: 38px; border: 1px solid #DFDAEE; border-radius: 12px; padding: 0 12px; font-family: inherit; font-size: 12px; background: #fff; color: var(--text); }
-.linea-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
-.linea-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: #F3F1FA; color: #5A5D72; }

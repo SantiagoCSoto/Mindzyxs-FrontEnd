@@ -222,7 +222,7 @@ document.getElementById('openCuestionario').addEventListener('click', async () =
 
 document.querySelectorAll('.mini-opts .tile[data-out]').forEach((t) => {
   t.addEventListener('click', () => {
-    showToast('Consulte las Líneas de ayuda desde el Panel de invitado');
+    showToast('Líneas de ayuda — fuera del alcance de esta pantalla');
   });
 });
 

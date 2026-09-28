@@ -85,23 +85,10 @@
   </div>
 
   <div class="modal-overlay" id="lineasModal" role="dialog" aria-modal="true">
-    <div class="modal modal-wide">
-      <button class="modal-x" id="lineasX" aria-label="Cerrar">✕</button>
+    <div class="modal">
       <div class="modal-icon info">🆘</div>
       <h3>Líneas de ayuda</h3>
       <p class="sub">Líneas de emergencia y acompañamiento emocional.</p>
-      <div class="lineas-filtros">
-        <input type="text" id="lineasQ" maxlength="60" placeholder="Ciudad, departamento o nombre…" autocomplete="off" />
-        <select id="lineasTipo" aria-label="Tipo de atención">
-          <option value="">Todas</option>
-          <option value="apoyo_emocional">Apoyo emocional</option>
-          <option value="intervencion_crisis">Intervención en crisis</option>
-          <option value="emergencia">Emergencia</option>
-          <option value="violencia_genero">Violencia de género</option>
-          <option value="infancia_adolescencia">Infancia y adolescencia</option>
-          <option value="orientacion_institucional">Orientación institucional</option>
-        </select>
-      </div>
       <div id="lineasList" style="display:flex;flex-direction:column;gap:10px;margin-top:14px;text-align:left"></div>
       <div class="modal-actions">
         <button class="btn-modal close" id="lineasClose">Cerrar</button>

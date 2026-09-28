@@ -154,27 +154,6 @@ body {
   transform: translateY(-1px);
 }
 
-.btn-perfil-header {
-  border: 1px solid #DFDAEE;
-  background: white;
-  color: var(--text);
-  padding: 7px 14px;
-  border-radius: 20px;
-  font-size: 12.5px;
-  font-weight: 600;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  transition: all 0.2s ease;
-}
-
-.btn-perfil-header:hover {
-  background: #F8FAFC;
-  border-color: #B8AEE0;
-  transform: translateY(-1px);
-}
-
 .btn-login-header {
   background: linear-gradient(135deg, #6ECFD4, #5ABCC2);
   color: white;
@@ -787,8 +766,3 @@ body {
 .btn-registro-header { display: inline-flex; align-items: center; padding: 9px 18px; border-radius: 20px; font-weight: 700; font-size: 13px; text-decoration: none; background: linear-gradient(180deg,#6ECFD4,#5ABCC2); color: #fff; box-shadow: 0 4px 12px rgba(94,188,196,.35); }
 
 a.btn-tile { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; line-height: 38px; }
-
-.modal { position: relative; }
-.modal-wide { width: min(560px,100%); }
-.modal-x { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 50%; border: 1px solid #DFDAEE; background: #fff; font-size: 14px; font-weight: 700; color: #8E91A3; cursor: pointer; }
-.modal-x:hover { border-color: #6ECFD4; color: #2E2E33; }
