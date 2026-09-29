@@ -60,7 +60,8 @@
         <p>Si las rechazas, el sitio sigue funcionando: el invitado puede repetir cuestionarios y los borradores no se guardan entre visitas.</p>
 
         <h2>Cambiar tu decisión</h2>
-        <p>Puedes aceptar, rechazar o configurar las funcionales en cualquier momento desde el enlace <b>Cookies</b> del pie de página. También puedes borrarlas desde los ajustes de tu navegador.</p>
+        <p>Puedes aceptar, rechazar o configurar las funcionales en cualquier momento desde el enlace <b>Cookies</b> del pie de página o con este botón. También puedes borrarlas desde los ajustes de tu navegador.</p>
+        <p><button type="button" class="btn-modal ok" id="btnPreferencias" style="background:var(--color-primario-fuerte,#0E7490);color:#fff;border:none;border-radius:18px;padding:10px 22px;min-height:44px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;">Cambiar preferencias</button></p>
 
         <p style="font-size:11.5px;color:#64748B;">Este texto es informativo y no constituye asesoría jurídica. El tratamiento de datos personales se rige además por la legislación aplicable de [PAÍS]; cualquier duda debe revisarla un profesional.</p>
       </div>
@@ -77,6 +78,11 @@
   </footer>
 
   <script src="../js/cookies-banner.js"></script>
+  <script>
+    document.getElementById('btnPreferencias').addEventListener('click', function () {
+      if (typeof window.reabrirCookies === 'function') window.reabrirCookies();
+    });
+  </script>
 </body>
 
 </html>
