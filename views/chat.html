@@ -40,6 +40,7 @@
   </header>
 
   <main class="wrap wrap-chat">
+    <a href="panel_paciente.html" id="backPanelChat" class="btn-volver-landing" style="background:#FFFFFF;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;margin-bottom:14px;align-self:flex-start;">&larr; Volver al panel</a>
     <div class="card hero">
       <h1><svg class="icon-inline hero-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> Chat psicólogo-paciente</h1>
       <p>Conversaciones ordenadas por fecha y hora, con remitente y contenido. <b>Solo ves tus conversaciones aceptadas.</b></p>
@@ -141,6 +142,13 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <script type="module" src="../js/controllers/chatController.js"></script>
+  <script type="module">
+    import { authService } from '../js/services/authService.js';
+    const back = document.getElementById('backPanelChat');
+    const s = authService.getSesion();
+    const rol = String(s?.rol || s?.tipo_usuario || '').toLowerCase();
+    if (back && !(s && rol.includes('paciente'))) back.href = 'inicio.html';
+  </script>
 </body>
 
 </html>

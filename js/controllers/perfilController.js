@@ -55,7 +55,6 @@ const btnVerify = document.getElementById('btnVerify');
 const btnResend = document.getElementById('btnResend');
 
 // Header, aviso modal (PB-04) y toast
-const roleBadge = document.getElementById('roleBadge');
 const btnLogout = document.getElementById('btn-logout');
 const toast = document.getElementById('toast');
 const avisoModal = document.getElementById('avisoModal');
@@ -201,10 +200,6 @@ function renderizarVista() {
   }
   if (vGenero) vGenero.textContent = nombreGenero || '-';
   if (vCorreo) vCorreo.textContent = perfilActual.correo || '-';
-
-  if (roleBadge) {
-    roleBadge.textContent = `👤 ${perfilActual.rol || 'Paciente'}`;
-  }
 }
 
 /**

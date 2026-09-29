@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="../assets/Logo1.png" />
   <title>Historial emocional — Mindzyxs</title>
   <link rel="stylesheet" href="../css/base.css" />
   <link rel="stylesheet" href="../css/historial.css" />
@@ -28,29 +29,23 @@
     <nav class="main-nav" aria-label="Navegación principal">
       <ul>
         <li><a href="inicio.html">Inicio</a></li>
-        <li><a href="cuestionario_paciente.html">Cuestionario</a></li>
-        <li><a href="historial.html" class="active">Historial</a></li>
-        <li><a href="perfil.html">Perfil</a></li>
+        <li><a href="inicio.html#nosotros">Nosotros</a></li>
         <li><a href="inicio.html#ayuda">Ayuda</a></li>
       </ul>
     </nav>
 
     <div class="header-right">
-      <div class="role-indicator">
-        <span class="badge-role" id="roleBadge">👤 Paciente</span>
-      </div>
       <div class="header-auth-buttons">
-        <a href="perfil.html" class="btn-perfil-header" id="btnPerfil">👤 Mi Perfil</a>
         <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
       </div>
     </div>
   </header>
 
   <main class="wrap">
+    <a href="panel_paciente.html" class="btn-volver-landing" style="background:#FFFFFF;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;margin-bottom:14px;">&larr; Volver al panel</a>
     <div class="card">
       <!-- Encabezado del Historial -->
       <div class="panel-head">
-        <span class="badge">HU1-PB13 · Paciente</span>
         <h1>Historial emocional</h1>
         <p class="sub">Consulta tus registros ordenados por fecha, del más reciente al más antiguo.</p>
       </div>
@@ -87,7 +82,7 @@
 
       <!-- Fila de Navegación de Regreso -->
       <div class="back-row">
-        <a href="inicio.html" class="btn-sm ghost" id="btnBackPanel">← Volver al inicio</a>
+        <a href="panel_paciente.html" class="btn-sm ghost" id="btnBackPanel">← Volver al panel</a>
       </div>
     </div>
   </main>
@@ -133,7 +128,7 @@
 
       <div class="modal-actions">
         <button type="button" class="btn-modal close" id="btnBackHistory">Volver al historial</button>
-        <a href="inicio.html" class="btn-modal ok" id="btnGoPanel">Volver al inicio</a>
+        <a href="panel_paciente.html" class="btn-modal ok" id="btnGoPanel">Volver al panel</a>
       </div>
     </div>
   </div>

@@ -20,7 +20,6 @@ import { recordatorioService, DIAS_MAP, DIAS_REVERSE } from '../services/recorda
 import { avisoService } from '../services/avisoService.js';
 
 // Elementos de encabezado y sesión
-const roleBadge = document.getElementById('roleBadge');
 const backBtn = document.getElementById('backBtn');
 
 // Elementos de tarjeta de estado actual
@@ -105,11 +104,6 @@ function verificarSesionPaciente() {
       alert('Esta sección está reservada para el rol de Paciente.');
       window.location.href = 'inicio.html';
       return false;
-    }
-
-    if (roleBadge) {
-      const nombreUsuario = sesion.nombre || sesion.nombres || 'Paciente';
-      roleBadge.textContent = nombreUsuario;
     }
   }
 

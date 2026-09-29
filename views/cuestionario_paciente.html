@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mindzyx — Cuestionario emocional (Paciente)</title>
+  <link rel="icon" type="image/png" href="../assets/Logo1.png" />
+  <title>Mindzyx — Cuestionario emocional</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/cuestionario_paciente.css" />
 </head>
@@ -25,23 +26,18 @@
     <nav class="main-nav" aria-label="Navegación principal">
       <ul>
         <li><a href="inicio.html">Inicio</a></li>
-        <li><a href="cuestionario_paciente.html" class="active">Cuestionario</a></li>
-        <li><a href="historial.html">Historial</a></li>
-        <li><a href="perfil.html">Perfil</a></li>
+        <li><a href="inicio.html#nosotros">Nosotros</a></li>
         <li><a href="inicio.html#ayuda">Ayuda</a></li>
       </ul>
     </nav>
-    <div class="header-right">
-      <span class="badge-role"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B5BCE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Paciente autenticado</span>
-    </div>
   </header>
 
   <main class="wrap">
+    <a href="panel_paciente.html" class="btn-volver-landing" style="background:#FFFFFF;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;margin-bottom:14px;">&larr; Volver al panel</a>
 
     <!-- Pantalla de inicio del paciente -->
     <div class="screen active" id="homeScreen">
       <div class="card hero">
-        <span class="badge-patient">Sesión de paciente</span>
         <h1>Cuestionario emocional</h1>
         <p>Responde 5 preguntas sobre tu bienestar. Tus respuestas se <b>guardan en tu historial</b>.</p>
       </div>
@@ -91,7 +87,7 @@
         <h2 class="result-title">Resultado del cuestionario</h2>
         <p class="sub">Tus respuestas fueron guardadas en tu historial.</p>
         <div class="result-list" id="resultList"></div>
-        <div class="save-note"><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg> Cuestionario <b>guardado en tu historial</b> como paciente autenticado (a diferencia del modo invitado).</div>
+        <div class="save-note"><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg> Cuestionario <b>guardado en tu historial</b>.</div>
         <button class="btn-big" id="continueBtn">Continuar</button>
       </div>
     </div>
