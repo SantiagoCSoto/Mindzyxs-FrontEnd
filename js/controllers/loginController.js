@@ -35,8 +35,7 @@ if (btnModoInvitado) {
 }
 
 // Precargar correo si proviene de registro o recuperación
-const urlParams = new URLSearchParams(window.location.search);
-const correoInicial = urlParams.get('correo') || sessionStorage.getItem('correoRegistro');
+const correoInicial = sessionStorage.getItem('correoRegistro');
 if (correoInicial && inputCorreo && !inputCorreo.value) {
   inputCorreo.value = correoInicial;
 }
