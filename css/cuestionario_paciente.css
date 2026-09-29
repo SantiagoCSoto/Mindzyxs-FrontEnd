@@ -853,3 +853,22 @@ button {
 .sk-title { height: 22px; width: 60%; margin: 8px 0; }
 .sk-card { min-height: 76px; margin: 8px 0; }
 .sk-circle { width: 44px; height: 44px; border-radius: 50%; }
+
+/* Botón Cerrar sesión (header unificado) */
+.btn-logout {
+  background-color: #E85D7A;
+  color: white;
+  border: none;
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.btn-logout:hover {
+  background-color: #D63A54;
+  transform: translateY(-1px);
+}
