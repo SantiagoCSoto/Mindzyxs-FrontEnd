@@ -142,7 +142,8 @@ async function cargarAsignados() {
     const respondible = !/complet/i.test(est);
     const limite = a.fechaLimite ? ' · Límite ' + formatoFecha(a.fechaLimite) : '';
     li.innerHTML =
-      '<span>' + escapar(a.titulo) + ' <span class="date">' + escapar(est) + limite + '</span></span>' +
+      '<span class="asig-titulo">' + escapar(a.titulo) + '</span>' +
+      '<span class="est ' + (respondible ? 'est-pend' : 'est-ok') + '">' + escapar(est) + limite + '</span>' +
       (respondible
         ? '<button type="button" class="btn-sm" data-asignado="' + a.idAsignacion + '">Responder</button>'
         : '<span class="date">✓ completado</span>');

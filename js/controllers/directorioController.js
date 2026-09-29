@@ -44,15 +44,16 @@ async function cargar() {
   }
   res.data.forEach((p) => {
     const card = document.createElement('article');
-    card.className = 'tile';
-    const esp = (p.especialidades && p.especialidades.length)
-      ? p.especialidades.map(escapar).join(', ')
-      : 'Sin especialidad registrada';
+    card.className = 'tile tile-dir';
+    const tieneEsp = p.especialidades && p.especialidades.length;
+    const espHtml = tieneEsp
+      ? '<div class="esp-chips">' + p.especialidades.map((e) => '<span>' + escapar(e) + '</span>').join('') + '</div>'
+      : '<p class="esp-none">Sin especialidad registrada</p>';
     card.innerHTML =
       '<div class="tile-icon" aria-hidden="true">🧑‍⚕️</div>' +
       '<h3>' + escapar(p.nombre) + '</h3>' +
-      '<p>' + esp + '</p>' +
-      '<p class="sub">' + p.pacientesAsignados + ' paciente(s) asignado(s)</p>';
+      espHtml +
+      '<p class="dir-count">' + p.pacientesAsignados + ' paciente(s) asignado(s)</p>';
     dirGrid.appendChild(card);
   });
 }

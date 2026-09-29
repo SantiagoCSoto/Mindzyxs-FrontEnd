@@ -762,4 +762,56 @@ button {
     align-items: flex-start;
     gap: 4px;
   }
+
+  #asigList li {
+    flex-wrap: wrap;
+  }
+}
+
+/* Mis cuestionarios asignados (PB-22): filas con título, estado y botón */
+#asigList li {
+  gap: 10px;
+}
+
+#asigList .asig-titulo {
+  flex: 1 1 100%;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text);
+}
+
+#asigList .est {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+#asigList .est-pend {
+  background: #FFF7E6;
+  color: #B7791F;
+}
+
+#asigList .est-ok {
+  background: #E6F7F0;
+  color: #1F7A4D;
+}
+
+#asigList .btn-sm {
+  flex-shrink: 0;
+  background: linear-gradient(180deg, #6ECFD4, #5ABCC2);
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: 7px 18px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 4px 12px rgba(94, 188, 196, .35);
+}
+
+#asigList .btn-sm:hover {
+  filter: brightness(.96);
 }
