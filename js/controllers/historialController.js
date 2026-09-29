@@ -40,7 +40,6 @@ const btnBackHistory = document.getElementById('btnBackHistory');
 const btnGoPanel = document.getElementById('btnGoPanel');
 
 // Header, aviso modal (PB-04) y toast
-const roleBadge = document.getElementById('roleBadge');
 const btnLogout = document.getElementById('btn-logout');
 const toast = document.getElementById('toast');
 const avisoModal = document.getElementById('avisoModal');
@@ -120,7 +119,7 @@ function renderizarLista() {
         <p class="record-sum">${r.resumen}</p>
         <div class="record-btns">
           <button type="button" class="btn-sm" data-action="detail" data-id="${r.id}">Ver detalle</button>
-          <a href="inicio.html" class="btn-sm ghost" data-action="back">Volver</a>
+          <a href="panel_paciente.html" class="btn-sm ghost" data-action="back">Volver</a>
         </div>
       </div>
     `;
@@ -362,12 +361,6 @@ function registrarEventos() {
  * Inicialización de la pantalla
  */
 async function inicializar() {
-  // Configurar rol en el encabezado
-  const usuario = authService.getSesion();
-  if (roleBadge) {
-    roleBadge.textContent = `👤 ${usuario?.rol || 'Paciente'}`;
-  }
-
   registrarEventos();
   await cargarHistorial();
 

@@ -20,7 +20,6 @@ import { progresoService } from '../services/progresoService.js';
 import { avisoService } from '../services/avisoService.js';
 
 // Elementos de encabezado y sesión
-const roleBadge = document.getElementById('roleBadge');
 const btnLogout = document.getElementById('btn-logout');
 
 // Elementos de controles y filtros
@@ -99,11 +98,6 @@ function verificarAccesoPsicologo() {
       alert('Esta sección está reservada exclusivamente para profesionales con rol de Psicólogo.');
       window.location.href = 'inicio.html';
       return false;
-    }
-
-    if (roleBadge) {
-      const nombreUsuario = sesion.nombre || sesion.nombres || 'Psicólogo';
-      roleBadge.textContent = `👨‍⚕️ ${nombreUsuario}`;
     }
   }
 

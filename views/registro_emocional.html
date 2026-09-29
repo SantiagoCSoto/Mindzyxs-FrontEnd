@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mindzyx — Registrar estado emocional (Paciente)</title>
+  <link rel="icon" type="image/png" href="../assets/Logo1.png" />
+  <title>Mindzyx — Registrar estado emocional</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/registro_emocional.css" />
 </head>
@@ -24,22 +25,19 @@
     </div>
     <nav class="main-nav" aria-label="Navegación principal">
       <ul>
-        <li><a href="inicio.html" class="active">Inicio</a></li>
-        <li><a href="#historias">Historial</a></li>
+        <li><a href="inicio.html">Inicio</a></li>
+        <li><a href="inicio.html#nosotros">Nosotros</a></li>
         <li><a href="inicio.html#ayuda">Ayuda</a></li>
       </ul>
     </nav>
-    <div class="header-right">
-      <span class="badge-role"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B5BCE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Paciente autenticado</span>
-    </div>
   </header>
 
   <main class="wrap">
+    <a href="panel_paciente.html" class="btn-volver-landing" style="background:#FFFFFF;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;margin-bottom:14px;">&larr; Volver al panel</a>
 
     <!-- Pantalla del panel del paciente (PB-12) -->
     <div class="screen active" id="panelScreen">
       <div class="card hero">
-        <span class="badge-patient">Sesión de paciente</span>
         <h1>Mi panel</h1>
         <p>Registra cómo te sientes hoy. La escala va de <b>1 (Muy mal)</b> a <b>5 (Excelente)</b> y puedes agregar una nota opcional.</p>
         <button class="btn-main" id="goRegister">
