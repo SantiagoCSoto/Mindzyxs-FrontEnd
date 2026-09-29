@@ -326,6 +326,7 @@ function renderReqs() {
     div.innerHTML = '<div class="conv-top"><div class="avatar">' + escapar(inicialesDe(c.contraparte.nombre)) + '</div>' +
       '<div><h3>' + escapar(c.contraparte.nombre) + '</h3><p style="margin:0">Solicitud • ' + escapar(c.contraparte.rol) + '</p></div></div>' +
       '<p>Quiere iniciar un chat de apoyo contigo.</p>' +
+      '<p class="hint">Al aceptar, autorizas a tu psicólogo a ver tu progreso y asignarte cuestionarios.</p>' +
       '<div class="req-actions"><button class="btn-accept">Aceptar</button><button class="btn-reject">Rechazar</button></div>';
     div.querySelector('.btn-accept').addEventListener('click', () => responder(c.id, true));
     div.querySelector('.btn-reject').addEventListener('click', () => responder(c.id, false));
@@ -348,9 +349,10 @@ function renderReqs() {
 }
 
 async function responder(id, aceptar) {
+  if (aceptar && !confirm('Al aceptar, autorizas a tu psicólogo a ver tu progreso y asignarte cuestionarios. ¿Desea continuar?')) return;
   try {
     await responderSolicitud(id, aceptar);
-    showToast(aceptar ? 'Conversación iniciada' : 'Solicitud rechazada');
+    showToast(aceptar ? 'Conversación iniciada. Autorizaste a tu psicólogo.' : 'Solicitud rechazada');
     await recargar(false);
     if (aceptar) { setTab(false); await openConv(id); }
   } catch (error) {
