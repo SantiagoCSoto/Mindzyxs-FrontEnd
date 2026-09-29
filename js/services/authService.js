@@ -173,7 +173,8 @@ export const authService = {
 
     return {
       tiposCuenta: [],
-      generos: []
+      generos: [],
+      especialidades: []
     };
   },
 
