@@ -180,8 +180,9 @@ function renderizarVista() {
   ).toUpperCase();
 
   if (avatarIni) avatarIni.textContent = iniciales || 'U';
-  if (vNombre) vNombre.textContent = `${perfilActual.nombres} ${perfilActual.apellidos}`.trim();
-  if (vCorreoSub) vCorreoSub.textContent = `${perfilActual.correo} · ${perfilActual.rol || 'Paciente'}`;
+  const nombreCompleto = `${perfilActual.nombres || ''} ${perfilActual.apellidos || ''}`.trim();
+  if (vNombre) vNombre.textContent = nombreCompleto || 'Usuario';
+  if (vCorreoSub) vCorreoSub.textContent = perfilActual.correo || '';
 
   if (vNombres) vNombres.textContent = perfilActual.nombres || '-';
   if (vApellidos) vApellidos.textContent = perfilActual.apellidos || '-';
@@ -627,7 +628,9 @@ async function inicializar() {
   fijarLimiteFechaNacimiento();
   await cargarCatalogos();
 
-  perfilActual = perfilService.obtenerPerfilActual();
+  // Perfil real desde el backend; respaldo: datos de la sesión local.
+  perfilActual = await perfilService.obtenerPerfil();
+  if (!perfilActual) perfilActual = perfilService.obtenerPerfilActual();
   renderizarVista();
   registrarEventos();
 
