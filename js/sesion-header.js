@@ -18,5 +18,24 @@
     document.querySelectorAll('.nav-inicio').forEach(function (el) {
       el.style.display = 'none';
     });
+    // El logo lleva al panel con sesión (no a la landing pública).
+    var destino = destinoPanel();
+    if (destino) {
+      document.querySelectorAll('.logo-link[href="inicio.html"]').forEach(function (el) {
+        el.setAttribute('href', destino);
+      });
+    }
   });
+
+  function destinoPanel() {
+    try {
+      if (sessionStorage.getItem('es_invitado') === 'true') return 'panel_invitado.html';
+      var s = JSON.parse(sessionStorage.getItem('usuario') || 'null');
+      var rol = String((s && (s.rol || s.tipo_usuario)) || '').toLowerCase();
+      if (rol.includes('paciente')) return 'panel_paciente.html';
+    } catch (e) {
+      return null;
+    }
+    return null;
+  }
 })();
