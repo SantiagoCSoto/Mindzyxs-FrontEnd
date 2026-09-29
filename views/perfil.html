@@ -45,8 +45,8 @@
     <a href="panel_paciente.html" class="btn-volver-landing" style="background:#FFFFFF;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;margin-bottom:14px;">&larr; Volver al panel</a>
     <!-- Héroe informativo -->
     <section class="card hero">
-      <h1>Editar perfil</h1>
-      <p>Visualiza y actualiza tus datos personales. Si cambias tu correo, deberás verificarlo con un código.</p>
+      <h1>Mi perfil</h1>
+      <p>Visualiza tus datos personales. Solo puedes cambiar tu correo electrónico, verificándolo con un código.</p>
     </section>
 
     <!-- Pantalla 1: Modo Vista -->
@@ -84,7 +84,7 @@
         </div>
 
         <div class="actions">
-          <button type="button" class="btn-edit" id="btnEditar">✏️ Editar</button>
+          <button type="button" class="btn-edit" id="btnEditar">✉️ Cambiar correo</button>
         </div>
       </div>
     </section>
@@ -95,39 +95,13 @@
         <div class="profile-top">
           <div class="avatar" aria-hidden="true">✏️</div>
           <div>
-            <h2>Editar perfil</h2>
-            <p class="sub">Modifica tus datos y guarda los cambios.</p>
+            <h2>Cambiar correo electrónico</h2>
+            <p class="sub">Ingresa tu nuevo correo y confírmalo con el código de verificación.</p>
           </div>
         </div>
 
         <form id="formPerfil" novalidate>
           <div class="form-grid">
-            <div class="form-group">
-              <label for="inNombres">Nombres *</label>
-              <input type="text" id="inNombres" name="nombres" placeholder="Ej. Camila" autocomplete="given-name" required />
-              <span class="err-msg" id="eNombres">El nombre es obligatorio.</span>
-            </div>
-
-            <div class="form-group">
-              <label for="inApellidos">Apellidos *</label>
-              <input type="text" id="inApellidos" name="apellidos" placeholder="Ej. Rojas" autocomplete="family-name" required />
-              <span class="err-msg" id="eApellidos">El apellido es obligatorio.</span>
-            </div>
-
-            <div class="form-group">
-              <label for="inFechaNacimiento">Fecha de nacimiento *</label>
-              <input type="date" id="inFechaNacimiento" name="fechaNacimiento" required />
-              <span class="err-msg" id="eFechaNacimiento">Ingresa una fecha válida (mínimo 14 años).</span>
-            </div>
-
-            <div class="form-group">
-              <label for="inGenero">Género *</label>
-              <select id="inGenero" name="idGenero" required>
-                <option value="" disabled selected>Seleccionar...</option>
-              </select>
-              <span class="err-msg" id="eGenero">Selecciona una opción.</span>
-            </div>
-
             <div class="form-group full">
               <label for="inCorreo">Correo electrónico *</label>
               <input type="email" id="inCorreo" name="correo" placeholder="tucorreo@test.com" autocomplete="email" required />
@@ -137,7 +111,7 @@
 
           <div class="form-actions">
             <button type="button" class="btn-cancel" id="btnCancelar">Cancelar</button>
-            <button type="submit" class="btn-save" id="btnGuardar">Guardar cambios</button>
+            <button type="submit" class="btn-save" id="btnGuardar">Enviar código</button>
           </div>
         </form>
       </div>
