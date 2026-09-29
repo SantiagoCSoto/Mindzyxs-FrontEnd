@@ -24,7 +24,6 @@ const countLabel = document.getElementById('countLabel');
 const recordList = document.getElementById('recordList');
 const emptyState = document.getElementById('emptyState');
 const btnRegister = document.getElementById('btnRegister');
-const btnBackPanel = document.getElementById('btnBackPanel');
 
 // Elementos del modal de detalle
 const detailModal = document.getElementById('detailModal');
