@@ -2,10 +2,8 @@
  * Controlador de la Vista de Perfil de Paciente (views/perfil.html)
  * Historia de Usuario: HU1-PB10 (Editar perfil de paciente)
  * Gestiona:
- *  - Carga y visualización de datos personales (modo vista)
- *  - Formulario de edición con validaciones (nombre, apellido, fecha de nacimiento >= 14 años, género, correo)
- *  - Flujo de guardado sin cambio de correo (PUT directo a /api/account/perfil)
- *  - Flujo de guardado con cambio de correo (solicitud y confirmación por código de 6 dígitos)
+ *  - Carga y visualización de datos personales desde GET /api/account/perfil (modo vista, solo lectura)
+ *  - Cambio de correo con código de 6 dígitos (solicitud y confirmación)
  *  - Modal aclaratorio (PB-04) y cierre de sesión
  */
 
@@ -28,18 +26,10 @@ const vGenero = document.getElementById('vGenero');
 const vCorreo = document.getElementById('vCorreo');
 const btnEditar = document.getElementById('btnEditar');
 
-// Elementos del formulario de edición
+// Elementos del formulario de cambio de correo
 const formPerfil = document.getElementById('formPerfil');
-const inNombres = document.getElementById('inNombres');
-const inApellidos = document.getElementById('inApellidos');
-const inFechaNacimiento = document.getElementById('inFechaNacimiento');
-const inGenero = document.getElementById('inGenero');
 const inCorreo = document.getElementById('inCorreo');
 
-const eNombres = document.getElementById('eNombres');
-const eApellidos = document.getElementById('eApellidos');
-const eFechaNacimiento = document.getElementById('eFechaNacimiento');
-const eGenero = document.getElementById('eGenero');
 const eCorreo = document.getElementById('eCorreo');
 
 const btnCancelar = document.getElementById('btnCancelar');
@@ -110,25 +100,9 @@ function setFieldError(input, errorElement, visible, message = '') {
  * Limpia todos los mensajes de error del formulario
  */
 function limpiarErrores() {
-  setFieldError(inNombres, eNombres, false);
-  setFieldError(inApellidos, eApellidos, false);
-  setFieldError(inFechaNacimiento, eFechaNacimiento, false);
-  setFieldError(inGenero, eGenero, false);
   setFieldError(inCorreo, eCorreo, false);
   if (eCode) eCode.classList.remove('show');
   if (codeInput) codeInput.classList.remove('invalid');
-}
-
-/**
- * Fija la fecha máxima permitida en el selector (al menos 14 años de edad)
- */
-function fijarLimiteFechaNacimiento() {
-  if (!inFechaNacimiento) return;
-  const hoy = new Date();
-  const anioMinimo = hoy.getFullYear() - 14;
-  const mes = String(hoy.getMonth() + 1).padStart(2, '0');
-  const dia = String(hoy.getDate()).padStart(2, '0');
-  inFechaNacimiento.max = `${anioMinimo}-${mes}-${dia}`;
 }
 
 /**
@@ -154,17 +128,6 @@ async function cargarCatalogos() {
     }
   } catch (error) {
     generosDisponibles = generosDefault;
-  }
-
-  // Poblar el elemento select
-  if (inGenero) {
-    inGenero.innerHTML = '<option value="" disabled selected>Selecciona una opción</option>';
-    generosDisponibles.forEach(g => {
-      const opt = document.createElement('option');
-      opt.value = g.id;
-      opt.textContent = g.nombre;
-      inGenero.appendChild(opt);
-    });
   }
 }
 
@@ -204,26 +167,10 @@ function renderizarVista() {
 }
 
 /**
- * Llena el formulario de edición con los valores actuales
+ * Llena el formulario de cambio de correo con el valor actual
  */
 function llenarFormulario() {
   if (!perfilActual) return;
-
-  if (inNombres) inNombres.value = perfilActual.nombres || '';
-  if (inApellidos) inApellidos.value = perfilActual.apellidos || '';
-
-  if (inFechaNacimiento && perfilActual.fechaNacimiento) {
-    inFechaNacimiento.value = perfilActual.fechaNacimiento.split('T')[0];
-  }
-
-  if (inGenero) {
-    if (perfilActual.idGenero) {
-      inGenero.value = perfilActual.idGenero;
-    } else if (perfilActual.genero) {
-      const g = generosDisponibles.find(item => item.nombre.toLowerCase() === perfilActual.genero.toLowerCase());
-      if (g) inGenero.value = g.id;
-    }
-  }
 
   if (inCorreo) inCorreo.value = perfilActual.correo || '';
 
@@ -231,61 +178,13 @@ function llenarFormulario() {
 }
 
 /**
- * Valida los campos del formulario de perfil
+ * Valida el campo de correo electrónico
  * @returns {boolean}
  */
 function validarFormulario() {
   let esValido = true;
 
-  const vNom = inNombres.value.trim();
-  const vApe = inApellidos.value.trim();
-  const vFec = inFechaNacimiento.value;
-  const vGen = inGenero.value;
   const vCor = inCorreo.value.trim();
-
-  // Validación Nombres
-  if (!vNom) {
-    setFieldError(inNombres, eNombres, true, 'El nombre es obligatorio.');
-    esValido = false;
-  } else {
-    setFieldError(inNombres, eNombres, false);
-  }
-
-  // Validación Apellidos
-  if (!vApe) {
-    setFieldError(inApellidos, eApellidos, true, 'El apellido es obligatorio.');
-    esValido = false;
-  } else {
-    setFieldError(inApellidos, eApellidos, false);
-  }
-
-  // Validación Fecha de Nacimiento
-  if (!vFec) {
-    setFieldError(inFechaNacimiento, eFechaNacimiento, true, 'La fecha de nacimiento es obligatoria.');
-    esValido = false;
-  } else {
-    const fDate = new Date(vFec + 'T00:00:00');
-    const hoy = new Date();
-    const edad = perfilService.calcularEdad(vFec);
-
-    if (isNaN(fDate.getTime()) || fDate > hoy) {
-      setFieldError(inFechaNacimiento, eFechaNacimiento, true, 'Ingresa una fecha válida (no puede ser futura).');
-      esValido = false;
-    } else if (edad === null || edad < 14) {
-      setFieldError(inFechaNacimiento, eFechaNacimiento, true, 'Debes tener al menos 14 años.');
-      esValido = false;
-    } else {
-      setFieldError(inFechaNacimiento, eFechaNacimiento, false);
-    }
-  }
-
-  // Validación Género
-  if (!vGen) {
-    setFieldError(inGenero, eGenero, true, 'Selecciona una opción.');
-    esValido = false;
-  } else {
-    setFieldError(inGenero, eGenero, false);
-  }
 
   // Validación Correo Electrónico
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -303,90 +202,51 @@ function validarFormulario() {
 }
 
 /**
- * Maneja el envío del formulario de guardado
+ * Maneja el envío del formulario de cambio de correo
  */
 async function manejarGuardar(e) {
   e.preventDefault();
 
   if (!validarFormulario()) {
-    perfilService.logAuditoria('VALIDACIÓN fallida al intentar guardar cambios');
+    perfilService.logAuditoria('VALIDACIÓN fallida al intentar cambiar el correo');
     return;
   }
 
-  const vNom = inNombres.value.trim();
-  const vApe = inApellidos.value.trim();
-  const vFec = inFechaNacimiento.value;
-  const idGen = Number(inGenero.value);
   const vCor = inCorreo.value.trim().toLowerCase();
-
-  const generoObj = generosDisponibles.find(g => g.id === idGen);
-  const nombreGen = generoObj ? generoObj.nombre : (perfilActual.genero || '');
-
   const correoActual = (perfilActual.correo || '').trim().toLowerCase();
-  const correoCambio = vCor !== correoActual;
 
-  const datosAActualizar = {
-    nombres: vNom,
-    apellidos: vApe,
-    fechaNacimiento: vFec,
-    idGenero: idGen,
-    genero: nombreGen,
-    correo: correoCambio ? correoActual : vCor
-  };
+  if (vCor === correoActual) {
+    setFieldError(inCorreo, eCorreo, true, 'Ingresa un correo diferente al actual.');
+    showToast('El correo es el mismo, no hay cambios');
+    return;
+  }
+
+  datosPendientes = { correo: vCor };
 
   btnGuardar.disabled = true;
 
   try {
-    if (!correoCambio) {
-      // Caso 1: Sin cambio de correo -> actualizar directamente
-      const res = await perfilService.actualizarPerfil({
-        nombres: vNom,
-        apellidos: vApe,
-        fechaNacimiento: vFec,
-        idGenero: idGen
-      });
+    const resSolicitud = await perfilService.solicitarCambioCorreo(vCor);
 
-      if (res.exito) {
-        perfilActual = perfilService.guardarPerfilEnSesion(datosAActualizar);
-        renderizarVista();
-        cambiarModo('view');
-        showToast('Perfil actualizado correctamente');
-      } else {
-        showToast(res.mensaje || 'Error al actualizar el perfil');
+    if (resSolicitud.exito) {
+      if (codeEmail) codeEmail.textContent = vCor;
+      if (codeInput) codeInput.value = '';
+      if (eCode) eCode.classList.remove('show');
+      if (codeModal) {
+        codeModal.classList.add('open');
+        codeModal.setAttribute('aria-hidden', 'false');
       }
+      showToast('Código de verificación enviado');
+      if (codeInput) codeInput.focus();
+    } else if (resSolicitud.esDuplicado) {
+      setFieldError(inCorreo, eCorreo, true, 'El correo ya se encuentra registrado');
+      showToast('El correo ya se encuentra registrado');
     } else {
-      // Caso 2: Con cambio de correo -> solicitar código y abrir modal
-      datosPendientes = {
-        nombres: vNom,
-        apellidos: vApe,
-        fechaNacimiento: vFec,
-        idGenero: idGen,
-        genero: nombreGen,
-        correo: vCor
-      };
-
-      const resSolicitud = await perfilService.solicitarCambioCorreo(vCor);
-
-      if (resSolicitud.exito) {
-        if (codeEmail) codeEmail.textContent = vCor;
-        if (codeInput) codeInput.value = '';
-        if (eCode) eCode.classList.remove('show');
-        if (codeModal) {
-          codeModal.classList.add('open');
-          codeModal.setAttribute('aria-hidden', 'false');
-        }
-        showToast('Código de verificación enviado');
-        if (codeInput) codeInput.focus();
-      } else if (resSolicitud.esDuplicado) {
-        setFieldError(inCorreo, eCorreo, true, 'El correo ya se encuentra registrado');
-        showToast('El correo ya se encuentra registrado');
-      } else {
-        setFieldError(inCorreo, eCorreo, true, resSolicitud.mensaje);
-        showToast(resSolicitud.mensaje);
-      }
+      setFieldError(inCorreo, eCorreo, true, resSolicitud.mensaje);
+      showToast(resSolicitud.mensaje);
     }
   } catch (error) {
-    showToast('Ocurrió un error inesperado al guardar los cambios.');
+    showToast('Ocurrió un error inesperado al solicitar el cambio.');
   } finally {
     btnGuardar.disabled = false;
   }
@@ -415,15 +275,7 @@ async function manejarVerificarCodigo() {
     const resConfirmar = await perfilService.confirmarCambioCorreo(datosPendientes.correo, codigo);
 
     if (resConfirmar.exito) {
-      // Una vez confirmado el correo, actualizamos el resto de campos en el backend
-      await perfilService.actualizarPerfil({
-        nombres: datosPendientes.nombres,
-        apellidos: datosPendientes.apellidos,
-        fechaNacimiento: datosPendientes.fechaNacimiento,
-        idGenero: datosPendientes.idGenero
-      });
-
-      perfilActual = perfilService.guardarPerfilEnSesion(datosPendientes);
+      perfilActual = perfilService.guardarPerfilEnSesion({ correo: datosPendientes.correo });
       renderizarVista();
 
       if (codeModal) {
@@ -433,7 +285,7 @@ async function manejarVerificarCodigo() {
 
       datosPendientes = null;
       cambiarModo('view');
-      showToast('Perfil actualizado correctamente');
+      showToast('Correo actualizado correctamente');
     } else {
       if (eCode) {
         eCode.textContent = resConfirmar.mensaje || 'Código incorrecto. Verifica e intenta nuevamente';
@@ -493,7 +345,7 @@ function manejarCancelarEdicion() {
  * Limpia errores en tiempo real mientras el usuario corrige los inputs
  */
 function registrarEventosLimpiezaErrores() {
-  [inNombres, inApellidos, inFechaNacimiento, inGenero, inCorreo].forEach(input => {
+  [inCorreo].forEach(input => {
     if (!input) return;
     input.addEventListener('input', () => {
       input.classList.remove('invalid');
@@ -625,7 +477,6 @@ function registrarEventos() {
  * Arranque de la vista
  */
 async function inicializar() {
-  fijarLimiteFechaNacimiento();
   await cargarCatalogos();
 
   // Perfil real desde el backend; respaldo: datos de la sesión local.
