@@ -42,6 +42,7 @@ async function cargar() {
     }
   }
   const res = await obtenerDirectorio();
+  if (dirGrid) dirGrid.innerHTML = '';
   if (!res.ok) {
     showToast(res.error);
     if (dirEmpty) dirEmpty.style.display = 'block';

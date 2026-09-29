@@ -117,8 +117,9 @@ async function cargarUltimo() {
   const res = await obtenerUltimoRegistro();
   if (res.ok) {
     renderUltimo(res.data);
-  } else if (emptyNote) {
-    emptyNote.style.display = 'block';
+  } else {
+    if (savedText) savedText.textContent = '';
+    if (emptyNote) emptyNote.style.display = 'block';
   }
   registrarLog('Último registro emocional cargado' + (res.localOnly ? ' (local)' : ''));
 }
