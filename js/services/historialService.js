@@ -38,8 +38,13 @@ export const historialService = {
       };
     }
 
-    // Si el backend no está disponible o hubo error de red, usamos datos de respaldo locales
-    if (res.isNetworkError || !res.ok) {
+    // 401 = sesión expirada: sin datos inventados (apiClient ya redirige a login).
+    if (res.status === 401) {
+      return { exito: false, status: 401, noSesion: true, mensaje: 'Tu sesión ha expirado. Inicia sesión nuevamente', data: [] };
+    }
+
+    // Datos de prueba solo con ?demo=1 explícito.
+    if ((res.isNetworkError || !res.ok) && this.modoDemo()) {
       this.logAuditoria('FALLBACK Carga de historial local/demo por desconexión del backend');
       const itemsFallback = this.obtenerHistorialFallback(desde, hasta);
       return {
@@ -75,8 +80,8 @@ export const historialService = {
       };
     }
 
-    // Si hubo desconexión, buscar en datos de respaldo locales
-    if (res.isNetworkError || !res.ok) {
+    // Si hubo desconexión y modo demo (?demo=1), buscar en datos de prueba locales
+    if ((res.isNetworkError || !res.ok) && this.modoDemo()) {
       this.logAuditoria(`FALLBACK Detalle local para id=${id}`);
       const fallbackItem = this.obtenerDetalleFallback(id);
       if (fallbackItem) {
@@ -86,6 +91,10 @@ export const historialService = {
           fallback: true
         };
       }
+    }
+
+    if (res.status === 401) {
+      return { exito: false, status: 401, noSesion: true, mensaje: 'Tu sesión ha expirado. Inicia sesión nuevamente' };
     }
 
     return {
@@ -224,8 +233,17 @@ export const historialService = {
   },
 
   /**
-   * Emite logs de auditoría estructurados con etiqueta [HU1-PB13]
+   * Emite logs de auditoría estructurados con etiqueta [HU1-PB13].
+   * Demo explícito (?demo=1): solo entonces se muestran datos de prueba locales.
    */
+  modoDemo() {
+    try {
+      return new URLSearchParams(window.location.search).get('demo') === '1';
+    } catch {
+      return false;
+    }
+  },
+
   logAuditoria(accion, detalle = '') {
     console.log('[HU1-PB13]', new Date().toLocaleTimeString(), accion, detalle);
   },

@@ -192,9 +192,11 @@ export const authService = {
   },
 
   /**
-   * Cerrar sesión y limpiar almacenamiento local
+   * Cerrar sesión: limpia lo local de inmediato e invalida el token en el servidor (best-effort).
+   * No requiere await en quien llama: la limpieza local es sincrónica.
    */
-  logout() {
+  async logout() {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
     sessionStorage.removeItem('usuario');
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('autenticado');
@@ -202,6 +204,13 @@ export const authService = {
     localStorage.removeItem('token');
     localStorage.removeItem('autenticado');
     localStorage.removeItem('rol');
+    if (token) {
+      try {
+        await postJson('/account/logout', {}, { headers: { 'Authorization': `Bearer ${token}` } });
+      } catch {
+        // sin conexión: la sesión expira sola en el servidor
+      }
+    }
     return { exito: true };
   },
 

@@ -65,8 +65,15 @@ function showToast(mensaje) {
 }
 
 /**
+ * Escapa HTML (anti-XSS): todo dato de backend/usuario va escapado antes de innerHTML.
+ */
+function escapar(s) {
+  return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+/**
  * Retorna las clases de estilo para el icono e insignia según categoría
- * @param {'pos'|'neu'|'low'} categoria 
+ * @param {'pos'|'neu'|'low'} categoria
  */
 function obtenerClasesVisuales(categoria) {
   if (categoria === 'pos') {
@@ -112,13 +119,13 @@ function renderizarLista() {
     card.setAttribute('data-id', r.id);
 
     card.innerHTML = `
-      <div class="record-ico ${icoClass}" aria-hidden="true">${r.emoji}</div>
+      <div class="record-ico ${icoClass}" aria-hidden="true">${escapar(r.emoji)}</div>
       <div class="record-body">
-        <div class="record-date">${r.fecha} · ${r.hora}</div>
-        <span class="record-val ${valClass}">${r.valorTexto}</span>
-        <p class="record-sum">${r.resumen}</p>
+        <div class="record-date">${escapar(r.fecha)} · ${escapar(r.hora)}</div>
+        <span class="record-val ${valClass}">${escapar(r.valorTexto)}</span>
+        <p class="record-sum">${escapar(r.resumen)}</p>
         <div class="record-btns">
-          <button type="button" class="btn-sm" data-action="detail" data-id="${r.id}">Ver detalle</button>
+          <button type="button" class="btn-sm" data-action="detail" data-id="${Number(r.id) || 0}">Ver detalle</button>
         </div>
       </div>
     `;
@@ -158,7 +165,7 @@ async function abrirDetalle(id) {
   // 1. Valor / Estado
   if (detailValueText) {
     const tipoLabel = d.tipo === 'RegistroEmocional' ? 'Registro de estado de ánimo' : 'Cuestionario de bienestar';
-    detailValueText.innerHTML = `<b>${d.valorTexto}</b> &mdash; <small style="color:var(--muted);">${tipoLabel}</small>`;
+    detailValueText.innerHTML = `<b>${escapar(d.valorTexto)}</b> &mdash; <small style="color:var(--muted);">${tipoLabel}</small>`;
   }
 
   // 2. Nota personal (Cómo me sentí)
@@ -174,11 +181,11 @@ async function abrirDetalle(id) {
   if (detailQuizText) {
     if (Array.isArray(d.respuestas) && d.respuestas.length > 0) {
       const listaResp = d.respuestas
-        .map(r => `<li style="margin-bottom:6px;"><b>${r.pregunta}:</b> ${r.texto || r.valor}</li>`)
+        .map(r => `<li style="margin-bottom:6px;"><b>${escapar(r.pregunta)}:</b> ${escapar(r.texto || r.valor)}</li>`)
         .join('');
       detailQuizText.innerHTML = `<ul style="margin:4px 0 0 16px; padding:0;">${listaResp}</ul>`;
     } else if (d.tipo === 'Cuestionario') {
-      detailQuizText.innerHTML = `<b>${d.cuestionario || 'Cuestionario'}</b>${d.puntaje ? ` &middot; Puntaje: ${d.puntaje}` : ''}`;
+      detailQuizText.innerHTML = `<b>${escapar(d.cuestionario || 'Cuestionario')}</b>${d.puntaje ? ` &middot; Puntaje: ${Number(d.puntaje) || 0}` : ''}`;
     } else {
       detailQuizText.innerHTML = '<span style="color:var(--muted);">No aplica (registro directo de estado emocional).</span>';
     }
@@ -191,8 +198,8 @@ async function abrirDetalle(id) {
       detailSupportText.innerHTML = d.observaciones
         .map(o => `
           <div style="margin-bottom:6px;">
-            <p style="margin:0 0 4px; font-style:italic;">&ldquo;${o.contenido}&rdquo;</p>
-            <small style="color:var(--muted);">${o.firma} &middot; ${o.fecha}</small>
+            <p style="margin:0 0 4px; font-style:italic;">&ldquo;${escapar(o.contenido)}&rdquo;</p>
+            <small style="color:var(--muted);">${escapar(o.firma)} &middot; ${escapar(o.fecha)}</small>
           </div>
         `)
         .join('<hr style="margin:8px 0; border:0; border-top:1px dashed #EDE8F0;" />');
@@ -246,6 +253,10 @@ async function cargarHistorial(desde = null, hasta = null) {
 
   if (btnFilter) btnFilter.disabled = false;
   if (btnClear) btnClear.disabled = false;
+  if (res.noSesion) {
+    window.location.href = 'login.html';
+    return;
+  }
   if (res.exito) {
     registrosActuales = res.data || [];
     renderizarLista();
