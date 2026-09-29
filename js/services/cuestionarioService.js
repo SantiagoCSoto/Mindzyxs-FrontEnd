@@ -62,6 +62,46 @@ export async function obtenerPendientePaciente() {
 }
 
 /**
+ * Obtiene los cuestionarios asignados al paciente (PB-22).
+ * Devuelve { ok, data: [{ idAsignacion, idCuestionario, titulo, tipo,
+ * fechaAsignacion, fechaLimite, estado }] }.
+ */
+export async function obtenerAsignadosPaciente() {
+  const res = await getJson('/cuestionario/paciente/asignados');
+
+  if (res.ok && res.data) {
+    const lista = Array.isArray(res.data) ? res.data : [];
+    return {
+      ok: true,
+      data: lista.map((a) => ({
+        idAsignacion: a.idAsignacion ?? a.IdAsignacion,
+        idCuestionario: a.idCuestionario ?? a.IdCuestionario,
+        titulo: a.titulo ?? a.Titulo ?? 'Cuestionario asignado',
+        tipo: a.tipo ?? a.Tipo ?? null,
+        fechaAsignacion: a.fechaAsignacion ?? a.FechaAsignacion ?? null,
+        fechaLimite: a.fechaLimite ?? a.FechaLimite ?? null,
+        estado: a.estado ?? a.Estado ?? 'Pendiente'
+      }))
+    };
+  }
+
+  return { ok: false, status: res.status, error: res.error || 'No fue posible cargar los asignados.' };
+}
+
+/**
+ * Obtiene un cuestionario asignado completo para responderlo (PB-22).
+ */
+export async function obtenerAsignadoDetalle(idAsignacion) {
+  const res = await getJson(`/cuestionario/paciente/asignados/${idAsignacion}`);
+
+  if (res.ok && res.data) {
+    return { ok: true, data: res.data };
+  }
+
+  return { ok: false, status: res.status, error: res.error || 'No fue posible cargar el cuestionario asignado.' };
+}
+
+/**
  * Registra el inicio del cuestionario del paciente (log en dbo.auth).
  * No bloquea: si falla, solo se registra en consola.
  */

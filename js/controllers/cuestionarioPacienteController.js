@@ -15,7 +15,9 @@ import {
   registrarInicioPaciente,
   finalizarCuestionarioPaciente,
   obtenerHistorial,
-  guardarHistorialLocal
+  guardarHistorialLocal,
+  obtenerAsignadosPaciente,
+  obtenerAsignadoDetalle
 } from '../services/cuestionarioService.js';
 
 const homeScreen = document.getElementById('homeScreen');
@@ -31,6 +33,7 @@ const nextBtn = document.getElementById('nextBtn');
 const cancelBtn = document.getElementById('cancelBtn');
 const startBtn = document.getElementById('startBtn');
 const histList = document.getElementById('histList');
+const asigList = document.getElementById('asigList');
 const resultList = document.getElementById('resultList');
 const continueBtn = document.getElementById('continueBtn');
 const avisoModal = document.getElementById('avisoModal');
@@ -112,6 +115,62 @@ async function cargarInicio() {
 
   const items = (hist.ok ? hist.data : []).filter((i) => i.tipo === 'Cuestionario').slice(0, 3);
   renderHistorial(items);
+
+  await cargarAsignados();
+}
+
+// --- Asignados del psicólogo (PB-22): lista separada para consultar y responder ---
+async function cargarAsignados() {
+  if (!asigList) return;
+  asigList.innerHTML = '';
+  const res = await obtenerAsignadosPaciente();
+  if (!res.ok) {
+    const li = document.createElement('li');
+    li.innerHTML = '<span>No fue posible cargar los asignados.</span>';
+    asigList.appendChild(li);
+    return;
+  }
+  if (!res.data.length) {
+    const li = document.createElement('li');
+    li.innerHTML = '<span>No tienes cuestionarios asignados.</span>';
+    asigList.appendChild(li);
+    return;
+  }
+  res.data.forEach((a) => {
+    const li = document.createElement('li');
+    const est = String(a.estado || 'Pendiente');
+    const respondible = !/complet/i.test(est);
+    const limite = a.fechaLimite ? ' · Límite ' + formatoFecha(a.fechaLimite) : '';
+    li.innerHTML =
+      '<span>' + escapar(a.titulo) + ' <span class="date">' + escapar(est) + limite + '</span></span>' +
+      (respondible
+        ? '<button type="button" class="btn-sm" data-asignado="' + a.idAsignacion + '">Responder</button>'
+        : '<span class="date">✓ completado</span>');
+    asigList.appendChild(li);
+  });
+  asigList.querySelectorAll('[data-asignado]').forEach((btn) => {
+    btn.addEventListener('click', () => responderAsignado(Number(btn.getAttribute('data-asignado'))));
+  });
+}
+
+async function responderAsignado(idAsignacion) {
+  const res = await obtenerAsignadoDetalle(idAsignacion);
+  if (!res.ok || !res.data) {
+    showToast(res.error || 'No fue posible cargar el cuestionario asignado.');
+    return;
+  }
+  cuestionario = res.data;
+  preguntas = ordenar(cuestionario.preguntas || []);
+  if (!preguntas.length) {
+    showToast('El cuestionario asignado no tiene preguntas.');
+    return;
+  }
+  if (cuestionario.avisoObligatorio !== false && !avisoOk) {
+    pendienteInicio = true;
+    abrirAviso();
+    return;
+  }
+  iniciarCuestionario();
 }
 
 function renderHistorial(items) {
@@ -339,7 +398,6 @@ if (continueBtn) {
     registrarLog('Click "Continuar" desde Resultado — vuelve al inicio del paciente');
   });
 }
-
 if (sesion) {
   cargarInicio();
   registrarLog('Sistema listo — paciente autenticado, botón "Responder cuestionario" disponible');
