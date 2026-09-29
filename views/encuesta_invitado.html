@@ -30,7 +30,7 @@
             <span>Progreso</span>
             <span id="progress-text">0%</span>
           </div>
-          <div class="progress-bar" aria-live="polite" aria-label="Progreso del formulario">
+          <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-live="polite" aria-label="Progreso del formulario" id="progressBar">
             <div class="progress-fill" id="progress-fill"></div>
           </div>
         </div>
@@ -102,9 +102,9 @@
   </div>
 
   <!-- Modal de confirmación para salir del cuestionario (PB-07: Sí, salir / No, continuar) -->
-  <div class="modal-overlay" id="modal-salir">
+  <div class="modal-overlay" id="modal-salir" role="dialog" aria-modal="true" aria-labelledby="modal-salir-titulo">
     <div class="modal-card">
-      <h2>Salir del cuestionario</h2>
+      <h2 id="modal-salir-titulo">Salir del cuestionario</h2>
       <p>¿Deseas salir del cuestionario? Se perderán tus respuestas</p>
       <div class="modal-actions">
         <button type="button" id="btn-salir-no" class="button button-secondary">No, continuar</button>

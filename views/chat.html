@@ -73,7 +73,7 @@
             <button id="unblockBtn">Desbloquear</button>
           </div>
           <div class="composer">
-            <input id="msgInput" type="text" placeholder="Escriba un mensaje…" maxlength="1000" autocomplete="off" />
+            <input id="msgInput" type="text" placeholder="Escriba un mensaje…" maxlength="1000" autocomplete="off" aria-label="Escriba un mensaje" />
             <button class="btn-send" id="sendBtn">Enviar</button>
           </div>
         </div>
@@ -88,7 +88,7 @@
         <details>
           <summary style="cursor:pointer;font-weight:700;font-size:13px;color:var(--color-mudo,#64748B);">Filtros de búsqueda</summary>
           <div class="filters">
-          <input type="text" id="searchPaciente" maxlength="60" placeholder="Nombre o correo (opcional)" autocomplete="off" />
+          <input type="text" id="searchPaciente" maxlength="60" placeholder="Nombre o correo (opcional)" autocomplete="off" aria-label="Buscar paciente por nombre o correo" />
           <select id="filterNivel" aria-label="Nivel de riesgo">
             <option value="">Nivel: cualquiera</option>
             <option value="Bajo">Riesgo bajo</option>
@@ -139,7 +139,7 @@
     </div>
   </div>
 
-  <div class="toast" id="toast"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>

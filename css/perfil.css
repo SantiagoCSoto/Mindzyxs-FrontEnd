@@ -721,8 +721,17 @@ body {
     padding: 10px 16px;
   }
 
-  .main-nav {
-    display: none;
+  .header-nav {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .main-nav ul {
+    gap: 14px;
+  }
+
+  .main-nav a {
+    font-size: 13px;
   }
 
   .data-grid,

@@ -214,10 +214,16 @@ body::after {
 @media (max-width: 768px) {
   .header-nav {
     padding: 12px 20px;
+    flex-wrap: wrap;
+    gap: 8px;
   }
 
-  .main-nav {
-    display: none;
+  .main-nav ul {
+    gap: 14px;
+  }
+
+  .main-nav a {
+    font-size: 13px;
   }
 
   body::before {

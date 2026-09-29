@@ -131,6 +131,8 @@ function actualizarProgreso() {
   const porcentaje = qs.length ? Math.round((contestadas / qs.length) * 100) : 0;
   progressFill.style.width = `${porcentaje}%`;
   progressText.textContent = `${porcentaje}%`;
+  const progressBar = document.getElementById('progressBar');
+  if (progressBar) progressBar.setAttribute('aria-valuenow', String(porcentaje));
 }
 
 function actualizarBotones() {

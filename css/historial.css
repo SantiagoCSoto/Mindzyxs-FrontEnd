@@ -803,8 +803,17 @@ body {
     padding: 12px 20px;
   }
 
-  .main-nav {
-    display: none;
+  .header-nav {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .main-nav ul {
+    gap: 14px;
+  }
+
+  .main-nav a {
+    font-size: 13px;
   }
 }
 

@@ -76,7 +76,7 @@
         <p class="q-count" id="qCount">Pregunta 1 de 5</p>
         <p class="q-text" id="qText"></p>
         <div class="extra-wrap" id="extraWrap"></div>
-        <div class="opts" id="opts"></div>
+        <div class="opts" id="opts" role="radiogroup" aria-label="Opciones de respuesta"></div>
         <div class="err-msg" id="errMsg">Debes seleccionar una respuesta para continuar.</div>
         <div class="quiz-actions">
           <button class="btn-modal close" id="cancelBtn">Cancelar</button>
@@ -145,7 +145,7 @@
     </div>
   </div>
 
-  <div class="toast" id="toast"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script type="module" src="../js/controllers/cuestionarioPacienteController.js"></script>
 </body>
