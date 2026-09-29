@@ -264,7 +264,7 @@ form {
 .button {
   border: none;
   border-radius: 999px;
-  background: linear-gradient(135deg, #56c5c0, #3aa9a4);
+  background: var(--color-primario-fuerte, #0E7490);
   color: white;
   padding: 14px 28px;
   font-size: 14px;

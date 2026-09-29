@@ -113,7 +113,7 @@ label {
 /* Botón principal Iniciar sesión */
 .btn-login-submit {
   width: 100%;
-  background-color: #56c5c0;
+  background-color: var(--color-primario-fuerte, #0E7490);
   color: white;
   border: none;
   padding: 13px 20px;
@@ -244,7 +244,7 @@ label {
 
 .btn-modal-continuar {
   width: 100%;
-  background-color: #56c5c0;
+  background-color: var(--color-primario-fuerte, #0E7490);
   color: white;
   border: none;
   padding: 12px 20px;
@@ -299,7 +299,7 @@ label {
 .btn-modo-invitado {
   width: 100%;
   height: 44px;
-  background: linear-gradient(180deg, #6ECFD4, #5ABCC2);
+  background: var(--color-primario-fuerte, #0E7490);
   color: white;
   border: none;
   border-radius: 20px;

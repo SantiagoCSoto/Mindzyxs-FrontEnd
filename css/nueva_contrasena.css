@@ -112,7 +112,7 @@
 /* Botón principal */
 .btn-nueva-contrasena {
   width: 100%;
-  background-color: #56c5c0;
+  background-color: var(--color-primario-fuerte, #0E7490);
   color: white;
   border: none;
   padding: 13px 20px;
@@ -217,7 +217,7 @@
 
 .btn-modal-continuar {
   display: inline-block;
-  background-color: #56c5c0;
+  background-color: var(--color-primario-fuerte, #0E7490);
   color: white;
   padding: 12px 28px;
   border-radius: 25px;

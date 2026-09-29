@@ -800,7 +800,7 @@ button {
 
 #asigList .btn-sm {
   flex-shrink: 0;
-  background: linear-gradient(180deg, #6ECFD4, #5ABCC2);
+  background: var(--color-primario-fuerte, #0E7490);
   color: #fff;
   border: none;
   border-radius: 16px;

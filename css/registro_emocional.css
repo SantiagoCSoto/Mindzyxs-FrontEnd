@@ -230,7 +230,7 @@ button {
   gap: 8px;
   border-radius: 20px;
   border: none;
-  background: linear-gradient(180deg, #6ECFD4, #5ABCC2);
+  background: var(--color-primario-fuerte, #0E7490);
   color: #FFF;
   font-weight: 700;
   font-size: 15px;

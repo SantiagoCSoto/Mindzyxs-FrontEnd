@@ -178,7 +178,7 @@ select:focus {
 
 .btn-submit {
   flex: 1;
-  background-color: #56c5c0;
+  background-color: var(--color-primario-fuerte, #0E7490);
   border: none;
   color: white;
   padding: 10px 20px;

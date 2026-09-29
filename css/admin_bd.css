@@ -173,7 +173,7 @@
   height: 38px;
   border-radius: 20px;
   border: none;
-  background-color: #56c5c0;
+  background-color: var(--color-primario-fuerte, #0E7490);
   color: white;
   font-weight: 700;
   font-size: 12px;
