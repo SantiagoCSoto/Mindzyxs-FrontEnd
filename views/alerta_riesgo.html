@@ -25,16 +25,16 @@
     </div>
     <nav class="main-nav" aria-label="Navegación principal">
       <ul>
-        <li><a href="inicio.html">Inicio</a></li>
+        <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
         <li><a href="inicio.html#nosotros">Nosotros</a></li>
         <li><a href="inicio.html#ayuda">Ayuda</a></li>
-        <li><a href="privacidad.html">Privacidad</a></li>
-        <li><a href="cookies.html">Cookies</a></li>
-        <li><a href="terminos.html">Términos</a></li>
-      </ul>
+        </ul>
     </nav>
     <div class="header-right">
       <span class="risk-pill"><svg class="icon-inline" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.79 16.03A2 2 0 0 1 19 18.56H5a2 2 0 0 1-1.79-2.53l2.74-8.22A2 2 0 0 1 7.85 6h8.3a2 2 0 0 1 1.9 1.81z"></path><line x1="5.07" y1="18.56" x2="18.93" y2="18.56"></line><line x1="9" y1="2.8" x2="9" y2="5.4"></line><line x1="15" y1="2.8" x2="15" y2="5.4"></line></svg> Riesgo alto</span>
+      <div class="header-auth-buttons">
+        <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
+      </div>
     </div>
   </header>
 
@@ -99,6 +99,7 @@
 
   <script type="module" src="../js/controllers/alertaRiesgoController.js"></script>
   <script src="../js/cookies-banner.js"></script>
+  <script src="../js/sesion-header.js"></script>
 </body>
 
 </html>

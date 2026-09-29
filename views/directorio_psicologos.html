@@ -26,14 +26,16 @@
 
     <nav class="main-nav" aria-label="Navegación principal">
       <ul>
-        <li><a href="inicio.html">Inicio</a></li>
+        <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
         <li><a href="inicio.html#nosotros">Nosotros</a></li>
         <li><a href="inicio.html#ayuda">Ayuda</a></li>
-        <li><a href="privacidad.html">Privacidad</a></li>
-        <li><a href="cookies.html">Cookies</a></li>
-        <li><a href="terminos.html">Términos</a></li>
       </ul>
     </nav>
+    <div class="header-right">
+      <div class="header-auth-buttons">
+        <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
+      </div>
+    </div>
   </header>
 
   <main class="wrap">
@@ -67,6 +69,7 @@
 
   <script type="module" src="../js/controllers/directorioController.js"></script>
   <script src="../js/cookies-banner.js"></script>
+  <script src="../js/sesion-header.js"></script>
 </body>
 
 </html>

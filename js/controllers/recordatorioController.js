@@ -433,3 +433,15 @@ if (document.readyState === 'loading') {
 } else {
   inicializar();
 }
+
+// Cerrar sesión (header unificado)
+const btnLogout = document.getElementById('btn-logout');
+if (btnLogout) {
+  btnLogout.addEventListener('click', () => {
+    if (!confirm('¿Está seguro de que desea cerrar sesión?')) return;
+    authService.logout();
+    avisoService.resetearAviso();
+    sessionStorage.removeItem('es_invitado');
+    window.location.href = 'login.html';
+  });
+}

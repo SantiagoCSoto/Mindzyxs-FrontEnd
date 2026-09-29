@@ -218,3 +218,14 @@ if (sesion) {
   cargarUltimo();
   registrarLog('Sistema listo — panel del paciente, botón "Registrar estado emocional" disponible');
 }
+
+// Cerrar sesión (header unificado)
+const btnLogout = document.getElementById('btn-logout');
+if (btnLogout) {
+  btnLogout.addEventListener('click', () => {
+    if (!confirm('¿Está seguro de que desea cerrar sesión?')) return;
+    authService.logout();
+    sessionStorage.removeItem('es_invitado');
+    window.location.href = 'login.html';
+  });
+}
