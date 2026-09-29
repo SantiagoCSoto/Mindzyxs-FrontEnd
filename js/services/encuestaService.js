@@ -79,9 +79,14 @@ export function leerNivel() {
   }
 }
 
+import { consentFuncional } from './consentService.js';
+
 // --- Sesión del invitado (cookies): cuest_<id>=1 marca cuestionario hecho al 100% ---
+// Solo se escriben con consentimiento funcional (ver Política de Cookies).
 export function marcarHecho(id) {
+  if (!consentFuncional()) return false;
   document.cookie = `cuest_${id}=1;max-age=31536000;path=/;SameSite=Lax`;
+  return true;
 }
 
 export function getHechos() {
@@ -92,7 +97,9 @@ export function getHechos() {
 }
 
 // --- Riesgo previo (cookies, sobreviven al cierre): riesgo_<id>=JSON{puntaje,nivel,alerta,explicacion} ---
+// Solo se escriben con consentimiento funcional (ver Política de Cookies).
 export function guardarRiesgo(id, resultado) {
+  if (!consentFuncional()) return false;
   try {
     const payload = {
       puntaje: resultado.puntaje,
@@ -101,7 +108,9 @@ export function guardarRiesgo(id, resultado) {
       explicacion: resultado.explicacion || ''
     };
     document.cookie = `riesgo_${id}=${encodeURIComponent(JSON.stringify(payload))};max-age=31536000;path=/;SameSite=Lax`;
+    return true;
   } catch (_) { /* cookie llena o bloqueada: no rompe el flujo */ }
+  return false;
 }
 
 export function leerRiesgos() {
