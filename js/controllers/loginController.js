@@ -136,7 +136,9 @@ if (formLogin) {
 // Cerrar modal y redirigir según el rol
 function destinoPorRol() {
   const rol = String(localStorage.getItem('rol') || '').toLowerCase();
-  return rol === 'administrador' || rol === 'admin' ? 'admin_bd.html' : 'inicio.html';
+  if (rol === 'administrador' || rol === 'admin') return 'admin_bd.html';
+  if (rol.includes('paciente')) return 'panel_paciente.html';
+  return 'inicio.html';
 }
 
 if (btnModalContinuar) {

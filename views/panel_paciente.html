@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel del paciente - Mindzyxs</title>
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/inicio.css" />
+</head>
+
+<body>
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-pink"></div>
+    <div class="blob blob-lav"></div>
+  </div>
+
+  <header class="header-nav">
+    <div class="logo-container">
+      <a href="inicio.html" class="logo-link">
+        <img src="../assets/Logo1.png" alt="Logo Mindzyxs" class="logo-img" />
+        <span>Mindzyxs</span>
+      </a>
+    </div>
+
+    <nav class="main-nav" aria-label="Navegación principal">
+      <ul>
+        <li><a href="inicio.html">Inicio</a></li>
+        <li><a href="inicio.html#nosotros">Nosotros</a></li>
+        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-right">
+      <div class="header-auth-buttons">
+        <button type="button" id="btn-logout-top" class="btn-logout">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card section-sensibles">
+      <div class="badge-guest-hero" style="display:inline-block;">
+        <span>🧑 Panel del paciente</span>
+      </div>
+
+      <!-- Opciones del Paciente -->
+      <div class="dash-invitado" id="dashPaciente">
+        <div class="grid grid-avail">
+          <article class="tile">
+            <div class="tile-icon tile-icon-cyan" aria-hidden="true">🌿</div>
+            <h3>Responder cuestionario</h3>
+            <p>Cuestionario de bienestar emocional</p>
+            <button type="button" class="btn btn-tile" id="btn-paciente-cuestionario" data-feature="Responder cuestionario">Entrar</button>
+          </article>
+          <article class="tile">
+            <div class="tile-icon" aria-hidden="true">📝</div>
+            <h3>Registrar estado</h3>
+            <p>Registra cómo te sientes hoy</p>
+            <button type="button" class="btn btn-tile" id="btn-paciente-registro" data-feature="Registrar estado">Entrar</button>
+          </article>
+          <article class="tile">
+            <div class="tile-icon" aria-hidden="true">🧠</div>
+            <h3>Historial emocional</h3>
+            <p>Consulta tus registros anteriores</p>
+            <button type="button" class="btn btn-tile" id="btn-paciente-historial">Abrir</button>
+          </article>
+          <article class="tile">
+            <div class="tile-icon" aria-hidden="true">👤</div>
+            <h3>Mi perfil</h3>
+            <p>Actualiza tu información personal</p>
+            <button type="button" class="btn btn-tile" id="btn-paciente-perfil">Abrir</button>
+          </article>
+          <article class="tile">
+            <div class="tile-icon tile-icon-yellow" aria-hidden="true">⏰</div>
+            <h3>Recordatorios</h3>
+            <p>Configura tus avisos</p>
+            <button type="button" class="btn btn-tile" id="btn-paciente-recordatorios">Abrir</button>
+          </article>
+          <article class="tile">
+            <div class="tile-icon tile-icon-sos" aria-hidden="true">💬</div>
+            <h3>Chat de apoyo</h3>
+            <p>Habla con tu psicólogo</p>
+            <button type="button" class="btn btn-tile" id="btn-paciente-chat">Abrir</button>
+          </article>
+          <article class="tile">
+            <div class="tile-icon tile-icon-sos" aria-hidden="true">🆘</div>
+            <h3>Líneas de ayuda</h3>
+            <p>Contactos de emergencia y apoyo</p>
+            <button type="button" class="btn btn-tile" id="btn-paciente-ayuda" data-feature="Líneas de ayuda">Abrir</button>
+          </article>
+          <article class="tile">
+            <div class="tile-icon" aria-hidden="true">⚠️</div>
+            <h3>Aviso importante</h3>
+            <p>Información clave de la plataforma</p>
+            <button type="button" class="btn btn-tile" id="btn-paciente-aviso">Leer</button>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-in">
+      <a href="inicio.html">Inicio</a>
+      <a href="inicio.html#nosotros">Nosotros</a>
+      <a href="inicio.html#ayuda">Ayuda</a>
+      <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog">
+        <span class="aviso-ico">ℹ️</span> Aviso: no diagnóstico
+      </a>
+    </div>
+  </footer>
+
+  <!-- Modal 1: Mensaje aclaratorio (PB-04) -->
+  <div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true" aria-labelledby="avisoTitle"
+    aria-hidden="true">
+    <div class="modal">
+      <div class="modal-icon" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+      </div>
+
+      <h3 id="avisoTitle">Mensaje aclaratorio</h3>
+
+      <div class="aviso-txt" id="avisoContent">
+        <p>
+          <b>Mindzyx</b> es una plataforma diseñada exclusivamente para el <b>monitoreo y apoyo del bienestar
+            emocional</b>.
+          Este sistema <span class="highlight">no realiza diagnósticos clínicos</span> y <span class="highlight">no
+            sustituye la atención de un profesional de la salud mental</span>.
+        </p>
+        <p>
+          Ante un <b>riesgo alto o una situación de urgencia</b>, busca ayuda profesional o utiliza las <b>líneas de
+            ayuda disponibles</b> en tu país (por ejemplo, servicios de emergencia o líneas de crisis locales).
+        </p>
+        <p>
+          Mindzyx es solo una <b>herramienta de apoyo y monitoreo emocional</b> y <b>no reemplaza la atención
+            profesional</b>.
+        </p>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-modal btn-close" id="btnCerrar">Cerrar</button>
+        <button type="button" class="btn-modal btn-ok" id="btnEntendido">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Error al cargar aviso -->
+  <div class="modal-overlay" id="errModal" role="alertdialog" aria-modal="true" aria-labelledby="errTitle"
+    aria-hidden="true">
+    <div class="modal">
+      <div class="modal-icon modal-icon-err" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+      </div>
+
+      <h3 id="errTitle">Mensaje aclaratorio</h3>
+      <p class="err-desc" id="errDesc">No fue posible cargar el mensaje aclaratorio. Intente nuevamente</p>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-modal btn-ok" id="errOk">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Líneas de ayuda (PB-06) -->
+  <div class="modal-overlay" id="modalLineasAyuda" role="dialog" aria-modal="true" aria-labelledby="ayudaTitle" aria-hidden="true">
+    <div class="modal modal-wide">
+      <button type="button" class="modal-x" id="btnXAyuda" aria-label="Cerrar">✕</button>
+      <div class="modal-icon" style="background: #FFF1F3; color: #EB5771;" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+        </svg>
+      </div>
+
+      <h3 id="ayudaTitle">Líneas de ayuda y apoyo emocional</h3>
+
+      <div class="aviso-txt" style="text-align: left;">
+        <p>Si te encuentras en una situación de crisis emocional o necesitas orientación profesional inmediata, puedes comunicarte a:</p>
+        <ul style="margin: 10px 0 10px 20px; line-height: 1.8;">
+          <li>📞 <b>Línea 106:</b> Ayuda psicológica y crisis emocional (24 horas, gratuita).</li>
+          <li>📞 <b>Línea 192:</b> Orientación en salud mental y apoyo psicosocial.</li>
+          <li>🚨 <b>Línea 123:</b> Emergencias y urgencias generales.</li>
+        </ul>
+        <p style="font-size: 11.5px; color: #8E91A3;">Recuerda que no estás solo y siempre hay ayuda disponible.</p>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-modal btn-ok" id="btnCerrarAyuda">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notificación flotante -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="../js/controllers/panelPacienteController.js"></script>
+</body>
+
+</html>
