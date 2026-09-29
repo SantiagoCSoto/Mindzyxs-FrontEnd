@@ -1,5 +1,9 @@
 /* Chat psicólogo-paciente (PB-31) — fiel al mockup */
 .wrap-chat { max-width: 960px; }
+.wrap-chat .icon-inline { vertical-align: -2px; }
+.hero-ico { vertical-align: -4px; margin-right: 4px; color: var(--lilac); }
+.tabs .icon-inline { margin-right: 4px; }
+.btn-block .icon-inline { margin-right: 5px; vertical-align: -2px; }
 .role-pill { font-size: 11px; font-weight: 700; color: #6B5BCE; background: #EDE7FF; border: 1px solid #DFDAEE; padding: 6px 12px; border-radius: 20px; white-space: nowrap; }
 .card.hero { text-align: center; }
 .card.hero h1 { font-size: 24px; }
@@ -33,8 +37,9 @@
 .msgs { flex: 1; padding: 16px 14px; display: flex; flex-direction: column; gap: 10px; background: #FFF; max-height: 340px; overflow-y: auto; }
 .day { font-size: 10px; font-weight: 700; color: var(--muted); text-align: center; background: #F3F1FA; border-radius: 20px; padding: 4px 12px; align-self: center; }
 .day-sticky { position: sticky; top: 0; z-index: 5; align-self: center; font-size: 11px; font-weight: 700; color: #5A5D72; background: #EDE7FF; border-radius: 999px; padding: 5px 14px; box-shadow: 0 2px 8px rgba(0,0,0,.08); margin-bottom: 4px; }
-.ticks { font-size: 12px; margin-left: 5px; color: #8E91A3; }
-.ticks.t0 { color: #0E7490; }
+.ticks { font-size: 12px; margin-left: 5px; color: #8E91A3; display: inline-flex; vertical-align: -2px; }
+.ticks .tick-svg { display: block; }
+.ticks.t0 { color: #9AA0B5; }
 .ticks.t1 { color: #0E7490; }
 .ticks.t2b { color: #0369A1; }
 .msg { max-width: 78%; padding: 10px 12px; border-radius: 14px; font-size: 13px; line-height: 1.5; }
@@ -82,6 +87,7 @@
 .modal-icon { width: 52px; height: 52px; border-radius: 14px; background: #FFF1F3; color: var(--error); display: grid; place-items: center; margin: 0 auto 14px; font-size: 24px; }
 .modal h3 { font-size: 16px; }
 .modal p.sub { font-size: 12px; color: var(--muted); margin-top: 8px; line-height: 1.6; text-align: left; }
+.modal-icon svg { display: block; }
 .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
 .btn-modal { flex: 1; height: 42px; border-radius: 20px; border: none; font-weight: 700; font-size: 13px; cursor: pointer; font-family: inherit; }
 .btn-modal.ok { background: var(--cyan); color: white; }
