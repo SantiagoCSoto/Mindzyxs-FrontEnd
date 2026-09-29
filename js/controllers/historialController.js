@@ -228,8 +228,25 @@ function cerrarDetalle() {
  * @param {string|null} hasta 
  */
 async function cargarHistorial(desde = null, hasta = null) {
+  if (recordList) {
+    recordList.style.display = 'flex';
+    recordList.innerHTML = '';
+    for (let i = 0; i < 3; i++) {
+      const d = document.createElement('div');
+      d.className = 'sk sk-card';
+      d.setAttribute('aria-hidden', 'true');
+      recordList.appendChild(d);
+    }
+  }
+  if (emptyState) emptyState.style.display = 'none';
+  if (countLabel) countLabel.textContent = 'Cargando historial...';
+  if (btnFilter) btnFilter.disabled = true;
+  if (btnClear) btnClear.disabled = true;
+
   const res = await historialService.obtenerHistorial(desde, hasta);
 
+  if (btnFilter) btnFilter.disabled = false;
+  if (btnClear) btnClear.disabled = false;
   if (res.exito) {
     registrosActuales = res.data || [];
     renderizarLista();

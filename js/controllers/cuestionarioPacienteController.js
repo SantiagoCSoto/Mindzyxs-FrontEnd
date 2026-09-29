@@ -92,7 +92,24 @@ function ocultarError() {
 }
 
 // --- Home: pendiente + historial reciente ---
+function pintarSkeleton(lista, n) {
+  if (!lista) return;
+  lista.innerHTML = '';
+  for (let i = 0; i < (n || 2); i++) {
+    const li = document.createElement('li');
+    li.className = 'sk sk-card';
+    li.setAttribute('aria-hidden', 'true');
+    lista.appendChild(li);
+  }
+}
+
 async function cargarInicio() {
+  if (startBtn) {
+    startBtn.disabled = true;
+    startBtn.textContent = 'Cargando cuestionario...';
+  }
+  pintarSkeleton(histList, 2);
+  pintarSkeleton(asigList, 2);
   const [pend, hist] = await Promise.all([obtenerPendientePaciente(), obtenerHistorial()]);
 
   if (pend.ok) {
@@ -106,6 +123,9 @@ async function cargarInicio() {
       startBtn.textContent = cuestionario.mensaje || 'No tienes cuestionarios pendientes por responder.';
       startBtn.disabled = true;
       preguntas = [];
+    } else {
+      startBtn.textContent = 'Responder cuestionario';
+      startBtn.disabled = false;
     }
   } else {
     startBtn.textContent = 'No fue posible cargar el cuestionario';
