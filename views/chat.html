@@ -85,7 +85,9 @@
       <div id="reqList"></div>
       <div id="searchBox" hidden>
         <div class="list-title" style="margin-top:16px">BUSCAR PACIENTE</div>
-        <div class="filters">
+        <details>
+          <summary style="cursor:pointer;font-weight:700;font-size:13px;color:var(--color-mudo,#64748B);">Filtros de búsqueda</summary>
+          <div class="filters">
           <input type="text" id="searchPaciente" maxlength="60" placeholder="Nombre o correo (opcional)" autocomplete="off" />
           <select id="filterNivel" aria-label="Nivel de riesgo">
             <option value="">Nivel: cualquiera</option>
@@ -101,6 +103,7 @@
           </select>
           <button type="button" class="btn btn-tile" id="btnBuscar">Buscar</button>
         </div>
+        </details>
         <div id="searchResults"></div>
       </div>
     </div>

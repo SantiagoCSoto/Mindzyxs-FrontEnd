@@ -119,7 +119,6 @@ function renderizarLista() {
         <p class="record-sum">${r.resumen}</p>
         <div class="record-btns">
           <button type="button" class="btn-sm" data-action="detail" data-id="${r.id}">Ver detalle</button>
-          <a href="panel_paciente.html" class="btn-sm ghost" data-action="back">Volver</a>
         </div>
       </div>
     `;
