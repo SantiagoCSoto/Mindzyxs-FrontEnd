@@ -33,7 +33,7 @@ const blockModal = $('blockModal'), authModal = $('authModal');
   if (faltan.length) {
     document.body.innerHTML = '<div style="font-family:sans-serif;padding:40px;text-align:center">' +
       '<h2>Vista desactualizada</h2><p>Esta página cargó archivos viejos desde la caché. ' +
-      'Recargá con <b>Ctrl+Shift+R</b>.</p><p style="color:#8E91A3;font-size:12px">Faltan: ' +
+      'Recargue con <b>Ctrl+Shift+R</b>.</p><p style="color:#8E91A3;font-size:12px">Faltan: ' +
       faltan.join(', ') + '</p></div>';
     throw new Error('Vista desactualizada (caché): faltan ' + faltan.join(', '));
   }
@@ -45,6 +45,14 @@ let conversaciones = [];
 let activaId = null;
 let offMsgs = null, offMeta = null, offTyping = null, offPresence = null, offVisto = null;
 let typingTimer = null;
+
+// Ticks de estado (enviada · entregada · leída) en SVG, estándar del front.
+const TICK_ENVIADA =
+  '<svg class="tick-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 4 7 13 3 9"></polyline></svg>';
+const TICK_ENTREGADA =
+  '<svg class="tick-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 7 12 3 8"></polyline><polyline points="21 3 12 12 8 8"></polyline></svg>';
+const TICK_LEIDA =
+  '<svg class="tick-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 7 12 3 8"></polyline><polyline points="21 3 12 12 8 8"></polyline></svg>';
 
 function showToast(msg) {
   toast.textContent = msg; toast.classList.add('show');
@@ -219,11 +227,11 @@ async function openConv(id, mantener = false) {
     if ((vistoMapa[mid] || {})[otroUidStr]) {
       el.classList.remove('t0', 't1');
       el.classList.add('t2b');
-      el.textContent = '●';
+      el.innerHTML = TICK_LEIDA;
     } else if (otroEnLineaFlag && !el.classList.contains('t2b')) {
       el.classList.remove('t0');
       el.classList.add('t1');
-      el.textContent = 'ⓜ';
+      el.innerHTML = TICK_ENTREGADA;
     }
   };
   const refrescarTicks = () => {
@@ -256,13 +264,13 @@ function actualizarBloqueo(c) {
   const bloqueoYo = bloqueada && c.bloqueadaPorMi;
   blockedBanner.classList.toggle('show', bloqueada);
   $('blockedText').textContent = bloqueoYo
-    ? '🚫 Usted bloqueó a este contacto. No puede escribirle.'
-    : '🚫 Usted fue bloqueado por este usuario. No puede escribir en este chat.';
+    ? 'Usted bloqueó a este contacto. No puede escribirle.'
+    : 'Usted fue bloqueado por este usuario. No puede escribir en este chat.';
   $('unblockBtn').style.display = bloqueoYo ? '' : 'none';
   msgInput.disabled = bloqueada;
   sendBtn.disabled = bloqueada;
   blockBtn.disabled = bloqueada;
-  blockBtn.textContent = soyPaciente() ? '⛔ Bloquear psicólogo' : '⛔ Bloquear paciente';
+  $('blockBtnText').textContent = soyPaciente() ? 'Bloquear psicólogo' : 'Bloquear paciente';
   blockBtn.hidden = !(soyPaciente() && (c.estado === 'Aceptada' || bloqueoYo));
   if (bloqueada) {
     $('chatStatus').textContent = bloqueoYo
@@ -271,8 +279,7 @@ function actualizarBloqueo(c) {
   }
 }
 
-// Bolitas propias: ○ enviada · ⓜ entregada (gris) · ● leída (llena).
-// (La lógica vive en aplicarTick dentro de openConv.)
+// Bolitas propias: enviada · entregada · leída (checks en SVG, igual estándar del front).
 
 function pintarMensaje(m, c) {
   const propio = String(m.remitenteUid) === String(yo.uid);
@@ -283,7 +290,7 @@ function pintarMensaje(m, c) {
   const div = document.createElement('div');
   div.className = 'msg ' + (propio ? 'out' : 'in');
   const quien = propio ? 'Usted' : c.contraparte.nombre;
-  const ticks = propio ? `<span class="ticks t0" data-mid="${escapar(m.id)}">○</span>` : '';
+  const ticks = propio ? `<span class="ticks t0" data-mid="${escapar(m.id)}">${TICK_ENVIADA}</span>` : '';
   div.innerHTML = '<b>' + escapar(quien) + '</b><div>' + escapar(m.texto) + '</div><small>' + escapar(horaDe(m.fecha)) + ticks + '</small>';
   msgs.appendChild(div);
   if (propio && window.__aplicarTick) window.__aplicarTick(div.querySelector('.ticks'), m.id);
@@ -310,7 +317,7 @@ function renderReqs() {
   const pend = pendientesAccionables();
   reqList.innerHTML = '';
   if (!pend.length && yo.rol !== 'Psicologo') {
-    reqList.innerHTML = '<div class="empty">No tienes solicitudes pendientes. 🎉</div>';
+    reqList.innerHTML = '<div class="empty">No tienes solicitudes pendientes.</div>';
     return;
   }
   pend.forEach((c) => {
@@ -343,7 +350,7 @@ function renderReqs() {
 async function responder(id, aceptar) {
   try {
     await responderSolicitud(id, aceptar);
-    showToast(aceptar ? 'Conversación iniciada ✓' : 'Solicitud rechazada');
+    showToast(aceptar ? 'Conversación iniciada' : 'Solicitud rechazada');
     await recargar(false);
     if (aceptar) { setTab(false); await openConv(id); }
   } catch (error) {
@@ -430,7 +437,7 @@ $('blockConfirm').addEventListener('click', async () => {
   blockModal.classList.remove('open');
   try {
     await bloquearChat(activaId);
-    showToast('Contacto bloqueado ⛔');
+    showToast('Contacto bloqueado');
     await recargar(true);
   } catch (error) {
     showToast(error.message);
@@ -439,7 +446,7 @@ $('blockConfirm').addEventListener('click', async () => {
 $('unblockBtn').addEventListener('click', async () => {
   try {
     await desbloquearChat(activaId);
-    showToast('Contacto desbloqueado ✓');
+    showToast('Contacto desbloqueado');
     await recargar(true);
   } catch (error) {
     showToast(error.message);
@@ -456,9 +463,9 @@ async function iniciar() {
   try {
     const t = await obtenerTokenChat();
     yo = { uid: t.uid, rol: t.rol };
-    $('rolePill').textContent = t.rol === 'Paciente' ? '👩 Paciente' : '🧠 Psicólogo';
+    $('rolePill').textContent = t.rol === 'Paciente' ? 'Paciente' : 'Psicólogo';
     $('searchBox').hidden = t.rol !== 'Psicologo';
-    blockBtn.textContent = t.rol === 'Paciente' ? '⛔ Bloquear psicólogo' : '⛔ Bloquear paciente';
+    $('blockBtnText').textContent = t.rol === 'Paciente' ? 'Bloquear psicólogo' : 'Bloquear paciente';
     db = await conectarRtdb(t.firebaseToken, t.databaseUrl);
     await recargar(false);
     const primero = conversaciones.find((c) => c.estado === 'Aceptada') || conversaciones[0];
