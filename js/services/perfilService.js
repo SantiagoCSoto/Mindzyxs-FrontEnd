@@ -4,7 +4,7 @@
  * Gestiona actualización de datos personales, solicitud y confirmación de cambio de correo.
  */
 
-import { putJson, postJson } from './apiClient.js';
+import { getJson, putJson, postJson } from './apiClient.js';
 import { authService } from './authService.js';
 
 export const perfilService = {
@@ -101,32 +101,40 @@ export const perfilService = {
   },
 
   /**
+   * Obtiene el perfil real desde el backend (GET /api/account/perfil).
+   * Normaliza PascalCase/camelCase. Retorna null si no hay sesión o falla.
+   */
+   async obtenerPerfil() {
+    const res = await getJson('/account/perfil');
+    if (!res.ok || !res.data) return null;
+    const d = res.data;
+    const fechaRaw = d.fechaNacimiento ?? d.FechaNacimiento ?? null;
+    return {
+      nombres: d.nombres ?? d.Nombres ?? '',
+      apellidos: d.apellidos ?? d.Apellidos ?? '',
+      fechaNacimiento: fechaRaw ? String(fechaRaw).split('T')[0] : null,
+      genero: d.genero ?? d.Genero ?? null,
+      idGenero: d.idGenero ?? d.IdGenero ?? null,
+      correo: d.correo ?? d.Correo ?? ''
+    };
+  },
+
+  /**
    * Obtiene los datos del perfil actual desde la sesión local
+   * (respaldo cuando el backend no responde; sin valores inventados).
    */
   obtenerPerfilActual() {
     const sesion = authService.getSesion();
-    if (!sesion) {
-      // Datos demo/fallback para desarrollo si no hay sesión activa
-      return {
-        nombres: 'Camila',
-        apellidos: 'Rojas',
-        fechaNacimiento: '2002-05-10',
-        genero: 'Femenino',
-        idGenero: 2,
-        correo: 'paciente@test.com',
-        rol: 'Paciente'
-      };
-    }
+    if (!sesion) return null;
 
     return {
       id: sesion.id,
-      nombres: sesion.nombres || sesion.nombre || 'Usuario',
+      nombres: sesion.nombres || sesion.nombre || '',
       apellidos: sesion.apellidos || sesion.apellido || '',
-      fechaNacimiento: sesion.fechaNacimiento || sesion.fecha_nacimiento || '2002-05-10',
-      genero: sesion.genero || 'Femenino',
-      idGenero: sesion.idGenero ?? sesion.id_genero ?? 2,
-      correo: sesion.correo || '',
-      rol: sesion.rol || sesion.tipo_usuario || 'Paciente'
+      fechaNacimiento: sesion.fechaNacimiento || sesion.fecha_nacimiento || null,
+      genero: sesion.genero || null,
+      idGenero: sesion.idGenero ?? sesion.id_genero ?? null,
+      correo: sesion.correo || ''
     };
   },
 
