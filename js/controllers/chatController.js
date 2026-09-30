@@ -5,6 +5,7 @@
  * Sesión Bearer (login) -> token Firebase -> RTDB en vivo + endpoints SQL.
  */
 
+import { authService } from '../services/authService.js';
 import {
   obtenerTokenChat, obtenerConversaciones, buscarPacientes, ofrecerChat,
   responderSolicitud, solicitarChat, responderPsicologo,
@@ -13,6 +14,7 @@ import {
   escucharPresencia, escucharEscribiendo, avisarEscribiendo, escucharMeta, leerUltimoMensaje,
   marcarVisto, escucharVisto, leerVisto
 } from '../services/chatService.js';
+import { obtenerDirectorio, solicitarChatPsicologo } from '../services/psicologoService.js';
 import { authService } from '../services/authService.js';
 
 const $ = (id) => document.getElementById(id);
@@ -30,7 +32,8 @@ const blockModal = $('blockModal'), authModal = $('authModal');
     'panelChat', 'panelReq', 'blockModal', 'authModal', 'searchBox', 'searchPaciente',
     'filterNivel', 'filterMinCuest', 'filterPsicologos', 'btnBuscar', 'searchResults',
     'chatName', 'chatAvatar', 'chatStatus', 'blockTitle', 'blockText', 'blockMotivo', 'blockCancel',
-    'blockConfirm', 'unblockBtn', 'btnResolverSi', 'btnResolverNo', 'authText', 'authOk'];
+    'blockConfirm', 'unblockBtn', 'btnResolverSi', 'btnResolverNo', 'authText', 'authOk',
+    'searchPsiBox', 'searchPsi', 'filterEspecialidad', 'btnBuscarPsi', 'searchPsiResults'];
   const faltan = ids.filter((id) => !$(id));
   if (faltan.length) {
     document.body.innerHTML = '<div style="font-family:sans-serif;padding:40px;text-align:center">' +
@@ -493,6 +496,75 @@ async function buscar() {
   }
 }
 
+// ---------- Buscador de psicólogos (paciente, espejo del de psicólogo) ----------
+async function cargarEspecialidades() {
+  const sel = $('filterEspecialidad');
+  if (!sel) return;
+  try {
+    const cat = await authService.getCatalogos();
+    const lista = cat.especialidades || cat.Especialidades || [];
+    lista.forEach((e) => {
+      const id = e.id ?? e.Id;
+      const nombre = e.nombre || e.codigo || e.Nombre || e.Codigo || '';
+      if (!id || !nombre) return;
+      const o = document.createElement('option');
+      o.value = id;
+      o.textContent = nombre;
+      sel.appendChild(o);
+    });
+  } catch (_) { /* checklist no disponible: se busca solo por nombre */ }
+}
+
+async function buscarPsicologos() {
+  const q = $('searchPsi').value.trim();
+  const esp = $('filterEspecialidad').value || null;
+  const box = $('searchPsiResults');
+  box.innerHTML = '<p class="hint">Buscando…</p>';
+  try {
+    const res = await obtenerDirectorio(q, esp ? Number(esp) : null);
+    if (!res.ok) {
+      box.innerHTML = `<p class="hint">No fue posible buscar: ${escapar(res.error)}</p>`;
+      return;
+    }
+    if (!res.data.length) { box.innerHTML = '<p class="hint">Sin coincidencias.</p>'; return; }
+    box.innerHTML = '';
+    res.data.forEach((p) => {
+      const tieneEsp = p.especialidades && p.especialidades.length;
+      const espHtml = tieneEsp
+        ? '<div class="esp-chips">' + p.especialidades.map((e) => '<span>' + escapar(e) + '</span>').join('') + '</div>'
+        : '<p class="esp-none">Sin especialidad registrada</p>';
+      const div = document.createElement('div');
+      div.className = 'dir-item';
+      const iniciales = p.nombre.split(' ').map((x) => x[0]).slice(0, 2).join('').toUpperCase();
+      div.innerHTML =
+        '<div class="dir-top"><div class="dir-avatar" aria-hidden="true">' + escapar(iniciales) + '</div>' +
+        '<div><h3>' + escapar(p.nombre) + '</h3>' +
+        '<span class="count-tag">' + p.pacientesAsignados + ' paciente(s) asignado(s)</span></div></div>' +
+        espHtml;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn btn-tile';
+      btn.textContent = 'Solicitar chat';
+      btn.addEventListener('click', async () => {
+        btn.disabled = true;
+        try {
+          await solicitarChatPsicologo(p.id);
+          showToast('Solicitud enviada a ' + p.nombre);
+          btn.textContent = 'Solicitada';
+          await recargar();
+        } catch (error) {
+          showToast(error.message);
+          btn.disabled = false;
+        }
+      });
+      div.appendChild(btn);
+      box.appendChild(div);
+    });
+  } catch (error) {
+    box.innerHTML = `<p class="hint">No fue posible buscar: ${escapar(error.message)}</p>`;
+  }
+}
+
 // ---------- Eventos ----------
 sendBtn.addEventListener('click', sendMessage);
 msgInput.addEventListener('keydown', (e) => {
@@ -506,6 +578,8 @@ msgInput.addEventListener('keydown', (e) => {
 tabChat.addEventListener('click', () => setTab(false));
 tabReq.addEventListener('click', () => setTab(true));
 $('btnBuscar')?.addEventListener('click', buscar);
+$('btnBuscarPsi')?.addEventListener('click', buscarPsicologos);
+$('searchPsi')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') buscarPsicologos(); });
 $('searchPaciente')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') buscar(); });
 
 blockBtn.addEventListener('click', () => {
@@ -579,6 +653,8 @@ async function iniciar() {
     yo = { uid: t.uid, rol: t.rol };
     $('rolePill').textContent = t.rol === 'Paciente' ? 'Paciente' : 'Psicólogo';
     $('searchBox').hidden = t.rol !== 'Psicologo';
+    $('searchPsiBox').hidden = t.rol !== 'Paciente';
+    if (t.rol === 'Paciente') await cargarEspecialidades();
     $('blockBtnText').textContent = t.rol === 'Paciente' ? 'Bloquear psicólogo' : 'Bloquear paciente';
     db = await conectarRtdb(t.firebaseToken, t.databaseUrl);
     await recargar(false);

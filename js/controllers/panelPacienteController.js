@@ -20,7 +20,6 @@ const btnHistorial = document.getElementById('btn-paciente-historial');
 const btnPerfil = document.getElementById('btn-paciente-perfil');
 const btnRecordatorios = document.getElementById('btn-paciente-recordatorios');
 const btnChat = document.getElementById('btn-paciente-chat');
-const btnDirectorio = document.getElementById('btn-paciente-directorio');
 const btnAyuda = document.getElementById('btn-paciente-ayuda');
 const btnAviso = document.getElementById('btn-paciente-aviso');
 const btnLogoutTop = document.getElementById('btn-logout-top');
@@ -99,13 +98,6 @@ if (btnRecordatorios) {
 if (btnChat) {
   btnChat.addEventListener('click', () => {
     window.location.href = 'chat.html';
-  });
-}
-
-// 6b. Directorio de psicólogos
-if (btnDirectorio) {
-  btnDirectorio.addEventListener('click', () => {
-    window.location.href = 'directorio_psicologos.html';
   });
 }
 
