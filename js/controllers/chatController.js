@@ -162,7 +162,8 @@ function renderConvs() {
 }
 
 async function recargar() {
-  if (!conversaciones.length && convList) {
+  if (!conversaciones.length && convList && !recargar._primeraHecha) {
+    recargar._primeraHecha = true;
     convList.innerHTML = '';
     for (let i = 0; i < 3; i++) {
       const d = document.createElement('div');
