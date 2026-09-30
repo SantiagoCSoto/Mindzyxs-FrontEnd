@@ -3,7 +3,7 @@
  *   GET /psicologos -> [{ id, nombre, especialidades[], pacientesAsignados }]
  */
 
-import { getJson } from './apiClient.js';
+import { getJson, postJson } from './apiClient.js';
 
 export async function obtenerDirectorio() {
   const res = await getJson('/psicologos');
@@ -22,4 +22,13 @@ export async function obtenerDirectorio() {
   }
 
   return { ok: false, status: res.status, error: res.error || 'No fue posible cargar el directorio.' };
+}
+
+/**
+ * Solicita chat a un psicólogo (doble vía). El psicólogo la acepta o rechaza.
+ */
+export async function solicitarChatPsicologo(idPsicologo) {
+  const res = await postJson('/chat/solicitudes/paciente', { idPsicologo });
+  if (!res.ok) throw new Error(res.error || 'No fue posible enviar la solicitud');
+  return res.data;
 }

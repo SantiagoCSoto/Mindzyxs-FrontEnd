@@ -4,8 +4,12 @@
  *   POST /chat/token                    -> { firebaseToken, uid, rol, databaseUrl }
  *   GET  /chat/conversaciones           -> propias (pendientes = notificaciones)
  *   POST /chat/solicitudes {idPaciente} -> ofrece (psicólogo)
+ *   POST /chat/solicitudes/paciente {idPsicologo} -> solicita (paciente, doble vía)
  *   POST /chat/solicitudes/{id}/aceptar|rechazar (paciente dueño)
- *   POST|DELETE /chat/conversaciones/{id}/bloqueo (paciente)
+ *   POST /chat/solicitudes/{id}/aceptar-psicologo|rechazar-psicologo (psicólogo dueño)
+ *   POST /chat/conversaciones/{id}/bloqueo/solicitar {motivo} (paciente, queda pendiente)
+ *   POST /chat/conversaciones/{id}/bloqueo/resolver {aceptar} (psicólogo/admin o cancela paciente)
+ *   POST|DELETE /chat/conversaciones/{id}/bloqueo (legacy confirmar/desbloquear)
  *   POST /chat/conversaciones/{id}/mensajes/aviso (best-effort tras push)
  * RTDB usa el SDK compat global `firebase` (scripts en la vista).
  */
@@ -56,6 +60,30 @@ export async function ofrecerChat(idPaciente) {
 export async function responderSolicitud(id, aceptar) {
   const res = await postJson(`/chat/solicitudes/${id}/${aceptar ? 'aceptar' : 'rechazar'}`, {});
   if (!res.ok) throw new Error(res.error || 'No fue posible procesar la solicitud');
+  return res.data;
+}
+
+export async function solicitarChat(idPsicologo) {
+  const res = await postJson('/chat/solicitudes/paciente', { idPsicologo });
+  if (!res.ok) throw new Error(res.error || 'No fue posible enviar la solicitud');
+  return res.data;
+}
+
+export async function responderPsicologo(id, aceptar) {
+  const res = await postJson(`/chat/solicitudes/${id}/${aceptar ? 'aceptar-psicologo' : 'rechazar-psicologo'}`, {});
+  if (!res.ok) throw new Error(res.error || 'No fue posible procesar la solicitud');
+  return res.data;
+}
+
+export async function solicitarBloqueo(id, motivo) {
+  const res = await postJson(`/chat/conversaciones/${id}/bloqueo/solicitar`, { motivo });
+  if (!res.ok) throw new Error(res.error || 'No fue posible enviar la solicitud');
+  return res.data;
+}
+
+export async function resolverBloqueo(id, aceptar) {
+  const res = await postJson(`/chat/conversaciones/${id}/bloqueo/resolver`, { aceptar });
+  if (!res.ok) throw new Error(res.error || 'No fue posible resolver la solicitud');
   return res.data;
 }
 

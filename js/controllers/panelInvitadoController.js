@@ -67,19 +67,33 @@ if (btnInvitadoCuestionario) {
   });
 }
 
-// 2. Ver recomendaciones básicas
+// 2. Ver recomendaciones básicas (aviso PB-04 si no aceptado)
 if (btnInvitadoRecomendaciones) {
   btnInvitadoRecomendaciones.addEventListener('click', () => {
-    invitadoService.logAuditoria('ACCESO a "Ver recomendaciones básicas"');
-    window.location.href = 'recomendaciones_invitado.html';
+    const feature = 'Ver recomendaciones básicas';
+    if (!avisoService.haAceptadoAviso()) {
+      pendingAction = 'recomendaciones_invitado';
+      invitadoService.logAuditoria(`INTENTO de acceder por primera vez a: "${feature}" (Invitado) -> se muestra aviso`);
+      openAviso(feature);
+    } else {
+      invitadoService.logAuditoria(`ACCESO directo a "${feature}" (aviso ya aceptado)`);
+      window.location.href = 'recomendaciones_invitado.html';
+    }
   });
 }
 
-// 2b. Ver resultado -> pantalla de riesgo PB-08
+// 2b. Ver resultado -> pantalla de riesgo PB-08 (aviso PB-04 si no aceptado)
 if (btnInvitadoResultado) {
   btnInvitadoResultado.addEventListener('click', () => {
-    invitadoService.logAuditoria('ACCESO a "Ver resultado" (dashboard invitado)');
-    window.location.href = 'resultado_riesgo.html';
+    const feature = 'Ver resultado';
+    if (!avisoService.haAceptadoAviso()) {
+      pendingAction = 'resultado_riesgo';
+      invitadoService.logAuditoria(`INTENTO de acceder por primera vez a: "${feature}" (Invitado) -> se muestra aviso`);
+      openAviso(feature);
+    } else {
+      invitadoService.logAuditoria(`ACCESO directo a "${feature}" (aviso ya aceptado)`);
+      window.location.href = 'resultado_riesgo.html';
+    }
   });
 }
 
@@ -143,6 +157,12 @@ if (btnEntendido) {
       if (accion === 'cuestionario_invitado' || accion === 'Responder cuestionario') {
         avisoService.logAuditoria('ACCESO PERMITIDO tras aceptar aviso -> Redirigiendo a encuesta_invitado.html');
         window.location.href = 'encuesta_invitado.html';
+      } else if (accion === 'resultado_riesgo' || accion === 'Ver resultado') {
+        avisoService.logAuditoria('ACCESO PERMITIDO tras aceptar aviso -> Redirigiendo a resultado_riesgo.html');
+        window.location.href = 'resultado_riesgo.html';
+      } else if (accion === 'recomendaciones_invitado' || accion === 'Ver recomendaciones básicas') {
+        avisoService.logAuditoria('ACCESO PERMITIDO tras aceptar aviso -> Redirigiendo a recomendaciones_invitado.html');
+        window.location.href = 'recomendaciones_invitado.html';
       }
     }
   });

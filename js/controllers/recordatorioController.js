@@ -261,7 +261,7 @@ async function manejarGuardar() {
 /**
  * Descarta los cambios en borrador y restablece la última configuración guardada
  */
-function manejarCancelar() {
+function manejarCancelar(silencioso = false) {
   if (configGuardada) {
     borrador = {
       activo: configGuardada.activo,
@@ -281,7 +281,7 @@ function manejarCancelar() {
 
   showMsg('', '');
   recordatorioService.logAuditoria('CANCELAR: cambios descartados, vuelve a la configuración guardada:', JSON.stringify(borrador));
-  showToast('Cambios descartados');
+  if (!silencioso) showToast('Cambios descartados');
   renderizar();
 }
 
@@ -343,9 +343,16 @@ function registrarEventos() {
     saveBtn.addEventListener('click', manejarGuardar);
   }
 
-  // Botón Cancelar / Volver
+  // Botón Cancelar
   if (cancelBtn) {
-    cancelBtn.addEventListener('click', manejarCancelar);
+    cancelBtn.addEventListener('click', () => manejarCancelar());
+  }
+
+  // Volver al panel: descarta el borrador como Cancelar y navega
+  if (backBtn) {
+    backBtn.addEventListener('click', () => {
+      manejarCancelar(true);
+    });
   }
 
   // Modal Aviso: no diagnóstico (PB-04)

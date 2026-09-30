@@ -5,7 +5,7 @@
  */
 
 import { authService } from '../services/authService.js';
-import { obtenerDirectorio } from '../services/psicologoService.js';
+import { obtenerDirectorio, solicitarChatPsicologo } from '../services/psicologoService.js';
 
 const sesion = authService.getSesion();
 const rol = String(sesion?.rol || sesion?.tipo_usuario || '').toLowerCase();
@@ -54,16 +54,33 @@ async function cargar() {
   }
   res.data.forEach((p) => {
     const card = document.createElement('article');
-    card.className = 'tile tile-dir';
+    card.className = 'dir-item';
+    const iniciales = p.nombre.split(' ').map((x) => x[0]).slice(0, 2).join('').toUpperCase();
     const tieneEsp = p.especialidades && p.especialidades.length;
     const espHtml = tieneEsp
       ? '<div class="esp-chips">' + p.especialidades.map((e) => '<span>' + escapar(e) + '</span>').join('') + '</div>'
       : '<p class="esp-none">Sin especialidad registrada</p>';
     card.innerHTML =
-      '<div class="tile-icon" aria-hidden="true">🧑‍⚕️</div>' +
-      '<h3>' + escapar(p.nombre) + '</h3>' +
-      espHtml +
-      '<p class="dir-count">' + p.pacientesAsignados + ' paciente(s) asignado(s)</p>';
+      '<div class="dir-top"><div class="dir-avatar" aria-hidden="true">' + escapar(iniciales) + '</div>' +
+      '<div><h3>' + escapar(p.nombre) + '</h3>' +
+      '<span class="count-tag">' + p.pacientesAsignados + ' paciente(s) asignado(s)</span></div></div>' +
+      espHtml;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn btn-tile';
+    btn.textContent = 'Solicitar chat';
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      try {
+        await solicitarChatPsicologo(p.id);
+        showToast('Solicitud enviada a ' + p.nombre);
+        btn.textContent = 'Solicitada';
+      } catch (error) {
+        showToast(error.message);
+        btn.disabled = false;
+      }
+    });
+    card.appendChild(btn);
     dirGrid.appendChild(card);
   });
 }

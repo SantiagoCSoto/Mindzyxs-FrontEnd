@@ -7,7 +7,8 @@
 
 import {
   obtenerTokenChat, obtenerConversaciones, buscarPacientes, ofrecerChat,
-  responderSolicitud, bloquearChat, desbloquearChat, avisarMensaje,
+  responderSolicitud, solicitarChat, responderPsicologo,
+  solicitarBloqueo, resolverBloqueo, desbloquearChat, avisarMensaje,
   conectarRtdb, suscribirMensajes, enviarMensaje, marcarPresencia,
   escucharPresencia, escucharEscribiendo, avisarEscribiendo, escucharMeta, leerUltimoMensaje,
   marcarVisto, escucharVisto, leerVisto
@@ -28,8 +29,8 @@ const blockModal = $('blockModal'), authModal = $('authModal');
     'blockedBanner', 'typing', 'toast', 'reqBadge', 'reqList', 'tabChat', 'tabReq',
     'panelChat', 'panelReq', 'blockModal', 'authModal', 'searchBox', 'searchPaciente',
     'filterNivel', 'filterMinCuest', 'filterPsicologos', 'btnBuscar', 'searchResults',
-    'chatName', 'chatAvatar', 'chatStatus', 'blockTitle', 'blockText', 'blockCancel',
-    'blockConfirm', 'unblockBtn', 'authText', 'authOk'];
+    'chatName', 'chatAvatar', 'chatStatus', 'blockTitle', 'blockText', 'blockMotivo', 'blockCancel',
+    'blockConfirm', 'unblockBtn', 'btnResolverSi', 'btnResolverNo', 'authText', 'authOk'];
   const faltan = ids.filter((id) => !$(id));
   if (faltan.length) {
     document.body.innerHTML = '<div style="font-family:sans-serif;padding:40px;text-align:center">' +
@@ -84,7 +85,23 @@ function esMio(conv) {
 }
 function soyPaciente() { return yo && yo.rol === 'Paciente'; }
 function pendientesAccionables() {
-  return conversaciones.filter((c) => c.estado === 'Pendiente' && soyPaciente() && c.contraparte.rol === 'Psicologo');
+  return conversaciones.filter((c) => c.estado === 'Pendiente' && soyPaciente() && c.contraparte.rol === 'Psicologo'
+    && (!c.idSolicitante || Number(c.idSolicitante) !== Number(yo.uid)));
+}
+
+// Solicitudes que me hizo el paciente (psicólogo las acepta/rechaza).
+function entrantesPsicologo() {
+  return conversaciones.filter((c) => c.estado === 'Pendiente' && yo.rol === 'Psicologo'
+    && c.idSolicitante && Number(c.idSolicitante) === Number(c.contraparte.id));
+}
+
+// Mis solicitudes enviadas aún sin respuesta (legacy sin solicitante = las ofrecí yo como psicólogo).
+function enviadasPendientes() {
+  return conversaciones.filter((c) => {
+    if (c.estado !== 'Pendiente') return false;
+    if (!c.idSolicitante) return yo.rol === 'Psicologo';
+    return Number(c.idSolicitante) === Number(yo.uid);
+  });
 }
 
 // ---------- Tabs ----------
@@ -273,22 +290,42 @@ async function openConv(id, mantener = false) {
 
 function actualizarBloqueo(c) {
   const bloqueada = c.estado === 'Bloqueada';
+  const pendiente = c.estado === 'BloqueoPendiente';
   const bloqueoYo = bloqueada && c.bloqueadaPorMi;
-  blockedBanner.classList.toggle('show', bloqueada);
-  $('blockedText').textContent = bloqueoYo
-    ? 'Usted bloqueó a este contacto. No puede escribirle.'
-    : 'Usted fue bloqueado por este usuario. No puede escribir en este chat.';
-  $('unblockBtn').style.display = bloqueoYo ? '' : 'none';
-  msgInput.disabled = bloqueada;
-  sendBtn.disabled = bloqueada;
-  blockBtn.disabled = bloqueada;
-  $('blockBtnText').textContent = soyPaciente() ? 'Bloquear psicólogo' : 'Bloquear paciente';
-  blockBtn.hidden = !(soyPaciente() && (c.estado === 'Aceptada' || bloqueoYo));
-  if (bloqueada) {
-    $('chatStatus').textContent = bloqueoYo
-      ? 'Bloqueado por usted.'
-      : 'Bloqueado — no puede escribir en este chat.';
+  const btnResSi = $('btnResolverSi'), btnResNo = $('btnResolverNo');
+  blockedBanner.classList.toggle('show', bloqueada || pendiente);
+  if (pendiente) {
+    const motivo = c.motivoBloqueo ? ' Motivo: ' + c.motivoBloqueo : '';
+    if (soyPaciente()) {
+      $('blockedText').textContent = 'Solicitud de bloqueo en revisión.' + motivo + ' No puede escribir mientras tanto.';
+      $('unblockBtn').style.display = '';
+      $('unblockBtn').textContent = 'Cancelar solicitud';
+    } else {
+      $('blockedText').textContent = 'Solicitud de bloqueo pendiente de revisión.' + motivo;
+      $('unblockBtn').style.display = 'none';
+    }
+    if (btnResSi) btnResSi.style.display = soyPaciente() ? 'none' : '';
+    if (btnResNo) btnResNo.style.display = soyPaciente() ? 'none' : '';
+    $('chatStatus').textContent = 'Bloqueo en revisión — chat pausado.';
+  } else {
+    $('unblockBtn').textContent = 'Desbloquear';
+    if (btnResSi) btnResSi.style.display = 'none';
+    if (btnResNo) btnResNo.style.display = 'none';
+    $('blockedText').textContent = bloqueoYo
+      ? 'Usted bloqueó a este contacto. No puede escribirle.'
+      : 'Usted fue bloqueado por este usuario. No puede escribir en este chat.';
+    $('unblockBtn').style.display = bloqueoYo ? '' : 'none';
+    if (bloqueada) {
+      $('chatStatus').textContent = bloqueoYo
+        ? 'Bloqueado por usted.'
+        : 'Bloqueado — no puede escribir en este chat.';
+    }
   }
+  msgInput.disabled = bloqueada || pendiente;
+  sendBtn.disabled = bloqueada || pendiente;
+  blockBtn.disabled = bloqueada || pendiente;
+  $('blockBtnText').textContent = soyPaciente() ? 'Solicitar bloqueo' : 'Bloquear paciente';
+  blockBtn.hidden = !(soyPaciente() && c.estado === 'Aceptada');
 }
 
 // Bolitas propias: enviada · entregada · leída (checks en SVG, igual estándar del front).
@@ -329,7 +366,15 @@ function renderReqs() {
   const pend = pendientesAccionables();
   reqList.innerHTML = '';
   if (!pend.length && yo.rol !== 'Psicologo') {
-    reqList.innerHTML = '<div class="empty">No tienes solicitudes pendientes.</div>';
+    const mias = enviadasPendientes();
+    if (mias.length) {
+      const p = document.createElement('p');
+      p.className = 'hint';
+      p.textContent = 'Solicitud enviada. En espera de respuesta del psicólogo.';
+      reqList.appendChild(p);
+    } else {
+      reqList.innerHTML = '<div class="empty">No tienes solicitudes pendientes.</div>';
+    }
     return;
   }
   pend.forEach((c) => {
@@ -345,18 +390,42 @@ function renderReqs() {
     reqList.appendChild(div);
   });
   if (yo.rol === 'Psicologo') {
-    const enviadas = conversaciones.filter((c) => c.estado === 'Pendiente');
+    const entrantes = entrantesPsicologo();
+    entrantes.forEach((c) => {
+      const div = document.createElement('div');
+      div.className = 'req-card';
+      div.innerHTML = '<div class="conv-top"><div class="avatar">' + escapar(inicialesDe(c.contraparte.nombre)) + '</div>' +
+        '<div><h3>' + escapar(c.contraparte.nombre) + '</h3><p style="margin:0">Solicitud • Paciente</p></div></div>' +
+        '<p>Le solicita iniciar un chat de apoyo.</p>' +
+        '<div class="req-actions"><button class="btn-accept">Aceptar</button><button class="btn-reject">Rechazar</button></div>';
+      div.querySelector('.btn-accept').addEventListener('click', () => responderPsi(c.id, true));
+      div.querySelector('.btn-reject').addEventListener('click', () => responderPsi(c.id, false));
+      reqList.appendChild(div);
+    });
+    const enviadas = conversaciones.filter((c) => c.estado === 'Pendiente' && !entrantes.some((e) => e.id === c.id));
     if (enviadas.length) {
       const p = document.createElement('p');
       p.className = 'hint';
       p.textContent = `Tiene ${enviadas.length} solicitud(es) esperando respuesta del paciente.`;
       reqList.appendChild(p);
-    } else if (!pend.length) {
+    } else if (!entrantes.length && !pend.length) {
       const p = document.createElement('p');
       p.className = 'hint';
       p.textContent = 'Sin solicitudes. Busque un paciente abajo para ofrecerle chat.';
       reqList.appendChild(p);
     }
+  }
+}
+
+async function responderPsi(id, aceptar) {
+  if (aceptar && !confirm('Al aceptar, el paciente le autoriza a ver su progreso y asignarle cuestionarios. ¿Desea continuar?')) return;
+  try {
+    await responderPsicologo(id, aceptar);
+    showToast(aceptar ? 'Conversación iniciada.' : 'Solicitud rechazada');
+    await recargar(false);
+    if (aceptar) { setTab(false); await openConv(id); }
+  } catch (error) {
+    showToast(error.message);
   }
 }
 
@@ -442,16 +511,23 @@ $('searchPaciente')?.addEventListener('keydown', (e) => { if (e.key === 'Enter')
 blockBtn.addEventListener('click', () => {
   const c = conversaciones.find((x) => x.id === activaId);
   if (!c) return;
-  $('blockTitle').textContent = soyPaciente() ? 'Bloquear psicólogo' : 'Bloquear paciente';
-  $('blockText').textContent = 'Al bloquear a ' + c.contraparte.nombre + ', no podrá enviar ni recibir mensajes. Podrá desbloquearlo más tarde desde este mismo chat. ¿Desea continuar?';
+  $('blockTitle').textContent = 'Solicitar bloqueo';
+  $('blockText').textContent = 'Cuéntenos el motivo. La solicitud quedará pendiente de revisión y el chat se pausará mientras tanto. ¿Desea continuar?';
+  const m = $('blockMotivo');
+  if (m) m.value = '';
   blockModal.classList.add('open');
 });
 $('blockCancel').addEventListener('click', () => blockModal.classList.remove('open'));
 $('blockConfirm').addEventListener('click', async () => {
+  const motivo = ($('blockMotivo')?.value || '').trim();
+  if (!motivo) {
+    showToast('Cuéntenos el motivo de la solicitud.');
+    return;
+  }
   blockModal.classList.remove('open');
   try {
-    await bloquearChat(activaId);
-    showToast('Contacto bloqueado');
+    await solicitarBloqueo(activaId, motivo);
+    showToast('Solicitud enviada. Quedará pendiente de revisión.');
     await recargar(true);
   } catch (error) {
     showToast(error.message);
@@ -459,8 +535,32 @@ $('blockConfirm').addEventListener('click', async () => {
 });
 $('unblockBtn').addEventListener('click', async () => {
   try {
-    await desbloquearChat(activaId);
-    showToast('Contacto desbloqueado');
+    const c = conversaciones.find((x) => x.id === activaId);
+    if (c && c.estado === 'BloqueoPendiente') {
+      await resolverBloqueo(activaId, false);
+      showToast('Solicitud cancelada');
+    } else {
+      await desbloquearChat(activaId);
+      showToast('Contacto desbloqueado');
+    }
+    await recargar(true);
+  } catch (error) {
+    showToast(error.message);
+  }
+});
+$('btnResolverSi').addEventListener('click', async () => {
+  try {
+    await resolverBloqueo(activaId, true);
+    showToast('Bloqueo confirmado');
+    await recargar(true);
+  } catch (error) {
+    showToast(error.message);
+  }
+});
+$('btnResolverNo').addEventListener('click', async () => {
+  try {
+    await resolverBloqueo(activaId, false);
+    showToast('Solicitud rechazada. El chat continúa.');
     await recargar(true);
   } catch (error) {
     showToast(error.message);
