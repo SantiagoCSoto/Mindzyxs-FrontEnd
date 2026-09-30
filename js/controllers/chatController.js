@@ -124,6 +124,7 @@ function renderConvs() {
   }
   const vacio = convList.querySelector('.empty');
   if (vacio) vacio.remove();
+  convList.querySelectorAll('.sk').forEach((n) => n.remove());
   // Crea o actualiza en su lugar (sin limpiar la lista).
   conversaciones.forEach((c) => {
     try {
