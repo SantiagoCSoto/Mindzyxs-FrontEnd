@@ -5,8 +5,12 @@
 
 import { getJson, postJson } from './apiClient.js';
 
-export async function obtenerDirectorio() {
-  const res = await getJson('/psicologos');
+export async function obtenerDirectorio(q = '', idEspecialidad = null) {
+  const params = new URLSearchParams();
+  if (q) params.set('q', q);
+  if (idEspecialidad) params.set('idEspecialidad', idEspecialidad);
+  const qs = params.toString() ? `?${params.toString()}` : '';
+  const res = await getJson('/psicologos' + qs);
 
   if (res.ok && res.data) {
     const lista = Array.isArray(res.data) ? res.data : [];
