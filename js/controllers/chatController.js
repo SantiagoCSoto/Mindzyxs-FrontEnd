@@ -198,6 +198,8 @@ async function recargar() {
   } catch (error) {
     if (!conversaciones.length) {
       convList.innerHTML = '<div class="empty">No fue posible cargar: ' + escapar(error.message) + '</div>';
+    } else {
+      showToast('No fue posible actualizar: ' + error.message);
     }
     return;
   }
