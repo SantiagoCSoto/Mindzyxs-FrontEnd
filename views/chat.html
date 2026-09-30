@@ -74,6 +74,8 @@
           <div class="blocked-banner" id="blockedBanner">
             <span id="blockedText">Has bloqueado a este contacto. No puedes enviar ni recibir mensajes.</span><br />
             <button id="unblockBtn">Desbloquear</button>
+            <button id="btnResolverSi" style="display:none">Confirmar bloqueo</button>
+            <button id="btnResolverNo" style="display:none">Rechazar solicitud</button>
           </div>
           <div class="composer">
             <input id="msgInput" type="text" placeholder="Escriba un mensaje…" maxlength="1000" autocomplete="off" aria-label="Escriba un mensaje" />
@@ -124,11 +126,15 @@
   <div class="modal-overlay" id="blockModal" role="alertdialog" aria-modal="true">
     <div class="modal">
       <div class="modal-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg></div>
-      <h3 id="blockTitle">Bloquear contacto</h3>
-      <p class="sub" id="blockText">Al bloquear, no podrás enviar ni recibir mensajes. Podrás desbloquearlo más tarde desde este mismo chat. ¿Deseas continuar?</p>
+      <h3 id="blockTitle">Solicitar bloqueo</h3>
+      <p class="sub" id="blockText">Cuéntenos el motivo. La solicitud quedará pendiente de revisión y el chat se pausará mientras tanto. ¿Desea continuar?</p>
+      <div style="text-align:left;margin-top:10px">
+        <label for="blockMotivo" style="font-size:12.5px;font-weight:600">Motivo *</label>
+        <textarea id="blockMotivo" rows="3" maxlength="500" placeholder="Escriba el motivo..." style="width:100%;margin-top:6px;padding:9px 12px;border:1.5px solid #CBD5E1;border-radius:10px;font-size:13px;font-family:inherit;resize:vertical"></textarea>
+      </div>
       <div class="modal-actions">
         <button class="btn-modal close" id="blockCancel">Cancelar</button>
-        <button class="btn-modal danger" id="blockConfirm">Bloquear</button>
+        <button class="btn-modal danger" id="blockConfirm">Enviar solicitud</button>
       </div>
     </div>
   </div>

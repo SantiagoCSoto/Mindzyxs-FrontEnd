@@ -5,7 +5,7 @@
  */
 
 import { authService } from '../services/authService.js';
-import { obtenerDirectorio } from '../services/psicologoService.js';
+import { obtenerDirectorio, solicitarChatPsicologo } from '../services/psicologoService.js';
 
 const sesion = authService.getSesion();
 const rol = String(sesion?.rol || sesion?.tipo_usuario || '').toLowerCase();
@@ -64,6 +64,22 @@ async function cargar() {
       '<h3>' + escapar(p.nombre) + '</h3>' +
       espHtml +
       '<p class="dir-count">' + p.pacientesAsignados + ' paciente(s) asignado(s)</p>';
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn btn-tile';
+    btn.textContent = 'Solicitar chat';
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      try {
+        await solicitarChatPsicologo(p.id);
+        showToast('Solicitud enviada a ' + p.nombre);
+        btn.textContent = 'Solicitada';
+      } catch (error) {
+        showToast(error.message);
+        btn.disabled = false;
+      }
+    });
+    card.appendChild(btn);
     dirGrid.appendChild(card);
   });
 }

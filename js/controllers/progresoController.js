@@ -453,12 +453,11 @@ function registrarEventos() {
     });
   }
 
-  // Botón Solicitar autorización desde el estado bloqueado
+  // Botón Solicitar autorización: abre el chat para ofrecerlo al paciente
   if (solBtn) {
     solBtn.addEventListener('click', () => {
-      const nombre = patientSel?.options[patientSel.selectedIndex]?.text || 'el paciente';
-      showToast(`Solicitud de autorización enviada a ${nombre}.`);
-      progresoService.logAuditoria(`SOLICITUD de autorización enviada a id=${patientSel?.value}`);
+      progresoService.logAuditoria(`Ir a ofrecer chat al paciente id=${patientSel?.value}`);
+      window.location.href = 'chat.html';
     });
   }
 
