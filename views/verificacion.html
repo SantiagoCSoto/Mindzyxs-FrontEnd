@@ -66,18 +66,19 @@
     </section>
   </main>
 
-  <div id="modal-exito" class="modal-overlay">
+  <div id="modal-exito" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-exito-titulo">
     <div class="modal-contenido">
       <div class="modal-badge-exito">
         <span>&check;</span>
       </div>
-      <h2>Registro exitoso. Ya puedes iniciar sesión</h2>
+      <h2 id="modal-exito-titulo">Registro exitoso. Ya puedes iniciar sesión</h2>
       <p>Tu cuenta fue activada correctamente. Ahora puedes entrar al sistema.</p>
       <a href="login.html" class="btn-iniciar-sesion">Iniciar sesión</a>
     </div>
   </div>
 
   <script type="module" src="../js/controllers/verificacionController.js"></script>
+  <script src="../js/cookies-banner.js"></script>
 </body>
 
 </html>

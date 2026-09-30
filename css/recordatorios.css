@@ -347,9 +347,12 @@ body {
 /* --------------------------------------------------------------------------
    Controles de Frecuencia y Chips
    -------------------------------------------------------------------------- */
+h2.section-title {
+  margin: 0 0 8px;
+}
+
 .section-title {
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 11px;  font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--purple-accent);
@@ -789,8 +792,17 @@ body {
     padding: 10px 16px;
   }
 
-  .main-nav {
-    display: none;
+  .header-nav {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .main-nav ul {
+    gap: 14px;
+  }
+
+  .main-nav a {
+    font-size: 13px;
   }
 
   .wrap {

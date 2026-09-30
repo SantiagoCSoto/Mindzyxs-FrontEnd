@@ -151,6 +151,10 @@ async function cargarPacientes() {
 
   const res = await progresoService.obtenerPacientesAutorizados();
 
+  if (res.noSesion) {
+    window.location.href = 'login.html';
+    return;
+  }
   if (!res.exito || !res.data || res.data.length === 0) {
     ocultarTodosLosEstados();
     if (noPatientsState) {
@@ -386,7 +390,7 @@ function renderizarGraficoSVG(serie) {
     `;
 
     // Círculo interactivo con tooltip
-    const tituloTooltip = `Fecha: ${p.pt.fechaCorta || p.pt.fecha}&#10;Puntaje: ${p.pt.puntaje} / 5${p.pt.nivel ? ` (${p.pt.nivel})` : ''}`;
+    const tituloTooltip = `Fecha: ${escaparHtml(p.pt.fechaCorta || p.pt.fecha)}&#10;Puntaje: ${Number(p.pt.puntaje) || 0} / 5${p.pt.nivel ? ` (${escaparHtml(p.pt.nivel)})` : ''}`;
     svgHtml += `
       <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="5.5" fill="#FFFFFF" stroke="#6ECFD4" stroke-width="3" class="chart-node" style="cursor: pointer; transition: r 0.2s ease;">
         <title>${tituloTooltip}</title>
@@ -395,14 +399,14 @@ function renderizarGraficoSVG(serie) {
 
     // Etiqueta del valor numérico
     svgHtml += `
-      <text x="${p.x.toFixed(1)}" y="${(p.y - 10).toFixed(1)}" text-anchor="middle" font-size="11" font-weight="700" fill="#1E293B">${p.pt.puntaje}</text>
+      <text x="${p.x.toFixed(1)}" y="${(p.y - 10).toFixed(1)}" text-anchor="middle" font-size="11" font-weight="700" fill="#1E293B">${Number(p.pt.puntaje) || 0}</text>
     `;
 
     // Etiqueta de la fecha en eje X
     const mostrarFecha = !compactarFechas || (idx === 0 || idx === n - 1 || idx % Math.ceil(n / 6) === 0);
     if (mostrarFecha) {
       svgHtml += `
-        <text x="${p.x.toFixed(1)}" y="${(H - 16).toFixed(1)}" text-anchor="middle" font-size="11" font-weight="500" fill="#64748B">${p.pt.fechaCorta}</text>
+        <text x="${p.x.toFixed(1)}" y="${(H - 16).toFixed(1)}" text-anchor="middle" font-size="11" font-weight="500" fill="#64748B">${escaparHtml(p.pt.fechaCorta)}</text>
       `;
     }
   });

@@ -30,7 +30,10 @@
       <ul>
         <li><a href="inicio.html">Inicio</a></li>
         <li><a href="inicio.html#nosotros">Nosotros</a></li>
-        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+        <li><a href="inicio.html#ayuda">Ayuda</a>
+      <a href="privacidad.html">Privacidad</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="terminos.html">T�rminos</a></li>
       </ul>
     </nav>
 
@@ -73,7 +76,7 @@
             <button id="unblockBtn">Desbloquear</button>
           </div>
           <div class="composer">
-            <input id="msgInput" type="text" placeholder="Escriba un mensaje…" maxlength="1000" autocomplete="off" />
+            <input id="msgInput" type="text" placeholder="Escriba un mensaje…" maxlength="1000" autocomplete="off" aria-label="Escriba un mensaje" />
             <button class="btn-send" id="sendBtn">Enviar</button>
           </div>
         </div>
@@ -85,8 +88,10 @@
       <div id="reqList"></div>
       <div id="searchBox" hidden>
         <div class="list-title" style="margin-top:16px">BUSCAR PACIENTE</div>
-        <div class="filters">
-          <input type="text" id="searchPaciente" maxlength="60" placeholder="Nombre o correo (opcional)" autocomplete="off" />
+        <details>
+          <summary style="cursor:pointer;font-weight:700;font-size:13px;color:var(--color-mudo,#64748B);">Filtros de búsqueda</summary>
+          <div class="filters">
+          <input type="text" id="searchPaciente" maxlength="60" placeholder="Nombre o correo (opcional)" autocomplete="off" aria-label="Buscar paciente por nombre o correo" />
           <select id="filterNivel" aria-label="Nivel de riesgo">
             <option value="">Nivel: cualquiera</option>
             <option value="Bajo">Riesgo bajo</option>
@@ -101,6 +106,7 @@
           </select>
           <button type="button" class="btn btn-tile" id="btnBuscar">Buscar</button>
         </div>
+        </details>
         <div id="searchResults"></div>
       </div>
     </div>
@@ -111,6 +117,9 @@
       <a href="inicio.html">Inicio</a>
       <a href="inicio.html#nosotros">Nosotros</a>
       <a href="inicio.html#ayuda">Ayuda</a>
+      <a href="privacidad.html">Privacidad</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="terminos.html">T�rminos</a>
       <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog"><span class="aviso-ico"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5A45C9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span> Aviso: no diagnóstico</a>
     </div>
   </footer>
@@ -136,7 +145,7 @@
     </div>
   </div>
 
-  <div class="toast" id="toast"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -149,6 +158,7 @@
     const rol = String(s?.rol || s?.tipo_usuario || '').toLowerCase();
     if (back && !(s && rol.includes('paciente'))) back.href = 'inicio.html';
   </script>
+  <script src="../js/cookies-banner.js"></script>
 </body>
 
 </html>

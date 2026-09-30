@@ -508,7 +508,7 @@ body {
   padding: 0 24px;
   border-radius: 20px;
   border: none;
-  background: linear-gradient(180deg, #6ECFD4, #5ABCC2);
+  background: var(--color-primario-fuerte, #0E7490);
   color: #FFFFFF;
   font-weight: 700;
   font-size: 13px;
@@ -803,8 +803,17 @@ body {
     padding: 12px 20px;
   }
 
-  .main-nav {
-    display: none;
+  .header-nav {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .main-nav ul {
+    gap: 14px;
+  }
+
+  .main-nav a {
+    font-size: 13px;
   }
 }
 

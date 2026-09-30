@@ -141,14 +141,24 @@ if (formularioRegistro) {
       return;
     }
 
-    const contrasena = document.getElementById('contrasena').value;
-    // Validación de contraseña según regla del backend: mínimo 6 caracteres, al menos 1 letra y 1 número
+    const contrasena = document.getElementById('contrasena').value;    // Validación de contraseña según regla del backend: mínimo 6 caracteres, al menos 1 letra y 1 número
     const passRegex = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
     if (!passRegex.test(contrasena)) {
       mostrarBanner(bannerErrorRegistro, 'La contraseña debe tener mínimo 6 caracteres e incluir al menos una letra y un número.');
       document.getElementById('contrasena').focus();
       return;
     }
+
+    // Consentimiento de políticas (casilla no premarcada)
+    const acepta = document.getElementById('acepta-privacidad');
+    const errorPriv = document.getElementById('error-privacidad');
+    if (!acepta || !acepta.checked) {
+      if (errorPriv) errorPriv.style.display = 'block';
+      mostrarBanner(bannerErrorRegistro, 'Debes aceptar la Política de Privacidad y los Términos para registrarte.');
+      if (acepta) acepta.focus();
+      return;
+    }
+    if (errorPriv) errorPriv.style.display = 'none';
 
     const nombres = document.getElementById('nombres').value.trim();
     const apellidos = document.getElementById('apellidos').value.trim();

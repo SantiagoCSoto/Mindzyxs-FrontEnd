@@ -24,6 +24,9 @@
       <a href="inicio.html" class="active">Inicio</a>
       <a href="inicio.html#nosotros">Nosotros</a>
       <a href="inicio.html#ayuda">Ayuda</a>
+      <a href="privacidad.html">Privacidad</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="terminos.html">T�rminos</a>
     </nav>
   </header>
 
@@ -63,6 +66,9 @@
       <a href="inicio.html">Inicio</a>
       <a href="inicio.html#nosotros">Nosotros</a>
       <a href="inicio.html#ayuda">Ayuda</a>
+      <a href="privacidad.html">Privacidad</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="terminos.html">T�rminos</a>
       <a href="#" class="aviso" id="footerAviso">⚠️ Aviso: no diagnóstico</a>
     </div>
   </footer>
@@ -91,7 +97,7 @@
       <h3>Líneas de ayuda</h3>
       <p class="sub">Líneas de emergencia y acompañamiento emocional.</p>
       <div class="lineas-filtros">
-        <input type="text" id="lineasQ" maxlength="60" placeholder="Ciudad, departamento o nombre…" autocomplete="off" />
+        <input type="text" id="lineasQ" maxlength="60" placeholder="Ciudad, departamento o nombre…" autocomplete="off" aria-label="Buscar líneas por ciudad o nombre" />
         <select id="lineasTipo" aria-label="Tipo de atención">
           <option value="">Todas</option>
           <option value="apoyo_emocional">Apoyo emocional</option>
@@ -110,6 +116,7 @@
   </div>
 
   <script type="module" src="../js/controllers/resultadoRiesgoController.js"></script>
+  <script src="../js/cookies-banner.js"></script>
 </body>
 
 </html>

@@ -9,6 +9,15 @@ import { authService } from './authService.js';
 
 export const perfilService = {
   /**
+   * Enmascara un correo para logs (evita PII en consola): u***@dominio.com
+   */
+  enmascararCorreo(correo) {
+    const c = String(correo || '');
+    const at = c.indexOf('@');
+    if (at <= 0) return '***';
+    return c[0] + '***' + c.slice(at);
+  },
+  /**
    * Actualiza nombres, apellidos, fecha de nacimiento y género (PUT /api/account/perfil)
    * @param {Object} datos - { nombres, apellidos, fechaNacimiento, idGenero }
    */
@@ -41,7 +50,7 @@ export const perfilService = {
    */
   async solicitarCambioCorreo(nuevoCorreo) {
     const correoNormalizado = (nuevoCorreo || '').trim().toLowerCase();
-    this.logAuditoria('SOLICITUD cambio de correo a:', correoNormalizado);
+    this.logAuditoria('SOLICITUD cambio de correo a:', this.enmascararCorreo(correoNormalizado));
 
     const res = await postJson('/account/correo/solicitar', {
       nuevoCorreo: correoNormalizado
@@ -74,7 +83,7 @@ export const perfilService = {
   async confirmarCambioCorreo(nuevoCorreo, codigo) {
     const correoNormalizado = (nuevoCorreo || '').trim().toLowerCase();
     const cod = (codigo || '').trim();
-    this.logAuditoria('CONFIRMACIÓN de cambio de correo con código para:', correoNormalizado);
+    this.logAuditoria('CONFIRMACIÓN de cambio de correo con código para:', this.enmascararCorreo(correoNormalizado));
 
     const res = await postJson('/account/correo/confirmar', {
       nuevoCorreo: correoNormalizado,

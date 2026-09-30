@@ -2,6 +2,70 @@
   box-sizing: border-box;
 }
 
+/* Tokens de diseño Mindzyxs (única fuente): solo azules/morados existentes.
+   primario = navegar/guardar/continuar; apoyo = secundario/informativo;
+   fuerte = fondos con texto blanco (contraste AA); resto = tinta/superficie. */
+:root {
+  --color-primario: #6ECFD4;
+  --color-primario-hover: #5ABCC2;
+  --color-primario-fuerte: #0E7490;
+  --color-primario-suave: #E6F7F8;
+  --color-apoyo: #6B5BCE;
+  --color-apoyo-hover: #5A45C9;
+  --color-apoyo-oscuro: #4A38B0;
+  --color-apoyo-suave: #EDE7FF;
+  --color-apoyo-borde: #DFDAEE;
+  --color-tinta: #1E293B;
+  --color-mudo: #64748B;
+  --color-fondo: #F8FAFC;
+  --color-superficie: #FFFFFF;
+  --color-borde-neutro: #E2E8F0;
+  --color-peligro: #E85D7A;
+  --color-peligro-suave: #FFF1F3;
+  --color-ok: #1BBF6B;
+  --color-aviso: #E8A347;
+}
+
+/* Foco visible accesible (WCAG 2.4.7) para todo elemento interactivo */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--color-primario-fuerte);
+  outline-offset: 2px;
+}
+
+/* Skeleton de carga (silueta gris shimmer) */
+.sk {
+  position: relative;
+  overflow: hidden;
+  background: #E2E8F0;
+  border-radius: 8px;
+  color: transparent !important;
+  pointer-events: none;
+  min-height: 14px;
+}
+
+.sk::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .7), transparent);
+  animation: sk-shimmer 1.4s infinite;
+}
+
+@keyframes sk-shimmer {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+.sk-line { height: 14px; margin: 8px 0; }
+.sk-title { height: 22px; width: 60%; margin: 8px 0; }
+.sk-card { min-height: 76px; margin: 8px 0; }
+.sk-circle { width: 44px; height: 44px; border-radius: 50%; }
+
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #ffffff;
@@ -70,7 +134,7 @@ body::after {
 }
 
 .logo-badge {
-  background-color: #56c5c0;
+  background-color: var(--color-primario-fuerte);
   color: white;
   width: 28px;
   height: 28px;
@@ -121,7 +185,7 @@ body::after {
 .btn-signup-header {
   text-decoration: none;
   color: white;
-  background-color: #56c5c0;
+  background-color: var(--color-primario-fuerte);
   padding: 8px 20px;
   border-radius: 20px;
   font-size: 14px;
@@ -150,10 +214,16 @@ body::after {
 @media (max-width: 768px) {
   .header-nav {
     padding: 12px 20px;
+    flex-wrap: wrap;
+    gap: 8px;
   }
 
-  .main-nav {
-    display: none;
+  .main-nav ul {
+    gap: 14px;
+  }
+
+  .main-nav a {
+    font-size: 13px;
   }
 
   body::before {

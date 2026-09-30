@@ -161,6 +161,15 @@ function renderConvs() {
 }
 
 async function recargar() {
+  if (!conversaciones.length && convList) {
+    convList.innerHTML = '';
+    for (let i = 0; i < 3; i++) {
+      const d = document.createElement('div');
+      d.className = 'sk sk-card';
+      d.setAttribute('aria-hidden', 'true');
+      convList.appendChild(d);
+    }
+  }
   try {
     conversaciones = await obtenerConversaciones();
   } catch (error) {

@@ -5,9 +5,54 @@
 
 export const API_BASE_URL = 'http://localhost:5015/api';
 
+const TIMEOUT_MS = 8000;
+
 function authHeaders() {
   const token = localStorage.getItem('token') || sessionStorage.getItem('token');
   return token ? { 'Authorization': `Bearer ${token}` } : {};
+}
+
+/** Endpoints de autenticación: un 401 aquí es error de credenciales, no sesión expirada. */
+function esEndpointAuth(endpoint) {
+  return ['/account/login', '/account/verify', '/account/resend', '/account/forgot']
+    .some((p) => endpoint.startsWith(p));
+}
+
+function conTimeout(signal) {
+  try {
+    const t = AbortSignal.timeout(TIMEOUT_MS);
+    if (signal && typeof AbortSignal.any === 'function') return AbortSignal.any([signal, t]);
+    return t;
+  } catch {
+    return signal;
+  }
+}
+
+/** 401 fuera de auth = sesión expirada/inválida: limpia sesión y va a login. */
+function manejarNoAutorizado(endpoint) {
+  if (esEndpointAuth(endpoint)) return;
+  try {
+    sessionStorage.removeItem('usuario');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('autenticado');
+    localStorage.removeItem('usuario');
+    localStorage.removeItem('token');
+    localStorage.removeItem('rol');
+    if (!window.location.pathname.includes('login')) {
+      window.location.href = 'login.html';
+    }
+  } catch {
+    // sin almacenamiento o sin DOM: no se puede redirigir
+  }
+}
+
+function errorRed(err) {
+  const timeout = err && err.name === 'AbortError';
+  return {
+    ok: false,
+    isNetworkError: true,
+    error: timeout ? 'La solicitud tardó demasiado. Intente nuevamente.' : 'No fue posible conectar con el servidor backend.'
+  };
 }
 
 /**
@@ -24,13 +69,15 @@ export async function postJson(endpoint, data, opciones = {}) {
         ...authHeaders(),
         ...opciones.headers
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
+      signal: conTimeout(opciones.signal)
     });
 
     const isJson = response.headers.get('content-type')?.includes('application/json');
     const resData = isJson ? await response.json() : null;
 
     if (!response.ok) {
+      if (response.status === 401) manejarNoAutorizado(endpoint);
       return {
         ok: false,
         status: response.status,
@@ -44,11 +91,7 @@ export async function postJson(endpoint, data, opciones = {}) {
       data: resData
     };
   } catch (err) {
-    return {
-      ok: false,
-      isNetworkError: true,
-      error: 'No fue posible conectar con el servidor backend.'
-    };
+    return errorRed(err);
   }
 }
 
@@ -66,13 +109,15 @@ export async function putJson(endpoint, data, opciones = {}) {
         ...authHeaders(),
         ...opciones.headers
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
+      signal: conTimeout(opciones.signal)
     });
 
     const isJson = response.headers.get('content-type')?.includes('application/json');
     const resData = isJson ? await response.json() : null;
 
     if (!response.ok) {
+      if (response.status === 401) manejarNoAutorizado(endpoint);
       return {
         ok: false,
         status: response.status,
@@ -86,11 +131,7 @@ export async function putJson(endpoint, data, opciones = {}) {
       data: resData
     };
   } catch (err) {
-    return {
-      ok: false,
-      isNetworkError: true,
-      error: 'No fue posible conectar con el servidor backend.'
-    };
+    return errorRed(err);
   }
 }
 
@@ -106,13 +147,15 @@ export async function postFormData(endpoint, formData, opciones = {}) {
         ...authHeaders(),
         ...opciones.headers
       },
-      body: formData
+      body: formData,
+      signal: conTimeout(opciones.signal)
     });
 
     const isJson = response.headers.get('content-type')?.includes('application/json');
     const resData = isJson ? await response.json() : null;
 
     if (!response.ok) {
+      if (response.status === 401) manejarNoAutorizado(endpoint);
       return {
         ok: false,
         status: response.status,
@@ -126,11 +169,7 @@ export async function postFormData(endpoint, formData, opciones = {}) {
       data: resData
     };
   } catch (err) {
-    return {
-      ok: false,
-      isNetworkError: true,
-      error: 'No fue posible conectar con el servidor backend.'
-    };
+    return errorRed(err);
   }
 }
 
@@ -146,13 +185,15 @@ export async function getJson(endpoint, opciones = {}) {
         'Accept': 'application/json',
         ...authHeaders(),
         ...opciones.headers
-      }
+      },
+      signal: conTimeout(opciones.signal)
     });
 
     const isJson = response.headers.get('content-type')?.includes('application/json');
     const resData = isJson ? await response.json() : null;
 
     if (!response.ok) {
+      if (response.status === 401) manejarNoAutorizado(endpoint);
       return {
         ok: false,
         status: response.status,
@@ -166,11 +207,7 @@ export async function getJson(endpoint, opciones = {}) {
       data: resData
     };
   } catch (err) {
-    return {
-      ok: false,
-      isNetworkError: true,
-      error: 'No fue posible conectar con el servidor backend.'
-    };
+    return errorRed(err);
   }
 }
 
@@ -186,13 +223,15 @@ export async function deleteJson(endpoint, opciones = {}) {
         'Accept': 'application/json',
         ...authHeaders(),
         ...opciones.headers
-      }
+      },
+      signal: conTimeout(opciones.signal)
     });
 
     const isJson = response.headers.get('content-type')?.includes('application/json');
     const resData = isJson ? await response.json() : null;
 
     if (!response.ok) {
+      if (response.status === 401) manejarNoAutorizado(endpoint);
       return {
         ok: false,
         status: response.status,
@@ -206,11 +245,7 @@ export async function deleteJson(endpoint, opciones = {}) {
       data: resData
     };
   } catch (err) {
-    return {
-      ok: false,
-      isNetworkError: true,
-      error: 'No fue posible conectar con el servidor backend.'
-    };
+    return errorRed(err);
   }
 }
 
@@ -224,10 +259,12 @@ export async function deleteJson(endpoint, opciones = {}) {
       headers: {
         ...authHeaders(),
         ...opciones.headers
-      }
+      },
+      signal: conTimeout(opciones.signal)
     });
 
     if (!response.ok) {
+      if (response.status === 401) manejarNoAutorizado(endpoint);
       const isJson = response.headers.get('content-type')?.includes('application/json');
       const resData = isJson ? await response.json() : null;
       return {
@@ -240,6 +277,6 @@ export async function deleteJson(endpoint, opciones = {}) {
     const blob = await response.blob();
     return { ok: true, status: response.status, blob };
   } catch (err) {
-    return { ok: false, isNetworkError: true, error: 'No fue posible conectar con el servidor backend.' };
+    return errorRed(err);
   }
 }

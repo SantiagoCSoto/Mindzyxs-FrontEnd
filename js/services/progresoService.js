@@ -13,6 +13,17 @@ import { authService } from './authService.js';
 
 export const progresoService = {
   /**
+   * Demo explícito (?demo=1): solo entonces se muestran datos de prueba locales.
+   */
+  modoDemo() {
+    try {
+      return new URLSearchParams(window.location.search).get('demo') === '1';
+    } catch {
+      return false;
+    }
+  },
+
+  /**
    * Obtiene la lista de pacientes autorizados asignados al psicólogo en sesión
    */
   async obtenerPacientesAutorizados() {
@@ -31,8 +42,12 @@ export const progresoService = {
       };
     }
 
-    // Modo respaldo sin backend o fallo de conexión
-    if (res.isNetworkError || !res.ok) {
+    if (res.status === 401) {
+      return { exito: false, status: 401, noSesion: true, mensaje: 'Tu sesión ha expirado. Inicia sesión nuevamente', data: [] };
+    }
+
+    // Datos de prueba solo con ?demo=1 explícito
+    if ((res.isNetworkError || !res.ok) && this.modoDemo()) {
       this.logAuditoria('FALLBACK Carga de pacientes autorizados demo');
       return {
         exito: true,
@@ -85,8 +100,12 @@ export const progresoService = {
       };
     }
 
-    // Caso 3: Fallback si el backend está desconectado
-    if (res.isNetworkError || !res.ok) {
+    // 401 = sesión expirada: sin datos inventados
+    if (res.status === 401) {
+      return { exito: false, status: 401, noSesion: true, mensaje: 'Tu sesión ha expirado. Inicia sesión nuevamente' };
+    }
+
+    // Caso 3: datos de prueba solo con ?demo=1 explícito    if ((res.isNetworkError || !res.ok) && this.modoDemo()) {
       this.logAuditoria(`FALLBACK Progreso local para paciente id=${idPaciente}`);
       const fallbackData = this.obtenerProgresoFallback(idPaciente, desde, hasta);
 

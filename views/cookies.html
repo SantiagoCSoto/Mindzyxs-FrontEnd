@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="../assets/Logo1.png" />
+  <title>Política de Cookies - Mindzyxs</title>
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/inicio.css" />
+</head>
+
+<body>
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-pink"></div>
+    <div class="blob blob-lav"></div>
+  </div>
+
+  <header class="header-nav">
+    <div class="logo-container">
+      <a href="inicio.html" class="logo-link">
+        <img src="../assets/Logo1.png" alt="Logo Mindzyxs" class="logo-img" />
+        <span>Mindzyxs</span>
+      </a>
+    </div>
+
+    <nav class="main-nav" aria-label="Navegación principal">
+      <ul>
+        <li><a href="inicio.html">Inicio</a></li>
+        <li><a href="inicio.html#nosotros">Nosotros</a></li>
+        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <a href="inicio.html" class="btn-volver-landing" style="background:#FFFFFF;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;margin-bottom:14px;">&larr; Volver</a>
+    <section class="card">
+      <div class="panel-head">
+        <h1>Política de Cookies</h1>
+        <p class="sub">Última actualización: 29/09/2026. Contacto: sankie453@gmail.com</p>
+      </div>
+
+      <div class="aviso-txt">
+        <p>Mindzyxs usa almacenamiento en tu navegador (cookies y almacenamiento local). No usamos analytics ni publicidad. Hay dos categorías:</p>
+
+        <h2>Necesarias (siempre activas)</h2>
+        <p>Sin ellas no puedes iniciar sesión ni usar tu cuenta:</p>
+        <ul>
+          <li><b>Sesión y autenticación</b> (almacenamiento local y de sesión): token de sesión, datos de tu usuario, rol y estado de autenticación. Se borran al cerrar sesión o el navegador (según el caso).</li>
+        </ul>
+
+        <h2>Funcionales (con tu consentimiento)</h2>
+        <p>Solo se usan si las aceptas en el banner. Sirven para el modo invitado y borradores:</p>
+        <ul>
+          <li><b>cuest_&lt;id&gt;</b> (cookie, 1 año): marca qué cuestionarios de invitado ya respondiste para no repetirlos.</li>
+          <li><b>riesgo_&lt;id&gt;</b> (cookie, 1 año): guarda tu último resultado de riesgo como invitado.</li>
+          <li><b>Borradores locales</b> (almacenamiento local y de sesión): aviso aceptado, modo invitado, últimos registros, historial reciente y configuración de recordatorios.</li>
+        </ul>
+        <p>Si las rechazas, el sitio sigue funcionando: el invitado puede repetir cuestionarios y los borradores no se guardan entre visitas.</p>
+
+        <h2>Cambiar tu decisión</h2>
+        <p>Puedes aceptar, rechazar o configurar las funcionales en cualquier momento desde el enlace <b>Cookies</b> del pie de página o con este botón. También puedes borrarlas desde los ajustes de tu navegador.</p>
+        <p><button type="button" class="btn-modal ok" id="btnPreferencias" style="background:var(--color-primario-fuerte,#0E7490);color:#fff;border:none;border-radius:18px;padding:10px 22px;min-height:44px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;">Cambiar preferencias</button></p>
+
+        <p style="font-size:11.5px;color:#64748B;">Este texto es informativo y no constituye asesoría jurídica. El tratamiento de datos personales se rige además por la legislación aplicable de [PAÍS]; cualquier duda debe revisarla un profesional.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-in">
+      <a href="inicio.html">Inicio</a>
+      <a href="privacidad.html">Privacidad</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="terminos.html">Términos</a>
+    </div>
+  </footer>
+
+  <script src="../js/cookies-banner.js"></script>
+  <script>
+    document.getElementById('btnPreferencias').addEventListener('click', function () {
+      if (typeof window.reabrirCookies === 'function') window.reabrirCookies();
+    });
+  </script>
+</body>
+
+</html>

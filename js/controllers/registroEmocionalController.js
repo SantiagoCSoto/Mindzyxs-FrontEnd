@@ -112,9 +112,13 @@ function renderUltimo(item) {
 }
 
 async function cargarUltimo() {
+  if (emptyNote) emptyNote.style.display = 'none';
+  if (savedText) savedText.innerHTML = '<span class="sk sk-line" aria-hidden="true" style="display:block;">&nbsp;</span>';
   const res = await obtenerUltimoRegistro();
   if (res.ok) {
     renderUltimo(res.data);
+  } else if (emptyNote) {
+    emptyNote.style.display = 'block';
   }
   registrarLog('Último registro emocional cargado' + (res.localOnly ? ' (local)' : ''));
 }

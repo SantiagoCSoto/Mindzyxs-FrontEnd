@@ -30,7 +30,10 @@
       <ul>
         <li><a href="inicio.html">Inicio</a></li>
         <li><a href="inicio.html#nosotros">Nosotros</a></li>
-        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+        <li><a href="inicio.html#ayuda">Ayuda</a>
+      <a href="privacidad.html">Privacidad</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="terminos.html">T�rminos</a></li>
       </ul>
     </nav>
 
@@ -73,7 +76,7 @@
       </div>
 
       <!-- Selector de Frecuencia -->
-      <span class="section-title">Frecuencia</span>
+      <h2 class="section-title">Frecuencia</h2>
       <div class="controls" role="group" aria-label="Selección de frecuencia">
         <button type="button" class="chip active" id="chipDiaria" data-freq="Diaria">Diaria</button>
         <button type="button" class="chip" id="chipSemanal" data-freq="Semanal">Semanal</button>
@@ -87,7 +90,7 @@
 
       <!-- Días de la Semana (Visible solo si la frecuencia es Semanal) -->
       <div id="daysBlock" style="display: none;">
-        <span class="section-title">Días de la semana</span>
+        <h2 class="section-title">Días de la semana</h2>
         <div class="days" id="daysGrid" role="group" aria-label="Selección de días">
           <label class="day" data-day="1"><input type="checkbox" value="Lun" data-val="1" />Lun</label>
           <label class="day" data-day="2"><input type="checkbox" value="Mar" data-val="2" />Mar</label>
@@ -105,7 +108,7 @@
       <!-- Acciones Principales -->
       <div class="actions">
         <button type="button" class="btn save" id="saveBtn">Guardar</button>
-        <button type="button" class="btn cancel" id="cancelBtn">Cancelar / Volver</button>
+        <button type="button" class="btn cancel" id="cancelBtn">Cancelar</button>
       </div>
     </div>
   </main>
@@ -116,6 +119,9 @@
       <a href="inicio.html">Inicio</a>
       <a href="inicio.html#nosotros">Nosotros</a>
       <a href="inicio.html#ayuda">Ayuda</a>
+      <a href="privacidad.html">Privacidad</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="terminos.html">T�rminos</a>
       <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog">
         <span class="aviso-ico">ℹ️</span> Aviso: no diagnóstico
       </a>
@@ -157,6 +163,7 @@
 
   <!-- Controlador de la vista -->
   <script type="module" src="../js/controllers/recordatorioController.js"></script>
+  <script src="../js/cookies-banner.js"></script>
 </body>
 
 </html>

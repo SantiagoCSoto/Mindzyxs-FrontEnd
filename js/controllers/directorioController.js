@@ -32,6 +32,15 @@ function showToast(mensaje) {
 }
 
 async function cargar() {
+  if (dirGrid) {
+    dirGrid.innerHTML = '';
+    for (let i = 0; i < 3; i++) {
+      const d = document.createElement('div');
+      d.className = 'sk sk-card';
+      d.setAttribute('aria-hidden', 'true');
+      dirGrid.appendChild(d);
+    }
+  }
   const res = await obtenerDirectorio();
   if (!res.ok) {
     showToast(res.error);
