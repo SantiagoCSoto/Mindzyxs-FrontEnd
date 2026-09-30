@@ -15,7 +15,6 @@ import {
   marcarVisto, escucharVisto, leerVisto
 } from '../services/chatService.js';
 import { obtenerDirectorio, solicitarChatPsicologo } from '../services/psicologoService.js';
-import { authService } from '../services/authService.js';
 
 const $ = (id) => document.getElementById(id);
 const rolePill = $('rolePill'), convList = $('convList'), convCount = $('convCount');
