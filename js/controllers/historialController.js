@@ -167,7 +167,9 @@ async function abrirDetalle(id) {
     detailValueText.innerHTML = `<b>${escapar(d.valorTexto)}</b> &mdash; <small style="color:var(--muted);">${tipoLabel}</small>`;
   }
 
-  // 2. Nota personal (Cómo me sentí)
+  // 2. Nota personal (Cómo me sentí): solo en RegistroEmocional, los cuestionarios no tienen nota
+  const notesRow = detailNotesText ? detailNotesText.closest('.detail-row') : null;
+  if (notesRow) notesRow.style.display = d.tipo === 'RegistroEmocional' ? '' : 'none';
   if (detailNotesText) {
     if (d.nota && d.nota.trim()) {
       detailNotesText.textContent = d.nota.trim();
