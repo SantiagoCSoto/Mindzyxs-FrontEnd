@@ -28,22 +28,22 @@
 
     <nav class="main-nav" aria-label="Navegación principal">
       <ul>
-        <li><a href="inicio.html">Inicio</a></li>
+        <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
         <li><a href="inicio.html#nosotros">Nosotros</a></li>
-        <li><a href="inicio.html#ayuda">Ayuda</a>
-      <a href="privacidad.html">Privacidad</a>
-      <a href="cookies.html">Cookies</a>
-      <a href="terminos.html">T�rminos</a></li>
+        <li><a href="inicio.html#ayuda">Ayuda</a></li>
       </ul>
     </nav>
 
     <div class="header-right">
-      <a href="panel_paciente.html" class="btn-volver-landing" id="backBtn">← Volver al panel</a>
+      <div class="header-auth-buttons">
+        <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
+      </div>
     </div>
   </header>
 
   <!-- Contenedor Principal -->
   <main class="wrap">
+    <a href="panel_paciente.html" class="btn-volver-landing" id="backBtn" style="background:#FFFFFF;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;margin-bottom:14px;">← Volver al panel</a>
     <div class="card">
       <!-- Encabezado del Panel -->
       <div class="panel-head">
@@ -116,12 +116,9 @@
   <!-- Pie de página -->
   <footer class="footer">
     <div class="footer-in">
-      <a href="inicio.html">Inicio</a>
-      <a href="inicio.html#nosotros">Nosotros</a>
-      <a href="inicio.html#ayuda">Ayuda</a>
       <a href="privacidad.html">Privacidad</a>
       <a href="cookies.html">Cookies</a>
-      <a href="terminos.html">T�rminos</a>
+      <a href="terminos.html">Términos</a>
       <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog">
         <span class="aviso-ico">ℹ️</span> Aviso: no diagnóstico
       </a>
@@ -164,6 +161,7 @@
   <!-- Controlador de la vista -->
   <script type="module" src="../js/controllers/recordatorioController.js"></script>
   <script src="../js/cookies-banner.js"></script>
+  <script src="../js/sesion-header.js"></script>
 </body>
 
 </html>

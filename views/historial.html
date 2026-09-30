@@ -28,13 +28,10 @@
 
     <nav class="main-nav" aria-label="Navegación principal">
       <ul>
-        <li><a href="inicio.html">Inicio</a></li>
+        <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
         <li><a href="inicio.html#nosotros">Nosotros</a></li>
-        <li><a href="inicio.html#ayuda">Ayuda</a>
-      <a href="privacidad.html">Privacidad</a>
-      <a href="cookies.html">Cookies</a>
-      <a href="terminos.html">T�rminos</a></li>
-      </ul>
+        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+        </ul>
     </nav>
 
     <div class="header-right">
@@ -82,23 +79,15 @@
         <p>Cuando registres tu estado emocional o respondas un cuestionario, aparecerá aquí tu historial.</p>
         <a href="cuestionario_paciente.html" class="btn-register" id="btnRegister">Registrar estado emocional</a>
       </div>
-
-      <!-- Fila de Navegación de Regreso -->
-      <div class="back-row">
-        <a href="panel_paciente.html" class="btn-sm ghost" id="btnBackPanel">← Volver al panel</a>
-      </div>
     </div>
   </main>
 
   <!-- Pie de página -->
   <footer class="footer">
     <div class="footer-in">
-      <a href="inicio.html">Inicio</a>
-      <a href="inicio.html#nosotros">Nosotros</a>
-      <a href="inicio.html#ayuda">Ayuda</a>
       <a href="privacidad.html">Privacidad</a>
       <a href="cookies.html">Cookies</a>
-      <a href="terminos.html">T�rminos</a>
+      <a href="terminos.html">Términos</a>
       <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog">
         <span class="aviso-ico">ℹ️</span> Aviso: no diagnóstico
       </a>
@@ -176,6 +165,7 @@
   <!-- Controlador de la vista -->
   <script type="module" src="../js/controllers/historialController.js"></script>
   <script src="../js/cookies-banner.js"></script>
+  <script src="../js/sesion-header.js"></script>
 </body>
 
 </html>

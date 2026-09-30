@@ -28,17 +28,17 @@
 
     <nav class="main-nav" aria-label="Navegación principal">
       <ul>
-        <li><a href="inicio.html">Inicio</a></li>
+        <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
         <li><a href="inicio.html#nosotros">Nosotros</a></li>
-        <li><a href="inicio.html#ayuda">Ayuda</a>
-      <a href="privacidad.html">Privacidad</a>
-      <a href="cookies.html">Cookies</a>
-      <a href="terminos.html">T�rminos</a></li>
-      </ul>
+        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+        </ul>
     </nav>
 
     <div class="header-right">
       <span class="role-pill" id="rolePill">Chat</span>
+      <div class="header-auth-buttons">
+        <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
+      </div>
     </div>
   </header>
 
@@ -114,12 +114,9 @@
 
   <footer class="footer">
     <div class="footer-in">
-      <a href="inicio.html">Inicio</a>
-      <a href="inicio.html#nosotros">Nosotros</a>
-      <a href="inicio.html#ayuda">Ayuda</a>
       <a href="privacidad.html">Privacidad</a>
       <a href="cookies.html">Cookies</a>
-      <a href="terminos.html">T�rminos</a>
+      <a href="terminos.html">Términos</a>
       <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog"><span class="aviso-ico"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5A45C9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span> Aviso: no diagnóstico</a>
     </div>
   </footer>
@@ -159,6 +156,7 @@
     if (back && !(s && rol.includes('paciente'))) back.href = 'inicio.html';
   </script>
   <script src="../js/cookies-banner.js"></script>
+  <script src="../js/sesion-header.js"></script>
 </body>
 
 </html>

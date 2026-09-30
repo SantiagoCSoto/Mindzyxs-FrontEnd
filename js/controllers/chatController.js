@@ -12,6 +12,7 @@ import {
   escucharPresencia, escucharEscribiendo, avisarEscribiendo, escucharMeta, leerUltimoMensaje,
   marcarVisto, escucharVisto, leerVisto
 } from '../services/chatService.js';
+import { authService } from '../services/authService.js';
 
 const $ = (id) => document.getElementById(id);
 const rolePill = $('rolePill'), convList = $('convList'), convCount = $('convCount');
@@ -123,6 +124,7 @@ function renderConvs() {
   }
   const vacio = convList.querySelector('.empty');
   if (vacio) vacio.remove();
+  convList.querySelectorAll('.sk').forEach((n) => n.remove());
   // Crea o actualiza en su lugar (sin limpiar la lista).
   conversaciones.forEach((c) => {
     try {
@@ -161,7 +163,8 @@ function renderConvs() {
 }
 
 async function recargar() {
-  if (!conversaciones.length && convList) {
+  if (!conversaciones.length && convList && !recargar._primeraHecha) {
+    recargar._primeraHecha = true;
     convList.innerHTML = '';
     for (let i = 0; i < 3; i++) {
       const d = document.createElement('div');
@@ -488,3 +491,14 @@ async function iniciar() {
 }
 
 iniciar();
+
+// Cerrar sesión (header unificado)
+const btnLogout = document.getElementById('btn-logout');
+if (btnLogout) {
+  btnLogout.addEventListener('click', () => {
+    if (!confirm('¿Está seguro de que desea cerrar sesión?')) return;
+    authService.logout();
+    sessionStorage.removeItem('es_invitado');
+    window.location.href = 'login.html';
+  });
+}
