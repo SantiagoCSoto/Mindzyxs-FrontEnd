@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="../assets/Logo1.png" />
+  <title>Gestión de accesos - Mindzyxs</title>
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/accesos.css" />
+</head>
+
+<body>
+  <!-- Fondo decorativo suave -->
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-pink"></div>
+    <div class="blob blob-lav"></div>
+  </div>
+
+  <!-- Encabezado y Navegación -->
+  <header class="header-nav">
+    <div class="logo-container">
+      <a href="inicio.html" class="logo-link">
+        <img src="../assets/Logo1.png" alt="Logo Mindzyxs" class="logo-img" />
+        <span>Mindzyxs</span>
+      </a>
+    </div>
+
+    <nav class="main-nav" aria-label="Navegación principal">
+      <ul>
+        <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
+        <li><a href="inicio.html#nosotros">Nosotros</a></li>
+        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-right">
+      <div class="header-auth-buttons">
+        <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <main class="wrap">
+    <a href="panel_paciente.html" class="btn-volver-landing" id="backBtn" style="background:#FFFFFF;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;margin-bottom:14px;">&larr; Volver al panel</a>
+
+    <section class="card">
+      <div class="panel-head">
+        <h1>Gestión de accesos</h1>
+        <p class="sub">Autorice o revoque el acceso de psicólogos a su información emocional.</p>
+      </div>
+
+      <div class="buscar-wrap">
+        <input
+          type="text"
+          class="buscar"
+          id="buscar"
+          placeholder="Buscar por nombre o especialidad..."
+          aria-label="Buscar psicólogo por nombre o especialidad"
+          autocomplete="off"
+        />
+      </div>
+
+      <!-- Contenedor dinámico de psicólogos -->
+      <div id="lista" class="lista-accesos" aria-live="polite">
+        <!-- Shimmer skeletons iniciales mientras carga la petición -->
+        <div class="sk-card fila-sk">
+          <div class="sk sk-circle" style="width:44px;height:44px;flex-shrink:0;"></div>
+          <div style="flex:1;">
+            <div class="sk sk-line" style="width:45%;height:14px;margin-bottom:8px;"></div>
+            <div class="sk sk-line" style="width:30%;height:12px;"></div>
+          </div>
+          <div class="sk" style="width:85px;height:24px;border-radius:20px;"></div>
+          <div class="sk" style="width:95px;height:38px;border-radius:18px;"></div>
+        </div>
+        <div class="sk-card fila-sk">
+          <div class="sk sk-circle" style="width:44px;height:44px;flex-shrink:0;"></div>
+          <div style="flex:1;">
+            <div class="sk sk-line" style="width:40%;height:14px;margin-bottom:8px;"></div>
+            <div class="sk sk-line" style="width:35%;height:12px;"></div>
+          </div>
+          <div class="sk" style="width:85px;height:24px;border-radius:20px;"></div>
+          <div class="sk" style="width:95px;height:38px;border-radius:18px;"></div>
+        </div>
+      </div>
+
+      <!-- Estado vacío -->
+      <div class="empty" id="vacio" style="display:none;">
+        No hay psicólogos disponibles para autorizar en este momento.
+      </div>
+    </section>
+  </main>
+
+  <!-- Pie de página legal estándar -->
+  <footer class="footer">
+    <div class="footer-in">
+      <a href="privacidad.html">Privacidad</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="terminos.html">Términos</a>
+      <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog">
+        <span class="aviso-ico">⚠️</span> Aviso: no diagnóstico
+      </a>
+    </div>
+  </footer>
+
+  <!-- Modal de confirmación para autorizar / revocar -->
+  <div class="modal-overlay" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-hidden="true">
+    <div class="modal">
+      <h3 id="confirmTitle">Confirmar</h3>
+      <p id="confirmText" class="modal-desc"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn-modal btn-close" id="btnNo">Cancelar</button>
+        <button type="button" class="btn-modal btn-ok" id="btnSi">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor Toast para notificaciones emergentes -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="../js/controllers/accesosController.js"></script>
+  <script src="../js/cookies-banner.js"></script>
+  <script src="../js/sesion-header.js"></script>
+</body>
+
+</html>
