@@ -60,11 +60,13 @@ function escapar(s) {
 }
 
 function abrirModal() {
-  confirmModal?.classList.add('open');
+  confirmModal.classList.add('open');
+  confirmModal.setAttribute('aria-hidden', 'false');
 }
 
 function cerrarModal() {
-  confirmModal?.classList.remove('open');
+  confirmModal.classList.remove('open');
+  confirmModal.setAttribute('aria-hidden', 'true');
 }
 
 function etiquetaEstado(estado) {
@@ -181,7 +183,7 @@ function filaPregunta(p, indice) {
   const btnAdd = document.createElement('button');
   btnAdd.type = 'button';
   btnAdd.className = 'btn btn-cancel btn-sm';
-  btnAdd.textContent = '+ Agregar opción';
+  btnAdd.innerHTML = '<svg class="btn-ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>Agregar opción';
   btnAdd.addEventListener('click', () => contOpciones.appendChild(filaOpcion({})));
   mini.appendChild(btnAdd);
   const btnDel = document.createElement('button');
@@ -197,6 +199,8 @@ function filaPregunta(p, indice) {
 function abrirEdicion() {
   $('eTitulo').value = actual.titulo || '';
   $('eDesc').value = actual.descripcion || '';
+  const editSub = $('editSub');
+  if (editSub) editSub.textContent = 'Estado: ' + actual.estado;
   $('eForm').classList.remove('show');
   const ep = $('ePreg');
   ep.innerHTML = '';
@@ -260,6 +264,14 @@ $('btnSi').addEventListener('click', async () => {
 });
 
 $('btnNo').addEventListener('click', cerrarModal);
+
+confirmModal.addEventListener('click', (e) => {
+  if (e.target === confirmModal) cerrarModal();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') cerrarModal();
+});
 
 // ---------- Guardar edición ----------
 function recogerEditor() {

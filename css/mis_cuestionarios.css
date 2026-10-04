@@ -32,6 +32,16 @@ button {
   font-family: inherit;
 }
 
+/* Foco visible accesible (WCAG 2.4.7) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--cyan-fuerte);
+  outline-offset: 2px;
+}
+
 .bg-blobs {
   position: fixed;
   inset: 0;
@@ -468,6 +478,18 @@ textarea:focus {
   height: 38px;
   font-size: 12.5px;
   padding: 0 16px;
+}
+
+.btn-add-wrap {
+  margin-top: 12px;
+}
+
+.btn:disabled,
+.btn-modal:disabled,
+.btn-back:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .btn-sm {
