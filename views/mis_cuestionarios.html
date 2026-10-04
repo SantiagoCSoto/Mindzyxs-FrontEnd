@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="../assets/Logo1.png" />
+  <title>Mindzyx — Mis cuestionarios</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/mis_cuestionarios.css" />
+</head>
+
+<body>
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-pink"></div>
+    <div class="blob blob-lav"></div>
+  </div>
+
+  <header class="header-nav">
+    <div class="logo-container">
+      <a href="inicio.html" class="logo-link">
+        <img src="../assets/Logo1.png" alt="Logo Mindzyxs" class="logo-img" />
+        <span>Mindzyxs</span>
+      </a>
+    </div>
+    <nav class="main-nav" aria-label="Navegación principal">
+      <ul>
+        <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
+        <li><a href="inicio.html#nosotros">Nosotros</a></li>
+        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+      </ul>
+    </nav>
+    <div class="header-right">
+      <div class="header-auth-buttons">
+        <span id="rol-usuario" class="badge-role">Psicólogo</span>
+        <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <a href="inicio.html" class="btn-back" id="btnVolverPanel">
+      <svg class="icon-inline" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      Volver al panel
+    </a>
+
+    <!-- Pantalla: lista de mis cuestionarios -->
+    <section class="card screen active" id="screenLista">
+      <h1>Mis cuestionarios</h1>
+      <p class="sub">Borrador o Publicado. Busca tus cuestionarios en orden.</p>
+      <input type="text" class="buscar" id="buscarC" placeholder="Buscar por título..." aria-label="Buscar cuestionario por título" autocomplete="off" />
+      <div class="err-msg" id="listaErr">No fue posible cargar tus cuestionarios. Intente nuevamente.</div>
+      <div id="listaC"></div>
+    </section>
+
+    <!-- Pantalla: detalle del cuestionario -->
+    <section class="card screen" id="screenDetalle">
+      <h2 id="detTitulo">Detalle</h2>
+      <p class="sub" id="detSub"></p>
+      <div id="detPreg"></div>
+      <div class="actions">
+        <button type="button" class="btn btn-save" id="btnEditar">
+          <svg class="btn-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>
+          Editar
+        </button>
+        <button type="button" class="btn btn-danger" id="btnEliminar">
+          <svg class="btn-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+          Eliminar
+        </button>
+        <button type="button" class="btn btn-cancel" id="btnVolverLista">Volver a cuestionarios</button>
+      </div>
+    </section>
+
+    <!-- Pantalla: editar cuestionario -->
+    <section class="card screen" id="screenEditar">
+      <h2>Editar cuestionario</h2>
+      <p class="sub" id="editSub"></p>
+
+      <label class="field-label" for="eTitulo">Título *</label>
+      <input type="text" id="eTitulo" maxlength="200" autocomplete="off" />
+
+      <label class="field-label" for="eDesc">Descripción</label>
+      <textarea id="eDesc" maxlength="1000" placeholder="Cuéntale al paciente de qué trata este cuestionario (opcional)"></textarea>
+
+      <label class="field-label">Preguntas *</label>
+      <p class="field-hint">Cada pregunta debe tener al menos dos opciones. Puedes agregar nuevas preguntas.</p>
+      <div id="ePreg"></div>
+      <div class="btn-add-wrap">
+        <button type="button" class="btn btn-cancel btn-add-preg" id="btnAddPreg">
+          <svg class="btn-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+          Agregar pregunta
+        </button>
+      </div>
+
+      <div class="err-msg" id="eForm">El cuestionario debe tener al menos una pregunta.</div>
+
+      <div class="actions">
+        <button type="button" class="btn btn-cancel" id="btnGuardarB">Guardar como borrador</button>
+        <button type="button" class="btn btn-save" id="btnPublicarE">Publicar</button>
+        <button type="button" class="btn btn-cancel" id="btnCancelarE">Cancelar</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-in">
+      <a href="privacidad.html">Privacidad</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="terminos.html">Términos</a>
+      <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog"><span class="aviso-ico"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5A45C9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span> Aviso: no diagnóstico</a>
+    </div>
+  </footer>
+
+  <!-- Modal de confirmación (despublicar / eliminar) -->
+  <div class="modal-overlay" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-hidden="true">
+    <div class="modal">
+      <div class="modal-icon" id="confirmIco">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+      </div>
+      <h3 id="confirmTitle">Confirmar</h3>
+      <p class="sub" id="confirmText"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn-modal close" id="btnNo">No</button>
+        <button type="button" class="btn-modal danger" id="btnSi">Sí, continuar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="../js/controllers/misCuestionariosController.js"></script>
+  <script src="../js/cookies-banner.js"></script>
+  <script src="../js/sesion-header.js"></script>
+</body>
+
+</html>
