@@ -20,6 +20,7 @@ const btnHistorial = document.getElementById('btn-paciente-historial');
 const btnPerfil = document.getElementById('btn-paciente-perfil');
 const btnRecordatorios = document.getElementById('btn-paciente-recordatorios');
 const btnChat = document.getElementById('btn-paciente-chat');
+const btnAccesos = document.getElementById('btn-paciente-accesos');
 const btnAyuda = document.getElementById('btn-paciente-ayuda');
 const btnAviso = document.getElementById('btn-paciente-aviso');
 const btnLogoutTop = document.getElementById('btn-logout-top');
@@ -98,6 +99,13 @@ if (btnRecordatorios) {
 if (btnChat) {
   btnChat.addEventListener('click', () => {
     window.location.href = 'chat.html';
+  });
+}
+
+// 6.1. Gestión de accesos (PB-17)
+if (btnAccesos) {
+  btnAccesos.addEventListener('click', () => {
+    window.location.href = 'gestion_accesos.html';
   });
 }
 
