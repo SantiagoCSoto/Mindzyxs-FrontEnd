@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="../assets/Logo1.png" />
+  <title>Observaciones clínicas - Mindzyxs</title>
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/observaciones.css" />
+</head>
+
+<body>
+  <!-- Fondo decorativo suave -->
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-pink"></div>
+    <div class="blob blob-lav"></div>
+  </div>
+
+  <!-- Encabezado y Navegación -->
+  <header class="header-nav">
+    <div class="logo-container">
+      <a href="inicio.html" class="logo-link">
+        <img src="../assets/Logo1.png" alt="Logo Mindzyxs" class="logo-img" />
+        <span>Mindzyxs</span>
+      </a>
+    </div>
+
+    <nav class="main-nav" aria-label="Navegación principal">
+      <ul>
+        <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
+        <li><a href="inicio.html#nosotros">Nosotros</a></li>
+        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-right">
+      <div class="header-auth-buttons">
+        <span id="rol-usuario" class="badge-role">Psicólogo</span>
+        <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <main class="wrap">
+    <a href="pacientes_autorizados.html" class="btn-volver-landing" id="btnVolver" style="background:#FFFFFF;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:9px 24px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;margin-bottom:14px;">&larr; Volver a registros</a>
+
+    <section class="card">
+      <div class="panel-head">
+        <h1>Observación clínica</h1>
+        <p class="sub" id="detMeta">Cargando información del registro...</p>
+      </div>
+
+      <!-- Resumen del estado del paciente -->
+      <div class="resumen-paciente">
+        <div class="dlabel">Estado emocional / Nivel</div>
+        <div class="dval" id="detValor">-</div>
+
+        <div class="dlabel">Nota propia del paciente</div>
+        <div class="dval" id="detNota">-</div>
+
+        <div class="dlabel">Resultado del cuestionario</div>
+        <div class="dval" id="detQuiz">-</div>
+
+        <div class="dlabel">Observaciones clínicas registradas</div>
+        <div id="detObs" class="lista-obs" aria-live="polite">
+          <!-- Shimmer skeleton inicial mientras carga -->
+          <div class="sk-card fila-sk">
+            <div style="flex:1;">
+              <div class="sk sk-line" style="width:60%;height:14px;margin-bottom:6px;"></div>
+              <div class="sk sk-line" style="width:30%;height:12px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="acciones-observacion">
+        <button type="button" class="btn" id="btnAgregarObs">+ Agregar observación</button>
+      </div>
+
+      <p class="hint">
+        La firma profesional y la fecha se registran automáticamente por el sistema. Recuerde que solo puede agregar observaciones a pacientes con autorización activa.
+      </p>
+    </section>
+  </main>
+
+  <!-- Modal para Agregar Observación Clínica -->
+  <div class="modal-overlay" id="obsModal" role="dialog" aria-modal="true" aria-labelledby="obsTitle" aria-hidden="true">
+    <div class="modal modal-form">
+      <h3 id="obsTitle">Nueva observación clínica</h3>
+      <p class="modal-sub">Esta nota quedará vinculada al paciente con su firma profesional automática.</p>
+
+      <div class="modal-form-body">
+        <label for="obsReg" class="form-label">Asociar al registro:</label>
+        <select id="obsReg" class="form-select">
+          <option value="0">General del paciente</option>
+        </select>
+
+        <label for="obsText" class="form-label">Observación *</label>
+        <textarea id="obsText" class="form-textarea" placeholder="Escriba su observación clínica..." rows="4"></textarea>
+        <span class="err-msg" id="eObs">La observación es obligatoria.</span>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-modal btn-close" id="obsCancel">Cancelar</button>
+        <button type="button" class="btn-modal btn-ok" id="obsSave">Guardar observación</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pie de página legal estándar -->
+  <footer class="footer">
+    <div class="footer-in">
+      <a href="privacidad.html">Privacidad</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="terminos.html">Términos</a>
+      <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog">
+        <span class="aviso-ico">⚠️</span> Aviso: no diagnóstico
+      </a>
+    </div>
+  </footer>
+
+  <!-- Contenedor Toast para notificaciones emergentes -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="../js/controllers/observacionesController.js"></script>
+  <script src="../js/cookies-banner.js"></script>
+  <script src="../js/sesion-header.js"></script>
+</body>
+
+</html>

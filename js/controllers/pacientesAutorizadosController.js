@@ -6,7 +6,7 @@
 
 import { authService } from '../services/authService.js';
 import { psicologoRegistrosService } from '../services/psicologoRegistrosService.js';
-import { postJson } from '../services/apiClient.js';
+import { observacionesService } from '../services/observacionesService.js';
 
 // 1. Verificación obligatoria de sesión y rol de Psicólogo
 const sesion = authService.getSesion();
@@ -42,6 +42,7 @@ const detQuiz = document.getElementById('detQuiz');
 const detObs = document.getElementById('detObs');
 const btnVolverReg = document.getElementById('btnVolverReg');
 const btnAgregarObs = document.getElementById('btnAgregarObs');
+const btnVerObservaciones = document.getElementById('btnVerObservaciones');
 
 // Modal Observación (PB-18 / PB-19)
 const obsModal = document.getElementById('obsModal');
@@ -440,7 +441,7 @@ async function guardarObservacion() {
   }
 
   try {
-    const res = await postJson('/observaciones', {
+    const res = await observacionesService.crearObservacion({
       idPaciente: pacienteSeleccionado.id,
       idEvento: idEventoTarget || null,
       contenido: contenido
@@ -526,6 +527,20 @@ if (btnVolverPanel) {
 // Observación Modal
 if (btnAgregarObs) {
   btnAgregarObs.addEventListener('click', abrirModalObs);
+}
+
+if (btnVerObservaciones) {
+  btnVerObservaciones.addEventListener('click', () => {
+    if (pacienteSeleccionado) {
+      const qs = new URLSearchParams({
+        idPaciente: pacienteSeleccionado.id,
+        ...(idRegistroSeleccionado ? { idEvento: idRegistroSeleccionado } : {})
+      });
+      window.location.href = `observaciones.html?${qs.toString()}`;
+    } else {
+      window.location.href = 'observaciones.html';
+    }
+  });
 }
 if (obsCancel) {
   obsCancel.addEventListener('click', cerrarModalObs);
