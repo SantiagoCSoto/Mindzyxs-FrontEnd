@@ -186,7 +186,6 @@ async function guardar() {
       .filter((e) => payload.especialidades.includes(e.id))
       .map((e) => e.nombre);
     renderVer();
-    btn.disabled = false;
   } catch (error) {
     const mensaje = error.message || 'No fue posible actualizar el perfil. Intente nuevamente';
     if (mensaje.includes('correo') && mensaje.toLowerCase().includes('registrado')) {
@@ -196,6 +195,8 @@ async function guardar() {
       $('eForm').textContent = mensaje;
       $('eForm').classList.add('show');
     }
+  } finally {
+    $('btnGuardar').disabled = false;
   }
 }
 
