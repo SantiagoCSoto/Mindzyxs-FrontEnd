@@ -515,7 +515,11 @@ if (btnVolverReg) {
 if (btnVolverPanel) {
   btnVolverPanel.addEventListener('click', (e) => {
     e.preventDefault();
-    window.location.href = 'inicio.html';
+    if (screenPacientes && !screenPacientes.classList.contains('active')) {
+      showScreen('screenPacientes');
+    } else {
+      window.location.href = 'inicio.html';
+    }
   });
 }
 
