@@ -1,6 +1,7 @@
 /**
- * Controlador de la gestión de cuestionarios del psicólogo (PB-21 HU1-PB21).
+ * Controlador de la gestión de cuestionarios del psicólogo (PB-20 HU1-PB20 y PB-21 HU1-PB21).
  * Conecta los ids de views/mis_cuestionarios.html con misCuestionariosService.js:
+ *   creación personalizada con cálculo de riesgo (POST /psicologo/cuestionarios) (PB-20),
  *   lista con búsqueda (GET /psicologo/cuestionarios?q=),
  *   detalle (GET /psicologo/cuestionarios/{id}),
  *   editar un Publicado -> confirmación -> despublicar + editor,
@@ -11,6 +12,7 @@
 
 import { authService } from '../services/authService.js';
 import {
+  crearCuestionario,
   listarCuestionarios,
   obtenerDetalleCuestionario,
   despublicarCuestionario,
@@ -359,6 +361,166 @@ $('btnVolverLista').addEventListener('click', () => {
   actual = null;
   show('screenLista');
 });
+
+// ---------- Crear nuevo cuestionario (PB-20 HU1-PB20) ----------
+function abrirNuevo() {
+  const fTitulo = $('fTitulo');
+  const fDesc = $('fDesc');
+  const errBox = $('eFormNuevo');
+  const pregBox = $('pregBox');
+
+  if (fTitulo) fTitulo.value = '';
+  if (fDesc) fDesc.value = '';
+  if (errBox) {
+    errBox.textContent = '';
+    errBox.classList.remove('show');
+  }
+
+  // Restablecer rangos predeterminados de riesgo
+  const rBajo = $('rBajo');
+  const rBajoH = $('rBajoH');
+  const rMedio = $('rMedio');
+  const rMedioH = $('rMedioH');
+  const rAlto = $('rAlto');
+  if (rBajo) rBajo.value = '1';
+  if (rBajoH) rBajoH.value = '2';
+  if (rMedio) rMedio.value = '3';
+  if (rMedioH) rMedioH.value = '3';
+  if (rAlto) rAlto.value = '4';
+
+  if (pregBox) {
+    pregBox.innerHTML = '';
+    pregBox.appendChild(filaPregunta({}, 1));
+  }
+
+  show('screenNuevo');
+}
+
+const btnAddPregNuevo = $('btnAddPregNuevo');
+if (btnAddPregNuevo) {
+  btnAddPregNuevo.addEventListener('click', () => {
+    const pb = $('pregBox');
+    if (pb) {
+      pb.appendChild(filaPregunta({}, pb.querySelectorAll('.p-item').length + 1));
+    }
+  });
+}
+
+// Sincronización reactiva de umbrales de riesgo
+const rBajoH = $('rBajoH');
+const rMedio = $('rMedio');
+const rMedioH = $('rMedioH');
+const rAlto = $('rAlto');
+
+if (rBajoH) {
+  rBajoH.addEventListener('input', () => {
+    const bMax = Number(rBajoH.value);
+    if (!Number.isNaN(bMax) && rMedio) {
+      rMedio.value = bMax + 1;
+      if (rMedioH && Number(rMedioH.value) <= bMax) {
+        rMedioH.value = bMax + 1;
+        if (rAlto) rAlto.value = bMax + 2;
+      }
+    }
+  });
+}
+
+if (rMedioH) {
+  rMedioH.addEventListener('input', () => {
+    const mMax = Number(rMedioH.value);
+    if (!Number.isNaN(mMax) && rAlto) {
+      rAlto.value = mMax + 1;
+    }
+  });
+}
+
+function recogerNuevo() {
+  const titulo = $('fTitulo')?.value?.trim() || '';
+  const descripcion = $('fDesc')?.value?.trim() || '';
+  const items = $('pregBox')?.querySelectorAll('.p-item') || [];
+  const preguntas = [];
+  items.forEach((node) => {
+    const texto = node.querySelector('.q-texto')?.value?.trim() || '';
+    const tipo = node.dataset.tipo || 'opcion_multiple';
+    const opciones = [];
+    node.querySelectorAll('.opc-row').forEach((row) => {
+      const opcTexto = row.querySelector('.opc-texto')?.value?.trim() || '';
+      const opcValor = Number(row.querySelector('.opc-valor')?.value ?? '0');
+      opciones.push({ texto: opcTexto, valor: Number.isFinite(opcValor) ? opcValor : 0 });
+    });
+    preguntas.push({ texto, tipo, opciones });
+  });
+
+  const bajoMax = Number($('rBajoH')?.value ?? 2);
+  const medioMax = Number($('rMedioH')?.value ?? 3);
+
+  return { titulo, descripcion, preguntas, bajoMax, medioMax };
+}
+
+function validarNuevo(nuevo) {
+  if (!nuevo.titulo) return 'El título es obligatorio.';
+  if (!nuevo.preguntas.length) return 'El cuestionario debe tener al menos una pregunta.';
+  const sinTexto = nuevo.preguntas.filter((p) => !p.texto);
+  if (sinTexto.length) return 'Cada pregunta debe tener texto.';
+  const sinOpciones = nuevo.preguntas.filter((p) => p.opciones.length < 2);
+  if (sinOpciones.length) return 'Cada pregunta debe tener al menos dos opciones.';
+  const opcVacia = nuevo.preguntas.some((p) => p.opciones.some((o) => !o.texto));
+  if (opcVacia) return 'Cada opción debe tener texto.';
+  const valorInvalido = nuevo.preguntas.some((p) => p.opciones.some((o) => o.valor < 0));
+  if (valorInvalido) return 'El valor de cada opción debe ser mayor o igual a cero.';
+  if (Number.isNaN(nuevo.bajoMax) || nuevo.bajoMax < 0) return 'El límite de riesgo Bajo debe ser mayor o igual a cero.';
+  if (Number.isNaN(nuevo.medioMax) || nuevo.medioMax <= nuevo.bajoMax) return 'El límite de riesgo Medio debe ser estrictamente mayor al límite de riesgo Bajo.';
+  return '';
+}
+
+async function guardarNuevo(publicar) {
+  const nuevo = recogerNuevo();
+  const error = validarNuevo(nuevo);
+  const errBox = $('eFormNuevo');
+  if (error) {
+    if (errBox) {
+      errBox.textContent = error;
+      errBox.classList.add('show');
+    }
+    return;
+  }
+  if (errBox) errBox.classList.remove('show');
+
+  const payload = {
+    titulo: nuevo.titulo,
+    descripcion: nuevo.descripcion || null,
+    publicar,
+    umbrales: {
+      bajoMax: nuevo.bajoMax,
+      medioMax: nuevo.medioMax
+    },
+    preguntas: nuevo.preguntas
+  };
+
+  try {
+    const r = await crearCuestionario(payload);
+    showToast(r.mensaje || (publicar ? 'Cuestionario publicado' : 'Cuestionario guardado como borrador'));
+    await cargarLista(buscarC?.value?.trim() || '');
+    show('screenLista');
+  } catch (err) {
+    if (errBox) {
+      errBox.textContent = err.message || 'No fue posible crear el cuestionario';
+      errBox.classList.add('show');
+    }
+  }
+}
+
+const btnNuevo = $('btnNuevo');
+if (btnNuevo) btnNuevo.addEventListener('click', abrirNuevo);
+
+const btnBorrador = $('btnBorrador');
+if (btnBorrador) btnBorrador.addEventListener('click', () => guardarNuevo(false));
+
+const btnPublicar = $('btnPublicar');
+if (btnPublicar) btnPublicar.addEventListener('click', () => guardarNuevo(true));
+
+const btnVolverListaNuevo = $('btnVolverListaNuevo');
+if (btnVolverListaNuevo) btnVolverListaNuevo.addEventListener('click', () => show('screenLista'));
 
 // ---------- Cerrar sesión ----------
 $('btn-logout').addEventListener('click', () => {
