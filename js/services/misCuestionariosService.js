@@ -1,6 +1,7 @@
 /**
- * Servicio de la gestión de cuestionarios del psicólogo (PB-21 HU1-PB21).
+ * Servicio de la gestión de cuestionarios del psicólogo (PB-20 HU1-PB20 y PB-21 HU1-PB21).
  * Consume el backend en http://localhost:5015/api:
+ *   POST   /psicologo/cuestionarios               -> crea cuestionario personalizado (PB-20)
  *   GET    /psicologo/cuestionarios?q=            -> mis cuestionarios (Borrador/Publicado) con búsqueda
  *   GET    /psicologo/cuestionarios/{id}          -> detalle editable (preguntas/opciones con ids)
  *   POST   /psicologo/cuestionarios/{id}/despublicar -> confirma: Publicado -> Borrador (habilita el editor)
@@ -10,6 +11,19 @@
  */
 
 import { getJson, postJson, putJson, deleteJson } from './apiClient.js';
+
+/**
+ * Crea un nuevo cuestionario personalizado (Borrador o Publicado) (PB-20 HU1-PB20).
+ * `payload`: { titulo, descripcion, publicar, umbrales?, preguntas[] }.
+ * Devuelve { id, mensaje }. Lanza Error con el mensaje exacto del backend.
+ */
+export async function crearCuestionario(payload) {
+  const res = await postJson('/psicologo/cuestionarios', payload);
+  if (!res.ok) {
+    throw new Error(res.error || 'No fue posible crear el cuestionario');
+  }
+  return { id: res.data?.id, mensaje: res.data?.mensaje || 'Cuestionario guardado correctamente' };
+}
 
 /**
  * Lista "Mis cuestionarios" del psicólogo (Borrador/Publicado), recientes primero.

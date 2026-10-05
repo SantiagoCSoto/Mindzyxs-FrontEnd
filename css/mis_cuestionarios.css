@@ -570,6 +570,42 @@ input[type="number"]:focus {
   flex-wrap: wrap;
 }
 
+/* Intervalos de cálculo de riesgo (PB-20 HU1-PB20) */
+.rangos {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 8px;
+}
+
+.rango {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #FAF9FF;
+  border: 1px solid #EDE8F0;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 13px;
+  color: var(--text);
+  flex-wrap: wrap;
+}
+
+.rango b {
+  min-width: 55px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.rango input[type="number"] {
+  width: 68px;
+  margin-top: 0;
+  padding: 6px 10px;
+  border-radius: 8px;
+  text-align: center;
+}
+
 .icon-inline {
   display: inline-block;
   vertical-align: -2px;
@@ -869,5 +905,14 @@ input[type="number"]:focus {
 
   .modal-actions {
     flex-direction: column;
+  }
+
+  .rango {
+    gap: 8px;
+    padding: 10px 12px;
+  }
+
+  .rango input[type="number"] {
+    width: 60px;
   }
 }
