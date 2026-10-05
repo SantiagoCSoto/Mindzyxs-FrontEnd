@@ -117,9 +117,8 @@ async function abrirAsignacion(id) {
     renderPacientes(Array.isArray(data.pacientes) ? data.pacientes : []);
     show('screenAsignar');
   } catch (error) {
-    listaPac.innerHTML = '';
-    pintarVacio(listaPac, 'No fue posible cargar los pacientes.');
     showToast(error.message);
+    await cargarLista();
     show('screenLista');
   }
 }
@@ -131,6 +130,7 @@ function renderPacientes(pacientes) {
     btnAsignar.disabled = true;
     return;
   }
+  let seleccionables = 0;
   pacientes.forEach((p) => {
     const l = document.createElement('label');
     l.className = 'fila-check' + (p.yaAsignado ? ' disabled' : '');
@@ -139,6 +139,7 @@ function renderPacientes(pacientes) {
     input.value = String(p.id);
     input.disabled = !!p.yaAsignado;
     if (p.yaAsignado) input.setAttribute('aria-label', p.nombre + ' (ya asignado, no disponible)');
+    else seleccionables += 1;
     l.appendChild(input);
     const span = document.createElement('span');
     span.innerHTML = '<b>' + escapar(p.nombre) + '</b>' +
@@ -146,6 +147,8 @@ function renderPacientes(pacientes) {
     l.appendChild(span);
     listaPac.appendChild(l);
   });
+  // Si todos los pacientes ya tienen el cuestionario, no hay nada que marcar.
+  btnAsignar.disabled = seleccionables === 0;
 }
 
 btnAsignar.addEventListener('click', async () => {
@@ -175,12 +178,13 @@ $('btnVolver').addEventListener('click', () => {
   show('screenLista');
 });
 
+// La lista de publicados siempre se carga (para "Volver" tras entrar con ?id=).
+cargarLista();
+
 // Si viene con ?id= se abre directamente esa asignación (enlace desde Mis cuestionarios).
 const parametroId = new URLSearchParams(window.location.search).get('id');
 if (parametroId && /^\d+$/.test(parametroId)) {
   abrirAsignacion(Number(parametroId));
-} else {
-  cargarLista();
 }
 
 // ---------- Cerrar sesión ----------
