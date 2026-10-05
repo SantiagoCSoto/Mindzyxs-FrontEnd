@@ -368,6 +368,26 @@ body {
   background: var(--cyan-fuerte);
 }
 
+.btn-sm {
+  flex: none;
+  min-width: 0;
+  height: 34px;
+  padding: 0 14px;
+  font-size: 12px;
+  border-radius: 18px;
+}
+
+/* --- Estado vacío --- */
+.empty {
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+  padding: 22px 10px;
+  border: 1px dashed #DFDAEE;
+  border-radius: 12px;
+  margin-top: 12px;
+}
+
 /* --- Mensaje de error --- */
 .err-msg {
   display: none;
