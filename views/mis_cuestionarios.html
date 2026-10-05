@@ -48,6 +48,12 @@
     <section class="card screen active" id="screenLista">
       <h1>Mis cuestionarios</h1>
       <p class="sub">Borrador o Publicado. Busca tus cuestionarios en orden.</p>
+      <div style="margin: 14px 0;">
+        <button type="button" class="btn btn-save" id="btnNuevo">
+          <svg class="btn-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+          + Crear cuestionario
+        </button>
+      </div>
       <input type="text" class="buscar" id="buscarC" placeholder="Buscar por título..." aria-label="Buscar cuestionario por título" autocomplete="off" />
       <div class="err-msg" id="listaErr">No fue posible cargar tus cuestionarios. Intente nuevamente.</div>
       <div id="listaC"></div>
@@ -98,6 +104,44 @@
         <button type="button" class="btn btn-cancel" id="btnGuardarB">Guardar como borrador</button>
         <button type="button" class="btn btn-save" id="btnPublicarE">Publicar</button>
         <button type="button" class="btn btn-cancel" id="btnCancelarE">Cancelar</button>
+      </div>
+    </section>
+
+    <!-- Pantalla: nuevo cuestionario (PB-20 HU1-PB20) -->
+    <section class="card screen" id="screenNuevo">
+      <h2>Nuevo cuestionario</h2>
+      <p class="sub">Diseñe un cuestionario personalizado con cálculo de riesgo configurable.</p>
+
+      <label class="field-label" for="fTitulo">Título *</label>
+      <input type="text" id="fTitulo" maxlength="200" placeholder="Ej. Chequeo de ansiedad" autocomplete="off" />
+
+      <label class="field-label" for="fDesc">Descripción</label>
+      <textarea id="fDesc" maxlength="1000" placeholder="Descripción del cuestionario..."></textarea>
+
+      <label class="field-label">Preguntas *</label>
+      <p class="field-hint">Cada pregunta debe tener al menos dos opciones con su valor ponderado.</p>
+      <div id="pregBox"></div>
+      <div class="btn-add-wrap">
+        <button type="button" class="btn btn-cancel btn-add-preg" id="btnAddPregNuevo">
+          <svg class="btn-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+          + Agregar pregunta
+        </button>
+      </div>
+
+      <h3 style="font-size: 16px; font-weight: 700; margin-top: 24px; color: var(--color-tinta, #1E293B);">Cálculo de riesgo</h3>
+      <p class="sub" style="margin-bottom: 12px;">Asigne un nivel a cada intervalo según su preferencia.</p>
+      <div class="rangos">
+        <div class="rango"><b style="color: #1F7A4D;">Bajo</b> De <input type="number" id="rBajo" value="1" min="0" aria-label="Bajo desde" /> a <input type="number" id="rBajoH" value="2" min="0" aria-label="Bajo hasta" /></div>
+        <div class="rango"><b style="color: #B7791F;">Medio</b> De <input type="number" id="rMedio" value="3" min="0" aria-label="Medio desde" /> a <input type="number" id="rMedioH" value="3" min="0" aria-label="Medio hasta" /></div>
+        <div class="rango"><b style="color: #C2274F;">Alto</b> De <input type="number" id="rAlto" value="4" min="0" aria-label="Alto desde" /> en adelante</div>
+      </div>
+
+      <div class="err-msg" id="eFormNuevo">Debe agregar al menos una pregunta válida con opciones.</div>
+
+      <div class="actions">
+        <button type="button" class="btn btn-cancel" id="btnBorrador">Guardar como borrador</button>
+        <button type="button" class="btn btn-save" id="btnPublicar">Publicar</button>
+        <button type="button" class="btn btn-cancel" id="btnVolverListaNuevo">Volver a cuestionarios</button>
       </div>
     </section>
   </main>
