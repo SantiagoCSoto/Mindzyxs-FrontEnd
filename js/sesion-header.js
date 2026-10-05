@@ -33,6 +33,7 @@
       var s = JSON.parse(sessionStorage.getItem('usuario') || 'null');
       var rol = String((s && (s.rol || s.tipo_usuario)) || '').toLowerCase();
       if (rol.includes('paciente')) return 'panel_paciente.html';
+      if (rol.includes('psicologo')) return 'pacientes_autorizados.html';
     } catch (e) {
       return null;
     }

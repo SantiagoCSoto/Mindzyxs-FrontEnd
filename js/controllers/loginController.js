@@ -137,6 +137,7 @@ function destinoPorRol() {
   const rol = String(localStorage.getItem('rol') || '').toLowerCase();
   if (rol === 'administrador' || rol === 'admin') return 'admin_bd.html';
   if (rol.includes('paciente')) return 'panel_paciente.html';
+  if (rol.includes('psicologo')) return 'pacientes_autorizados.html';
   return 'inicio.html';
 }
 
