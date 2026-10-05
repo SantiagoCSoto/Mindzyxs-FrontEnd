@@ -98,7 +98,7 @@ function etiquetaCorta(fecha) {
   return String(fecha || '');
 }
 
-function pintarBarras(contenedor, items) {
+function pintarBarras(contenedor, items, prefijo) {
   contenedor.innerHTML = '';
   const max = Math.max(...items.map((s) => Number(s.registros) || 0), 1);
   items.forEach((s, i) => {
@@ -109,7 +109,7 @@ function pintarBarras(contenedor, items) {
     barra.style.height = Math.max(Math.round((valor / max) * 100), 8) + '%';
     barra.setAttribute('aria-label', etiqueta + ': ' + valor + ' registro(s)');
     const et = document.createElement('span');
-    et.textContent = 'S' + (i + 1);
+    et.textContent = prefijo + (i + 1);
     et.setAttribute('aria-hidden', 'true');
     barra.appendChild(et);
     contenedor.appendChild(barra);
@@ -123,6 +123,7 @@ function pintarDistribucion(distribucion) {
   const claves = ['Bajo', 'Medio', 'Alto'];
   claves.forEach((nivel) => {
     const cantidad = distribucion ? Number(distribucion[nivel]) || 0 : 0;
+    if (!cantidad) return;
     const tr = document.createElement('tr');
     const tdN = document.createElement('td');
     tdN.textContent = nivel;
@@ -132,6 +133,9 @@ function pintarDistribucion(distribucion) {
     tr.appendChild(tdC);
     body.appendChild(tr);
   });
+  if (!body.hasChildNodes()) {
+    body.innerHTML = '<tr><td colspan="2">Sin registros por nivel.</td></tr>';
+  }
 }
 
 function renderEstadisticas(data) {
@@ -139,8 +143,8 @@ function renderEstadisticas(data) {
   $('kTend').textContent = data.tendencia || 'Estable';
   $('kReg').textContent = String(data.totalRegistros ?? 0);
   $('kNiv').textContent = data.nivelFrecuente || '—';
-  pintarBarras($('barrasSemana'), Array.isArray(data.porSemana) ? data.porSemana : []);
-  pintarBarras($('barrasMes'), Array.isArray(data.porMes) ? data.porMes : []);
+  pintarBarras($('barrasSemana'), Array.isArray(data.porSemana) ? data.porSemana : [], 'S');
+  pintarBarras($('barrasMes'), Array.isArray(data.porMes) ? data.porMes : [], 'M');
   pintarDistribucion(data.distribucion);
 }
 
