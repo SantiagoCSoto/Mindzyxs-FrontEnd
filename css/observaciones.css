@@ -1,0 +1,303 @@
+/* Estilos para la vista de Observaciones Clínicas del Psicólogo (PB-19 HU1-PB19) */
+
+.wrap {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 20px 48px;
+  flex: 1;
+}
+
+.badge-role {
+  background: var(--color-apoyo-suave);
+  color: var(--color-apoyo-oscuro);
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--color-apoyo-borde);
+  margin-right: 8px;
+}
+
+.card {
+  background: var(--color-superficie);
+  border: 1px solid #EDE8F0;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  padding: 28px 24px;
+}
+
+.panel-head h1 {
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--color-tinta);
+  margin: 0;
+}
+
+.panel-head .sub {
+  color: var(--color-mudo);
+  font-size: 13.5px;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+/* Resumen del registro y paciente */
+.resumen-paciente {
+  margin: 20px 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dlabel {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: var(--color-mudo);
+  margin-bottom: -6px;
+}
+
+.dval {
+  font-size: 14px;
+  color: var(--color-tinta);
+  background: #F8FAFC;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #EDE8F0;
+  line-height: 1.5;
+}
+
+/* Listado de observaciones clínicas */
+.lista-obs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.obs {
+  border-left: 3.5px solid var(--color-apoyo);
+  background: #F9F7FF;
+  border-radius: 0 12px 12px 0;
+  padding: 12px 16px;
+  font-size: 13.5px;
+  color: var(--color-tinta);
+  line-height: 1.5;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.obs:hover {
+  transform: translateX(2px);
+  box-shadow: 0 2px 8px rgba(107, 91, 206, 0.06);
+}
+
+.obs small {
+  display: block;
+  color: var(--color-mudo);
+  font-size: 11.5px;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+/* Botones de acción */
+.acciones-observacion {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0 12px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: 20px;
+  padding: 8px 22px;
+  min-height: 42px;
+  font-weight: 700;
+  font-size: 13px;
+  border: none;
+  background: var(--color-primario-fuerte);
+  color: #FFFFFF;
+  transition: all .15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.btn:hover:not(:disabled) {
+  background: #0C647C;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Texto de ayuda/firma */
+.hint {
+  font-size: 12.5px;
+  color: var(--color-mudo);
+  margin-top: 14px;
+  line-height: 1.5;
+  padding-top: 12px;
+  border-top: 1px solid #F1F5F9;
+}
+
+/* Skeletons */
+.fila-sk {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 18px;
+  border: 1px solid #EDE8F0;
+  border-radius: 14px;
+  background: #FFFFFF;
+  margin-bottom: 8px;
+}
+
+/* Estado vacío */
+.empty {
+  border: 1.5px dashed var(--color-borde-neutro);
+  border-radius: 12px;
+  padding: 28px 18px;
+  text-align: center;
+  color: var(--color-mudo);
+  font-size: 13px;
+  background: #FAFAFC;
+}
+
+/* Modal de formulario de observación */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 9999;
+  backdrop-filter: blur(2px);
+}
+
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal {
+  width: min(500px, 100%);
+  background: #FFFFFF;
+  border-radius: 18px;
+  padding: 26px 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  animation: modalPop .2s ease-out;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-tinta);
+  margin: 0;
+}
+
+.modal-sub {
+  font-size: 13px;
+  color: var(--color-mudo);
+  margin: 6px 0 16px;
+  line-height: 1.4;
+}
+
+.modal-form-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+
+.form-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--color-tinta);
+  margin-bottom: -4px;
+}
+
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid var(--color-borde-neutro);
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-family: inherit;
+  color: var(--color-tinta);
+}
+
+.form-select:focus,
+.form-textarea:focus {
+  border-color: var(--color-primario-fuerte);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(14, 116, 144, 0.12);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.err-msg {
+  display: none;
+  color: var(--color-peligro);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.err-msg.show {
+  display: block;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.btn-modal {
+  flex: 1;
+  min-height: 42px;
+  border-radius: 20px;
+  border: none;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all .15s ease;
+}
+
+.btn-modal.btn-ok {
+  background: var(--color-primario-fuerte);
+  color: #FFFFFF;
+}
+
+.btn-modal.btn-ok:hover:not(:disabled) {
+  background: #0C647C;
+}
+
+.btn-modal.btn-close {
+  background: #FFFFFF;
+  border: 1.5px solid var(--color-borde-neutro);
+  color: var(--color-mudo);
+}
+
+.btn-modal.btn-close:hover {
+  background: #F8FAFC;
+  color: var(--color-tinta);
+}
