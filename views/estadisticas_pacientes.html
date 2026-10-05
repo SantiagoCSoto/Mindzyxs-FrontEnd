@@ -39,7 +39,7 @@
   </header>
 
   <main class="wrap">
-    <a href="inicio.html" class="btn-back">
+    <a href="pacientes_autorizados.html" class="btn-volver-landing" id="backBtn">
       <svg class="icon-inline" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
       Volver al panel
     </a>
@@ -51,18 +51,19 @@
       <div class="filtros">
         <div>
           <label for="selPac">Paciente autorizado</label>
-          <select id="selPac"></select>
+          <div class="sk sk-line" id="skSelPac" aria-hidden="true"></div>
+          <select id="selPac" hidden></select>
         </div>
         <div>
           <label for="fDesde">Desde</label>
-          <input type="date" id="fDesde" />
+          <input type="date" id="fDesde" disabled />
         </div>
         <div>
           <label for="fHasta">Hasta</label>
-          <input type="date" id="fHasta" />
+          <input type="date" id="fHasta" disabled />
         </div>
         <div class="filtros-accion">
-          <button type="button" class="btn btn-save" id="btnGenerar">
+          <button type="button" class="btn btn-save" id="btnGenerar" disabled>
             <svg class="btn-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
             Generar
           </button>
@@ -70,6 +71,14 @@
       </div>
 
       <div class="err-msg" id="errStats">No fue posible cargar las estadísticas. Intente nuevamente.</div>
+
+      <div class="sk-stack" id="skResultados" aria-hidden="true" hidden>
+        <div class="sk sk-title"></div>
+        <div class="sk sk-card"></div>
+        <div class="sk sk-card"></div>
+        <div class="sk sk-line"></div>
+        <div class="sk sk-line"></div>
+      </div>
 
       <div class="empty" id="vacioPac" hidden>No tienes pacientes autorizados en este momento.</div>
       <div class="empty" id="sinDatos" hidden>El paciente no tiene datos suficientes para generar estadísticas.</div>

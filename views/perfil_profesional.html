@@ -39,7 +39,7 @@
   </header>
 
   <main class="wrap">
-    <a href="inicio.html" class="btn-back">
+    <a href="pacientes_autorizados.html" class="btn-volver-landing" id="backBtn">
       <svg class="icon-inline" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
       Volver al panel
     </a>
@@ -50,23 +50,33 @@
     <section class="card screen active" id="screenVer">
       <h1>Perfil profesional</h1>
       <p class="sub">Su información visible para los pacientes.</p>
-      <div class="perfil-top">
-        <div class="avatar" id="verAvatar" aria-hidden="true">MG</div>
-        <div class="perfil-nombre">
-          <b id="verNombre">—</b>
-          <small id="verCorreoTop">—</small>
-        </div>
+      <div class="sk-stack" id="skPerfil" aria-hidden="true">
+        <div class="sk sk-title"></div>
+        <div class="sk sk-line"></div>
+        <div class="sk sk-line"></div>
+        <div class="sk sk-line"></div>
+        <div class="sk sk-line"></div>
+        <div class="sk sk-line"></div>
       </div>
-      <div class="campo"><b>Especialidades</b><div class="chips" id="verEsp"></div></div>
-      <div class="campo"><b>Años de experiencia</b><span id="verExp">—</span></div>
-      <div class="campo"><b>Descripción profesional</b><span id="verDesc">—</span></div>
-      <div class="campo"><b>Datos de contacto</b><span id="verCont">—</span></div>
-      <div class="campo"><b>Tarjeta profesional</b><span id="verTarjeta">—</span></div>
-      <div class="actions">
-        <button type="button" class="btn btn-save" id="btnEditar">
-          <svg class="btn-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>
-          Editar
-        </button>
+      <div id="verDatos" hidden>
+        <div class="perfil-top">
+          <div class="avatar" id="verAvatar" aria-hidden="true">MG</div>
+          <div class="perfil-nombre">
+            <b id="verNombre">—</b>
+            <small id="verCorreoTop">—</small>
+          </div>
+        </div>
+        <div class="campo"><b>Especialidades</b><div class="chips" id="verEsp"></div></div>
+        <div class="campo"><b>Años de experiencia</b><span id="verExp">—</span></div>
+        <div class="campo"><b>Descripción profesional</b><span id="verDesc">—</span></div>
+        <div class="campo"><b>Datos de contacto</b><span id="verCont">—</span></div>
+        <div class="campo"><b>Tarjeta profesional</b><span id="verTarjeta">—</span></div>
+        <div class="actions">
+          <button type="button" class="btn btn-save" id="btnEditar">
+            <svg class="btn-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>
+            Editar
+          </button>
+        </div>
       </div>
     </section>
 

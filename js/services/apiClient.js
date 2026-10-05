@@ -18,6 +18,11 @@ function esEndpointAuth(endpoint) {
     .some((p) => endpoint.startsWith(p));
 }
 
+/** Escapado estricto contra XSS para renderizar texto del backend en el DOM. */
+export function escaparHtml(texto) {
+  return String(texto ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
 function conTimeout(signal) {
   try {
     const t = AbortSignal.timeout(TIMEOUT_MS);

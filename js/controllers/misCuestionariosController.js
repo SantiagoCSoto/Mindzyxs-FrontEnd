@@ -11,6 +11,7 @@
  */
 
 import { authService } from '../services/authService.js';
+import { escaparHtml } from '../services/apiClient.js';
 import {
   crearCuestionario,
   listarCuestionarios,
@@ -57,10 +58,6 @@ function show(id) {
   if (el) el.classList.add('active');
 }
 
-function escapar(s) {
-  return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-}
-
 function abrirModal() {
   confirmModal.classList.add('open');
   confirmModal.setAttribute('aria-hidden', 'false');
@@ -99,7 +96,7 @@ function renderLista(items) {
     const d = document.createElement('div');
     d.className = 'lista-item';
     d.innerHTML =
-      '<div class="info"><b>' + escapar(c.titulo) + '</b>' +
+      '<div class="info"><b>' + escaparHtml(c.titulo) + '</b>' +
       '<small>' + Number(c.numPreguntas ?? 0) + ' pregunta(s)</small></div>' +
       etiquetaEstado(c.estado);
     const b = document.createElement('button');
@@ -146,8 +143,8 @@ async function abrirDetalle(id) {
   $('detPreg').innerHTML = preguntas.length
     ? preguntas.map((p, i) => {
       const opciones = Array.isArray(p.opciones) ? p.opciones : [];
-      return '<div class="p-item"><b>' + (i + 1) + '. ' + escapar(p.texto) + '</b>' +
-        (opciones.length ? '<small>' + escapar(opciones.map((o) => o.texto).join(' / ')) + '</small>' : '') +
+      return '<div class="p-item"><b>' + (i + 1) + '. ' + escaparHtml(p.texto) + '</b>' +
+        (opciones.length ? '<small>' + escaparHtml(opciones.map((o) => o.texto).join(' / ')) + '</small>' : '') +
         '</div>';
     }).join('')
     : '<div class="empty">Sin preguntas registradas.</div>';
@@ -160,7 +157,7 @@ function filaOpcion(op = {}) {
   div.className = 'opc-row';
   if (op.id) div.dataset.oid = op.id;
   div.innerHTML =
-    '<input type="text" class="opc-texto" placeholder="Opción" value="' + escapar(op.texto ?? '') + '" aria-label="Opción" />' +
+    '<input type="text" class="opc-texto" placeholder="Opción" value="' + escaparHtml(op.texto ?? '') + '" aria-label="Opción" />' +
     '<input type="number" class="opc-valor" min="0" step="1" value="' + (op.valor ?? 0) + '" aria-label="Valor de la opción" />' +
     '<button type="button" class="opc-rm" title="Quitar opción"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>';
   div.querySelector('.opc-rm').addEventListener('click', () => div.remove());
@@ -173,7 +170,7 @@ function filaPregunta(p, indice) {
   if (p.id) div.dataset.qid = p.id;
   if (p.tipo) div.dataset.tipo = p.tipo;
   div.innerHTML = '<label class="field-label">Pregunta ' + indice + '</label>' +
-    '<input type="text" class="q-texto" value="' + escapar(p.texto ?? '') + '" placeholder="Texto de la pregunta" aria-label="Texto de la pregunta" />';
+    '<input type="text" class="q-texto" value="' + escaparHtml(p.texto ?? '') + '" placeholder="Texto de la pregunta" aria-label="Texto de la pregunta" />';
   const contOpciones = document.createElement('div');
   contOpciones.className = 'opciones';
   const opciones = Array.isArray(p.opciones) && p.opciones.length ? p.opciones : [{}, {}];

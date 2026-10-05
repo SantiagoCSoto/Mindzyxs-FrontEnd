@@ -170,7 +170,7 @@ body {
   flex: 1;
 }
 
-.btn-back {
+.btn-volver-landing {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -186,7 +186,7 @@ body {
   transition: background 0.2s, border-color 0.2s;
 }
 
-.btn-back:hover {
+.btn-volver-landing:hover {
   background: #F1F5F9;
   border-color: #94A3B8;
 }
@@ -432,6 +432,12 @@ body {
   border-radius: 10px;
 }
 
+.sk-title {
+  height: 22px;
+  width: 60%;
+  margin-top: 8px;
+}
+
 .sk-line {
   height: 14px;
   margin-top: 6px;
@@ -440,6 +446,10 @@ body {
 .sk-card {
   height: 62px;
   margin-top: 12px;
+}
+
+.sk-stack {
+  padding: 8px 2px;
 }
 
 @keyframes sk {

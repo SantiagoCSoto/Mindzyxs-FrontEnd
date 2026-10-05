@@ -25,6 +25,7 @@ if (!rolActual.includes('psicologo')) {
 }
 
 const selPac = $('selPac');
+const skSelPac = $('skSelPac');
 const fDesde = $('fDesde');
 const fHasta = $('fHasta');
 const btnGenerar = $('btnGenerar');
@@ -32,6 +33,7 @@ const errStats = $('errStats');
 const vacioPac = $('vacioPac');
 const sinDatos = $('sinDatos');
 const resultados = $('resultados');
+const skResultados = $('skResultados');
 const toast = $('toast');
 
 function showToast(msg) {
@@ -42,12 +44,18 @@ function showToast(msg) {
   showToast._t = setTimeout(() => toast.classList.remove('show'), 2600);
 }
 
-function escapar(s) {
-  return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-}
-
 function ocultarErrores() {
   errStats.classList.remove('show');
+}
+
+function mostrarSkeleton() {
+  skSelPac.hidden = false;
+  skResultados.hidden = false;
+}
+
+function limpiarSkeleton() {
+  skSelPac.hidden = true;
+  skResultados.hidden = true;
 }
 
 function mostrarResultado(visible) {
@@ -57,12 +65,11 @@ function mostrarResultado(visible) {
 
 // ---------- Selector de pacientes ----------
 async function cargarPacientes() {
-  selPac.innerHTML = '<option value="">Cargando pacientes...</option>';
-  btnGenerar.disabled = true;
-  vacioPac.hidden = true;
-  errStats.classList.remove('show');
+  limpiarErroresYEstados();
+  mostrarSkeleton();
   try {
     const pacientes = await listarPacientesAutorizados();
+    selPac.hidden = false;
     selPac.innerHTML = '<option value="">Seleccione un paciente</option>';
     if (!pacientes.length) {
       vacioPac.hidden = false;
@@ -75,13 +82,23 @@ async function cargarPacientes() {
       o.textContent = p.nombre;
       selPac.appendChild(o);
     });
+    fDesde.disabled = false;
+    fHasta.disabled = false;
     btnGenerar.disabled = false;
   } catch (error) {
-    errStats.textContent = error.message || 'No fue posible cargar tus pacientes. Intente nuevamente';
-    errStats.classList.add('show');
+    selPac.hidden = false;
     selPac.innerHTML = '';
     btnGenerar.disabled = true;
+    errStats.textContent = error.message || 'No fue posible cargar tus pacientes. Intente nuevamente';
+    errStats.classList.add('show');
+  } finally {
+    limpiarSkeleton();
   }
+}
+
+function limpiarErroresYEstados() {
+  errStats.classList.remove('show');
+  vacioPac.hidden = true;
 }
 
 selPac.addEventListener('change', () => {
@@ -163,19 +180,23 @@ async function generar() {
     errStats.classList.add('show');
     return;
   }
-  $('barrasSemana').innerHTML = '';
-  $('barrasMes').innerHTML = '';
+  mostrarResultado(false);
+  limpiarSkeleton();
+  skResultados.hidden = false;
   btnGenerar.disabled = true;
   try {
     const data = await obtenerEstadisticas(id, desde, hasta);
     if (data.suficientes === false) {
+      limpiarSkeleton();
       mostrarResultado(false);
       return;
     }
+    limpiarSkeleton();
     renderEstadisticas(data);
     mostrarResultado(true);
     vacioPac.hidden = true;
   } catch (error) {
+    limpiarSkeleton();
     errStats.textContent = error.message || 'No fue posible cargar las estadísticas. Intente nuevamente';
     errStats.classList.add('show');
     mostrarResultado(false);

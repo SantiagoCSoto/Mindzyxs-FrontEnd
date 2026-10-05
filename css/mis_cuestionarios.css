@@ -200,26 +200,25 @@ textarea:focus-visible {
   line-height: 1.6;
 }
 
-.btn-back {
+.btn-volver-landing {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  background: #fff;
+  border: 1.5px solid #CBD5E1;
+  color: #475569;
   font-size: 13px;
   font-weight: 600;
-  color: var(--muted);
-  text-decoration: none;
-  margin-bottom: 12px;
-  padding: 6px 12px;
-  border: 1px solid #DFDAEE;
+  padding: 9px 24px;
   border-radius: 20px;
-  background: #FFF;
-  transition: all 0.2s ease;
+  text-decoration: none;
+  margin-bottom: 14px;
+  transition: background 0.2s, border-color 0.2s;
 }
 
-.btn-back:hover {
-  color: var(--text);
-  border-color: #B8AEE0;
-  background: #F8FAFC;
+.btn-volver-landing:hover {
+  background: #F1F5F9;
+  border-color: #94A3B8;
 }
 
 .buscar {
@@ -486,7 +485,7 @@ textarea:focus {
 
 .btn:disabled,
 .btn-modal:disabled,
-.btn-back:disabled {
+.btn-volver-landing:disabled {
   opacity: 0.55;
   cursor: not-allowed;
   pointer-events: none;

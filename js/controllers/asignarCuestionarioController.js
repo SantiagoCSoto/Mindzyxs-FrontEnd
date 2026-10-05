@@ -8,6 +8,7 @@
  */
 
 import { authService } from '../services/authService.js';
+import { escaparHtml } from '../services/apiClient.js';
 import { listarCuestionarios } from '../services/misCuestionariosService.js';
 import { obtenerPantallaAsignacion, asignarCuestionario } from '../services/asignarCuestionarioService.js';
 
@@ -47,10 +48,6 @@ function show(id) {
   if (el) el.classList.add('active');
 }
 
-function escapar(s) {
-  return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-}
-
 function pintarSkeleton(contenedor) {
   contenedor.innerHTML = '';
   for (let i = 0; i < 3; i++) {
@@ -62,7 +59,7 @@ function pintarSkeleton(contenedor) {
 }
 
 function pintarVacio(contenedor, mensaje) {
-  contenedor.innerHTML = '<div class="empty">' + escapar(mensaje) + '</div>';
+  contenedor.innerHTML = '<div class="empty">' + escaparHtml(mensaje) + '</div>';
 }
 
 // ---------- Pantalla lista: cuestionarios publicados ----------
@@ -76,7 +73,7 @@ function renderLista(items) {
     const d = document.createElement('div');
     d.className = 'lista-item';
     d.innerHTML =
-      '<div class="info"><b>' + escapar(c.titulo) + '</b>' +
+      '<div class="info"><b>' + escaparHtml(c.titulo) + '</b>' +
       '<small>' + Number(c.numPreguntas ?? 0) + ' pregunta(s)</small></div>' +
       '<span class="est est-p">Publicado</span>';
     const b = document.createElement('button');
@@ -142,7 +139,7 @@ function renderPacientes(pacientes) {
     else seleccionables += 1;
     l.appendChild(input);
     const span = document.createElement('span');
-    span.innerHTML = '<b>' + escapar(p.nombre) + '</b>' +
+    span.innerHTML = '<b>' + escaparHtml(p.nombre) + '</b>' +
       (p.yaAsignado ? '<small>Ya tiene este cuestionario asignado</small>' : '');
     l.appendChild(span);
     listaPac.appendChild(l);

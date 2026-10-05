@@ -8,6 +8,7 @@
  */
 
 import { authService } from '../services/authService.js';
+import { escaparHtml } from '../services/apiClient.js';
 import {
   obtenerPerfilProfesional,
   listarEspecialidades,
@@ -48,10 +49,6 @@ function show(id) {
   if (el) el.classList.add('active');
 }
 
-function escapar(s) {
-  return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-}
-
 function iniciales(nombre) {
   return String(nombre || '').split(/\s+/).filter(Boolean).slice(0, 2)
     .map((p) => p[0].toUpperCase()).join('') || '?';
@@ -63,12 +60,14 @@ function correoValido(correo) {
 
 // ---------- Vista: ver perfil ----------
 function renderVer() {
+  $('skPerfil').hidden = true;
+  $('verDatos').hidden = false;
   $('verAvatar').textContent = iniciales(perfil.nombre);
   $('verNombre').textContent = perfil.nombre || '—';
   $('verCorreoTop').textContent = perfil.correo || '—';
   const esp = Array.isArray(perfil.especialidades) ? perfil.especialidades : [];
   $('verEsp').innerHTML = esp.length
-    ? esp.map((e) => '<span>' + escapar(e) + '</span>').join('')
+    ? esp.map((e) => '<span>' + escaparHtml(e) + '</span>').join('')
     : '<span class="chip-vacia">Sin especialidad registrada</span>';
   $('verExp').textContent = perfil.añosExperiencia != null ? String(perfil.añosExperiencia) : '—';
   $('verDesc').textContent = perfil.descripcionProfesional ? perfil.descripcionProfesional : '—';
@@ -85,6 +84,8 @@ async function cargarPerfil() {
     perfil = await obtenerPerfilProfesional();
     renderVer();
   } catch (error) {
+    $('skPerfil').hidden = true;
+    $('verDatos').hidden = false;
     peErrores.textContent = error.message || 'No fue posible cargar el perfil. Intente nuevamente';
     peErrores.classList.add('show');
   }

@@ -170,7 +170,7 @@ body {
   flex: 1;
 }
 
-.btn-back {
+.btn-volver-landing {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -186,7 +186,7 @@ body {
   transition: background 0.2s, border-color 0.2s;
 }
 
-.btn-back:hover {
+.btn-volver-landing:hover {
   background: #F1F5F9;
   border-color: #94A3B8;
 }
