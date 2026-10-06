@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="../assets/Logo1.png" />
+  <title>Panel del psicólogo - Mindzyxs</title>
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/inicio.css" />
+</head>
+
+<body>
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-pink"></div>
+    <div class="blob blob-lav"></div>
+  </div>
+
+  <header class="header-nav">
+    <div class="logo-container">
+      <a href="inicio.html" class="logo-link">
+        <img src="../assets/Logo1.png" alt="Logo Mindzyxs" class="logo-img" />
+        <span>Mindzyxs</span>
+      </a>
+    </div>
+
+    <nav class="main-nav" aria-label="Navegación principal">
+      <ul>
+        <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
+        <li><a href="inicio.html#nosotros">Nosotros</a></li>
+        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+        </ul>
+    </nav>
+
+    <div class="header-right">
+      <div class="header-auth-buttons">
+        <button type="button" id="btn-logout-top" class="btn-logout">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card section-sensibles">
+      <h1 style="font-size:20px;margin:0 0 4px;">Mi panel</h1>
+      <p class="sub" style="color:var(--color-mudo,#64748B);font-size:13px;margin:0 0 4px;">Tus acciones frecuentes primero.</p>
+      <!-- Opciones del Psicólogo -->
+      <div class="dash-invitado" id="dashPsicologo">
+        <div class="grid grid-avail">
+          <article class="tile">
+            <div class="tile-icon tile-icon-cyan" aria-hidden="true">👥</div>
+            <h3>Pacientes</h3>
+            <p>Registros de autorizados</p>
+            <button type="button" class="btn btn-tile" id="btn-psicologo-pacientes">Entrar</button>
+          </article>
+          <article class="tile">
+            <div class="tile-icon" aria-hidden="true">📝</div>
+            <h3>Cuestionarios</h3>
+            <p>Crear, editar y asignar</p>
+            <button type="button" class="btn btn-tile" id="btn-psicologo-cuestionarios">Entrar</button>
+          </article>
+          <article class="tile">
+            <div class="tile-icon" aria-hidden="true">📊</div>
+            <h3>Estadísticas</h3>
+            <p>Evolución y promedios</p>
+            <button type="button" class="btn btn-tile" id="btn-psicologo-estadisticas">Entrar</button>
+          </article>
+          <article class="tile">
+            <div class="tile-icon" aria-hidden="true">👤</div>
+            <h3>Perfil profesional</h3>
+            <p>Especialidad y datos</p>
+            <button type="button" class="btn btn-tile" id="btn-psicologo-perfil">Abrir</button>
+          </article>
+          <article class="tile">
+            <div class="tile-icon tile-icon-sos" aria-hidden="true">💬</div>
+            <h3>Chat de apoyo</h3>
+            <p>Habla con tus pacientes</p>
+            <button type="button" class="btn btn-tile" id="btn-psicologo-chat">Abrir</button>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-in">
+      <a href="privacidad.html">Privacidad</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="terminos.html">Términos</a>
+      <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog">
+        <span class="aviso-ico">ℹ️</span> Aviso: no diagnóstico
+      </a>
+    </div>
+  </footer>
+
+  <!-- Modal 1: Mensaje aclaratorio (PB-04) -->
+  <div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true" aria-labelledby="avisoTitle"
+    aria-hidden="true">
+    <div class="modal">
+      <div class="modal-icon" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+      </div>
+
+      <h3 id="avisoTitle">Mensaje aclaratorio</h3>
+
+      <div class="aviso-txt" id="avisoContent">
+        <p>
+          <b>Mindzyx</b> es una plataforma diseñada exclusivamente para el <b>monitoreo y apoyo del bienestar
+            emocional</b>.
+          Este sistema <span class="highlight">no realiza diagnósticos clínicos</span> y <span class="highlight">no
+            sustituye la atención de un profesional de la salud mental</span>.
+        </p>
+        <p>
+          Ante un <b>riesgo alto o una situación de urgencia</b>, busca ayuda profesional o utiliza las <b>líneas de
+            ayuda disponibles</b> en tu país (por ejemplo, servicios de emergencia o líneas de crisis locales).
+        </p>
+        <p>
+          Mindzyx es solo una <b>herramienta de apoyo y monitoreo emocional</b> y <b>no reemplaza la atención
+            profesional</b>.
+        </p>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-modal btn-close" id="btnCerrar">Cerrar</button>
+        <button type="button" class="btn-modal btn-ok" id="btnEntendido">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Error al cargar aviso -->
+  <div class="modal-overlay" id="errModal" role="alertdialog" aria-modal="true" aria-labelledby="errTitle"
+    aria-hidden="true">
+    <div class="modal">
+      <div class="modal-icon modal-icon-err" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+      </div>
+
+      <h3 id="errTitle">Mensaje aclaratorio</h3>
+      <p class="err-desc" id="errDesc">No fue posible cargar el mensaje aclaratorio. Intente nuevamente</p>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-modal btn-ok" id="errOk">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notificación flotante -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="../js/controllers/panelPsicologoController.js"></script>
+  <script src="../js/cookies-banner.js"></script>
+  <script src="../js/sesion-header.js"></script>
+</body>
+
+</html>
