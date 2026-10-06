@@ -43,6 +43,17 @@ const blockModal = $('blockModal'), authModal = $('authModal');
   }
 })();
 
+// Volver al panel según el rol (el chat es doble vía paciente/psicólogo).
+(function ajustarVolver() {
+  const back = $('backPanelChat');
+  if (!back) return;
+  try {
+    const s = authService.getSesion();
+    const rol = String(s?.rol || s?.tipo_usuario || '').toLowerCase();
+    back.href = rol.includes('psicologo') ? 'panel_psicologo.html' : 'panel_paciente.html';
+  } catch (e) { /* conserva el href de la vista */ }
+})();
+
 let yo = null; // { uid, rol }
 let db = null;
 let conversaciones = [];
