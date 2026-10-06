@@ -516,11 +516,7 @@ if (btnVolverReg) {
 if (btnVolverPanel) {
   btnVolverPanel.addEventListener('click', (e) => {
     e.preventDefault();
-    if (screenPacientes && !screenPacientes.classList.contains('active')) {
-      showScreen('screenPacientes');
-    } else {
-      window.location.href = 'inicio.html';
-    }
+    window.location.href = 'panel_psicologo.html';
   });
 }
 
