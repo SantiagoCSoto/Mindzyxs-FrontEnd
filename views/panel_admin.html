@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="../assets/Logo1.png" />
+  <title>Panel del administrador - Mindzyxs</title>
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/inicio.css" />
+</head>
+
+<body>
+  <!-- Fondo decorativo suave -->
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-pink"></div>
+    <div class="blob blob-lav"></div>
+  </div>
+
+  <!-- Encabezado sticky unificado -->
+  <header class="header-nav">
+    <div class="logo-container">
+      <a href="panel_admin.html" class="logo-link">
+        <img src="../assets/Logo1.png" alt="Logo Mindzyxs" class="logo-img" />
+        <span>Mindzyxs</span>
+      </a>
+    </div>
+
+    <nav class="main-nav" aria-label="Navegación principal">
+      <ul>
+        <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
+        <li><a href="inicio.html#nosotros">Nosotros</a></li>
+        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-right">
+      <div class="header-auth-buttons">
+        <span id="rol-usuario" class="badge-role">Administrador</span>
+        <button type="button" id="btn-logout-top" class="btn-logout">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <main class="wrap">
+    <section class="card section-sensibles">
+      <h1 style="font-size:20px;margin:0 0 4px;">Mi panel</h1>
+      <p class="sub" style="color:var(--color-mudo,#64748B);font-size:13px;margin:0 0 16px;">Administración del sistema.</p>
+
+      <div class="dash-invitado" id="dashAdmin">
+        <div class="grid grid-avail">
+          <!-- Mosaico 1: Gestión de usuarios (PB-25) -->
+          <article class="tile">
+            <div class="tile-icon" style="background:#EDE7FF;color:#4A38B0;" aria-hidden="true">👥</div>
+            <h3>Usuarios</h3>
+            <p>Gestionar cuentas del sistema</p>
+            <a class="btn btn-tile" style="display:grid;place-items:center;text-decoration:none;" href="gestion_usuarios.html" id="btn-admin-usuarios">Entrar</a>
+          </article>
+
+          <!-- Mosaico 2: Validar psicólogos (PB-26) -->
+          <article class="tile">
+            <div class="tile-icon" style="background:#E6F7F8;color:#0E7490;" aria-hidden="true">🩺</div>
+            <h3>Validar psicólogos</h3>
+            <p>Revisar credenciales profesionales</p>
+            <a class="btn btn-tile" style="display:grid;place-items:center;text-decoration:none;" href="validar_psicologos.html" id="btn-admin-validar">Entrar</a>
+          </article>
+
+          <!-- Mosaico 3: Cuestionarios del sistema (PB-28) -->
+          <article class="tile">
+            <div class="tile-icon" style="background:#FEF3C7;color:#D97706;" aria-hidden="true">📝</div>
+            <h3>Cuestionarios</h3>
+            <p>Predeterminados del sistema</p>
+            <a class="btn btn-tile" style="display:grid;place-items:center;text-decoration:none;" href="cuestionarios_admin.html" id="btn-admin-cuestionarios">Entrar</a>
+          </article>
+
+          <!-- Mosaico 4: Líneas de ayuda (PB-29) -->
+          <article class="tile">
+            <div class="tile-icon" style="background:#EDE7FF;color:#6B5BCE;" aria-hidden="true">📞</div>
+            <h3>Líneas de ayuda</h3>
+            <p>Contactos de apoyo</p>
+            <a class="btn btn-tile" style="display:grid;place-items:center;text-decoration:none;" href="lineas_ayuda_admin.html" id="btn-admin-lineas">Entrar</a>
+          </article>
+
+          <!-- Mosaico 5: Notificaciones (PB-30) -->
+          <article class="tile">
+            <div class="tile-icon" style="background:#FFF1F3;color:#E85D7A;" aria-hidden="true">🔔</div>
+            <h3>Notificaciones</h3>
+            <p>Plantillas y canales</p>
+            <a class="btn btn-tile" style="display:grid;place-items:center;text-decoration:none;" href="notificaciones_sistema.html" id="btn-admin-notificaciones">Entrar</a>
+          </article>
+
+          <!-- Mosaico 6: Base de datos (PB-27) -->
+          <article class="tile">
+            <div class="tile-icon" style="background:#E0F2FE;color:#0284C7;" aria-hidden="true">🗄️</div>
+            <h3>Base de datos</h3>
+            <p>Respaldos y mantenimiento</p>
+            <a class="btn btn-tile" style="display:grid;place-items:center;text-decoration:none;" href="admin_bd.html" id="btn-admin-bd">Abrir</a>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Pie de página legal estándar -->
+  <footer class="footer">
+    <div class="footer-in">
+      <a href="privacidad.html">Privacidad</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="terminos.html">Términos</a>
+      <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog">
+        <span class="aviso-ico">⚠️</span> Aviso: no diagnóstico
+      </a>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script type="module">
+    import { authService } from '../js/services/authService.js';
+    const sesion = authService.getSesion();
+    if (!sesion) {
+      window.location.href = 'login.html';
+    } else {
+      const rol = String(sesion.rol || sesion.tipo_usuario || sessionStorage.getItem('rol') || '').toLowerCase();
+      if (!rol.includes('admin')) {
+        window.location.href = rol.includes('psicologo')
+          ? 'panel_psicologo.html'
+          : rol.includes('paciente')
+          ? 'panel_paciente.html'
+          : 'inicio.html';
+      }
+    }
+    const btnLogout = document.getElementById('btn-logout-top');
+    if (btnLogout) {
+      btnLogout.addEventListener('click', () => {
+        if (confirm('¿Está seguro de que desea cerrar sesión?')) {
+          authService.logout();
+          window.location.href = 'login.html';
+        }
+      });
+    }
+  </script>
+  <script src="../js/cookies-banner.js"></script>
+  <script src="../js/sesion-header.js"></script>
+</body>
+
+</html>

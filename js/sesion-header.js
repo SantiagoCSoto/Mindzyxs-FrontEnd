@@ -34,6 +34,7 @@
       var rol = String((s && (s.rol || s.tipo_usuario)) || '').toLowerCase();
       if (rol.includes('paciente')) return 'panel_paciente.html';
       if (rol.includes('psicologo')) return 'panel_psicologo.html';
+      if (rol.includes('admin')) return 'panel_admin.html';
     } catch (e) {
       return null;
     }
