@@ -41,6 +41,8 @@ Mindzyxs-FrontEnd/
 │   ├── historial.css            # Historial emocional: tarjetas de eventos, filtros y detalle (PB-13)
 │   ├── progreso_emocional.css   # Progreso emocional del paciente (rol psicólogo, PB-14)
 │   ├── recordatorios.css        # Configuración de recordatorios emocionales (PB-15)
+│   ├── gestion_usuarios.css     # Gestión y edición de usuarios del sistema (PB-25)
+│   ├── validar_psicologos.css   # Cola de validación y credenciales de psicólogos (PB-26)
 │   └── admin_bd.css             # Consola de administración de BD (PB-27)
 ├── views/                       # Las páginas (una por archivo)
 │   ├── login.html               # Iniciar sesión y acceso a Modo Invitado
@@ -56,6 +58,9 @@ Mindzyxs-FrontEnd/
 │   ├── progreso_emocional.html  # Progreso emocional: gráfico SVG, selector de pacientes y KPIs (PB-14)
 │   ├── recordatorios.html       # Configuración de recordatorios de registro emocional (PB-15)
 │   ├── encuesta_invitado.html   # Cuestionario de bienestar para invitados
+│   ├── panel_admin.html         # Panel centralizado de administración (PB-25, PB-26, PB-27, PB-30)
+│   ├── gestion_usuarios.html    # Gestión y administración de usuarios (PB-25)
+│   ├── validar_psicologos.html  # Validación y revisión de credenciales de psicólogos (PB-26)
 │   └── admin_bd.html            # Consola admin: respaldos y mantenimiento (PB-27)
 └── js/
     ├── services/                # Comunicación con la API
@@ -106,6 +111,9 @@ Mindzyxs-FrontEnd/
 | Progreso emocional (Psicólogo) | `views/progreso_emocional.html` | `progresoController.js` | Exclusivo rol Psicólogo. Lista pacientes autorizados (`GET /api/progreso/pacientes`), filtra por rango de fechas y grafica la evolución emocional (1–5) mediante SVG dinámico. Calcula 3 KPIs (Promedio, Tendencia, Registros) y gestiona estados sin datos y paciente no autorizado 403 (PB-14) |
 | Recordatorios (Paciente) | `views/recordatorios.html` | `recordatorioController.js` | Configuración de avisos para registro emocional con frecuencia diaria o semanal (días específicos), horario programado, switch toggle de activación (`POST /api/recordatorios`) y consulta de avisos vencidos hoy (`GET /api/recordatorios/hoy`) (PB-15) |
 | Encuesta de invitado | `views/encuesta_invitado.html` | — | Cuestionario de bienestar emocional accesible para invitados |
+| Panel Administrador | `views/panel_admin.html` | — | Acceso centralizado a los módulos administrativos del sistema (PB-25, PB-26, PB-27, PB-30) |
+| Gestión de usuarios (Admin) | `views/gestion_usuarios.html` | `gestionUsuariosController.js` | Consulta con filtros (rol, estado, texto), edición de datos y restablecimiento forzado de contraseña (`GET /api/admin/usuarios`, `PUT /api/admin/usuarios/{id}`, `PUT /api/admin/usuarios/{id}/estado`, `POST /api/admin/usuarios/{id}/reset-password`) (PB-25) |
+| Validación de psicólogos (Admin) | `views/validar_psicologos.html` | `validarPsicologosController.js` | Cola de psicólogos pendientes de aprobación, detalle de credenciales, descarga de PDF de tarjeta profesional, y aprobación/rechazo (`GET /api/admin/psicologos/pendientes`, `GET /api/admin/psicologos/{id}/validacion`, `GET /api/admin/psicologos/{id}/tarjeta`, `POST /api/admin/psicologos/{id}/aprobar`, `POST /api/admin/psicologos/{id}/rechazar`) (PB-26) |
 | Consola admin BD (PB-27) | `views/admin_bd.html` | `adminBdController.js` | `POST /api/admin/backup`, `GET /api/admin/backups`, `GET /api/admin/backups/{id}/download`, `POST /api/admin/maintenance` |
 
 ## 4. Servicios
@@ -220,6 +228,26 @@ Controla el flujo de acceso sin cuenta a la plataforma y audita ingresos, bloque
 | `esInvitado()` | — | Retorna `true` si la sesión actual está en modo invitado |
 | `logAuditoria(mensaje)` | — | Emite logs estructurados en consola con prefijo `[HU1-PB6]` |
 
+### `js/services/gestionUsuariosService.js` (PB-25)
+
+| Método | Endpoint | Uso |
+|--------|----------|-----|
+| `listarUsuarios(params)` | `GET /admin/usuarios` | Lista usuarios con filtros por rol, estado y búsqueda |
+| `obtenerDetalleUsuario(id)` | `GET /admin/usuarios/{id}` | Obtiene información detallada del usuario |
+| `actualizarUsuario(id, datos)` | `PUT /admin/usuarios/{id}` | Actualiza datos personales (nombres, apellidos, correo, fecha, género) |
+| `cambiarEstadoUsuario(id, estado)` | `PUT /admin/usuarios/{id}/estado` | Modifica estado de cuenta (Activa, Suspendida, Inactiva) |
+| `forzarRestablecimientoPassword(id)` | `POST /admin/usuarios/{id}/reset-password` | Envía código de restablecimiento forzado al correo |
+
+### `js/services/validarPsicologosService.js` (PB-26)
+
+| Método | Endpoint | Uso |
+|--------|----------|-----|
+| `listarSolicitudesPendientes()` | `GET /admin/psicologos/pendientes` | Lista solicitudes en espera de validación |
+| `obtenerDetalleSolicitud(id)` | `GET /admin/psicologos/{id}/validacion` | Consulta credenciales, especialidades y estado de tarjeta |
+| `descargarTarjetaProfesional(id)` | `GET /admin/psicologos/{id}/tarjeta` | Descarga el archivo de tarjeta profesional en PDF como Blob |
+| `aprobarPsicologo(id)` | `POST /admin/psicologos/{id}/aprobar` | Aprueba la solicitud y activa la cuenta del psicólogo |
+| `rechazarPsicologo(id, motivo)` | `POST /admin/psicologos/{id}/rechazar` | Rechaza la solicitud con motivo opcional y notificación |
+
 ### `js/services/adminService.js` (PB-27)
 
 | Método | Endpoint | Uso |
@@ -251,4 +279,6 @@ Controla el flujo de acceso sin cuenta a la plataforma y audita ingresos, bloque
 * **PB-13 (Historial emocional del paciente):** permite visualizar el registro cronológico (recientes primero) de estados de ánimo y cuestionarios respondidos. Incluye filtro interactivo por rango de fechas (desde / hasta), estado vacío con botón de registro si no hay eventos y modal interactivo para consultar el detalle (notas personales "Cómo me sentí", respuestas del cuestionario y notas de apoyo del psicólogo asignado).
 * **PB-14 (Progreso emocional del paciente - Rol Psicólogo):** Permite al profesional de la salud mental consultar la evolución emocional (escala de 1 a 5) de sus pacientes autorizados a través de un gráfico SVG dinámico (`viewBox="0 0 620 280"`) con guía punteada de estabilidad en nivel 3, filtros de fecha desde/hasta con validación cronológica, 3 KPIs (Promedio, Tendencia direccional y Total de registros) y manejo de estados especiales (bloqueo por 403 no autorizado con solicitud de acceso, estado vacío para `< 2` registros y estado sin pacientes asignados).
 * **PB-15 (Recordatorios para el registro emocional - Rol Paciente):** Permite al paciente programar avisos para registrar su bienestar emocional con periodicidad diaria o semanal (seleccionando días específicos de 1 a 7), definir la hora del aviso mediante un selector nativo, activar/desactivar recordatorios con un switch toggle sin perder la configuración guardada, consultar el resumen en un panel de estado visual y recibir notificaciones periódicas sincronizadas con el backend (`/api/recordatorios`).
+* **PB-25 (Gestión de usuarios del sistema - Rol Administrador):** Permite al administrador consultar y filtrar a todos los usuarios por rol, estado y búsqueda de texto, editar su información de contacto y estado de cuenta, y forzar el restablecimiento de contraseña mediante envío seguro de código por correo.
+* **PB-26 (Validación de psicólogos - Rol Administrador):** Permite al administrador revisar la cola de profesionales en espera de validación, examinar sus credenciales y especialidades declaradas, descargar la tarjeta profesional en formato PDF y aprobar o rechazar la solicitud con notificación formal por correo electrónico.
 * El front de PB-27 (consola admin) no incluye restauración de respaldos — solo crear, listar/descargar y mantenimiento.

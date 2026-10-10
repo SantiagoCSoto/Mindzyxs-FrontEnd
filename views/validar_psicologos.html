@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="../assets/Logo1.png" />
+  <title>Validar psicólogos - Mindzyxs</title>
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/validar_psicologos.css" />
+</head>
+
+<body>
+  <!-- Fondo decorativo suave -->
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-pink"></div>
+    <div class="blob blob-lav"></div>
+  </div>
+
+  <!-- Encabezado y Navegación -->
+  <header class="header-nav">
+    <div class="logo-container">
+      <a href="panel_admin.html" class="logo-link">
+        <img src="../assets/Logo1.png" alt="Logo Mindzyxs" class="logo-img" />
+        <span>Mindzyxs</span>
+      </a>
+    </div>
+
+    <nav class="main-nav" aria-label="Navegación principal">
+      <ul>
+        <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
+        <li><a href="inicio.html#nosotros">Nosotros</a></li>
+        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-right">
+      <div class="header-auth-buttons">
+        <span id="rol-usuario" class="badge-role">Administrador</span>
+        <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <main class="wrap">
+    <a href="panel_admin.html" class="btn-back" id="btnVolverPanel" aria-label="Volver al panel de administración">
+      &larr; Volver al panel
+    </a>
+
+    <!-- Pantalla 1: Cola de solicitudes pendientes -->
+    <section class="card screen active" id="screenLista" aria-labelledby="listaTitulo">
+      <div class="panel-head">
+        <div class="head-info">
+          <h1 id="listaTitulo">Validar psicólogos</h1>
+          <p class="sub">Revisa las credenciales de los profesionales pendientes de validación para habilitar su acceso a la plataforma.</p>
+        </div>
+        <div class="badge-counter" id="badgeContador" style="display: none;">
+          <span id="contadorTexto">0 pendientes</span>
+        </div>
+      </div>
+
+      <!-- Barra de búsqueda y acciones -->
+      <div class="filtros" role="search" aria-label="Búsqueda de solicitudes">
+        <input
+          type="text"
+          class="input buscar"
+          id="fBuscar"
+          placeholder="Buscar por nombre o correo..."
+          aria-label="Buscar psicólogo pendiente por nombre o correo"
+          autocomplete="off"
+        />
+        <button type="button" class="btn btn-sec" id="btnRefrescar" title="Actualizar lista de pendientes">
+          Actualizar
+        </button>
+      </div>
+
+      <!-- Mensaje de error en la lista -->
+      <div class="err-msg" id="errLista" role="alert"></div>
+
+      <!-- Contenedor dinámico de solicitudes con skeleton loader -->
+      <div id="listaSolicitudes" aria-live="polite">
+        <div class="sk-card fila-sk">
+          <div class="sk sk-avatar"></div>
+          <div class="sk-info">
+            <div class="sk sk-line" style="width: 45%;"></div>
+            <div class="sk sk-line" style="width: 65%;"></div>
+          </div>
+          <div class="sk sk-btn"></div>
+        </div>
+        <div class="sk-card fila-sk">
+          <div class="sk sk-avatar"></div>
+          <div class="sk-info">
+            <div class="sk sk-line" style="width: 40%;"></div>
+            <div class="sk sk-line" style="width: 60%;"></div>
+          </div>
+          <div class="sk sk-btn"></div>
+        </div>
+      </div>
+
+      <!-- Estado vacío -->
+      <div class="empty" id="vacio" style="display: none;">
+        <div class="empty-icon" aria-hidden="true">🩺</div>
+        <h3>No hay solicitudes pendientes</h3>
+        <p>Todos los psicólogos registrados han sido revisados o no coinciden con la búsqueda.</p>
+      </div>
+    </section>
+
+    <!-- Pantalla 2: Detalle y validación de solicitud -->
+    <section class="card screen" id="screenDetalle" style="display: none;" aria-labelledby="detalleTitulo">
+      <button type="button" class="btn-back" id="btnVolverLista" aria-label="Volver a la lista de solicitudes">
+        &larr; Volver a solicitudes
+      </button>
+
+      <div class="panel-head">
+        <div class="head-info">
+          <h2 id="detalleTitulo">Revisión de credenciales</h2>
+          <p class="sub" id="detalleSub">Evalúa la información profesional y la tarjeta profesional antes de emitir una resolución.</p>
+        </div>
+      </div>
+
+      <!-- Mensaje de error en pantalla de detalle -->
+      <div class="err-msg" id="errDetalle" role="alert"></div>
+
+      <!-- Ficha del psicólogo -->
+      <div class="detalle-card" id="cardInfo">
+        <div class="perfil-resumen">
+          <div class="avatar-lg" id="detAvatar">PS</div>
+          <div class="perfil-datos">
+            <div class="perfil-header-line">
+              <h3 id="detNombre">Cargando psicólogo...</h3>
+              <span class="badge-status badge-pendiente" id="detEstado">Pendiente de aprobación</span>
+            </div>
+            <p class="correo-line" id="detCorreo">-</p>
+            <p class="fecha-line">
+              <span class="muted">Fecha de solicitud:</span>
+              <strong id="detFecha">-</strong>
+            </p>
+          </div>
+        </div>
+
+        <!-- Especialidades -->
+        <div class="detalle-seccion">
+          <h4 class="seccion-sub">Especialidades declaradas</h4>
+          <div class="chips-container" id="detEspecialidades">
+            <span class="chip chip-vacio">Sin especialidades registradas</span>
+          </div>
+        </div>
+
+        <!-- Tarjeta profesional adjunta -->
+        <div class="detalle-seccion">
+          <h4 class="seccion-sub">Documento de tarjeta profesional</h4>
+          <div class="tarjeta-box" id="detTarjetaBox">
+            <div class="tarjeta-info">
+              <span class="doc-icon" aria-hidden="true">📄</span>
+              <div>
+                <strong id="detTarjetaTitulo">Tarjeta profesional en PDF</strong>
+                <p class="sub" id="detTarjetaSub">Documento probatorio cargado por el solicitante.</p>
+              </div>
+            </div>
+            <button type="button" class="btn btn-sec" id="btnDescargarTarjeta">
+              Descargar tarjeta
+            </button>
+          </div>
+          <div class="alerta-box alerta-warning" id="detSinTarjetaAviso" style="display: none;">
+            ⚠️ El profesional no cargó un archivo digital de su tarjeta profesional.
+          </div>
+        </div>
+
+        <!-- Panel de decisión -->
+        <div class="decision-panel">
+          <h4 class="seccion-sub">Resolución de la solicitud</h4>
+          <p class="sub">Al aprobar o rechazar, el sistema actualizará el estado de la cuenta y enviará una notificación formal por correo electrónico al profesional.</p>
+
+          <div class="field field-full" style="margin-top: 12px;">
+            <label for="txtMotivo">Motivo de resolución (opcional o requerido en rechazo):</label>
+            <textarea
+              id="txtMotivo"
+              class="input textarea"
+              rows="3"
+              maxlength="500"
+              placeholder="Indica las razones u observaciones para el solicitante..."
+            ></textarea>
+            <span class="caracteres-ayuda" id="lblCaracteres">Máximo 500 caracteres</span>
+          </div>
+
+          <div class="decision-actions">
+            <button type="button" class="btn btn-danger" id="btnRechazar">
+              Rechazar solicitud
+            </button>
+            <button type="button" class="btn btn-success" id="btnAprobar">
+              Aprobar y habilitar
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Pie de página legal estándar -->
+  <footer class="footer">
+    <div class="footer-in">
+      <a href="privacidad.html">Privacidad</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="terminos.html">Términos</a>
+      <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog">
+        <span class="aviso-ico">⚠️</span> Aviso: no diagnóstico
+      </a>
+    </div>
+  </footer>
+
+  <!-- Modal de confirmación para Aprobar / Rechazar -->
+  <div class="modal-overlay" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-hidden="true">
+    <div class="modal">
+      <h3 id="confirmTitle">Confirmar decisión</h3>
+      <p id="confirmText" class="modal-desc"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn-modal btn-close" id="btnModalNo">Cancelar</button>
+        <button type="button" class="btn-modal btn-ok" id="btnModalSi">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor Toast para notificaciones emergentes -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="../js/controllers/validarPsicologosController.js"></script>
+  <script src="../js/cookies-banner.js"></script>
+  <script src="../js/sesion-header.js"></script>
+</body>
+
+</html>
