@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="../assets/Logo1.png" />
+  <title>Gestionar usuarios - Mindzyxs</title>
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/gestion_usuarios.css" />
+</head>
+
+<body>
+  <!-- Fondo decorativo suave -->
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-pink"></div>
+    <div class="blob blob-lav"></div>
+  </div>
+
+  <!-- Encabezado y Navegación -->
+  <header class="header-nav">
+    <div class="logo-container">
+      <a href="panel_admin.html" class="logo-link">
+        <img src="../assets/Logo1.png" alt="Logo Mindzyxs" class="logo-img" />
+        <span>Mindzyxs</span>
+      </a>
+    </div>
+
+    <nav class="main-nav" aria-label="Navegación principal">
+      <ul>
+        <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
+        <li><a href="inicio.html#nosotros">Nosotros</a></li>
+        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-right">
+      <div class="header-auth-buttons">
+        <span id="rol-usuario" class="badge-role">Administrador</span>
+        <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <main class="wrap">
+    <a href="panel_admin.html" class="btn-back" id="btnVolverPanel" aria-label="Volver al panel de administración">
+      &larr; Volver al panel
+    </a>
+
+    <!-- Pantalla 1: Listado de usuarios con filtros -->
+    <section class="card screen active" id="screenLista">
+      <div class="panel-head">
+        <h1>Gestionar usuarios</h1>
+        <p class="sub">Consulta, filtra y edita la información de todos los usuarios del sistema.</p>
+      </div>
+
+      <!-- Barra de filtros -->
+      <div class="filtros" role="search" aria-label="Filtros de usuarios">
+        <select class="input" id="fRol" aria-label="Filtrar por rol">
+          <option value="">Todos los roles</option>
+          <option value="Paciente">Paciente</option>
+          <option value="Psicologo">Psicólogo</option>
+          <option value="Administrador">Administrador</option>
+        </select>
+
+        <select class="input" id="fEstado" aria-label="Filtrar por estado">
+          <option value="">Todos los estados</option>
+          <option value="Activa">Activa</option>
+          <option value="PendienteVerificacion">Pendiente de verificación</option>
+          <option value="PendienteAprobacion">Pendiente de aprobación</option>
+          <option value="Suspendida">Suspendida</option>
+          <option value="Inactiva">Inactiva</option>
+        </select>
+
+        <input
+          type="text"
+          class="input buscar"
+          id="fQ"
+          placeholder="Buscar nombre o correo..."
+          aria-label="Buscar usuario por nombre o correo"
+          autocomplete="off"
+        />
+
+        <button type="button" class="btn" id="btnFiltrar">Filtrar</button>
+        <button type="button" class="btn btn-sec" id="btnLimpiar">Limpiar</button>
+      </div>
+
+      <!-- Mensaje de error en lista -->
+      <div class="err-msg" id="errLista" role="alert"></div>
+
+      <!-- Contenedor dinámico de usuarios -->
+      <div id="listaUsuarios" aria-live="polite">
+        <div class="sk-card fila-sk">
+          <div class="sk sk-avatar"></div>
+          <div style="flex:1;">
+            <div class="sk sk-line" style="width:40%;"></div>
+            <div class="sk sk-line" style="width:60%;"></div>
+          </div>
+          <div class="sk" style="width:80px;height:34px;border-radius:18px;"></div>
+        </div>
+        <div class="sk-card fila-sk">
+          <div class="sk sk-avatar"></div>
+          <div style="flex:1;">
+            <div class="sk sk-line" style="width:35%;"></div>
+            <div class="sk sk-line" style="width:55%;"></div>
+          </div>
+          <div class="sk" style="width:80px;height:34px;border-radius:18px;"></div>
+        </div>
+      </div>
+
+      <!-- Estado vacío -->
+      <div class="empty" id="vacio" style="display: none;">
+        No se encontraron usuarios con los criterios seleccionados.
+      </div>
+    </section>
+
+    <!-- Pantalla 2: Edición de usuario -->
+    <section class="card screen" id="screenEditar" aria-labelledby="editTitulo">
+      <h2 id="editTitulo">Editar usuario</h2>
+      <p class="sub" id="editSub">Modifica los datos del usuario.</p>
+
+      <div class="err-msg" id="errEditar" role="alert"></div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="eNombres">Nombres *</label>
+          <input class="input" id="eNombres" type="text" maxlength="100" placeholder="Nombres" required />
+        </div>
+
+        <div class="field">
+          <label for="eApellidos">Apellidos</label>
+          <input class="input" id="eApellidos" type="text" maxlength="100" placeholder="Apellidos" />
+        </div>
+
+        <div class="field field-full">
+          <label for="eCorreo">Correo electrónico *</label>
+          <input class="input" id="eCorreo" type="email" maxlength="150" placeholder="correo@ejemplo.com" required />
+        </div>
+
+        <div class="field">
+          <label for="eGenero">Género</label>
+          <select class="input" id="eGenero">
+            <option value="">Seleccionar género</option>
+            <option value="1">Masculino</option>
+            <option value="2">Femenino</option>
+            <option value="3">Otro</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="eFecha">Fecha de nacimiento</label>
+          <input class="input" id="eFecha" type="date" />
+        </div>
+
+        <div class="field field-full">
+          <label for="eEstado">Estado de cuenta *</label>
+          <select class="input" id="eEstado">
+            <option value="Activa">Activa</option>
+            <option value="Suspendida">Suspendida</option>
+            <option value="Inactiva">Inactiva</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Acción especial: Restablecimiento de contraseña forzado -->
+      <div class="security-box">
+        <div>
+          <b>Seguridad de la cuenta</b>
+          <p class="sub">Envía un código de restablecimiento de contraseña al correo oficial del usuario.</p>
+        </div>
+        <button type="button" class="btn btn-sec btn-sm" id="btnResetPassword">
+          Forzar restablecimiento
+        </button>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn btn-sec" id="btnCancelar">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="btnGuardar">Guardar cambios</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Pie de página legal estándar -->
+  <footer class="footer">
+    <div class="footer-in">
+      <a href="privacidad.html">Privacidad</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="terminos.html">Términos</a>
+      <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog">
+        <span class="aviso-ico">⚠️</span> Aviso: no diagnóstico
+      </a>
+    </div>
+  </footer>
+
+  <!-- Modal de confirmación para guardar o restablecer -->
+  <div class="modal-overlay" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-hidden="true">
+    <div class="modal">
+      <h3 id="confirmTitle">Confirmar</h3>
+      <p id="confirmText" class="modal-desc"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn-modal btn-close" id="btnNo">No</button>
+        <button type="button" class="btn-modal btn-ok" id="btnSi">Sí, continuar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor Toast para notificaciones emergentes -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="../js/controllers/gestionUsuariosController.js"></script>
+  <script src="../js/cookies-banner.js"></script>
+  <script src="../js/sesion-header.js"></script>
+</body>
+
+</html>
