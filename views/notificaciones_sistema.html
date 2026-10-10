@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="../assets/Logo1.png" />
+  <title>Notificaciones del sistema - Mindzyxs</title>
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/notificaciones_sistema.css" />
+</head>
+
+<body>
+  <!-- Fondo decorativo suave -->
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-pink"></div>
+    <div class="blob blob-lav"></div>
+  </div>
+
+  <!-- Encabezado y Navegación -->
+  <header class="header-nav">
+    <div class="logo-container">
+      <a href="panel_admin.html" class="logo-link">
+        <img src="../assets/Logo1.png" alt="Logo Mindzyxs" class="logo-img" />
+        <span>Mindzyxs</span>
+      </a>
+    </div>
+
+    <nav class="main-nav" aria-label="Navegación principal">
+      <ul>
+        <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
+        <li><a href="inicio.html#nosotros">Nosotros</a></li>
+        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-right">
+      <div class="header-auth-buttons">
+        <span id="rol-usuario" class="badge-role">Administrador</span>
+        <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <main class="wrap">
+    <a href="panel_admin.html" class="btn-back" id="btnVolverPanel" aria-label="Volver al panel de administración">
+      &larr; Volver al panel
+    </a>
+
+    <!-- Pantalla 1: Catálogo de eventos -->
+    <section class="card screen active" id="screenCatalogo" aria-labelledby="catTitulo">
+      <div class="panel-head">
+        <div class="head-info">
+          <h1 id="catTitulo">Notificaciones del sistema</h1>
+          <p class="sub">Configura las plantillas de mensajes, canales de difusión y el estado activo de cada evento automático.</p>
+        </div>
+        <div class="badge-counter" id="badgeContador" style="display: none;">
+          <span id="contadorTexto">0 eventos</span>
+        </div>
+      </div>
+
+      <!-- Barra de filtros -->
+      <div class="filtros" role="search" aria-label="Filtros de catálogo de notificaciones">
+        <input
+          type="text"
+          class="input buscar"
+          id="fBuscar"
+          placeholder="Buscar evento por nombre o clave..."
+          aria-label="Buscar evento por nombre o clave"
+          autocomplete="off"
+        />
+
+        <select class="input" id="fCanal" aria-label="Filtrar por canal de entrega">
+          <option value="">Todos los canales</option>
+          <option value="correo">Correo electrónico</option>
+          <option value="sms">SMS</option>
+          <option value="interna">Notificación interna</option>
+        </select>
+
+        <select class="input" id="fEstado" aria-label="Filtrar por estado">
+          <option value="">Todos los estados</option>
+          <option value="activo">Habilitadas</option>
+          <option value="inactivo">Deshabilitadas</option>
+        </select>
+
+        <button type="button" class="btn btn-sec" id="btnRefrescar" title="Actualizar catálogo">
+          Actualizar
+        </button>
+      </div>
+
+      <!-- Mensaje de error en catálogo -->
+      <div class="err-msg" id="errCatalogo" role="alert"></div>
+
+      <!-- Lista dinámica de eventos con skeleton loader -->
+      <div id="listaEventos" aria-live="polite">
+        <div class="sk-card fila-sk">
+          <div class="sk sk-icon"></div>
+          <div class="sk-info">
+            <div class="sk sk-line" style="width: 50%;"></div>
+            <div class="sk sk-line" style="width: 70%;"></div>
+          </div>
+          <div class="sk sk-btn"></div>
+        </div>
+        <div class="sk-card fila-sk">
+          <div class="sk sk-icon"></div>
+          <div class="sk-info">
+            <div class="sk sk-line" style="width: 45%;"></div>
+            <div class="sk sk-line" style="width: 60%;"></div>
+          </div>
+          <div class="sk sk-btn"></div>
+        </div>
+      </div>
+
+      <!-- Estado vacío -->
+      <div class="empty" id="vacio" style="display: none;">
+        <div class="empty-icon" aria-hidden="true">🔔</div>
+        <h3>No se encontraron eventos</h3>
+        <p>No hay eventos de notificación que coincidan con los filtros aplicados.</p>
+      </div>
+    </section>
+
+    <!-- Pantalla 2: Edición y Previsualización -->
+    <section class="card screen" id="screenEditar" style="display: none;" aria-labelledby="editTitulo">
+      <button type="button" class="btn-back" id="btnVolverCatalogo" aria-label="Volver al catálogo de notificaciones">
+        &larr; Volver a notificaciones
+      </button>
+
+      <div class="panel-head">
+        <div class="head-info">
+          <h2 id="editTitulo">Configurar evento</h2>
+          <p class="sub" id="editSub">Personaliza los canales de entrega, el asunto y la plantilla del mensaje.</p>
+        </div>
+        <div class="switch-container">
+          <label class="switch-label" for="chkActivo">
+            <input type="checkbox" id="chkActivo" class="switch-input" />
+            <span class="switch-slider"></span>
+            <span class="switch-text" id="lblActivoTexto">Habilitada</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Mensaje de error en pantalla de edición -->
+      <div class="err-msg" id="errEditar" role="alert"></div>
+
+      <form id="formNotificacion" novalidate>
+        <!-- Selección de canales de entrega -->
+        <fieldset class="form-section">
+          <legend class="section-sub">Canales de entrega activos</legend>
+          <p class="sub-help">Selecciona por cuáles medios se transmitirá este mensaje (al menos uno requerido si el evento está activo):</p>
+          <div class="canales-grid" id="canalesGrid">
+            <label class="checkbox-card" for="chkCanalCorreo">
+              <input type="checkbox" id="chkCanalCorreo" value="correo" />
+              <div class="checkbox-content">
+                <span class="canal-ico">✉️</span>
+                <div>
+                  <strong>Correo electrónico</strong>
+                  <small>Entrega de asunto y cuerpo formateado</small>
+                </div>
+              </div>
+            </label>
+
+            <label class="checkbox-card" for="chkCanalSms">
+              <input type="checkbox" id="chkCanalSms" value="sms" />
+              <div class="checkbox-content">
+                <span class="canal-ico">📱</span>
+                <div>
+                  <strong>Mensaje de texto (SMS)</strong>
+                  <small>Envío directo al teléfono registrado</small>
+                </div>
+              </div>
+            </label>
+
+            <label class="checkbox-card" for="chkCanalInterna">
+              <input type="checkbox" id="chkCanalInterna" value="interna" />
+              <div class="checkbox-content">
+                <span class="canal-ico">🔔</span>
+                <div>
+                  <strong>Notificación en plataforma</strong>
+                  <small>Aviso interactivo dentro de la interfaz</small>
+                </div>
+              </div>
+            </label>
+          </div>
+        </fieldset>
+
+        <!-- Redacción de asunto y plantilla -->
+        <fieldset class="form-section">
+          <legend class="section-sub">Contenido de la plantilla</legend>
+
+          <div class="field field-full">
+            <label for="txtAsunto">Asunto del mensaje *</label>
+            <input
+              type="text"
+              id="txtAsunto"
+              class="input"
+              maxlength="250"
+              placeholder="Ej: Verificación de tu cuenta Mindzyxs"
+              required
+            />
+            <small class="field-hint">Utilizado principalmente para canales como correo electrónico.</small>
+          </div>
+
+          <div class="field field-full" style="margin-top: 14px;">
+            <label for="txtCuerpo">Cuerpo del mensaje / Plantilla *</label>
+            <textarea
+              id="txtCuerpo"
+              class="input textarea cuerpo-textarea"
+              rows="5"
+              placeholder="Escribe el contenido del mensaje. Puedes insertar variables dinámicas..."
+              required
+            ></textarea>
+          </div>
+
+          <!-- Variables disponibles dinámicas -->
+          <div class="variables-panel">
+            <div class="vars-header">
+              <span class="vars-title">💡 Variables dinámicas disponibles:</span>
+              <small class="vars-sub">Haz clic en una variable para insertarla en la plantilla.</small>
+            </div>
+            <div class="chips-vars" id="chipsVariables">
+              <button type="button" class="chip-var" data-var="{nombre}" title="Nombre del usuario destinatario">
+                <code>{nombre}</code> <span>Nombre</span>
+              </button>
+              <button type="button" class="chip-var" data-var="{codigo}" title="Código numérico generado">
+                <code>{codigo}</code> <span>Código</span>
+              </button>
+              <button type="button" class="chip-var" data-var="{fecha}" title="Fecha del evento">
+                <code>{fecha}</code> <span>Fecha</span>
+              </button>
+              <button type="button" class="chip-var" data-var="{motivo}" title="Motivo u observación administrativa">
+                <code>{motivo}</code> <span>Motivo</span>
+              </button>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Previsualización interactiva con variables de prueba -->
+        <fieldset class="form-section preview-section">
+          <div class="preview-header">
+            <div>
+              <legend class="section-sub">Previsualización del mensaje</legend>
+              <p class="sub-help">Visualiza cómo se renderizará este mensaje con datos de ejemplo en tiempo real.</p>
+            </div>
+            <button type="button" class="btn btn-sm btn-sec" id="btnActualizarPreview">
+              Actualizar vista previa
+            </button>
+          </div>
+
+          <!-- Formulario colapsable de variables de prueba -->
+          <div class="preview-vars-grid">
+            <div class="field">
+              <label for="varNombre">Ejemplo {nombre}:</label>
+              <input type="text" class="input input-sm" id="varNombre" value="María" />
+            </div>
+            <div class="field">
+              <label for="varCodigo">Ejemplo {codigo}:</label>
+              <input type="text" class="input input-sm" id="varCodigo" value="482913" />
+            </div>
+            <div class="field">
+              <label for="varFecha">Ejemplo {fecha}:</label>
+              <input type="text" class="input input-sm" id="varFecha" value="" />
+            </div>
+            <div class="field">
+              <label for="varMotivo">Ejemplo {motivo}:</label>
+              <input type="text" class="input input-sm" id="varMotivo" value="Documentación incompleta" />
+            </div>
+          </div>
+
+          <!-- Cuadro de simulación de correo / mensaje -->
+          <div class="preview-box">
+            <div class="preview-meta">
+              <div class="meta-row">
+                <span class="meta-tag">Canales:</span>
+                <span id="prevCanales" class="meta-value">-</span>
+              </div>
+              <div class="meta-row">
+                <span class="meta-tag">Asunto:</span>
+                <strong id="prevAsunto" class="meta-value">(Sin asunto definido)</strong>
+              </div>
+            </div>
+            <div class="preview-body" id="prevCuerpo">
+              (El cuerpo del mensaje se mostrará aquí sustituyendo las variables...)
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Botones de acción -->
+        <div class="actions">
+          <button type="button" class="btn btn-sec" id="btnCancelarEdicion">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="btnGuardar">Guardar cambios</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <!-- Pie de página legal estándar -->
+  <footer class="footer">
+    <div class="footer-in">
+      <a href="privacidad.html">Privacidad</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="terminos.html">Términos</a>
+      <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog">
+        <span class="aviso-ico">⚠️</span> Aviso: no diagnóstico
+      </a>
+    </div>
+  </footer>
+
+  <!-- Modal de confirmación para guardar cambios -->
+  <div class="modal-overlay" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-hidden="true">
+    <div class="modal">
+      <h3 id="confirmTitle">Confirmar guardado</h3>
+      <p id="confirmText" class="modal-desc"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn-modal btn-close" id="btnModalNo">Cancelar</button>
+        <button type="button" class="btn-modal btn-ok" id="btnModalSi">Sí, guardar cambios</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor Toast para notificaciones emergentes -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="../js/controllers/notificacionesController.js"></script>
+  <script src="../js/cookies-banner.js"></script>
+  <script src="../js/sesion-header.js"></script>
+</body>
+
+</html>
