@@ -43,6 +43,7 @@ Mindzyxs-FrontEnd/
 │   ├── recordatorios.css        # Configuración de recordatorios emocionales (PB-15)
 │   ├── gestion_usuarios.css     # Gestión y edición de usuarios del sistema (PB-25)
 │   ├── validar_psicologos.css   # Cola de validación y credenciales de psicólogos (PB-26)
+│   ├── notificaciones_sistema.css # Plantillas y canales de notificaciones (PB-30)
 │   └── admin_bd.css             # Consola de administración de BD (PB-27)
 ├── views/                       # Las páginas (una por archivo)
 │   ├── login.html               # Iniciar sesión y acceso a Modo Invitado
@@ -61,6 +62,7 @@ Mindzyxs-FrontEnd/
 │   ├── panel_admin.html         # Panel centralizado de administración (PB-25, PB-26, PB-27, PB-30)
 │   ├── gestion_usuarios.html    # Gestión y administración de usuarios (PB-25)
 │   ├── validar_psicologos.html  # Validación y revisión de credenciales de psicólogos (PB-26)
+│   ├── notificaciones_sistema.html # Administración y preview de notificaciones (PB-30)
 │   └── admin_bd.html            # Consola admin: respaldos y mantenimiento (PB-27)
 └── js/
     ├── services/                # Comunicación con la API
@@ -114,6 +116,7 @@ Mindzyxs-FrontEnd/
 | Panel Administrador | `views/panel_admin.html` | — | Acceso centralizado a los módulos administrativos del sistema (PB-25, PB-26, PB-27, PB-30) |
 | Gestión de usuarios (Admin) | `views/gestion_usuarios.html` | `gestionUsuariosController.js` | Consulta con filtros (rol, estado, texto), edición de datos y restablecimiento forzado de contraseña (`GET /api/admin/usuarios`, `PUT /api/admin/usuarios/{id}`, `PUT /api/admin/usuarios/{id}/estado`, `POST /api/admin/usuarios/{id}/reset-password`) (PB-25) |
 | Validación de psicólogos (Admin) | `views/validar_psicologos.html` | `validarPsicologosController.js` | Cola de psicólogos pendientes de aprobación, detalle de credenciales, descarga de PDF de tarjeta profesional, y aprobación/rechazo (`GET /api/admin/psicologos/pendientes`, `GET /api/admin/psicologos/{id}/validacion`, `GET /api/admin/psicologos/{id}/tarjeta`, `POST /api/admin/psicologos/{id}/aprobar`, `POST /api/admin/psicologos/{id}/rechazar`) (PB-26) |
+| Notificaciones del sistema (Admin) | `views/notificaciones_sistema.html` | `notificacionesController.js` | Catálogo de eventos, canales (correo, sms, interna), editor de plantillas con variables y simulador de preview (`GET /api/admin/notificaciones`, `GET /api/admin/notificaciones/{tipo}`, `PUT /api/admin/notificaciones/{tipo}`, `POST /api/admin/notificaciones/{tipo}/preview`) (PB-30) |
 | Consola admin BD (PB-27) | `views/admin_bd.html` | `adminBdController.js` | `POST /api/admin/backup`, `GET /api/admin/backups`, `GET /api/admin/backups/{id}/download`, `POST /api/admin/maintenance` |
 
 ## 4. Servicios
@@ -248,6 +251,15 @@ Controla el flujo de acceso sin cuenta a la plataforma y audita ingresos, bloque
 | `aprobarPsicologo(id)` | `POST /admin/psicologos/{id}/aprobar` | Aprueba la solicitud y activa la cuenta del psicólogo |
 | `rechazarPsicologo(id, motivo)` | `POST /admin/psicologos/{id}/rechazar` | Rechaza la solicitud con motivo opcional y notificación |
 
+### `js/services/notificacionesService.js` (PB-30)
+
+| Método | Endpoint | Uso |
+|--------|----------|-----|
+| `listarNotificaciones()` | `GET /admin/notificaciones` | Consulta catálogo de eventos y estado de canales |
+| `obtenerDetalleNotificacion(tipo)` | `GET /admin/notificaciones/{tipo}` | Obtiene configuración de un evento específico |
+| `actualizarNotificacion(tipo, cfg)` | `PUT /admin/notificaciones/{tipo}` | Actualiza canales, activación, asunto y plantilla |
+| `obtenerPreviewNotificacion(tipo, vars)` | `POST /admin/notificaciones/{tipo}/preview` | Simula renderizado con variables dinámicas |
+
 ### `js/services/adminService.js` (PB-27)
 
 | Método | Endpoint | Uso |
@@ -281,4 +293,5 @@ Controla el flujo de acceso sin cuenta a la plataforma y audita ingresos, bloque
 * **PB-15 (Recordatorios para el registro emocional - Rol Paciente):** Permite al paciente programar avisos para registrar su bienestar emocional con periodicidad diaria o semanal (seleccionando días específicos de 1 a 7), definir la hora del aviso mediante un selector nativo, activar/desactivar recordatorios con un switch toggle sin perder la configuración guardada, consultar el resumen en un panel de estado visual y recibir notificaciones periódicas sincronizadas con el backend (`/api/recordatorios`).
 * **PB-25 (Gestión de usuarios del sistema - Rol Administrador):** Permite al administrador consultar y filtrar a todos los usuarios por rol, estado y búsqueda de texto, editar su información de contacto y estado de cuenta, y forzar el restablecimiento de contraseña mediante envío seguro de código por correo.
 * **PB-26 (Validación de psicólogos - Rol Administrador):** Permite al administrador revisar la cola de profesionales en espera de validación, examinar sus credenciales y especialidades declaradas, descargar la tarjeta profesional en formato PDF y aprobar o rechazar la solicitud con notificación formal por correo electrónico.
+* **PB-30 (Notificaciones del sistema - Rol Administrador):** Permite al administrador configurar las plantillas de mensajes automáticos del sistema, seleccionar los canales de difusión (correo electrónico, SMS y notificación interna en plataforma), habilitar/deshabilitar eventos y validar el renderizado en tiempo real con previsualización interactiva.
 * El front de PB-27 (consola admin) no incluye restauración de respaldos — solo crear, listar/descargar y mantenimiento.
