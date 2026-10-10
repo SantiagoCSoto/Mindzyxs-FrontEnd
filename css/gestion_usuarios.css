@@ -2,6 +2,12 @@
    Estilos para Gestión de Usuarios del Sistema (PB-25 HU1-PB25)
    ========================================================================== */
 
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 /* Fondo decorativo de blobs */
 .bg-blobs {
   position: fixed;

@@ -2,6 +2,12 @@
    Estilos para Validación de Psicólogos (PB-26 HU1-PB26)
    ========================================================================== */
 
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 /* Fondo decorativo con blobs sutiles */
 .bg-blobs {
   position: fixed;
