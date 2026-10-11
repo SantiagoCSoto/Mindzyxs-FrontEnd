@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="../assets/Logo1.png" />
+  <title>Mindzyx — Cuestionarios predeterminados</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/cuestionarios_admin.css" />
+</head>
+
+<body>
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-pink"></div>
+    <div class="blob blob-lav"></div>
+  </div>
+
+  <header class="header-nav">
+    <div class="logo-container">
+      <a href="inicio.html" class="logo-link">
+        <img src="../assets/Logo1.png" alt="Logo Mindzyxs" class="logo-img" />
+        <span>Mindzyxs</span>
+      </a>
+    </div>
+    <nav class="main-nav" aria-label="Navegación principal">
+      <ul>
+        <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
+        <li><a href="inicio.html#nosotros">Nosotros</a></li>
+        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+      </ul>
+    </nav>
+    <div class="header-right">
+      <div class="header-auth-buttons">
+        <span id="rol-usuario" class="badge-role">Administrador</span>
+        <button type="button" id="btn-logout-top" class="btn-logout">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <a href="panel_admin.html" class="btn-volver-landing" id="backBtn">
+      <svg class="icon-inline" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      Volver al panel
+    </a>
+
+    <!-- Pantalla: lista -->
+    <section class="card screen active" id="screenLista">
+      <h1>Cuestionarios predeterminados</h1>
+      <p class="sub">Cree, edite o desactive los cuestionarios base del sistema.</p>
+      <div style="margin: 14px 0;">
+        <button type="button" class="btn btn-save" id="btnNuevo">
+          <svg class="btn-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+        Crear cuestionario
+        </button>
+      </div>
+      <input type="text" class="buscar" id="buscarC" placeholder="Buscar por título..." aria-label="Buscar cuestionario por título" autocomplete="off" />
+      <div class="err-msg" id="listaErr">No fue posible cargar los cuestionarios. Intente nuevamente.</div>
+      <div class="sk-stack" id="skLista" aria-hidden="true" hidden>
+        <div class="sk sk-title"></div>
+        <div class="sk sk-card"></div>
+        <div class="sk sk-card"></div>
+        <div class="sk sk-card"></div>
+      </div>
+      <div class="empty" id="vacioCuestionario" hidden>No se encontraron cuestionarios predeterminados.</div>
+      <div id="listaC"></div>
+    </section>
+
+    <!-- Pantalla: crear / editar -->
+    <section class="card screen" id="screenEditar">
+      <h2 id="editTitulo">Nuevo cuestionario</h2>
+      <p class="sub" id="editSub">Complete los campos obligatorios para guardar el cuestionario.</p>
+
+      <label class="field-label" for="eTitulo">Título *</label>
+      <input type="text" id="eTitulo" maxlength="200" placeholder="Ej. Cuestionario base de ansiedad" autocomplete="off" />
+
+      <label class="field-label" for="eDesc">Descripción</label>
+      <textarea id="eDesc" maxlength="1000" placeholder="Descripción e instrucciones del cuestionario"></textarea>
+
+      <label class="field-label">Preguntas *</label>
+      <p class="field-hint">Cada pregunta debe tener al menos dos opciones con su valor ponderado (0 o más).</p>
+      <div id="pregBox"></div>
+      <div class="btn-add-wrap">
+        <button type="button" class="btn btn-cancel btn-add-preg" id="btnAddPreg">
+          <svg class="btn-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+          + Agregar pregunta
+        </button>
+      </div>
+
+      <h3 style="font-size: 16px; font-weight: 700; margin-top: 24px; color: var(--text);">Cálculo de riesgo</h3>
+      <p class="sub" style="margin-bottom: 12px;">El puntaje total se clasifica según los umbrales definidos.</p>
+      <div class="rangos">
+        <div class="rango"><b style="color: #1F7A4D;">Bajo</b> De 0 a <input type="number" id="uBajoMax" value="6" min="0" aria-label="Bajo hasta" /></div>
+        <div class="rango"><b style="color: #B7791F;">Medio</b> De <span id="uMedioDesde" class="auto-valor">—</span> a <input type="number" id="uMedioMax" value="12" min="0" aria-label="Medio hasta" /></div>
+        <div class="rango"><b style="color: #C2274F;">Alto</b> Desde <span id="uAltoDesde" class="auto-valor">—</span> en adelante</div>
+      </div>
+
+      <label class="check-inline" for="fPublicar">
+        <input type="checkbox" id="fPublicar" />
+        <span>Publicar (quedará disponible para invitados y pacientes)</span>
+      </label>
+
+      <div class="err-msg" id="eForm">Debe completar los campos obligatorios.</div>
+
+      <div class="actions">
+        <button type="button" class="btn btn-cancel" id="btnCancelar">Cancelar</button>
+        <button type="button" class="btn btn-save" id="btnGuardar">
+          <svg class="btn-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+          Guardar
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-in">
+      <a href="privacidad.html">Privacidad</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="terminos.html">Términos</a>
+      <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog"><span class="aviso-ico"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5A45C9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span> Aviso: no diagnóstico</a>
+    </div>
+  </footer>
+
+  <!-- Modal de confirmación (desactivar) -->
+  <div class="modal-overlay" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-hidden="true">
+    <div class="modal">
+      <div class="modal-icon" id="confirmIco">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+      </div>
+      <h3 id="confirmTitle">Confirmar</h3>
+      <p class="sub" id="confirmText"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn-modal close" id="btnNo">No</button>
+        <button type="button" class="btn-modal danger" id="btnSi">Sí, desactivar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="../js/controllers/cuestionariosAdminController.js"></script>
+  <script src="../js/cookies-banner.js"></script>
+  <script src="../js/sesion-header.js"></script>
+</body>
+
+</html>
