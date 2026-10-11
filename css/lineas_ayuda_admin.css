@@ -559,6 +559,11 @@ textarea:focus {
   color: #2A9AA0;
 }
 
+.modal-icon.warn {
+  background: #FFF7E8;
+  color: #C77E1A;
+}
+
 .modal h3 {
   font-size: 17px;
   font-weight: 700;
@@ -612,6 +617,16 @@ textarea:focus {
 .btn-modal.ok:hover {
   background: var(--cyan-hover);
   box-shadow: 0 4px 10px rgba(110, 207, 212, 0.3);
+}
+
+.btn-modal.warn {
+  background: var(--warning);
+  color: #FFF;
+}
+
+.btn-modal.warn:hover {
+  background: #D68F2C;
+  box-shadow: 0 4px 10px rgba(232, 163, 71, 0.3);
 }
 
 /* --- Toast --- */
