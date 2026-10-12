@@ -2,7 +2,7 @@
  * Controlador para la gestión y configuración de notificaciones del sistema (PB-30 HU1-PB30).
  * Conecta views/notificaciones_sistema.html con notificacionesService.js:
  * - Catálogo oficial de eventos automáticos con filtrado por canal, estado y texto.
- * - Edición de canales de entrega (correo, sms, interna) y estado activo/inactivo.
+ * - Edición del canal correo y estado activo/inactivo.
  * - Editor de asunto y plantilla con inserción asistida de variables dinámicas.
  * - Simulador de previsualización interactiva con variables de prueba en tiempo real.
  * Requiere rol Administrador.
@@ -61,8 +61,6 @@ const lblActivoTexto = $('lblActivoTexto');
 
 const formNotificacion = $('formNotificacion');
 const chkCanalCorreo = $('chkCanalCorreo');
-const chkCanalSms = $('chkCanalSms');
-const chkCanalInterna = $('chkCanalInterna');
 const txtAsunto = $('txtAsunto');
 const txtCuerpo = $('txtCuerpo');
 const chipsVariables = $('chipsVariables');
@@ -125,9 +123,7 @@ function formatearCanales(canales) {
     return '<span class="tag-canal">Ninguno</span>';
   }
   const iconos = {
-    correo: '✉️ Correo',
-    sms: '📱 SMS',
-    interna: '🔔 Interna'
+    correo: '✉️ Correo'
   };
   return canales
     .map((c) => `<span class="tag-canal">${iconos[c] || escapar(c)}</span>`)
@@ -327,8 +323,6 @@ async function abrirEdicion(tipo) {
   // Canales
   const canales = Array.isArray(eventoActual.canales) ? eventoActual.canales : [];
   if (chkCanalCorreo) chkCanalCorreo.checked = canales.includes('correo');
-  if (chkCanalSms) chkCanalSms.checked = canales.includes('sms');
-  if (chkCanalInterna) chkCanalInterna.checked = canales.includes('interna');
 
   // Asunto y cuerpo
   if (txtAsunto) txtAsunto.value = eventoActual.asunto || '';
@@ -378,8 +372,6 @@ if (chipsVariables && txtCuerpo) {
 function obtenerCanalesSeleccionados() {
   const seleccionados = [];
   if (chkCanalCorreo?.checked) seleccionados.push('correo');
-  if (chkCanalSms?.checked) seleccionados.push('sms');
-  if (chkCanalInterna?.checked) seleccionados.push('interna');
   return seleccionados;
 }
 
@@ -431,7 +423,7 @@ if (btnActualizarPreview) {
 
 if (txtAsunto) txtAsunto.addEventListener('input', actualizarVistaPrevia);
 if (txtCuerpo) txtCuerpo.addEventListener('input', actualizarVistaPrevia);
-[chkCanalCorreo, chkCanalSms, chkCanalInterna].forEach((chk) => {
+[chkCanalCorreo].forEach((chk) => {
   if (chk) chk.addEventListener('change', actualizarVistaPrevia);
 });
 

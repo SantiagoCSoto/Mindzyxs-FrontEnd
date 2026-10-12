@@ -15,9 +15,7 @@
 import { getJson, putJson, postJson } from './apiClient.js';
 
 export const CANALES_DISPONIBLES = [
-  { id: 'correo', etiqueta: 'Correo electrónico', icono: '✉️' },
-  { id: 'sms', etiqueta: 'Mensaje de texto (SMS)', icono: '📱' },
-  { id: 'interna', etiqueta: 'Notificación interna en plataforma', icono: '🔔' }
+  { id: 'correo', etiqueta: 'Correo electrónico', icono: '✉️' }
 ];
 
 export const VARIABLES_DOCUMENTADAS = [
