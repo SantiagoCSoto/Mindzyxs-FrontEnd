@@ -93,13 +93,13 @@
 
       <div class="modal-form-body">
         <label for="obsReg" class="form-label">Asociar al registro:</label>
-        <select id="obsReg" class="form-select" aria-label="obsReg">
+        <select id="obsReg" class="form-select">
           <option value="0">General del paciente</option>
         </select>
 
         <label for="obsText" class="form-label">Observación *</label>
-        <textarea id="obsText" class="form-textarea" placeholder="Escriba su observación clínica..." rows="4" aria-label="Escriba su observación clínica..."></textarea>
-        <span class="err-msg" id="eObs">La observación es obligatoria.</span>
+        <textarea id="obsText" class="form-textarea" placeholder="Escriba su observación clínica..." rows="4" aria-describedby="eObs"></textarea>
+        <span class="err-msg" id="eObs" role="alert">La observación es obligatoria.</span>
       </div>
 
       <div class="modal-actions">

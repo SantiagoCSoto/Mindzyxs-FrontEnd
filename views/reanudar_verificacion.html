@@ -13,6 +13,8 @@
 
 <body>
 
+  <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
   <header class="header-nav">
     <div class="logo-container">
       <a href="login.html" class="logo-link">
@@ -21,9 +23,9 @@
       </a>
     </div>
 
-    <nav class="main-nav">
+    <nav class="main-nav" aria-label="Navegación principal">
       <ul>
-        <li><a href="#">Inicio</a></li>
+        <li><a href="inicio.html">Inicio</a></li>
         <li><a href="nosotros.html">Nosotros</a></li>
         <li><a href="ayuda.html">Ayuda</a></li>
       </ul>
@@ -35,7 +37,7 @@
     </div>
   </header>
 
-  <main>
+  <main id="main-content">
     <section class="verificacion-card" style="max-width: 420px;">
       <h1>Reanudar verificación</h1>
       <p class="verificacion-subtitulo">¿No completaste tu registro? Introduce tu correo para reenviar el código.</p>
@@ -44,12 +46,12 @@
         <div class="form-group">
           <label for="correo-reanudar">Correo registrado</label>
           <input type="email" id="correo-reanudar" name="correo" autocomplete="email" required
-            placeholder="tu@correo.com" aria-label="tu@correo.com">
-          <span id="error-correo-reanudar" class="error-mensaje"></span>
+            placeholder="tu@correo.com" aria-describedby="error-correo-reanudar">
+          <span id="error-correo-reanudar" class="error-mensaje" role="alert" aria-live="polite"></span>
         </div>
 
-        <div id="banner-error-reanudar" class="alerta-error"></div>
-        <div id="banner-exito-reanudar" class="alerta-exito"></div>
+        <div id="banner-error-reanudar" class="alerta-error" role="alert" aria-live="assertive"></div>
+        <div id="banner-exito-reanudar" class="alerta-exito" role="status" aria-live="polite"></div>
 
         <button type="submit" id="btn-reanudar" class="btn-verificar">Reenviar código</button>
 

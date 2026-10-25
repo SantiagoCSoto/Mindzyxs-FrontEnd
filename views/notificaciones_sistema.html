@@ -131,7 +131,7 @@
         </div>
         <div class="switch-container">
           <label class="switch-label" for="chkActivo">
-            <input type="checkbox" id="chkActivo" class="switch-input" / aria-label="chkActivo">
+            <input type="checkbox" id="chkActivo" class="switch-input" aria-label="Habilitar o inhabilitar notificación">
             <span class="switch-slider"></span>
             <span class="switch-text" id="lblActivoTexto">Habilitada</span>
           </label>
@@ -148,9 +148,9 @@
           <p class="sub-help">Selecciona por cuáles medios se transmitirá este mensaje (al menos uno requerido si el evento está activo):</p>
           <div class="canales-grid" id="canalesGrid" tabindex="0">
             <label class="checkbox-card" for="chkCanalCorreo">
-              <input type="checkbox" id="chkCanalCorreo" value="correo" / aria-label="chkCanalCorreo">
+              <input type="checkbox" id="chkCanalCorreo" value="correo">
               <div class="checkbox-content">
-                <span class="canal-ico">✉️</span>
+                <span class="canal-ico" aria-hidden="true">✉️</span>
                 <div>
                   <strong>Correo electrónico</strong>
                   <small>Entrega de asunto y cuerpo formateado</small>

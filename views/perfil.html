@@ -105,8 +105,8 @@
           <div class="form-grid">
             <div class="form-group full">
               <label for="inCorreo">Correo electrónico *</label>
-              <input type="email" id="inCorreo" name="correo" placeholder="tucorreo@test.com" autocomplete="email" required / aria-label="tucorreo@test.com">
-              <span class="err-msg" id="eCorreo">Ingresa un correo válido.</span>
+              <input type="email" id="inCorreo" name="correo" placeholder="tucorreo@test.com" autocomplete="email" required aria-describedby="eCorreo">
+              <span class="err-msg" id="eCorreo" role="alert">Ingresa un correo válido.</span>
             </div>
           </div>
 
@@ -137,8 +137,8 @@
       <div class="modal-icon" aria-hidden="true">✉️</div>
       <h3 id="codeTitle">Verifica tu nuevo correo</h3>
       <p class="sub" id="codeSub">Enviamos un código de 6 dígitos a <b id="codeEmail">-</b>. Ingrésalo para confirmar el cambio.</p>
-      <input class="code-input" id="codeInput" maxlength="6" inputmode="numeric" placeholder="· · · · · ·" autocomplete="one-time-code" aria-label="Código de verificación de 6 dígitos" />
-      <span class="err-msg" id="eCode">Código incorrecto. Verifica e intenta nuevamente</span>
+      <input class="code-input" id="codeInput" maxlength="6" inputmode="numeric" placeholder="· · · · · ·" autocomplete="one-time-code" aria-label="Código de verificación de 6 dígitos" aria-describedby="eCode" />
+      <span class="err-msg" id="eCode" role="alert">Código incorrecto. Verifica e intenta nuevamente</span>
       <div class="modal-actions">
         <button type="button" class="btn-modal close" id="btnCodeCancel">Cancelar</button>
         <button type="button" class="btn-modal ok" id="btnVerify">Verificar</button>

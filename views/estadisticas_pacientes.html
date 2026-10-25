@@ -53,25 +53,25 @@
         <div>
           <label for="selPac">Paciente autorizado</label>
           <div class="sk sk-line" id="skSelPac" aria-hidden="true"></div>
-          <select id="selPac" hidden aria-label="selPac"></select>
+          <select id="selPac" hidden></select>
         </div>
         <div>
           <label for="fDesde">Desde</label>
-          <input type="date" id="fDesde" disabled / aria-label="fDesde">
+          <input type="date" id="fDesde" disabled>
         </div>
         <div>
           <label for="fHasta">Hasta</label>
-          <input type="date" id="fHasta" disabled / aria-label="fHasta">
+          <input type="date" id="fHasta" disabled>
         </div>
         <div class="filtros-accion">
           <button type="button" class="btn btn-save" id="btnGenerar" disabled>
-            <svg class="btn-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+            <svg class="btn-ico" aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
             Generar
           </button>
         </div>
       </div>
 
-      <div class="err-msg" id="errStats">No fue posible cargar las estadísticas. Intente nuevamente.</div>
+      <div class="err-msg" id="errStats" role="alert">No fue posible cargar las estadísticas. Intente nuevamente.</div>
 
       <div class="sk-stack" id="skResultados" aria-hidden="true" hidden>
         <div class="sk sk-title"></div>

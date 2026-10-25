@@ -56,7 +56,7 @@
         </button>
       </div>
       <input type="text" class="buscar" id="buscarC" placeholder="Buscar por título..." aria-label="Buscar cuestionario por título" autocomplete="off" />
-      <div class="err-msg" id="listaErr" tabindex="0">No fue posible cargar tus cuestionarios. Intente nuevamente.</div>
+      <div class="err-msg" id="listaErr" role="alert" tabindex="0">No fue posible cargar tus cuestionarios. Intente nuevamente.</div>
       <div id="listaC" tabindex="0"></div>
     </section>
 
@@ -84,22 +84,22 @@
       <p class="sub" id="editSub"></p>
 
       <label class="field-label" for="eTitulo">Título *</label>
-      <input type="text" id="eTitulo" maxlength="200" autocomplete="off" / aria-label="eTitulo">
+      <input type="text" id="eTitulo" maxlength="200" autocomplete="off">
 
       <label class="field-label" for="eDesc">Descripción</label>
-      <textarea id="eDesc" maxlength="1000" placeholder="Cuéntale al paciente de qué trata este cuestionario (opcional)" aria-label="Cuéntale al paciente de qué trata este cuestionario (opcional)"></textarea>
+      <textarea id="eDesc" maxlength="1000" placeholder="Cuéntale al paciente de qué trata este cuestionario (opcional)"></textarea>
 
       <label class="field-label">Preguntas *</label>
       <p class="field-hint">Cada pregunta debe tener al menos dos opciones. Puedes agregar nuevas preguntas.</p>
       <div id="ePreg"></div>
       <div class="btn-add-wrap">
         <button type="button" class="btn btn-cancel btn-add-preg" id="btnAddPreg">
-          <svg class="btn-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+          <svg class="btn-ico" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
           Agregar pregunta
         </button>
       </div>
 
-      <div class="err-msg" id="eForm">El cuestionario debe tener al menos una pregunta.</div>
+      <div class="err-msg" id="eForm" role="alert">El cuestionario debe tener al menos una pregunta.</div>
 
       <div class="actions">
         <button type="button" class="btn btn-cancel" id="btnGuardarB">Guardar como borrador</button>
@@ -114,10 +114,10 @@
       <p class="sub">Diseñe un cuestionario personalizado con cálculo de riesgo configurable.</p>
 
       <label class="field-label" for="fTitulo">Título *</label>
-      <input type="text" id="fTitulo" maxlength="200" placeholder="Ej. Chequeo de ansiedad" autocomplete="off" / aria-label="Ej. Chequeo de ansiedad">
+      <input type="text" id="fTitulo" maxlength="200" placeholder="Ej. Chequeo de ansiedad" autocomplete="off">
 
       <label class="field-label" for="fDesc">Descripción</label>
-      <textarea id="fDesc" maxlength="1000" placeholder="Descripción del cuestionario..." aria-label="Descripción del cuestionario..."></textarea>
+      <textarea id="fDesc" maxlength="1000" placeholder="Descripción del cuestionario..."></textarea>
 
       <label class="field-label">Preguntas *</label>
       <p class="field-hint">Cada pregunta debe tener al menos dos opciones con su valor ponderado.</p>
@@ -137,7 +137,7 @@
         <div class="rango"><b style="color: #C2274F;">Alto</b> De <input type="number" id="rAlto" value="4" min="0" aria-label="Alto desde" /> en adelante</div>
       </div>
 
-      <div class="err-msg" id="eFormNuevo">Debe agregar al menos una pregunta válida con opciones.</div>
+      <div class="err-msg" id="eFormNuevo" role="alert">Debe agregar al menos una pregunta válida con opciones.</div>
 
       <div class="actions">
         <button type="button" class="btn btn-cancel" id="btnBorrador">Guardar como borrador</button>

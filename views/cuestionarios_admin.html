@@ -56,7 +56,7 @@
         </button>
       </div>
       <input type="text" class="buscar" id="buscarC" placeholder="Buscar por título..." aria-label="Buscar cuestionario por título" autocomplete="off" />
-      <div class="err-msg" id="listaErr" tabindex="0">No fue posible cargar los cuestionarios. Intente nuevamente.</div>
+      <div class="err-msg" id="listaErr" role="alert" tabindex="0">No fue posible cargar los cuestionarios. Intente nuevamente.</div>
       <div class="sk-stack" id="skLista" aria-hidden="true" hidden tabindex="0">
         <div class="sk sk-title"></div>
         <div class="sk sk-card"></div>
@@ -73,17 +73,17 @@
       <p class="sub" id="editSub">Complete los campos obligatorios para guardar el cuestionario.</p>
 
       <label class="field-label" for="eTitulo">Título *</label>
-      <input type="text" id="eTitulo" maxlength="200" placeholder="Ej. Cuestionario base de ansiedad" autocomplete="off" / aria-label="Ej. Cuestionario base de ansiedad">
+      <input type="text" id="eTitulo" maxlength="200" placeholder="Ej. Cuestionario base de ansiedad" autocomplete="off">
 
       <label class="field-label" for="eDesc">Descripción</label>
-      <textarea id="eDesc" maxlength="1000" placeholder="Descripción e instrucciones del cuestionario" aria-label="Descripción e instrucciones del cuestionario"></textarea>
+      <textarea id="eDesc" maxlength="1000" placeholder="Descripción e instrucciones del cuestionario"></textarea>
 
       <label class="field-label">Preguntas *</label>
       <p class="field-hint">Cada pregunta debe tener al menos dos opciones con su valor ponderado (0 o más).</p>
       <div id="pregBox"></div>
       <div class="btn-add-wrap">
         <button type="button" class="btn btn-cancel btn-add-preg" id="btnAddPreg">
-          <svg class="btn-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+          <svg class="btn-ico" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
           + Agregar pregunta
         </button>
       </div>
@@ -97,11 +97,11 @@
       </div>
 
       <label class="check-inline" for="fPublicar">
-        <input type="checkbox" id="fPublicar" / aria-label="fPublicar">
+        <input type="checkbox" id="fPublicar">
         <span>Publicar (quedará disponible para invitados y pacientes)</span>
       </label>
 
-      <div class="err-msg" id="eForm">Debe completar los campos obligatorios.</div>
+      <div class="err-msg" id="eForm" role="alert">Debe completar los campos obligatorios.</div>
 
       <div class="actions">
         <button type="button" class="btn btn-cancel" id="btnCancelar">Cancelar</button>

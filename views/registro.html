@@ -13,6 +13,8 @@
 
 <body>
 
+  <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
   <header class="header-nav">
     <div class="logo-container">
       <a href="registro.html" class="logo-link">
@@ -21,9 +23,9 @@
       </a>
     </div>
 
-    <nav class="main-nav">
+    <nav class="main-nav" aria-label="Navegación principal">
       <ul>
-        <li><a href="#">Inicio</a></li>
+        <li><a href="inicio.html">Inicio</a></li>
         <li><a href="nosotros.html">Nosotros</a></li>
         <li><a href="ayuda.html">Ayuda</a></li>
       </ul>
@@ -35,16 +37,16 @@
     </div>
   </header>
 
-  <main>
+  <main id="main-content">
     <section class="registro-card">
       <h1>Registrarse</h1>
 
-      <div id="banner-error-registro" class="alerta-error"></div>
+      <div id="banner-error-registro" class="alerta-error" role="alert" aria-live="assertive"></div>
 
-      <form action="#" method="POST" enctype="multipart/form-data" class="form-registro">
+      <form action="#" method="POST" enctype="multipart/form-data" class="form-registro" novalidate>
         <div class="form-group">
           <label for="tipo-usuario">Tipo de usuario *</label>
-          <select id="tipo-usuario" name="tipo_usuario" required aria-label="tipo usuario">
+          <select id="tipo-usuario" name="tipo_usuario" required>
             <option value="" disabled selected>Selecciona una opción</option>
             <option value="Paciente">Paciente</option>
             <option value="Psicologo">Psicólogo</option>
@@ -53,31 +55,32 @@
 
         <div id="seccion-credenciales-psicologo">
           <div class="credenciales-header">
-            <span class="icono-credenciales">🎓</span>
+            <span class="icono-credenciales" aria-hidden="true">🎓</span>
             <h2>Credenciales profesionales</h2>
           </div>
 
           <div class="credenciales-body">
-            <label class="label-tarjeta">Subir tarjeta profesional *</label>            <div class="file-upload-box">
+            <label for="tarjeta-profesional" class="label-tarjeta">Subir tarjeta profesional *</label>
+            <div class="file-upload-box">
               <input type="file" id="tarjeta-profesional" name="tarjeta_profesional" accept=".pdf,application/pdf"
-                class="file-input-real" aria-label="tarjeta profesional">
+                class="file-input-real" aria-describedby="error-tarjeta formato-tarjeta-ayuda">
               <label for="tarjeta-profesional" class="btn-custom-file">
-                <span class="file-upload-icon">↗</span>
+                <span class="file-upload-icon" aria-hidden="true">↗</span>
                 <span>Seleccionar archivo</span>
               </label>
               <span id="file-name-display" class="file-name-text">Ningún archivo seleccionado</span>
             </div>
-            <small class="formato-ayuda">Formatos permitidos: PDF — Tamaño máximo 5MB</small>
+            <small id="formato-tarjeta-ayuda" class="formato-ayuda">Formatos permitidos: PDF — Tamaño máximo 5MB</small>
             <small class="formato-ayuda">Su cuenta quedará pendiente de aprobación por el administrador.</small>
-            <span id="error-tarjeta" class="mensaje-error">Por favor, sube tu tarjeta profesional para continuar.</span>
+            <span id="error-tarjeta" class="mensaje-error" role="alert" aria-live="polite">Por favor, sube tu tarjeta profesional para continuar.</span>
           </div>
 
           <div class="credenciales-body">
-            <label class="label-tarjeta">Especialidades (una, varias o ninguna)</label>
-            <input type="text" id="buscar-especialidad" placeholder="Buscar especialidad..." autocomplete="off" aria-label="Buscar especialidad"
+            <label for="buscar-especialidad" class="label-tarjeta">Especialidades (una, varias o ninguna)</label>
+            <input type="text" id="buscar-especialidad" placeholder="Buscar especialidad..." autocomplete="off"
               style="width:100%;padding:9px 12px;border:1.5px solid #CBD5E1;border-radius:10px;font-size:13.5px;margin-bottom:8px;" />
             <div id="lista-especialidades"
-              style="max-height:170px;overflow-y:auto;border:1.5px solid #E3E6F3;border-radius:10px;padding:8px 10px;background:#fff;" tabindex="0">
+              style="max-height:170px;overflow-y:auto;border:1.5px solid #E3E6F3;border-radius:10px;padding:8px 10px;background:#fff;" tabindex="0" role="region" aria-label="Lista de especialidades">
             </div>
             <small class="formato-ayuda">Si tu especialidad no está, se solicitará aparte con validación del administrador.</small>
           </div>
@@ -86,25 +89,25 @@
         <div class="form-row">
           <div class="form-group">
             <label for="nombres">Nombres *</label>
-            <input type="text" id="nombres" name="nombres" placeholder="Ej. Sofía" required aria-label="Ej. Sofía">
+            <input type="text" id="nombres" name="nombres" placeholder="Ej. Sofía" required>
           </div>
 
           <div class="form-group">
             <label for="apellidos">Apellidos *</label>
-            <input type="text" id="apellidos" name="apellidos" placeholder="Ej. Martínez" required aria-label="Ej. Martínez">
+            <input type="text" id="apellidos" name="apellidos" placeholder="Ej. Martínez" required>
           </div>
         </div>
 
         <div class="form-row">
           <div class="form-group">
             <label for="fecha-nacimiento">Fecha de nacimiento *</label>
-            <input type="date" id="fecha-nacimiento" name="fecha_nacimiento" required aria-label="fecha nacimiento">
-            <small class="formato-ayuda">Debe ser mayor de 14 años</small>
+            <input type="date" id="fecha-nacimiento" name="fecha_nacimiento" required aria-describedby="ayuda-edad">
+            <small id="ayuda-edad" class="formato-ayuda">Debe ser mayor de 14 años</small>
           </div>
 
           <div class="form-group">
             <label for="genero">Género *</label>
-            <select id="genero" name="genero" required aria-label="genero">
+            <select id="genero" name="genero" required>
               <option value="" disabled selected>Selecciona</option>
               <option value="1">Masculino</option>
               <option value="2">Femenino</option>
@@ -115,22 +118,23 @@
         </div>
 
         <div class="form-group">
-          <label for="correo">Correo *</label>
-          <input type="email" id="correo" name="correo" placeholder="tu@correo.com" required aria-label="tu@correo.com">
+          <label for="correo">Correo electrónico *</label>
+          <input type="email" id="correo" name="correo" placeholder="tu@correo.com" required>
         </div>
 
         <div class="form-group">
           <label for="contrasena">Contraseña *</label>
           <input type="password" id="contrasena" name="contrasena" placeholder="Mín. 6 caracteres (letras y números)" minlength="6"
-            required aria-label="Mín. 6 caracteres (letras y números)">
+            required aria-describedby="ayuda-contrasena">
+          <small id="ayuda-contrasena" class="formato-ayuda">Mínimo 6 caracteres combinando letras y números.</small>
         </div>
 
         <div class="form-group">
-          <label style="display:flex;gap:8px;align-items:flex-start;font-size:13px;font-weight:400;cursor:pointer;">
-            <input type="checkbox" id="acepta-privacidad" style="margin-top:3px;" / aria-label="acepta privacidad">
+          <label for="acepta-privacidad" style="display:flex;gap:8px;align-items:flex-start;font-size:13px;font-weight:400;cursor:pointer;">
+            <input type="checkbox" id="acepta-privacidad" style="margin-top:3px;" required aria-describedby="error-privacidad">
             <span>He leído y acepto la <a href="privacidad.html">Política de Privacidad</a>, la <a href="cookies.html">Política de Cookies</a> y los <a href="terminos.html">Términos y Condiciones</a>. *</span>
           </label>
-          <span id="error-privacidad" class="mensaje-error">Debes aceptar las políticas para registrarte.</span>
+          <span id="error-privacidad" class="mensaje-error" role="alert" aria-live="polite">Debes aceptar las políticas para registrarte.</span>
         </div>
 
         <div class="form-actions">
