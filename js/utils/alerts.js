@@ -55,9 +55,17 @@ export function ocultarBanner(bannerElement) {
 export function abrirModal(modalElement) {
   if (!modalElement) return;
   modalElement.classList.add('activo');
+  modalElement.setAttribute('aria-hidden', 'false');
+  if (window.MindzyxsA11y && typeof window.MindzyxsA11y.onModalOpened === 'function') {
+    window.MindzyxsA11y.onModalOpened(modalElement);
+  }
 }
 
 export function cerrarModal(modalElement) {
   if (!modalElement) return;
   modalElement.classList.remove('activo');
+  modalElement.setAttribute('aria-hidden', 'true');
+  if (window.MindzyxsA11y && typeof window.MindzyxsA11y.onModalClosed === 'function') {
+    window.MindzyxsA11y.onModalClosed(modalElement);
+  }
 }

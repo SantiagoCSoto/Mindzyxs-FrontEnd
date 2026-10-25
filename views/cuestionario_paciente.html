@@ -138,12 +138,12 @@
   </div>
 
   <!-- Confirmar salida del cuestionario -->
-  <div class="modal-overlay" id="exitModal" role="alertdialog" aria-modal="true">
+  <div class="modal-overlay" id="exitModal" role="alertdialog" aria-modal="true" aria-labelledby="exitTitle">
     <div class="modal">
       <div class="modal-icon err">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
       </div>
-      <h3>Salir del cuestionario</h3>
+      <h3 id="exitTitle">Salir del cuestionario</h3>
       <p class="sub">¿Deseas salir del cuestionario? Se perderán tus respuestas no guardadas.</p>
       <div class="modal-actions">
         <button class="btn-modal danger" id="exitYes">Sí, salir</button>
@@ -155,6 +155,7 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script type="module" src="../js/controllers/cuestionarioPacienteController.js"></script>
+  <script src="../js/accessibility.js"></script>
   <script src="../js/cookies-banner.js"></script>
   <script src="../js/sesion-header.js"></script>
 </body>
