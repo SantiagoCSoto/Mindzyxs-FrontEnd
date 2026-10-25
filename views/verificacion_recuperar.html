@@ -13,6 +13,8 @@
 
 <body>
 
+  <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
   <header class="header-nav">
     <div class="logo-container">
       <a href="login.html" class="logo-link">
@@ -23,26 +25,26 @@
 
   </header>
 
-  <main>
+  <main id="main-content">
     <section class="verificacion-card">
       <h1>Verificación de recuperación</h1>
       <p class="verificacion-subtitulo">Ingresa el código enviado a tu correo</p>
 
       <div class="chip-correo">
-        <span class="icono-correo">📨</span>
+        <span class="icono-correo" aria-hidden="true">📨</span>
         <span>Código enviado a <strong>tu@correo.com</strong> &bull; válido 5 min</span>
       </div>
 
-      <form class="form-verificacion" id="form-verificacion-recuperar" action="#">
+      <form class="form-verificacion" id="form-verificacion-recuperar" action="#" novalidate>
         <div class="form-group">
           <label for="codigo-verificacion">Código de verificación</label>
           <div class="input-codigo-contenedor">
             <input type="text" id="codigo-verificacion" name="codigo_verificacion" maxlength="6" inputmode="numeric"
-              pattern="[0-9]*" placeholder="&mdash;  &mdash;  &mdash;  &mdash;  &mdash;  &mdash;" autocomplete="off"
-              required aria-label="&mdash;  &mdash;  &mdash;  &mdash;  &mdash;  &mdash;">
+              pattern="[0-9]*" placeholder="&mdash;  &mdash;  &mdash;  &mdash;  &mdash;  &mdash;" autocomplete="one-time-code"
+              required aria-describedby="banner-error">
           </div>
-          <div id="banner-error" class="alerta-error">El código expiró. Reenvía el código</div>
-          <div id="banner-exito" class="alerta-exito">Se ha reenviado un nuevo código a tu correo.</div>
+          <div id="banner-error" class="alerta-error" role="alert" aria-live="assertive">El código expiró. Reenvía el código</div>
+          <div id="banner-exito" class="alerta-exito" role="status" aria-live="polite">Se ha reenviado un nuevo código a tu correo.</div>
         </div>
 
         <button type="submit" id="btn-verificar" class="btn-verificar">Verificar</button>
@@ -68,6 +70,7 @@
 
   <script type="module" src="../js/controllers/verificacionRecuperarController.js"></script>
 
+  <script src="../js/accessibility.js"></script>
   <script src="../js/cookies-banner.js"></script>
 </body>
 

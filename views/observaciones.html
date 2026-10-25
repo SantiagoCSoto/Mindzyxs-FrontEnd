@@ -93,13 +93,13 @@
 
       <div class="modal-form-body">
         <label for="obsReg" class="form-label">Asociar al registro:</label>
-        <select id="obsReg" class="form-select" aria-label="obsReg">
+        <select id="obsReg" class="form-select">
           <option value="0">General del paciente</option>
         </select>
 
         <label for="obsText" class="form-label">Observación *</label>
-        <textarea id="obsText" class="form-textarea" placeholder="Escriba su observación clínica..." rows="4" aria-label="Escriba su observación clínica..."></textarea>
-        <span class="err-msg" id="eObs">La observación es obligatoria.</span>
+        <textarea id="obsText" class="form-textarea" placeholder="Escriba su observación clínica..." rows="4" aria-describedby="eObs"></textarea>
+        <span class="err-msg" id="eObs" role="alert">La observación es obligatoria.</span>
       </div>
 
       <div class="modal-actions">
@@ -116,7 +116,7 @@
       <a href="cookies.html">Cookies</a>
       <a href="terminos.html">Términos</a>
       <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog">
-        <span class="aviso-ico">⚠️</span> Aviso: no diagnóstico
+        <span class="aviso-ico" aria-hidden="true">⚠️</span> Aviso: no diagnóstico
       </a>
     </div>
   </footer>
@@ -126,6 +126,7 @@
 
   <!-- Scripts -->
   <script type="module" src="../js/controllers/observacionesController.js"></script>
+  <script src="../js/accessibility.js"></script>
   <script src="../js/cookies-banner.js"></script>
   <script src="../js/sesion-header.js"></script>
 </body>

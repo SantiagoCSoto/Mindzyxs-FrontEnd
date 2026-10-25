@@ -54,7 +54,7 @@
           <p class="sub">Pacientes que le otorgaron acceso a sus registros emocionales.</p>
         </div>
         <a href="mis_cuestionarios.html" class="btn btn-sec" id="btnIrCuestionarios" style="height:36px;padding:0 16px;border-radius:18px;font-size:12.5px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
           Mis cuestionarios
         </a>
       </div>
@@ -162,11 +162,11 @@
 
       <div class="modal-form-body">
         <label for="obsReg" class="form-label">Asociar al registro:</label>
-        <select id="obsReg" class="form-select" aria-label="obsReg"></select>
+        <select id="obsReg" class="form-select"></select>
 
         <label for="obsText" class="form-label">Observación *</label>
-        <textarea id="obsText" class="form-textarea" placeholder="Escriba su observación clínica..." rows="4" aria-label="Escriba su observación clínica..."></textarea>
-        <span class="err-msg" id="eObs">La observación es obligatoria.</span>
+        <textarea id="obsText" class="form-textarea" placeholder="Escriba su observación clínica..." rows="4" aria-describedby="eObs"></textarea>
+        <span class="err-msg" id="eObs" role="alert">La observación es obligatoria.</span>
       </div>
 
       <div class="modal-actions">
@@ -183,7 +183,7 @@
       <a href="cookies.html">Cookies</a>
       <a href="terminos.html">Términos</a>
       <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog">
-        <span class="aviso-ico">⚠️</span> Aviso: no diagnóstico
+        <span class="aviso-ico" aria-hidden="true">⚠️</span> Aviso: no diagnóstico
       </a>
     </div>
   </footer>
@@ -193,6 +193,7 @@
 
   <!-- Scripts -->
   <script type="module" src="../js/controllers/pacientesAutorizadosController.js"></script>
+  <script src="../js/accessibility.js"></script>
   <script src="../js/cookies-banner.js"></script>
   <script src="../js/sesion-header.js"></script>
 </body>

@@ -85,7 +85,7 @@
         </div>
 
         <div class="actions">
-          <button type="button" class="btn-edit" id="btnEditar">✉️ Cambiar correo</button>
+          <button type="button" class="btn-edit" id="btnEditar"><span aria-hidden="true">✉️</span> Cambiar correo</button>
         </div>
       </div>
     </section>
@@ -105,8 +105,8 @@
           <div class="form-grid">
             <div class="form-group full">
               <label for="inCorreo">Correo electrónico *</label>
-              <input type="email" id="inCorreo" name="correo" placeholder="tucorreo@test.com" autocomplete="email" required / aria-label="tucorreo@test.com">
-              <span class="err-msg" id="eCorreo">Ingresa un correo válido.</span>
+              <input type="email" id="inCorreo" name="correo" placeholder="tucorreo@test.com" autocomplete="email" required aria-describedby="eCorreo">
+              <span class="err-msg" id="eCorreo" role="alert">Ingresa un correo válido.</span>
             </div>
           </div>
 
@@ -126,7 +126,7 @@
       <a href="cookies.html">Cookies</a>
       <a href="terminos.html">Términos</a>
       <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog">
-        <span class="aviso-ico">ℹ️</span> Aviso: no diagnóstico
+        <span class="aviso-ico" aria-hidden="true">ℹ️</span> Aviso: no diagnóstico
       </a>
     </div>
   </footer>
@@ -137,8 +137,8 @@
       <div class="modal-icon" aria-hidden="true">✉️</div>
       <h3 id="codeTitle">Verifica tu nuevo correo</h3>
       <p class="sub" id="codeSub">Enviamos un código de 6 dígitos a <b id="codeEmail">-</b>. Ingrésalo para confirmar el cambio.</p>
-      <input class="code-input" id="codeInput" maxlength="6" inputmode="numeric" placeholder="· · · · · ·" autocomplete="one-time-code" aria-label="Código de verificación de 6 dígitos" />
-      <span class="err-msg" id="eCode">Código incorrecto. Verifica e intenta nuevamente</span>
+      <input class="code-input" id="codeInput" maxlength="6" inputmode="numeric" placeholder="· · · · · ·" autocomplete="one-time-code" aria-label="Código de verificación de 6 dígitos" aria-describedby="eCode" />
+      <span class="err-msg" id="eCode" role="alert">Código incorrecto. Verifica e intenta nuevamente</span>
       <div class="modal-actions">
         <button type="button" class="btn-modal close" id="btnCodeCancel">Cancelar</button>
         <button type="button" class="btn-modal ok" id="btnVerify">Verificar</button>
@@ -151,7 +151,7 @@
   <div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true" aria-labelledby="avisoTitle" aria-hidden="true">
     <div class="modal">
       <div class="modal-icon" aria-hidden="true">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+        <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
           stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10"></circle>
           <line x1="12" y1="16" x2="12" y2="12"></line>
@@ -183,6 +183,7 @@
 
   <!-- Controlador de la vista -->
   <script type="module" src="../js/controllers/perfilController.js"></script>
+  <script src="../js/accessibility.js"></script>
   <script src="../js/cookies-banner.js"></script>
   <script src="../js/sesion-header.js"></script>
 </body>

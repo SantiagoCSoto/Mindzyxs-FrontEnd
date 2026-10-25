@@ -64,7 +64,7 @@
         <a href="registro.html" class="btn-cta primary">Crear cuenta</a>
         <a href="login.html" class="btn-cta">Iniciar sesión</a>
         <a href="reanudar_verificacion.html" class="btn-cta ghost">Continúa con tu verificación</a>
-        <button type="button" id="btn-modo-invitado" class="btn-cta ghost">👤 Entrar como invitado</button>
+        <button type="button" id="btn-modo-invitado" class="btn-cta ghost"><span aria-hidden="true">👤</span> Entrar como invitado</button>
       </div>
     </section>
 
@@ -75,33 +75,33 @@
       </div>
       <div class="grid grid-features">
         <section aria-labelledby="tile-cuestionarios-heading">
-          <h2 id="tile-cuestionarios-heading">Cuestionarios</h2>
+          <h2 id="tile-cuestionarios-heading" class="visually-hidden">Cuestionarios</h2>
           <article class="tile">
-            <div class="tile-icon">📝</div>
+            <div class="tile-icon" aria-hidden="true">📝</div>
             <h3>Responder cuestionarios</h3>
             <p>Cuestionarios de bienestar emocional, con o sin cuenta.</p>
           </article>
         </section>
         <section aria-labelledby="tile-riesgo-heading">
-          <h2 id="tile-riesgo-heading">Riesgo emocional</h2>
+          <h2 id="tile-riesgo-heading" class="visually-hidden">Riesgo emocional</h2>
           <article class="tile">
-            <div class="tile-icon">📊</div>
+            <div class="tile-icon" aria-hidden="true">📊</div>
             <h3>Conocer tu riesgo</h3>
             <p>Nivel de riesgo emocional: bajo, medio o alto.</p>
           </article>
         </section>
         <section aria-labelledby="tile-recomendaciones-heading">
-          <h2 id="tile-recomendaciones-heading">Recomendaciones</h2>
+          <h2 id="tile-recomendaciones-heading" class="visually-hidden">Recomendaciones</h2>
           <article class="tile">
-            <div class="tile-icon">💡</div>
+            <div class="tile-icon" aria-hidden="true">💡</div>
             <h3>Recomendaciones básicas</h3>
             <p>Autocuidado priorizado según tu nivel.</p>
           </article>
         </section>
         <section aria-labelledby="tile-lineas-heading">
-          <h2 id="tile-lineas-heading">Líneas de ayuda</h2>
+          <h2 id="tile-lineas-heading" class="visually-hidden">Líneas de ayuda</h2>
           <article class="tile">
-            <div class="tile-icon">🆘</div>
+            <div class="tile-icon" aria-hidden="true">🆘</div>
             <h3>Líneas de ayuda</h3>
             <p>Contactos de emergencia y apoyo profesional.</p>
           </article>
@@ -150,7 +150,7 @@
       <a href="cookies.html">Cookies</a>
       <a href="terminos.html">Términos</a>
       <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog">
-        <span class="aviso-ico">ℹ️</span> Aviso: no diagnóstico
+        <span class="aviso-ico" aria-hidden="true">ℹ️</span> Aviso: no diagnóstico
       </a>
     </div>
   </footer>
@@ -160,7 +160,7 @@
     aria-hidden="true">
     <div class="modal">
       <div class="modal-icon" aria-hidden="true">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+        <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
           stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10"></circle>
           <line x1="12" y1="16" x2="12" y2="12"></line>
@@ -193,6 +193,7 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script type="module" src="../js/controllers/inicioController.js"></script>
+  <script src="../js/accessibility.js"></script>
   <script src="../js/cookies-banner.js"></script>
   <script src="../js/sesion-header.js"></script>
 </body>

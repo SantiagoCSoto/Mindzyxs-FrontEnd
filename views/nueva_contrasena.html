@@ -13,6 +13,8 @@
 
 <body>
 
+  <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
   <header class="header-nav">
     <div class="logo-container">
       <a href="login.html" class="logo-link">
@@ -22,41 +24,41 @@
     </div>
   </header>
 
-  <main>
+  <main id="main-content">
     <section class="nueva-contrasena-card">
       <h1>Nueva contraseña</h1>
       <p class="nueva-contrasena-subtitulo">Establece tu nueva contraseña</p>
 
-      <div id="banner-error" class="alerta-error"></div>
-      <div id="banner-exito" class="alerta-exito"></div>
+      <div id="banner-error" class="alerta-error" role="alert" aria-live="assertive"></div>
+      <div id="banner-exito" class="alerta-exito" role="status" aria-live="polite"></div>
 
       <form class="form-nueva-contrasena" id="form-nueva-contrasena" novalidate action="#">
         <div class="form-group">
           <label for="contrasena">Nueva contraseña</label>
           <div class="input-password-wrapper">
-            <input type="password" id="contrasena" name="contrasena" placeholder="Mín. 6 caracteres (letras y números)" minlength="6" required aria-label="Mín. 6 caracteres (letras y números)">
-            <button type="button" class="btn-toggle-password" data-target="contrasena" aria-label="Mostrar/ocultar contraseña">
-              <svg class="icono-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <input type="password" id="contrasena" name="contrasena" placeholder="Mín. 6 caracteres (letras y números)" minlength="6" required aria-describedby="error-contrasena">
+            <button type="button" class="btn-toggle-password" data-target="contrasena" aria-label="Mostrar u ocultar contraseña" aria-pressed="false">
+              <svg class="icono-toggle" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                 <circle cx="12" cy="12" r="3"></circle>
               </svg>
             </button>
           </div>
-          <span id="error-contrasena" class="error-mensaje"></span>
+          <span id="error-contrasena" class="error-mensaje" role="alert" aria-live="polite"></span>
         </div>
 
         <div class="form-group">
           <label for="confirmar-contrasena">Confirmar contraseña</label>
           <div class="input-password-wrapper">
-            <input type="password" id="confirmar-contrasena" name="confirmar_contrasena" placeholder="Repite tu contraseña" minlength="6" required aria-label="Repite tu contraseña">
-            <button type="button" class="btn-toggle-password" data-target="confirmar-contrasena" aria-label="Mostrar/ocultar contraseña">
-              <svg class="icono-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <input type="password" id="confirmar-contrasena" name="confirmar_contrasena" placeholder="Repite tu contraseña" minlength="6" required aria-describedby="error-confirmar">
+            <button type="button" class="btn-toggle-password" data-target="confirmar-contrasena" aria-label="Mostrar u ocultar contraseña" aria-pressed="false">
+              <svg class="icono-toggle" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                 <circle cx="12" cy="12" r="3"></circle>
               </svg>
             </button>
           </div>
-          <span id="error-confirmar" class="error-mensaje"></span>
+          <span id="error-confirmar" class="error-mensaje" role="alert" aria-live="polite"></span>
         </div>
 
         <button type="submit" id="btn-guardar" class="btn-nueva-contrasena">Guardar contraseña</button>
@@ -71,7 +73,7 @@
   <div id="modal-exito" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-exito-titulo">
     <div class="modal-contenido">
       <div class="modal-badge-exito">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
           <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
       </div>
@@ -82,6 +84,7 @@
   </div>
 
   <script type="module" src="../js/controllers/nuevaContrasenaController.js"></script>
+  <script src="../js/accessibility.js"></script>
   <script src="../js/cookies-banner.js"></script>
 </body>
 

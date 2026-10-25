@@ -131,7 +131,7 @@
         </div>
         <div class="switch-container">
           <label class="switch-label" for="chkActivo">
-            <input type="checkbox" id="chkActivo" class="switch-input" / aria-label="chkActivo">
+            <input type="checkbox" id="chkActivo" class="switch-input" aria-label="Habilitar o inhabilitar notificación">
             <span class="switch-slider"></span>
             <span class="switch-text" id="lblActivoTexto">Habilitada</span>
           </label>
@@ -148,9 +148,9 @@
           <p class="sub-help">Selecciona por cuáles medios se transmitirá este mensaje (al menos uno requerido si el evento está activo):</p>
           <div class="canales-grid" id="canalesGrid" tabindex="0">
             <label class="checkbox-card" for="chkCanalCorreo">
-              <input type="checkbox" id="chkCanalCorreo" value="correo" / aria-label="chkCanalCorreo">
+              <input type="checkbox" id="chkCanalCorreo" value="correo">
               <div class="checkbox-content">
-                <span class="canal-ico">✉️</span>
+                <span class="canal-ico" aria-hidden="true">✉️</span>
                 <div>
                   <strong>Correo electrónico</strong>
                   <small>Entrega de asunto y cuerpo formateado</small>
@@ -176,7 +176,7 @@
       <a href="cookies.html">Cookies</a>
       <a href="terminos.html">Términos</a>
       <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog">
-        <span class="aviso-ico">⚠️</span> Aviso: no diagnóstico
+        <span class="aviso-ico" aria-hidden="true">⚠️</span> Aviso: no diagnóstico
       </a>
     </div>
   </footer>
@@ -198,6 +198,7 @@
 
   <!-- Scripts -->
   <script type="module" src="../js/controllers/notificacionesController.js"></script>
+  <script src="../js/accessibility.js"></script>
   <script src="../js/cookies-banner.js"></script>
   <script src="../js/sesion-header.js"></script>
 </body>

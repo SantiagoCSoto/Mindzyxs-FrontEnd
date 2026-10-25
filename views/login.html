@@ -13,6 +13,8 @@
 
 <body>
 
+  <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
   <header class="header-nav">
     <div class="logo-container">
       <a href="login.html" class="logo-link">
@@ -21,9 +23,9 @@
       </a>
     </div>
 
-    <nav class="main-nav">
+    <nav class="main-nav" aria-label="Navegación principal">
       <ul>
-        <li><a href="#">Inicio</a></li>
+        <li><a href="inicio.html">Inicio</a></li>
         <li><a href="nosotros.html">Nosotros</a></li>
         <li><a href="ayuda.html">Ayuda</a></li>
       </ul>
@@ -35,24 +37,24 @@
     </div>
   </header>
 
-  <main>
+  <main id="main-content">
     <section class="login-card">
       <h1>Inicio de sesión</h1>
       <p class="login-subtitulo">Accede según tu rol</p>
 
-      <div id="banner-error-login" class="alerta-error">Correo o contraseña incorrectos</div>
+      <div id="banner-error-login" class="alerta-error" role="alert" aria-live="assertive">Correo o contraseña incorrectos</div>
 
       <form class="form-login" id="form-login" novalidate action="#">
         <div class="form-group">
-          <label for="correo">Correo</label>
-          <input type="email" id="correo" name="correo" autocomplete="email" aria-label="correo">
-          <span id="error-correo" class="error-mensaje"></span>
+          <label for="correo">Correo electrónico</label>
+          <input type="email" id="correo" name="correo" autocomplete="email" aria-describedby="error-correo" required>
+          <span id="error-correo" class="error-mensaje" role="alert" aria-live="polite"></span>
         </div>
 
         <div class="form-group">
           <label for="password">Contraseña</label>
-          <input type="password" id="password" name="password" autocomplete="current-password" aria-label="password">
-          <span id="error-password" class="error-mensaje"></span>
+          <input type="password" id="password" name="password" autocomplete="current-password" aria-describedby="error-password" required>
+          <span id="error-password" class="error-mensaje" role="alert" aria-live="polite"></span>
         </div>
 
         <button type="submit" id="btn-login" class="btn-login-submit">Iniciar sesión</button>
@@ -64,7 +66,7 @@
         <div class="invitado-seccion">
           <p class="invitado-subtexto">Usa servicios básicos sin registrarte ni iniciar sesión</p>
           <button type="button" id="btn-modo-invitado" class="btn-modo-invitado">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
@@ -97,6 +99,7 @@
   </div>
 
   <script type="module" src="../js/controllers/loginController.js"></script>
+  <script src="../js/accessibility.js"></script>
   <script src="../js/cookies-banner.js"></script>
 </body>
 

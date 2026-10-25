@@ -1,4 +1,4 @@
-﻿/* Tarjeta principal de registro */
+/* Tarjeta principal de registro */
 .registro-card {
   max-width: 520px;
   margin: 30px auto;
@@ -49,13 +49,14 @@ select {
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 14px;
-  outline: none;
   background-color: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 input:focus,
 select:focus {
-  border-color: #56c5c0;
+  border-color: var(--color-primario-fuerte);
+  box-shadow: 0 0 0 3px rgba(14, 116, 144, 0.25);
 }
 
 /* SecciÃ³n de credenciales para el PsicÃ³logo */

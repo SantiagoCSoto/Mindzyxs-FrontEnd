@@ -41,7 +41,7 @@
 
   <main class="wrap">
     <a href="panel_psicologo.html" class="btn-volver-landing" id="backBtn">
-      <svg class="icon-inline" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      <svg aria-hidden="true" class="icon-inline" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
       Volver al panel
     </a>
 
@@ -53,25 +53,25 @@
         <div>
           <label for="selPac">Paciente autorizado</label>
           <div class="sk sk-line" id="skSelPac" aria-hidden="true"></div>
-          <select id="selPac" hidden aria-label="selPac"></select>
+          <select id="selPac" hidden></select>
         </div>
         <div>
           <label for="fDesde">Desde</label>
-          <input type="date" id="fDesde" disabled / aria-label="fDesde">
+          <input type="date" id="fDesde" disabled>
         </div>
         <div>
           <label for="fHasta">Hasta</label>
-          <input type="date" id="fHasta" disabled / aria-label="fHasta">
+          <input type="date" id="fHasta" disabled>
         </div>
         <div class="filtros-accion">
           <button type="button" class="btn btn-save" id="btnGenerar" disabled>
-            <svg class="btn-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+            <svg class="btn-ico" aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
             Generar
           </button>
         </div>
       </div>
 
-      <div class="err-msg" id="errStats">No fue posible cargar las estadísticas. Intente nuevamente.</div>
+      <div class="err-msg" id="errStats" role="alert">No fue posible cargar las estadísticas. Intente nuevamente.</div>
 
       <div class="sk-stack" id="skResultados" aria-hidden="true" hidden>
         <div class="sk sk-title"></div>
@@ -122,13 +122,14 @@
       <a href="privacidad.html">Privacidad</a>
       <a href="cookies.html">Cookies</a>
       <a href="terminos.html">Términos</a>
-      <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog"><span class="aviso-ico"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5A45C9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span> Aviso: no diagnóstico</a>
+      <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog"><span class="aviso-ico" aria-hidden="true"><svg aria-hidden="true" class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5A45C9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span> Aviso: no diagnóstico</a>
     </div>
   </footer>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script type="module" src="../js/controllers/estadisticasPacientesController.js"></script>
+  <script src="../js/accessibility.js"></script>
   <script src="../js/cookies-banner.js"></script>
   <script src="../js/sesion-header.js"></script>
 </body>

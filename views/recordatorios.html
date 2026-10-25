@@ -122,7 +122,7 @@
       <a href="cookies.html">Cookies</a>
       <a href="terminos.html">Términos</a>
       <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog">
-        <span class="aviso-ico">ℹ️</span> Aviso: no diagnóstico
+        <span class="aviso-ico" aria-hidden="true">ℹ️</span> Aviso: no diagnóstico
       </a>
     </div>
   </footer>
@@ -131,7 +131,7 @@
   <div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true" aria-labelledby="avisoTitle" aria-hidden="true">
     <div class="modal">
       <div class="modal-icon" aria-hidden="true">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10"></circle>
           <line x1="12" y1="16" x2="12" y2="12"></line>
           <line x1="12" y1="8" x2="12.01" y2="8"></line>
@@ -162,6 +162,7 @@
 
   <!-- Controlador de la vista -->
   <script type="module" src="../js/controllers/recordatorioController.js"></script>
+  <script src="../js/accessibility.js"></script>
   <script src="../js/cookies-banner.js"></script>
   <script src="../js/sesion-header.js"></script>
 </body>

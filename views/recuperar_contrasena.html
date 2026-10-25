@@ -9,29 +9,33 @@
     <link rel="stylesheet" href="../css/recuperar_contrasena.css">
 </head>
 <body>
-    <div class="recuperar-card">
-        <h1>Recuperar contraseña</h1>
-        <p class="recuperar-subtitulo">Te enviaremos un código a tu correo</p>
-        
-        <div id="banner-error" class="alerta-error"></div>
-        <div id="banner-exito" class="alerta-exito"></div>
-        
-        <form class="form-recuperar">
-            <div class="form-group">
-                <label for="email">Correo</label>
-                <input type="email" id="email" name="email" placeholder="tu@correo.com" required aria-label="tu@correo.com">
-            </div>
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+    <main id="main-content">
+        <div class="recuperar-card">
+            <h1>Recuperar contraseña</h1>
+            <p class="recuperar-subtitulo">Te enviaremos un código a tu correo</p>
             
-            <button type="submit" class="btn-recuperar-submit">Enviar código</button>
-        </form>
-        
-        <div class="recuperar-enlaces">
-            <a href="login.html" class="link-accion">Cancelar / Volver</a>
-            <a href="registro.html" class="link-accion">Registrarse</a>
+            <div id="banner-error" class="alerta-error" role="alert" aria-live="assertive"></div>
+            <div id="banner-exito" class="alerta-exito" role="status" aria-live="polite"></div>
+            
+            <form class="form-recuperar" novalidate>
+                <div class="form-group">
+                    <label for="email">Correo electrónico</label>
+                    <input type="email" id="email" name="email" placeholder="tu@correo.com" autocomplete="email" required aria-describedby="banner-error">
+                </div>
+                
+                <button type="submit" class="btn-recuperar-submit">Enviar código</button>
+            </form>
+            
+            <div class="recuperar-enlaces">
+                <a href="login.html" class="link-accion">Cancelar / Volver</a>
+                <a href="registro.html" class="link-accion">Registrarse</a>
+            </div>
         </div>
-    </div>
+    </main>
     
     <script type="module" src="../js/controllers/recuperarContrasenaController.js"></script>
+  <script src="../js/accessibility.js"></script>
   <script src="../js/cookies-banner.js"></script>
 </body>
 </html>

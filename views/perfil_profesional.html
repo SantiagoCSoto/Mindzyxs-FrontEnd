@@ -41,11 +41,11 @@
 
   <main class="wrap">
     <a href="panel_psicologo.html" class="btn-volver-landing" id="backBtn">
-      <svg class="icon-inline" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      <svg aria-hidden="true" class="icon-inline" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
       Volver al panel
     </a>
 
-    <div class="err-msg" id="peErrores">No fue posible cargar el perfil. Intente nuevamente.</div>
+    <div class="err-msg" id="peErrores" role="alert">No fue posible cargar el perfil. Intente nuevamente.</div>
 
     <!-- Pantalla: ver perfil profesional -->
     <section class="card screen active" id="screenVer">
@@ -74,7 +74,7 @@
         <div class="campo"><b>Tarjeta profesional</b><span id="verTarjeta">—</span></div>
         <div class="actions">
           <button type="button" class="btn btn-save" id="btnEditar">
-            <svg class="btn-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>
+            <svg aria-hidden="true" class="btn-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>
             Editar
           </button>
         </div>
@@ -86,23 +86,23 @@
       <h2>Editar perfil profesional</h2>
 
       <label class="fl" for="buscarEsp">Especialidades (una, varias o ninguna)</label>
-      <input type="text" id="buscarEsp" placeholder="Buscar especialidad..." autocomplete="off" aria-label="Buscar especialidad" />
-      <div class="checks" id="listaEsp" tabindex="0"></div>
+      <input type="text" id="buscarEsp" placeholder="Buscar especialidad..." autocomplete="off" />
+      <div class="checks" id="listaEsp" tabindex="0" role="region" aria-label="Lista de especialidades"></div>
 
       <label class="fl" for="fExp">Años de experiencia *</label>
-      <input type="number" id="fExp" min="0" max="60" step="1" / aria-label="fExp">
+      <input type="number" id="fExp" min="0" max="60" step="1">
 
       <label class="fl" for="fDesc">Descripción profesional</label>
-      <textarea id="fDesc" maxlength="1000" placeholder="Describa brevemente su experiencia y enfoque (opcional)" aria-label="Describa brevemente su experiencia y enfoque (opcional)"></textarea>
+      <textarea id="fDesc" maxlength="1000" placeholder="Describa brevemente su experiencia y enfoque (opcional)"></textarea>
 
       <label class="fl" for="fCont">Datos de contacto</label>
-      <input type="text" id="fCont" maxlength="300" placeholder="Teléfono, clínica, ciudad... (opcional)" / aria-label="Teléfono, clínica, ciudad... (opcional)">
+      <input type="text" id="fCont" maxlength="300" placeholder="Teléfono, clínica, ciudad... (opcional)">
 
       <label class="fl" for="fCorreo">Correo de contacto *</label>
-      <input type="email" id="fCorreo" autocomplete="email" / aria-label="fCorreo">
-      <span class="err-msg" id="eCorreo">El correo ya se encuentra registrado.</span>
+      <input type="email" id="fCorreo" autocomplete="email" aria-describedby="eCorreo">
+      <span class="err-msg" id="eCorreo" role="alert">El correo ya se encuentra registrado.</span>
 
-      <div class="err-msg" id="eForm">No fue posible guardar los cambios. Intente nuevamente.</div>
+      <div class="err-msg" id="eForm" role="alert">No fue posible guardar los cambios. Intente nuevamente.</div>
 
       <div class="actions">
         <button type="button" class="btn btn-save" id="btnGuardar">Guardar cambios</button>
@@ -116,13 +116,14 @@
       <a href="privacidad.html">Privacidad</a>
       <a href="cookies.html">Cookies</a>
       <a href="terminos.html">Términos</a>
-      <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog"><span class="aviso-ico"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5A45C9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span> Aviso: no diagnóstico</a>
+      <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog"><span class="aviso-ico" aria-hidden="true"><svg aria-hidden="true" class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5A45C9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span> Aviso: no diagnóstico</a>
     </div>
   </footer>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script type="module" src="../js/controllers/perfilProfesionalController.js"></script>
+  <script src="../js/accessibility.js"></script>
   <script src="../js/cookies-banner.js"></script>
   <script src="../js/sesion-header.js"></script>
 </body>
