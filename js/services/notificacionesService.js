@@ -39,8 +39,7 @@ function normalizarNotificacion(item) {
       ? (item.canales ?? item.Canales)
       : [],
     activo: Boolean(item.activo ?? item.Activo),
-    asunto: item.asunto ?? item.Asunto ?? '',
-    cuerpo: item.cuerpo ?? item.Cuerpo ?? ''
+    asunto: item.asunto ?? item.Asunto ?? ''
   };
 }
 
@@ -111,8 +110,7 @@ export async function actualizarNotificacion(tipo, configuracion) {
   const payload = {
     canales: Array.isArray(configuracion.canales) ? configuracion.canales : [],
     activo: Boolean(configuracion.activo),
-    asunto: configuracion.asunto?.trim() || null,
-    cuerpo: configuracion.cuerpo?.trim() || null
+    asunto: configuracion.asunto?.trim() || null
   };
 
   const res = await putJson(`/admin/notificaciones/${encodeURIComponent(tipo)}`, payload);

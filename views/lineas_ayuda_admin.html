@@ -7,6 +7,8 @@
   <link rel="icon" type="image/png" href="../assets/Logo1.png" />
   <title>Mindzyx — Líneas de ayuda</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/inicio.css" />
   <link rel="stylesheet" href="../css/lineas_ayuda_admin.css" />
 </head>
 
@@ -26,13 +28,12 @@
     <nav class="main-nav" aria-label="Navegación principal">
       <ul>
         <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
-        <li><a href="inicio.html#nosotros">Nosotros</a></li>
-        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="ayuda.html">Ayuda</a></li>
       </ul>
     </nav>
     <div class="header-right">
       <div class="header-auth-buttons">
-        <span id="rol-usuario" class="badge-role">Administrador</span>
         <button type="button" id="btn-logout-top" class="btn-logout">Cerrar sesión</button>
       </div>
     </div>
@@ -55,15 +56,15 @@
         </button>
       </div>
       <input type="text" class="buscar" id="buscarC" placeholder="Buscar por nombre..." aria-label="Buscar línea de ayuda por nombre" autocomplete="off" />
-      <div class="err-msg" id="listaErr">No fue posible cargar las líneas de ayuda. Intente nuevamente.</div>
-      <div class="sk-stack" id="skLista" aria-hidden="true" hidden>
+      <div class="err-msg" id="listaErr" tabindex="0">No fue posible cargar las líneas de ayuda. Intente nuevamente.</div>
+      <div class="sk-stack" id="skLista" aria-hidden="true" hidden tabindex="0">
         <div class="sk sk-title"></div>
         <div class="sk sk-card"></div>
         <div class="sk sk-card"></div>
         <div class="sk sk-card"></div>
       </div>
       <div class="empty" id="vacioLineas" hidden>No se encontraron líneas de ayuda.</div>
-      <div id="listaC"></div>
+      <div id="listaC" tabindex="0"></div>
     </section>
 
     <!-- Pantalla: crear / editar -->
@@ -74,87 +75,87 @@
       <div class="form-grid">
         <div class="field full">
           <label class="field-label" for="eNombre">Nombre *</label>
-          <input type="text" id="eNombre" maxlength="150" placeholder="Ej. Línea 106 - Salud Mental" autocomplete="off" />
+          <input type="text" id="eNombre" maxlength="150" placeholder="Ej. Línea 106 - Salud Mental" autocomplete="off" / aria-label="Ej. Línea 106 - Salud Mental">
         </div>
 
         <div class="field full">
           <label class="field-label" for="eDescripcion">Descripción</label>
-          <textarea id="eDescripcion" maxlength="1000" placeholder="Descripción completa de la línea de ayuda"></textarea>
+          <textarea id="eDescripcion" maxlength="1000" placeholder="Descripción completa de la línea de ayuda" aria-label="Descripción completa de la línea de ayuda"></textarea>
         </div>
 
         <div class="field full">
           <label class="field-label" for="eDescripcionCorta">Descripción corta</label>
-          <input type="text" id="eDescripcionCorta" maxlength="255" placeholder="Resumen breve (máx. 255 caracteres)" autocomplete="off" />
+          <input type="text" id="eDescripcionCorta" maxlength="255" placeholder="Resumen breve (máx. 255 caracteres)" autocomplete="off" / aria-label="Resumen breve (máx. 255 caracteres)">
         </div>
 
         <div class="field">
           <label class="field-label" for="eTelefono">Teléfono</label>
-          <input type="text" id="eTelefono" maxlength="30" placeholder="Ej. 106" autocomplete="off" />
+          <input type="text" id="eTelefono" maxlength="30" placeholder="Ej. 106" autocomplete="off" / aria-label="Ej. 106">
         </div>
 
         <div class="field">
           <label class="field-label" for="eUrl">URL</label>
-          <input type="text" id="eUrl" maxlength="255" placeholder="https://..." autocomplete="off" />
+          <input type="text" id="eUrl" maxlength="255" placeholder="https://..." autocomplete="off" / aria-label="https://...">
         </div>
 
         <div class="field">
           <label class="field-label" for="eHorario">Horario</label>
-          <input type="text" id="eHorario" maxlength="120" placeholder="Ej. 24 horas, 7 días" autocomplete="off" />
+          <input type="text" id="eHorario" maxlength="120" placeholder="Ej. 24 horas, 7 días" autocomplete="off" / aria-label="Ej. 24 horas, 7 días">
         </div>
 
         <div class="field">
           <label class="field-label" for="eCobertura">Cobertura</label>
-          <input type="text" id="eCobertura" maxlength="120" placeholder="Ej. Nacional" autocomplete="off" />
+          <input type="text" id="eCobertura" maxlength="120" placeholder="Ej. Nacional" autocomplete="off" / aria-label="Ej. Nacional">
         </div>
 
         <div class="field">
           <label class="field-label" for="eWhatsapp">WhatsApp</label>
-          <input type="text" id="eWhatsapp" maxlength="30" placeholder="Ej. 3001234567" autocomplete="off" />
+          <input type="text" id="eWhatsapp" maxlength="30" placeholder="Ej. 3001234567" autocomplete="off" / aria-label="Ej. 3001234567">
         </div>
 
         <div class="field">
           <label class="field-label" for="eEmail">Email</label>
-          <input type="text" id="eEmail" maxlength="150" placeholder="contacto@dominio.com" autocomplete="off" />
+          <input type="text" id="eEmail" maxlength="150" placeholder="contacto@dominio.com" autocomplete="off" / aria-label="contacto@dominio.com">
         </div>
 
         <div class="field">
           <label class="field-label" for="eChat">Chat</label>
-          <input type="text" id="eChat" maxlength="255" placeholder="https://... chat de apoyo" autocomplete="off" />
+          <input type="text" id="eChat" maxlength="255" placeholder="https://... chat de apoyo" autocomplete="off" / aria-label="https://... chat de apoyo">
         </div>
 
         <div class="field">
           <label class="field-label" for="eVideollamada">Videollamada</label>
-          <input type="text" id="eVideollamada" maxlength="255" placeholder="https://... agendamiento" autocomplete="off" />
+          <input type="text" id="eVideollamada" maxlength="255" placeholder="https://... agendamiento" autocomplete="off" / aria-label="https://... agendamiento">
         </div>
 
         <div class="field">
           <label class="field-label" for="eTipoAtencion">Tipo de atención</label>
-          <input type="text" id="eTipoAtencion" maxlength="40" placeholder="Ej. intervencion_crisis" autocomplete="off" />
+          <input type="text" id="eTipoAtencion" maxlength="40" placeholder="Ej. intervencion_crisis" autocomplete="off" / aria-label="Ej. intervencion_crisis">
         </div>
 
         <div class="field">
           <label class="field-label" for="eDepartamento">Departamento</label>
-          <input type="text" id="eDepartamento" maxlength="80" placeholder="Ej. Cundinamarca" autocomplete="off" />
+          <input type="text" id="eDepartamento" maxlength="80" placeholder="Ej. Cundinamarca" autocomplete="off" / aria-label="Ej. Cundinamarca">
         </div>
 
         <div class="field">
           <label class="field-label" for="eMunicipio">Municipio</label>
-          <input type="text" id="eMunicipio" maxlength="80" placeholder="Ej. Bogotá" autocomplete="off" />
+          <input type="text" id="eMunicipio" maxlength="80" placeholder="Ej. Bogotá" autocomplete="off" / aria-label="Ej. Bogotá">
         </div>
 
         <div class="field">
           <label class="field-label" for="ePoblacion">Población</label>
-          <input type="text" id="ePoblacion" maxlength="100" placeholder="Ej. Jóvenes" autocomplete="off" />
+          <input type="text" id="ePoblacion" maxlength="100" placeholder="Ej. Jóvenes" autocomplete="off" / aria-label="Ej. Jóvenes">
         </div>
 
         <div class="field">
           <label class="field-label" for="eFuente">Fuente</label>
-          <input type="text" id="eFuente" maxlength="150" placeholder="Ej. Ministerio de Salud" autocomplete="off" />
+          <input type="text" id="eFuente" maxlength="150" placeholder="Ej. Ministerio de Salud" autocomplete="off" / aria-label="Ej. Ministerio de Salud">
         </div>
 
         <div class="field">
           <label class="field-label" for="eFechaVerificacion">Fecha de verificación</label>
-          <input type="date" id="eFechaVerificacion" />
+          <input type="date" id="eFechaVerificacion" / aria-label="eFechaVerificacion">
         </div>
       </div>
 

@@ -1,11 +1,13 @@
 :root {
-  --cyan: #6ECFD4;
+
+
+  --color-primario: #6ECFD4;
   --cyan-fuerte: #0E7490;
   --text: #1E293B;
   --muted: #64748B;
   --violet: #6B5BCE;
   --violet-suave: #5A45C9;
-  --error: #E85D7A;
+  
   --danger-bg: #FEEFF3;
 }
 
@@ -145,7 +147,7 @@ body {
 }
 
 .btn-logout {
-  background: #E85D7A;
+  background: var(--color-peligro);
   color: #fff;
   border: none;
   padding: 7px 16px;
@@ -158,7 +160,7 @@ body {
 }
 
 .btn-logout:hover {
-  background: #D84A68;
+  background: var(--color-peligro-hover);
 }
 
 /* --- Wrapper y tarjetas --- */
@@ -188,7 +190,7 @@ body {
 
 .btn-volver-landing:hover {
   background: #F1F5F9;
-  border-color: #94A3B8;
+  border-color: #475569;
 }
 
 .card {
@@ -382,7 +384,13 @@ textarea {
   align-items: center;
   justify-content: center;
   gap: 7px;
-  transition: background 0.2s, opacity 0.2s;
+  transition: filter 0.2s ease, transform 0.15s ease;
+  box-shadow: 0 4px 12px rgba(94, 188, 196, 0.35);
+}
+
+.btn:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
 }
 
 .btn:hover {
@@ -595,3 +603,4 @@ textarea:focus-visible {
     padding: 18px 14px;
   }
 }
+

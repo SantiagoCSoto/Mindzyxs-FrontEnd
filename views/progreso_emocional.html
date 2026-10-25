@@ -7,6 +7,7 @@
   <link rel="icon" type="image/png" href="../assets/Logo1.png" />
   <title>Progreso emocional — Mindzyxs</title>
   <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/inicio.css" />
   <link rel="stylesheet" href="../css/progreso_emocional.css" />
 </head>
 
@@ -29,8 +30,8 @@
     <nav class="main-nav" aria-label="Navegación principal">
       <ul>
         <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
-        <li><a href="inicio.html#nosotros">Nosotros</a></li>
-        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="ayuda.html">Ayuda</a></li>
         </ul>
     </nav>
 
@@ -53,17 +54,17 @@
       <div class="controls-row" id="controlsRow">
         <div class="field">
           <label for="patientSel">Paciente autorizado</label>
-          <select id="patientSel">
+          <select id="patientSel" aria-label="patientSel">
             <option value="" disabled selected>Cargando pacientes...</option>
           </select>
         </div>
         <div class="field field-date">
           <label for="dateFrom">Desde</label>
-          <input type="date" id="dateFrom" />
+          <input type="date" id="dateFrom" / aria-label="dateFrom">
         </div>
         <div class="field field-date">
           <label for="dateTo">Hasta</label>
-          <input type="date" id="dateTo" />
+          <input type="date" id="dateTo" / aria-label="dateTo">
         </div>
         <button type="button" class="btn-primary" id="applyBtn">Aplicar</button>
       </div>
@@ -106,7 +107,7 @@
       <!-- Estado: Sin datos suficientes (< 2 registros) -->
       <div class="empty" id="emptyState" style="display: none;">
         <div class="ico" aria-hidden="true">📉</div>
-        <h3>Sin datos suficientes</h3>
+        <h2>Sin datos suficientes</h2>
         <p>No tienes registros suficientes para generar gráficos.<br />Se necesitan al menos 2 registros en el rango elegido.</p>
         <button type="button" class="btn-secondary" id="btnRestablecerFiltros">Restablecer fechas</button>
       </div>
@@ -114,7 +115,7 @@
       <!-- Estado: Paciente no autorizado (403 Forbidden) -->
       <div class="blocked" id="blockedState" style="display: none;">
         <div class="ico" aria-hidden="true">🔒</div>
-        <h3>Paciente no autorizado</h3>
+        <h2>Paciente no autorizado</h2>
         <p>No tienes autorización para ver el progreso de este paciente.<br />Solicita su autorización para acceder a sus registros.</p>
         <button type="button" class="btn-secondary" id="solBtn">Solicitar autorización</button>
       </div>
@@ -122,7 +123,7 @@
       <!-- Estado: Sin pacientes autorizados -->
       <div class="empty" id="noPatientsState" style="display: none;">
         <div class="ico" aria-hidden="true">👥</div>
-        <h3>No tienes pacientes autorizados en este momento</h3>
+        <h2>No tienes pacientes autorizados en este momento</h2>
         <p>Cuando un paciente te asigne o autorice el seguimiento de su bienestar emocional, podrás consultar su progreso aquí.</p>
         <a href="inicio.html" class="btn-secondary">Volver al inicio</a>
       </div>

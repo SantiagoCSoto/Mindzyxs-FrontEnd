@@ -1,4 +1,27 @@
-/* Tarjeta principal de verificación */
+:root {
+  --color-primario: #6ECFD4;
+  --color-primario-fuerte: #0E7490;
+  --color-primario-fuerte-hover: #0B5F75;
+  --color-primario-suave: #E6F7F8;
+  --color-apoyo: #6B5BCE;
+  --color-apoyo-hover: #5A45C9;
+  --color-apoyo-oscuro: #4A38B0;
+  --color-apoyo-suave: #EDE7FF;
+  --color-apoyo-borde: #DFDAEE;
+  --color-tinta: #1E293B;
+  --color-mudo: #475569;
+  --color-fondo: #F8FAFC;
+  --color-superficie: #FFFFFF;
+  --color-borde-neutro: #E2E8F0;
+  --color-peligro: #C0392B;
+  --color-peligro-hover: #A93226;
+  --color-peligro-suave: #FFF1F3;
+  --color-ok: #1BBF6B;
+  --color-aviso: #E8A347;
+  --color-texto-claro: #FFFFFF;
+}
+
+﻿/* Tarjeta principal de verificaciÃ³n */
 .verificacion-card {
   max-width: 440px;
   margin: 40px auto;
@@ -18,7 +41,7 @@
 
 .verificacion-subtitulo {
   font-size: 13px;
-  color: #64748b;
+  color: var(--muted);
   margin: 0 0 16px;
 }
 
@@ -63,7 +86,29 @@ label {
   text-align: left;
 }
 
-/* Campo de código de 6 dígitos */
+
+
+/* Campo de texto/email genérico (reanudar verificación) */
+input[type="email"],
+input[type="text"] {
+  width: 100%;
+  height: 52px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background-color: #ffffff;
+  font-size: 15px;
+  padding: 0 16px;
+  color: #1e293b;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input[type="email"]:focus,
+input[type="text"]:focus {
+  border-color: #56c5c0;
+  box-shadow: 0 0 0 3px rgba(86, 197, 192, 0.15);
+}
+/* Campo de cÃ³digo de 6 dÃ­gitos */
 .input-codigo-contenedor {
   width: 100%;
 }
@@ -85,7 +130,7 @@ label {
 }
 
 #codigo-verificacion::placeholder {
-  color: #94a3b8;
+  color: #475569;
   font-weight: 600;
   letter-spacing: 12px;
 }
@@ -95,9 +140,9 @@ label {
   box-shadow: 0 0 0 3px rgba(86, 197, 192, 0.15);
 }
 
-/* Estado de error / código expirado */
+/* Estado de error / cÃ³digo expirado */
 #codigo-verificacion.error {
-  border-color: #eb5771;
+  border-color: var(--color-peligro);
   background-color: #fff8f8;
 }
 
@@ -105,7 +150,7 @@ label {
   display: none;
   width: 100%;
   background-color: #feeef2;
-  color: #eb5771;
+  color: var(--color-peligro);
   padding: 10px 14px;
   border-radius: 8px;
   font-size: 13px;
@@ -128,7 +173,7 @@ label {
   margin-top: 8px;
 }
 
-/* Botón principal Verificar */
+/* BotÃ³n principal Verificar */
 .btn-verificar {
   width: 100%;
   background-color: var(--color-primario-fuerte, #0E7490);
@@ -146,7 +191,7 @@ label {
   background-color: #48b4af;
 }
 
-/* Enlaces inferiores de acción */
+/* Enlaces inferiores de acciÃ³n */
 .verificacion-acciones {
   display: flex;
   justify-content: space-between;
@@ -157,7 +202,7 @@ label {
 .link-accion {
   background: none;
   border: none;
-  color: #56c5c0;
+  color: var(--color-primario-fuerte);
   font-size: 12px;
   font-weight: 600;
   text-decoration: underline;
@@ -166,14 +211,14 @@ label {
 }
 
 .link-cancelar {
-  color: #64748b;
+  color: var(--muted);
   font-size: 12px;
   font-weight: 500;
   text-decoration: underline;
   cursor: pointer;
 }
 
-/* Modal de éxito */
+/* Modal de Ã©xito */
 .modal-overlay {
   display: none;
   position: fixed;
@@ -240,7 +285,7 @@ label {
 
 .modal-contenido p {
   font-size: 13px;
-  color: #64748b;
+  color: var(--muted);
   margin: 0 0 24px;
   line-height: 1.5;
 }
@@ -264,7 +309,7 @@ label {
   background-color: #48b4af;
 }
 
-/* Diseño responsivo */
+/* DiseÃ±o responsivo */
 @media (max-width: 768px) {
   .verificacion-card {
     margin: 24px 16px;
@@ -316,3 +361,4 @@ label {
     margin-bottom: 20px;
   }
 }
+

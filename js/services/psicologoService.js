@@ -5,10 +5,12 @@
 
 import { getJson, postJson } from './apiClient.js';
 
-export async function obtenerDirectorio(q = '', idEspecialidad = null) {
+export async function obtenerDirectorio(q = '', idEspecialidad = null, idGenero = null, minAniosExperiencia = null) {
   const params = new URLSearchParams();
   if (q) params.set('q', q);
   if (idEspecialidad) params.set('idEspecialidad', idEspecialidad);
+  if (idGenero) params.set('idGenero', idGenero);
+  if (minAniosExperiencia) params.set('minAniosExperiencia', minAniosExperiencia);
   const qs = params.toString() ? `?${params.toString()}` : '';
   const res = await getJson('/psicologos' + qs);
 
@@ -20,7 +22,9 @@ export async function obtenerDirectorio(q = '', idEspecialidad = null) {
         id: p.id ?? p.Id,
         nombre: p.nombre ?? p.Nombre ?? 'Psicólogo',
         especialidades: p.especialidades ?? p.Especialidades ?? [],
-        pacientesAsignados: p.pacientesAsignados ?? p.PacientesAsignados ?? 0
+        pacientesAsignados: p.pacientesAsignados ?? p.PacientesAsignados ?? 0,
+        aniosExperiencia: p.aniosExperiencia ?? p.AniosExperiencia ?? null,
+        descripcionProfesional: p.descripcionProfesional ?? p.DescripcionProfesional ?? null
       }))
     };
   }

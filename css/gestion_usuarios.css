@@ -1,5 +1,28 @@
-/* ==========================================================================
-   Estilos para Gestión de Usuarios del Sistema (PB-25 HU1-PB25)
+:root {
+  --color-primario: #6ECFD4;
+  --color-primario-fuerte: #0E7490;
+  --color-primario-fuerte-hover: #0B5F75;
+  --color-primario-suave: #E6F7F8;
+  --color-apoyo: #6B5BCE;
+  --color-apoyo-hover: #5A45C9;
+  --color-apoyo-oscuro: #4A38B0;
+  --color-apoyo-suave: #EDE7FF;
+  --color-apoyo-borde: #DFDAEE;
+  --color-tinta: #1E293B;
+  --color-mudo: #475569;
+  --color-fondo: #F8FAFC;
+  --color-superficie: #FFFFFF;
+  --color-borde-neutro: #E2E8F0;
+  --color-peligro: #C0392B;
+  --color-peligro-hover: #A93226;
+  --color-peligro-suave: #FFF1F3;
+  --color-ok: #1BBF6B;
+  --color-aviso: #E8A347;
+  --color-texto-claro: #FFFFFF;
+}
+
+﻿/* ==========================================================================
+   Estilos para GestiÃ³n de Usuarios del Sistema (PB-25 HU1-PB25)
    ========================================================================== */
 
 body {
@@ -132,7 +155,7 @@ body {
 }
 
 .btn-logout:hover {
-  background-color: #D63A54;
+  background-color: var(--color-peligro-hover);
   transform: translateY(-1px);
 }
 
@@ -163,7 +186,7 @@ body {
 
 .btn-back:hover {
   background: #F8FAFC;
-  border-color: #94A3B8;
+  border-color: #475569;
   color: var(--color-tinta);
 }
 
@@ -272,10 +295,13 @@ select.input {
 .btn-primary {
   background: var(--color-primario-fuerte);
   color: #FFFFFF;
+  transition: filter 0.2s ease, transform 0.15s ease;
+  box-shadow: 0 4px 12px rgba(94, 188, 196, 0.35);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #0C647C;
+  filter: brightness(1.05);
+  transform: translateY(-1px);
 }
 
 .btn-sec {
@@ -296,7 +322,7 @@ select.input {
   border-radius: 16px;
 }
 
-/* Lista dinámica de usuarios */
+/* Lista dinÃ¡mica de usuarios */
 #listaUsuarios {
   display: flex;
   flex-direction: column;
@@ -374,7 +400,7 @@ select.input {
 
 .est-no {
   background: #F1F5F9;
-  color: #64748B;
+  color: var(--muted);
   border-color: #CBD5E1;
 }
 
@@ -390,7 +416,7 @@ select.input {
   border-color: #FBD3DC;
 }
 
-/* Estado vacío */
+/* Estado vacÃ­o */
 .empty {
   border: 1.5px dashed var(--color-apoyo-borde);
   border-radius: 14px;
@@ -401,7 +427,7 @@ select.input {
   margin-top: 14px;
 }
 
-/* Formulario de edición */
+/* Formulario de ediciÃ³n */
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -429,7 +455,7 @@ select.input {
   width: 100%;
 }
 
-/* Sección de seguridad */
+/* SecciÃ³n de seguridad */
 .security-box {
   margin-top: 22px;
   padding: 16px 18px;
@@ -595,7 +621,7 @@ select.input {
   transform: translateX(-50%) translateY(0);
 }
 
-/* Footer estándar */
+/* Footer estÃ¡ndar */
 .footer {
   border-top: 1px solid #EFE6F8;
   background: #FDF9FF;
@@ -687,3 +713,5 @@ select.input {
     flex-direction: column;
   }
 }
+
+

@@ -1,4 +1,4 @@
-* {
+﻿* {
   box-sizing: border-box;
 }
 
@@ -123,7 +123,7 @@ h1 {
 .subtitle {
   margin: 0 auto;
   max-width: 720px;
-  color: #64748b;
+  color: var(--muted);
   font-size: 16px;
   line-height: 1.6;
 }
@@ -142,7 +142,7 @@ h1 {
   align-items: center;
   margin-bottom: 10px;
   font-size: 13px;
-  color: #64748b;
+  color: var(--muted);
   font-weight: 700;
 }
 
@@ -256,7 +256,7 @@ form {
 }
 
 .helper {
-  color: #64748b;
+  color: var(--muted);
   font-size: 12px;
   font-weight: 600;
 }
@@ -271,12 +271,12 @@ form {
   font-weight: 700;
   cursor: pointer;
   box-shadow: 0 12px 20px rgba(86, 197, 192, 0.25);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: filter 0.2s ease, transform 0.15s ease;
 }
 
 .button:hover {
+  filter: brightness(1.05);
   transform: translateY(-1px);
-  box-shadow: 0 16px 24px rgba(86, 197, 192, 0.28);
 }
 
 /* --- Wizard: una pregunta a la vez (PB-07) --- */
@@ -347,7 +347,7 @@ form {
 
 .button-secondary:hover {
   background: #f8fafc;
-  border-color: #94a3b8;
+  border-color: #475569;
   transform: none;
   box-shadow: 0 8px 14px rgba(15, 23, 42, 0.08);
 }
@@ -355,14 +355,16 @@ form {
 .button-danger {
   background: linear-gradient(135deg, #f87171, #dc2626);
   box-shadow: 0 12px 20px rgba(220, 38, 38, 0.25);
+  transition: filter 0.2s ease, transform 0.15s ease;
 }
 
 .button-danger:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
   background: linear-gradient(135deg, #ef4444, #b91c1c);
-  box-shadow: 0 16px 24px rgba(220, 38, 38, 0.3);
 }
 
-/* --- Modal de confirmación de salida (PB-07) --- */
+/* --- Modal de confirmaciÃ³n de salida (PB-07) --- */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -396,7 +398,7 @@ form {
 
 .modal-card p {
   margin: 0 0 18px;
-  color: #64748b;
+  color: var(--muted);
   font-size: 14px;
   line-height: 1.55;
 }
@@ -446,3 +448,5 @@ form {
     width: 100%;
   }
 }
+
+

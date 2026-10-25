@@ -1,5 +1,28 @@
-/* ==========================================================================
-   Estilos para Validación de Psicólogos (PB-26 HU1-PB26)
+:root {
+  --color-primario: #6ECFD4;
+  --color-primario-fuerte: #0E7490;
+  --color-primario-fuerte-hover: #0B5F75;
+  --color-primario-suave: #E6F7F8;
+  --color-apoyo: #6B5BCE;
+  --color-apoyo-hover: #5A45C9;
+  --color-apoyo-oscuro: #4A38B0;
+  --color-apoyo-suave: #EDE7FF;
+  --color-apoyo-borde: #DFDAEE;
+  --color-tinta: #1E293B;
+  --color-mudo: #475569;
+  --color-fondo: #F8FAFC;
+  --color-superficie: #FFFFFF;
+  --color-borde-neutro: #E2E8F0;
+  --color-peligro: #C0392B;
+  --color-peligro-hover: #A93226;
+  --color-peligro-suave: #FFF1F3;
+  --color-ok: #1BBF6B;
+  --color-aviso: #E8A347;
+  --color-texto-claro: #FFFFFF;
+}
+
+﻿/* ==========================================================================
+   Estilos para ValidaciÃ³n de PsicÃ³logos (PB-26 HU1-PB26)
    ========================================================================== */
 
 body {
@@ -132,7 +155,7 @@ body {
 }
 
 .btn-logout:hover {
-  background-color: #D63A54;
+  background-color: var(--color-peligro-hover);
   transform: translateY(-1px);
 }
 
@@ -165,7 +188,7 @@ body {
 
 .btn-back:hover {
   background: #F8FAFC;
-  border-color: #94A3B8;
+  border-color: #475569;
   color: var(--color-tinta);
 }
 
@@ -234,7 +257,7 @@ body {
   display: block;
 }
 
-/* Filtros y búsqueda */
+/* Filtros y bÃºsqueda */
 .filtros {
   display: flex;
   gap: 10px;
@@ -294,14 +317,14 @@ body {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  transition: all 0.2s ease;
+  transition: filter 0.2s ease, transform 0.15s ease;
   background: var(--color-primario-fuerte);
   color: #FFFFFF;
-  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(94, 188, 196, 0.35);
 }
 
 .btn:hover:not(:disabled) {
-  background: #0C647C;
+  filter: brightness(1.05);
   transform: translateY(-1px);
 }
 
@@ -314,9 +337,14 @@ body {
 .btn-primary {
   background: var(--color-primario-fuerte);
   color: #FFFFFF;
+  transition: filter 0.2s ease, transform 0.15s ease;
+  box-shadow: 0 4px 12px rgba(94, 188, 196, 0.35);
 }
 
-.btn-sec {
+.btn-primary:hover:not(:disabled) {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
   background: #FFFFFF;
   border: 1.5px solid var(--color-apoyo-borde);
   color: var(--color-tinta);
@@ -352,7 +380,7 @@ body {
   border-radius: 16px;
 }
 
-/* Cola dinámica de solicitudes */
+/* Cola dinÃ¡mica de solicitudes */
 #listaSolicitudes {
   display: flex;
   flex-direction: column;
@@ -442,7 +470,7 @@ body {
   border-color: #FBD3DC;
 }
 
-/* Estado vacío */
+/* Estado vacÃ­o */
 .empty {
   border: 1.5px dashed var(--color-apoyo-borde);
   border-radius: 14px;
@@ -504,7 +532,7 @@ body {
 }
 
 /* ==========================================================================
-   Pantalla de detalle y ficha del psicólogo
+   Pantalla de detalle y ficha del psicÃ³logo
    ========================================================================== */
 
 .detalle-card {
@@ -609,7 +637,7 @@ body {
 
 .chip-vacio {
   background: #F1F5F9;
-  color: #64748B;
+  color: var(--muted);
   border-color: #E2E8F0;
   font-weight: 500;
   font-style: italic;
@@ -663,7 +691,7 @@ body {
   color: #B45309;
 }
 
-/* Panel de resolución y decisiones */
+/* Panel de resoluciÃ³n y decisiones */
 .decision-panel {
   padding: 20px 22px;
   background: #FAF5FF;
@@ -696,7 +724,7 @@ body {
   display: block;
 }
 
-/* Modal accesible de confirmación */
+/* Modal accesible de confirmaciÃ³n */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -807,7 +835,7 @@ body {
   transform: translateX(-50%) translateY(0);
 }
 
-/* Footer estándar */
+/* Footer estÃ¡ndar */
 .footer {
   border-top: 1px solid #EFE6F8;
   background: #FDF9FF;
@@ -893,3 +921,5 @@ body {
     width: 100%;
   }
 }
+
+

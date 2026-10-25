@@ -3,11 +3,13 @@
    ========================================================================== */
 
 :root {
-  --cyan: #6ECFD4;
-  --cyan-hover: #5ABCC2;
+
+
+  --color-primario: #6ECFD4;
+  
   --text: #1E293B;
   --muted: #64748B;
-  --error: #E85D7A;
+  
   --warning: #E8A347;
   --ok: #1BBF6B;
   --purple-accent: #6B5BCE;
@@ -142,7 +144,7 @@ body {
 }
 
 .btn-logout {
-  background-color: #EB5771;
+  background-color: var(--color-peligro);
   color: white;
   border: none;
   padding: 7px 16px;
@@ -154,7 +156,7 @@ body {
 }
 
 .btn-logout:hover {
-  background-color: #D63A54;
+  background-color: var(--color-peligro-hover);
   transform: translateY(-1px);
 }
 
@@ -311,13 +313,12 @@ body {
   justify-content: center;
   gap: 8px;
   box-shadow: 0 4px 12px rgba(110, 207, 212, 0.35);
-  transition: all 0.2s ease;
+  transition: filter 0.2s ease, transform 0.15s ease;
 }
 
 .btn-edit:hover {
-  background: var(--cyan-hover);
+  filter: brightness(1.05);
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(110, 207, 212, 0.45);
 }
 
 /* --------------------------------------------------------------------------
@@ -541,7 +542,7 @@ body {
 
 .btn-modal.ok,
 .btn-modal.btn-ok {
-  background: linear-gradient(135deg, var(--cyan), var(--cyan-hover));
+  background: linear-gradient(135deg, var(--color-primario-fuerte), var(--cyan-hover));
   color: #FFFFFF;
   box-shadow: 0 2px 8px rgba(110, 207, 212, 0.3);
 }
@@ -751,3 +752,5 @@ body {
     font-size: 20px;
   }
 }
+
+

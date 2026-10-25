@@ -1,4 +1,27 @@
-/* Tarjeta principal de recuperación de contraseña */
+:root {
+  --color-primario: #6ECFD4;
+  --color-primario-fuerte: #0E7490;
+  --color-primario-fuerte-hover: #0B5F75;
+  --color-primario-suave: #E6F7F8;
+  --color-apoyo: #6B5BCE;
+  --color-apoyo-hover: #5A45C9;
+  --color-apoyo-oscuro: #4A38B0;
+  --color-apoyo-suave: #EDE7FF;
+  --color-apoyo-borde: #DFDAEE;
+  --color-tinta: #1E293B;
+  --color-mudo: #475569;
+  --color-fondo: #F8FAFC;
+  --color-superficie: #FFFFFF;
+  --color-borde-neutro: #E2E8F0;
+  --color-peligro: #C0392B;
+  --color-peligro-hover: #A93226;
+  --color-peligro-suave: #FFF1F3;
+  --color-ok: #1BBF6B;
+  --color-aviso: #E8A347;
+  --color-texto-claro: #FFFFFF;
+}
+
+﻿/* Tarjeta principal de recuperaciÃ³n de contraseÃ±a */
 .recuperar-card {
   max-width: 440px;
   margin: 40px auto;
@@ -18,7 +41,7 @@
 
 .recuperar-subtitulo {
   font-size: 13px;
-  color: #64748b;
+  color: var(--muted);
   margin: 0 0 24px;
 }
 
@@ -27,7 +50,7 @@
   display: none;
   width: 100%;
   background-color: #feeef2;
-  color: #eb5771;
+  color: var(--color-peligro);
   padding: 10px 14px;
   border-radius: 8px;
   font-size: 13px;
@@ -90,20 +113,20 @@ label {
 }
 
 .form-group input.error {
-  border-color: #eb5771;
+  border-color: var(--color-peligro);
   background-color: #fff8f8;
 }
 
 .form-group input.error:focus {
-  border-color: #eb5771;
+  border-color: var(--color-peligro);
   box-shadow: 0 0 0 3px rgba(235, 87, 113, 0.15);
 }
 
 .form-group input::placeholder {
-  color: #94a3b8;
+  color: #475569;
 }
 
-/* Botón principal Enviar código */
+/* BotÃ³n principal Enviar cÃ³digo */
 .btn-recuperar-submit {
   width: 100%;
   background-color: var(--color-primario-fuerte, #0E7490);
@@ -116,14 +139,16 @@ label {
   cursor: pointer;
   margin-top: 4px;
   margin-bottom: 16px;
-  transition: background-color 0.2s ease;
+  transition: filter 0.2s ease, transform 0.15s ease;
+  box-shadow: 0 4px 12px rgba(14, 116, 144, 0.35);
 }
 
 .btn-recuperar-submit:hover {
-  background-color: #48b4af;
+  filter: brightness(1.05);
+  transform: translateY(-1px);
 }
 
-/* Enlaces de acción */
+/* Enlaces de acciÃ³n */
 .recuperar-enlaces {
   display: flex;
   justify-content: space-between;
@@ -134,11 +159,13 @@ label {
 
 .link-accion {
   font-size: 13px;
-  color: #4db7b2;
+  color: var(--color-primario-fuerte);
   text-decoration: underline;
   transition: color 0.2s;
 }
 
 .link-accion:hover {
-  color: #3aa39e;
+  color: var(--cyan-hover);
 }
+
+

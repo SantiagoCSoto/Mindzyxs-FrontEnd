@@ -7,6 +7,7 @@
   <link rel="icon" type="image/png" href="../assets/Logo1.png" />
   <title>Validar psicólogos - Mindzyxs</title>
   <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/inicio.css" />
   <link rel="stylesheet" href="../css/validar_psicologos.css" />
 </head>
 
@@ -29,14 +30,13 @@
     <nav class="main-nav" aria-label="Navegación principal">
       <ul>
         <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
-        <li><a href="inicio.html#nosotros">Nosotros</a></li>
-        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="ayuda.html">Ayuda</a></li>
       </ul>
     </nav>
 
     <div class="header-right">
       <div class="header-auth-buttons">
-        <span id="rol-usuario" class="badge-role">Administrador</span>
         <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
       </div>
     </div>
@@ -76,10 +76,10 @@
       </div>
 
       <!-- Mensaje de error en la lista -->
-      <div class="err-msg" id="errLista" role="alert"></div>
+      <div class="err-msg" id="errLista" role="alert" tabindex="0"></div>
 
       <!-- Contenedor dinámico de solicitudes con skeleton loader -->
-      <div id="listaSolicitudes" aria-live="polite">
+      <div id="listaSolicitudes" aria-live="polite" tabindex="0">
         <div class="sk-card fila-sk">
           <div class="sk sk-avatar"></div>
           <div class="sk-info">
@@ -101,7 +101,7 @@
       <!-- Estado vacío -->
       <div class="empty" id="vacio" style="display: none;">
         <div class="empty-icon" aria-hidden="true">🩺</div>
-        <h3>No hay solicitudes pendientes</h3>
+        <h2>No hay solicitudes pendientes</h2>
         <p>Todos los psicólogos registrados han sido revisados o no coinciden con la búsqueda.</p>
       </div>
     </section>
@@ -180,7 +180,7 @@
               rows="3"
               maxlength="500"
               placeholder="Indica las razones u observaciones para el solicitante..."
-            ></textarea>
+             aria-label="Indica las razones u observaciones para el solicitante..."></textarea>
             <span class="caracteres-ayuda" id="lblCaracteres">Máximo 500 caracteres</span>
           </div>
 

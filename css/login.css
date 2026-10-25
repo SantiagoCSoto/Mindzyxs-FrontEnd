@@ -1,7 +1,30 @@
-/* Tag de sprint en header */
+:root {
+  --color-primario: #6ECFD4;
+  --color-primario-fuerte: #0E7490;
+  --color-primario-fuerte-hover: #0B5F75;
+  --color-primario-suave: #E6F7F8;
+  --color-apoyo: #6B5BCE;
+  --color-apoyo-hover: #5A45C9;
+  --color-apoyo-oscuro: #4A38B0;
+  --color-apoyo-suave: #EDE7FF;
+  --color-apoyo-borde: #DFDAEE;
+  --color-tinta: #1E293B;
+  --color-mudo: #475569;
+  --color-fondo: #F8FAFC;
+  --color-superficie: #FFFFFF;
+  --color-borde-neutro: #E2E8F0;
+  --color-peligro: #C0392B;
+  --color-peligro-hover: #A93226;
+  --color-peligro-suave: #FFF1F3;
+  --color-ok: #1BBF6B;
+  --color-aviso: #E8A347;
+  --color-texto-claro: #FFFFFF;
+}
+
+﻿/* Tag de sprint en header */
 .header-tag {
   font-size: 13px;
-  color: #64748b;
+  color: var(--muted);
   font-weight: 500;
 }
 
@@ -10,7 +33,7 @@
   display: none;
   width: 100%;
   background-color: #feeef2;
-  color: #eb5771;
+  color: var(--color-peligro);
   padding: 10px 14px;
   border-radius: 8px;
   font-size: 13px;
@@ -43,7 +66,7 @@
 
 .login-subtitulo {
   font-size: 13px;
-  color: #64748b;
+  color: var(--muted);
   margin: 0 0 24px;
 }
 
@@ -88,19 +111,19 @@ label {
 }
 
 .form-group input.error {
-  border-color: #eb5771;
+  border-color: var(--color-peligro);
   background-color: #fff8f8;
 }
 
 .form-group input.error:focus {
-  border-color: #eb5771;
+  border-color: var(--color-peligro);
   box-shadow: 0 0 0 3px rgba(235, 87, 113, 0.15);
 }
 
 .error-mensaje {
   display: none;
   font-size: 12px;
-  color: #eb5771;
+  color: var(--color-peligro);
   margin-top: 5px;
   text-align: left;
   font-weight: 500;
@@ -110,7 +133,7 @@ label {
   display: block;
 }
 
-/* Botón principal Iniciar sesión */
+/* BotÃ³n principal Iniciar sesiÃ³n */
 .btn-login-submit {
   width: 100%;
   background-color: var(--color-primario-fuerte, #0E7490);
@@ -123,14 +146,16 @@ label {
   cursor: pointer;
   margin-top: 4px;
   margin-bottom: 16px;
-  transition: background-color 0.2s ease;
+  transition: filter 0.2s ease, transform 0.15s ease;
+  box-shadow: 0 4px 12px rgba(14, 116, 144, 0.35);
 }
 
 .btn-login-submit:hover {
-  background-color: #48b4af;
+  filter: brightness(1.05);
+  transform: translateY(-1px);
 }
 
-/* Enlaces de acción (olvido y registro) */
+/* Enlaces de acciÃ³n (olvido y registro) */
 .login-enlaces {
   display: flex;
   justify-content: space-between;
@@ -141,13 +166,13 @@ label {
 
 .link-accion {
   font-size: 13px;
-  color: #4db7b2;
+  color: var(--color-primario-fuerte);
   text-decoration: underline;
   transition: color 0.2s;
 }
 
 .link-accion:hover {
-  color: #3aa39e;
+  color: var(--cyan-hover);
 }
 
 /* Enlace cancelar / volver */
@@ -158,7 +183,7 @@ label {
 
 .link-cancelar {
   font-size: 13px;
-  color: #64748b;
+  color: var(--muted);
   text-decoration: underline;
   transition: color 0.2s;
 }
@@ -167,7 +192,7 @@ label {
   color: #334155;
 }
 
-/* Modal de autenticación exitosa */
+/* Modal de autenticaciÃ³n exitosa */
 .modal-overlay {
   display: none;
   position: fixed;
@@ -237,7 +262,7 @@ label {
 
 .modal-contenido p {
   font-size: 13px;
-  color: #64748b;
+  color: var(--muted);
   margin: 0 0 24px;
   line-height: 1.5;
 }
@@ -252,20 +277,22 @@ label {
   font-size: 15px;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: filter 0.2s ease, transform 0.15s ease;
+  box-shadow: 0 4px 12px rgba(14, 116, 144, 0.35);
 }
 
 .btn-modal-continuar:hover {
-  background-color: #48b4af;
+  filter: brightness(1.05);
+  transform: translateY(-1px);
 }
 
-/* Sección Modo Invitado (PB-06) */
+/* SecciÃ³n Modo Invitado (PB-06) */
 .divider-invitado {
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 18px 0 14px;
-  color: #94a3b8;
+  color: var(--muted);
   font-size: 12px;
   font-weight: 500;
 }
@@ -291,7 +318,7 @@ label {
 
 .invitado-subtexto {
   font-size: 12px;
-  color: #64748b;
+  color: var(--muted);
   margin: 0 0 10px;
   line-height: 1.4;
 }
@@ -325,7 +352,7 @@ label {
   cursor: not-allowed;
 }
 
-/* Diseño responsivo */
+/* DiseÃ±o responsivo */
 @media (max-width: 768px) {
   .login-card {
     margin: 24px 16px;
@@ -383,3 +410,4 @@ label {
     font-size: 14px;
   }
 }
+

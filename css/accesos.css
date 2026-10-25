@@ -1,4 +1,27 @@
-/* Estilos de la vista Gestión de Accesos (PB-17 HU1-PB17) */
+:root {
+  --color-primario: #6ECFD4;
+  --color-primario-fuerte: #0E7490;
+  --color-primario-fuerte-hover: #0B5F75;
+  --color-primario-suave: #E6F7F8;
+  --color-apoyo: #6B5BCE;
+  --color-apoyo-hover: #5A45C9;
+  --color-apoyo-oscuro: #4A38B0;
+  --color-apoyo-suave: #EDE7FF;
+  --color-apoyo-borde: #DFDAEE;
+  --color-tinta: #1E293B;
+  --color-mudo: #475569;
+  --color-fondo: #F8FAFC;
+  --color-superficie: #FFFFFF;
+  --color-borde-neutro: #E2E8F0;
+  --color-peligro: #C0392B;
+  --color-peligro-hover: #A93226;
+  --color-peligro-suave: #FFF1F3;
+  --color-ok: #1BBF6B;
+  --color-aviso: #E8A347;
+  --color-texto-claro: #FFFFFF;
+}
+
+﻿/* Estilos de la vista GestiÃ³n de Accesos (PB-17 HU1-PB17) */
 
 .wrap {
   width: 100%;
@@ -30,7 +53,7 @@
   line-height: 1.5;
 }
 
-/* Buscador de psicólogos */
+/* Buscador de psicÃ³logos */
 .buscar-wrap {
   margin: 18px 0 16px;
 }
@@ -54,10 +77,10 @@
 }
 
 .buscar::placeholder {
-  color: #94A3B8;
+  color: #475569;
 }
 
-/* Lista dinámica de psicólogos */
+/* Lista dinÃ¡mica de psicÃ³logos */
 .lista-accesos {
   display: flex;
   flex-direction: column;
@@ -137,11 +160,11 @@
 
 .est-no {
   background: #F1F5F9;
-  color: #64748B;
+  color: var(--muted);
   border: 1px solid #E2E8F0;
 }
 
-/* Botones de acción */
+/* Botones de acciÃ³n */
 .btn {
   font-family: inherit;
   cursor: pointer;
@@ -151,11 +174,19 @@
   font-weight: 700;
   font-size: 12.5px;
   border: none;
-  transition: all .15s ease;
+  background: var(--color-primario-fuerte);
+  color: #FFFFFF;
+  transition: filter 0.2s ease, transform 0.15s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
+  box-shadow: 0 4px 12px rgba(94, 188, 196, 0.35);
+}
+
+.btn:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
 }
 
 .btn:disabled {
@@ -196,7 +227,7 @@
   margin-bottom: 8px;
 }
 
-/* Estado vacío */
+/* Estado vacÃ­o */
 .empty {
   border: 1.5px dashed var(--color-borde-neutro);
   border-radius: 12px;
@@ -208,7 +239,7 @@
   margin-top: 10px;
 }
 
-/* Modal de confirmación */
+/* Modal de confirmaciÃ³n */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -301,7 +332,7 @@
   color: var(--color-tinta);
 }
 
-/* Responsividad para móviles */
+/* Responsividad para mÃ³viles */
 @media (max-width: 600px) {
   .fila {
     flex-wrap: wrap;
@@ -319,3 +350,5 @@
     margin-top: 4px;
   }
 }
+
+

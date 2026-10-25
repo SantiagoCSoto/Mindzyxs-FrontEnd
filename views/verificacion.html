@@ -7,6 +7,7 @@
   <link rel="icon" type="image/png" href="../assets/Logo1.png">
   <title>Verificación de cuenta - Mindzyxs</title>
   <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/inicio.css" />
   <link rel="stylesheet" href="../css/verificacion.css">
 </head>
 
@@ -23,8 +24,8 @@
     <nav class="main-nav">
       <ul>
         <li><a href="#">Inicio</a></li>
-        <li><a href="#">Nosotros</a></li>
-        <li><a href="#">Ayuda</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="ayuda.html">Ayuda</a></li>
       </ul>
     </nav>
 
@@ -50,7 +51,7 @@
           <div class="input-codigo-contenedor">
             <input type="text" id="codigo-verificacion" name="codigo_verificacion" maxlength="6" inputmode="numeric"
               pattern="[0-9]*" placeholder="&mdash;  &mdash;  &mdash;  &mdash;  &mdash;  &mdash;" autocomplete="off"
-              required>
+              required aria-label="&mdash;  &mdash;  &mdash;  &mdash;  &mdash;  &mdash;">
           </div>
           <div id="banner-error" class="alerta-error">El código expiró. Reenvía el código</div>
           <div id="banner-exito" class="alerta-exito">Se ha reenviado un nuevo código a tu correo.</div>
@@ -82,4 +83,4 @@
 </body>
 
 </html>
-
+

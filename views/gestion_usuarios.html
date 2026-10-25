@@ -7,6 +7,7 @@
   <link rel="icon" type="image/png" href="../assets/Logo1.png" />
   <title>Gestionar usuarios - Mindzyxs</title>
   <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/inicio.css" />
   <link rel="stylesheet" href="../css/gestion_usuarios.css" />
 </head>
 
@@ -29,14 +30,13 @@
     <nav class="main-nav" aria-label="Navegación principal">
       <ul>
         <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
-        <li><a href="inicio.html#nosotros">Nosotros</a></li>
-        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="ayuda.html">Ayuda</a></li>
       </ul>
     </nav>
 
     <div class="header-right">
       <div class="header-auth-buttons">
-        <span id="rol-usuario" class="badge-role">Administrador</span>
         <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
       </div>
     </div>
@@ -87,10 +87,10 @@
       </div>
 
       <!-- Mensaje de error en lista -->
-      <div class="err-msg" id="errLista" role="alert"></div>
+      <div class="err-msg" id="errLista" role="alert" tabindex="0"></div>
 
       <!-- Contenedor dinámico de usuarios -->
-      <div id="listaUsuarios" aria-live="polite">
+      <div id="listaUsuarios" aria-live="polite" tabindex="0">
         <div class="sk-card fila-sk">
           <div class="sk sk-avatar"></div>
           <div style="flex:1;">
@@ -125,22 +125,22 @@
       <div class="form-grid">
         <div class="field">
           <label for="eNombres">Nombres *</label>
-          <input class="input" id="eNombres" type="text" maxlength="100" placeholder="Nombres" required />
+          <input class="input" id="eNombres" type="text" maxlength="100" placeholder="Nombres" required / aria-label="Nombres">
         </div>
 
         <div class="field">
           <label for="eApellidos">Apellidos</label>
-          <input class="input" id="eApellidos" type="text" maxlength="100" placeholder="Apellidos" />
+          <input class="input" id="eApellidos" type="text" maxlength="100" placeholder="Apellidos" / aria-label="Apellidos">
         </div>
 
         <div class="field field-full">
           <label for="eCorreo">Correo electrónico *</label>
-          <input class="input" id="eCorreo" type="email" maxlength="150" placeholder="correo@ejemplo.com" required />
+          <input class="input" id="eCorreo" type="email" maxlength="150" placeholder="correo@ejemplo.com" required / aria-label="correo@ejemplo.com">
         </div>
 
         <div class="field">
           <label for="eGenero">Género</label>
-          <select class="input" id="eGenero">
+          <select class="input" id="eGenero" aria-label="eGenero">
             <option value="">Seleccionar género</option>
             <option value="1">Masculino</option>
             <option value="2">Femenino</option>
@@ -150,12 +150,12 @@
 
         <div class="field">
           <label for="eFecha">Fecha de nacimiento</label>
-          <input class="input" id="eFecha" type="date" />
+          <input class="input" id="eFecha" type="date" / aria-label="eFecha">
         </div>
 
         <div class="field field-full">
           <label for="eEstado">Estado de cuenta *</label>
-          <select class="input" id="eEstado">
+          <select class="input" id="eEstado" aria-label="eEstado">
             <option value="Activa">Activa</option>
             <option value="Suspendida">Suspendida</option>
             <option value="Inactiva">Inactiva</option>

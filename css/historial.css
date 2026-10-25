@@ -3,11 +3,11 @@
    ========================================================================== */
 
 :root {
-  --cyan: #6ECFD4;
-  --cyan-hover: #5ABCC2;
+  --color-primario: #6ECFD4;
+  
   --text: #1E293B;
   --muted: #64748B;
-  --error: #E85D7A;
+  
   --warning: #E8A347;
   --ok: #1BBF6B;
   --violet: #6B5BCE;
@@ -163,7 +163,7 @@ body {
 }
 
 .btn-logout {
-  background-color: #EB5771;
+  background-color: var(--color-peligro);
   color: white;
   border: none;
   padding: 7px 16px;
@@ -175,7 +175,7 @@ body {
 }
 
 .btn-logout:hover {
-  background-color: #D63A54;
+  background-color: var(--color-peligro-hover);
   transform: translateY(-1px);
 }
 
@@ -294,14 +294,13 @@ body {
   font-weight: 700;
   font-size: 13px;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(110, 207, 212, 0.3);
-  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(94, 188, 196, 0.35);
+  transition: filter 0.2s ease, transform 0.15s ease;
 }
 
 .btn-filter:hover {
-  background: var(--cyan-hover);
+  filter: brightness(1.05);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(110, 207, 212, 0.4);
 }
 
 .btn-clear {
@@ -403,17 +402,17 @@ body {
 
 .val-pos {
   background: #E8FFF1;
-  color: #0E9B52;
+  color: #0B7A3E;
 }
 
 .val-neu {
   background: #FFF6DE;
-  color: #B97E0C;
+  color: #8A5A00;
 }
 
 .val-low {
   background: #FFE9EE;
-  color: #D13A5E;
+  color: #B02A4A;
 }
 
 .record-sum {
@@ -639,7 +638,7 @@ body {
 
 .btn-modal.ok,
 .btn-modal.btn-ok {
-  background: linear-gradient(135deg, var(--cyan), var(--cyan-hover));
+  background: linear-gradient(135deg, var(--color-primario-fuerte), var(--cyan-hover));
   color: #FFFFFF;
   box-shadow: 0 2px 8px rgba(110, 207, 212, 0.3);
 }
@@ -849,3 +848,5 @@ body {
     padding: 20px 14px 30px;
   }
 }
+
+

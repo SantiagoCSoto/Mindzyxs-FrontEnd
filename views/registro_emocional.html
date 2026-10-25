@@ -7,6 +7,8 @@
   <link rel="icon" type="image/png" href="../assets/Logo1.png" />
   <title>Mindzyx — Registrar estado emocional</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/inicio.css" />
   <link rel="stylesheet" href="../css/registro_emocional.css" />
 </head>
 
@@ -26,8 +28,8 @@
     <nav class="main-nav" aria-label="Navegación principal">
       <ul>
         <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
-        <li><a href="inicio.html#nosotros">Nosotros</a></li>
-        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="ayuda.html">Ayuda</a></li>
       </ul>
     </nav>
     <div class="header-right">
@@ -53,7 +55,7 @@
 
       <div class="card">
         <div class="saved" id="savedCard">
-          <h3><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg> Último registro guardado</h3>
+          <h2><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg> Último registro guardado</h2>
           <p id="savedText"></p>
           <small id="savedDate"></small>
         </div>
@@ -101,7 +103,7 @@
 
         <label class="field-label" for="notes">Notas</label>
         <p class="field-hint">¿Quieres agregar una nota? (opcional)</p>
-        <textarea id="notes" placeholder="Cuéntanos con tus palabras cómo te sientes..."></textarea>
+        <textarea id="notes" placeholder="Cuéntanos con tus palabras cómo te sientes..." aria-label="Cuéntanos con tus palabras cómo te sientes..."></textarea>
 
         <div class="err-msg" id="errMsg">Debes seleccionar un estado emocional para guardar</div>
 

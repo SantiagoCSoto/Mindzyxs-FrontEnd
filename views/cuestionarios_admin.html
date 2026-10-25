@@ -7,6 +7,8 @@
   <link rel="icon" type="image/png" href="../assets/Logo1.png" />
   <title>Mindzyx — Cuestionarios predeterminados</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/inicio.css" />
   <link rel="stylesheet" href="../css/cuestionarios_admin.css" />
 </head>
 
@@ -26,13 +28,12 @@
     <nav class="main-nav" aria-label="Navegación principal">
       <ul>
         <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
-        <li><a href="inicio.html#nosotros">Nosotros</a></li>
-        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="ayuda.html">Ayuda</a></li>
       </ul>
     </nav>
     <div class="header-right">
       <div class="header-auth-buttons">
-        <span id="rol-usuario" class="badge-role">Administrador</span>
         <button type="button" id="btn-logout-top" class="btn-logout">Cerrar sesión</button>
       </div>
     </div>
@@ -55,15 +56,15 @@
         </button>
       </div>
       <input type="text" class="buscar" id="buscarC" placeholder="Buscar por título..." aria-label="Buscar cuestionario por título" autocomplete="off" />
-      <div class="err-msg" id="listaErr">No fue posible cargar los cuestionarios. Intente nuevamente.</div>
-      <div class="sk-stack" id="skLista" aria-hidden="true" hidden>
+      <div class="err-msg" id="listaErr" tabindex="0">No fue posible cargar los cuestionarios. Intente nuevamente.</div>
+      <div class="sk-stack" id="skLista" aria-hidden="true" hidden tabindex="0">
         <div class="sk sk-title"></div>
         <div class="sk sk-card"></div>
         <div class="sk sk-card"></div>
         <div class="sk sk-card"></div>
       </div>
       <div class="empty" id="vacioCuestionario" hidden>No se encontraron cuestionarios predeterminados.</div>
-      <div id="listaC"></div>
+      <div id="listaC" tabindex="0"></div>
     </section>
 
     <!-- Pantalla: crear / editar -->
@@ -72,10 +73,10 @@
       <p class="sub" id="editSub">Complete los campos obligatorios para guardar el cuestionario.</p>
 
       <label class="field-label" for="eTitulo">Título *</label>
-      <input type="text" id="eTitulo" maxlength="200" placeholder="Ej. Cuestionario base de ansiedad" autocomplete="off" />
+      <input type="text" id="eTitulo" maxlength="200" placeholder="Ej. Cuestionario base de ansiedad" autocomplete="off" / aria-label="Ej. Cuestionario base de ansiedad">
 
       <label class="field-label" for="eDesc">Descripción</label>
-      <textarea id="eDesc" maxlength="1000" placeholder="Descripción e instrucciones del cuestionario"></textarea>
+      <textarea id="eDesc" maxlength="1000" placeholder="Descripción e instrucciones del cuestionario" aria-label="Descripción e instrucciones del cuestionario"></textarea>
 
       <label class="field-label">Preguntas *</label>
       <p class="field-hint">Cada pregunta debe tener al menos dos opciones con su valor ponderado (0 o más).</p>
@@ -96,7 +97,7 @@
       </div>
 
       <label class="check-inline" for="fPublicar">
-        <input type="checkbox" id="fPublicar" />
+        <input type="checkbox" id="fPublicar" / aria-label="fPublicar">
         <span>Publicar (quedará disponible para invitados y pacientes)</span>
       </label>
 

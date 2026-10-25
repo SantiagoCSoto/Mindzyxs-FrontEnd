@@ -7,6 +7,8 @@
   <link rel="icon" type="image/png" href="../assets/Logo1.png" />
   <title>Mindzyx — Cuestionario emocional</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/inicio.css" />
   <link rel="stylesheet" href="../css/cuestionario_paciente.css" />
 </head>
 
@@ -26,8 +28,8 @@
     <nav class="main-nav" aria-label="Navegación principal">
       <ul>
         <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
-        <li><a href="inicio.html#nosotros">Nosotros</a></li>
-        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="ayuda.html">Ayuda</a></li>
       </ul>
     </nav>
     <div class="header-right">
@@ -44,7 +46,7 @@
     <div class="screen active" id="homeScreen">
       <div class="card hero">
         <h1>Cuestionario emocional</h1>
-        <p>Responde las preguntas sobre tu bienestar. Tus respuestas se <b>guardan en tu historial</b>.</p>
+        <p>Tus respuestas se <b>guardan en tu historial</b>.</p>
       </div>
 
       <div class="card">
@@ -91,14 +93,14 @@
     </div>
 
     <!-- Pantalla de resultado -->
-    <div class="screen" id="resultScreen">
+    <div class="screen" id="resultScreen" tabindex="0">
       <div class="card text-center">
         <div class="result-icon">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
         </div>
         <h2 class="result-title">Resultado del cuestionario</h2>
         <p class="sub">Tus respuestas fueron guardadas en tu historial.</p>
-        <div class="result-list" id="resultList"></div>
+        <div class="result-list" id="resultList" tabindex="0"></div>
         <div class="save-note"><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg> Cuestionario <b>guardado en tu historial</b>.</div>
         <button class="btn-big" id="continueBtn">Continuar</button>
       </div>
