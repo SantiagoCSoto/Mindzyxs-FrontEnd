@@ -7,6 +7,8 @@
   <link rel="icon" type="image/png" href="../assets/Logo1.png" />
   <title>Mindzyx — Asignar cuestionario</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/inicio.css" />
   <link rel="stylesheet" href="../css/asignar_cuestionario.css" />
 </head>
 
@@ -26,13 +28,12 @@
     <nav class="main-nav" aria-label="Navegación principal">
       <ul>
         <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
-        <li><a href="inicio.html#nosotros">Nosotros</a></li>
-        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="ayuda.html">Ayuda</a></li>
       </ul>
     </nav>
     <div class="header-right">
       <div class="header-auth-buttons">
-        <span id="rol-usuario" class="badge-role">Psicólogo</span>
         <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
       </div>
     </div>
@@ -48,14 +49,14 @@
     <section class="card screen active" id="screenLista">
       <h1>Asignar cuestionario</h1>
       <p class="sub">Elija un cuestionario publicado para asignarlo.</p>
-      <div id="listaC"></div>
+      <div id="listaC" tabindex="0"></div>
     </section>
 
     <!-- Pantalla: marcar pacientes autorizados -->
     <section class="card screen" id="screenAsignar">
       <h2 id="asigTitulo">Asignar</h2>
       <p class="sub">Solo pacientes que le autorizaron. Marque con las casillas.</p>
-      <div id="listaPac"></div>
+      <div id="listaPac" tabindex="0"></div>
       <div class="err-msg" id="eSel">Debes seleccionar al menos un paciente.</div>
       <div class="actions">
         <button type="button" class="btn btn-save" id="btnAsignar">

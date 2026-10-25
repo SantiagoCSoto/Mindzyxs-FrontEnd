@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="../assets/Logo1.png" />
+  <title>Nosotros - Mindzyxs</title>
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/inicio.css" />
+</head>
+<body>
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-pink"></div>
+    <div class="blob blob-lav"></div>
+  </div>
+  <header class="header-nav">
+    <div class="logo-container">
+      <a href="inicio.html" class="logo-link">
+        <img src="../assets/Logo1.png" alt="Logo Mindzyxs" class="logo-img" />
+        <span>Mindzyxs</span>
+      </a>
+    </div>
+    <nav class="main-nav" aria-label="Navegación principal">
+      <ul>
+        <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="ayuda.html">Ayuda</a></li>
+      </ul>
+    </nav>
+    <div class="header-right">
+      <div class="header-auth-buttons">
+        <a href="login.html" class="btn-login">Iniciar sesión</a>
+      </div>
+    </div>
+  </header>
+  <main class="wrap">
+    <section class="card">
+      <div class="panel-head">
+        <h1>Nosotros</h1>
+        <p class="sub">Conoce la misión de Mindzyxs.</p>
+        <button type="button" class="btn-volver-landing" id="btnVolver" style="margin-top:10px;">← Volver</button>
+      </div>
+      <div class="aviso-txt">
+        <p>Mindzyxs nace con una idea simple: <b>hacer visible lo invisible</b>. Las emociones influyen en todo lo que hacemos, pero pocas veces nos detenemos a observarlas. Esta plataforma te ayuda a registrar, comprender y monitorear tu bienestar emocional.</p>
+        <p><b>No realizamos diagnósticos clínicos ni sustituimos la atención profesional.</b></p>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="footer-in">
+      <a href="privacidad.html">Privacidad</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="terminos.html">Términos</a>
+    </div>
+  </footer>
+  <script src="../js/sesion-header.js"></script>
+  <script src="../js/cookies-banner.js"></script>
+  <script>
+    (function () {
+      function destino() {
+        try {
+          if (sessionStorage.getItem('es_invitado') === 'true') return 'panel_invitado.html';
+          var s = JSON.parse(sessionStorage.getItem('usuario') || 'null');
+          var rol = String((s && (s.rol || s.tipo_usuario)) || '').toLowerCase();
+          if (rol.includes('paciente')) return 'panel_paciente.html';
+          if (rol.includes('psicologo')) return 'panel_psicologo.html';
+          if (rol.includes('admin')) return 'panel_admin.html';
+        } catch (e) { /* ignore */ }
+        return 'inicio.html';
+      }
+      var btn = document.getElementById('btnVolver');
+      if (btn) btn.addEventListener('click', function () { window.location.href = destino(); });
+    })();
+  </script>
+</body>
+</html>

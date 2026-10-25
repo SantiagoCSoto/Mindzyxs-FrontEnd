@@ -1,12 +1,14 @@
 :root {
-  --cyan: #6ECFD4;
-  --cyan-hover: #5ABCC2;
+  --color-primario: #6ECFD4;
+  --color-primario-fuerte: #0E7490;
+  --color-primario-fuerte-hover: #0B5F75;
   --text: #1E293B;
   --muted: #64748B;
-  --error: #E85D7A;
   --warning: #E8A347;
   --ok: #1BBF6B;
   --purple-accent: #6B5BCE;
+  --error: #C0392B;
+  --error-hover: #A93226;
 }
 
 * {
@@ -230,11 +232,14 @@ button {
   font-weight: 700;
   font-size: 13px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: filter 0.2s ease, transform 0.15s ease;
+  box-shadow: 0 4px 12px rgba(94, 188, 196, 0.35);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  background: var(--color-primario-fuerte, #0E7490);
+  color: #FFF;
 }
 
 .btn-alert-ico {
@@ -242,22 +247,23 @@ button {
 }
 
 .btn-alert.danger {
-  background: var(--error);
+  background: var(--color-primario-fuerte, #0E7490);
   color: #FFF;
 }
 
 .btn-alert.danger:hover {
-  filter: brightness(1.07);
+  filter: brightness(1.05);
+  transform: translateY(-1px);
 }
 
 .btn-alert.mid {
-  background: var(--cyan);
+  background: var(--color-primario-fuerte);
   color: #FFF;
 }
 
 .btn-alert.mid:hover {
-  background: var(--cyan-hover);
-  box-shadow: 0 4px 10px rgba(110, 207, 212, 0.3);
+  filter: brightness(1.05);
+  transform: translateY(-1px);
 }
 
 .btn-alert.close {
@@ -372,7 +378,7 @@ button {
 
 .modal-icon.info {
   background: #E6F7F8;
-  color: #2A9AA0;
+  color: #0b5f75;
 }
 
 .modal h3 {
@@ -429,7 +435,7 @@ button {
 }
 
 .btn-modal.ok {
-  background: var(--cyan);
+  background: var(--color-primario-fuerte);
   color: #FFF;
 }
 
@@ -515,9 +521,8 @@ button {
   }
 }
 
-/* Botón Cerrar sesión (header unificado) */
 .btn-logout {
-  background-color: #E85D7A;
+  background-color: var(--color-peligro);
   color: white;
   border: none;
   padding: 7px 16px;
@@ -530,6 +535,7 @@ button {
 }
 
 .btn-logout:hover {
-  background-color: #D63A54;
+  background-color: var(--color-peligro-hover);
   transform: translateY(-1px);
 }
+

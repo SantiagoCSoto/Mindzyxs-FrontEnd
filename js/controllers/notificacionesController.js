@@ -62,8 +62,6 @@ const lblActivoTexto = $('lblActivoTexto');
 const formNotificacion = $('formNotificacion');
 const chkCanalCorreo = $('chkCanalCorreo');
 const txtAsunto = $('txtAsunto');
-const txtCuerpo = $('txtCuerpo');
-const chipsVariables = $('chipsVariables');
 
 const btnActualizarPreview = $('btnActualizarPreview');
 const varNombre = $('varNombre');
@@ -73,8 +71,6 @@ const varMotivo = $('varMotivo');
 const prevCanales = $('prevCanales');
 const prevAsunto = $('prevAsunto');
 const prevCuerpo = $('prevCuerpo');
-
-const btnCancelarEdicion = $('btnCancelarEdicion');
 const btnGuardar = $('btnGuardar');
 
 const confirmModal = $('confirmModal');
@@ -324,9 +320,8 @@ async function abrirEdicion(tipo) {
   const canales = Array.isArray(eventoActual.canales) ? eventoActual.canales : [];
   if (chkCanalCorreo) chkCanalCorreo.checked = canales.includes('correo');
 
-  // Asunto y cuerpo
+  // Asunto
   if (txtAsunto) txtAsunto.value = eventoActual.asunto || '';
-  if (txtCuerpo) txtCuerpo.value = eventoActual.cuerpo || '';
 
   // Fecha por defecto en variables de prueba
   if (varFecha && !varFecha.value) {
@@ -347,25 +342,8 @@ if (chkActivo) {
   chkActivo.addEventListener('change', actualizarTextoActivo);
 }
 
-// Inserción asistida de variables dinámicas al hacer clic en los chips
-if (chipsVariables && txtCuerpo) {
-  chipsVariables.querySelectorAll('.chip-var').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const varTexto = btn.getAttribute('data-var');
-      if (!varTexto) return;
-
-      const inicio = txtCuerpo.selectionStart ?? txtCuerpo.value.length;
-      const fin = txtCuerpo.selectionEnd ?? txtCuerpo.value.length;
-      const antes = txtCuerpo.value.substring(0, inicio);
-      const despues = txtCuerpo.value.substring(fin);
-
-      txtCuerpo.value = antes + varTexto + despues;
-      txtCuerpo.focus();
-      txtCuerpo.selectionStart = txtCuerpo.selectionEnd = inicio + varTexto.length;
-
-      actualizarVistaPrevia();
-    });
-  });
+if (chkActivo) {
+  chkActivo.addEventListener('change', actualizarTextoActivo);
 }
 
 // Canales seleccionados en el formulario
@@ -400,7 +378,7 @@ async function actualizarVistaPrevia() {
   } else {
     // Fallback de renderizado en el cliente sustituyendo las variables locales
     let asuntoRender = txtAsunto?.value || '';
-    let cuerpoRender = txtCuerpo?.value || '';
+    let cuerpoRender = '';
 
     Object.entries(vars).forEach(([k, v]) => {
       const reg = new RegExp(`\\{${k}\\}`, 'gi');
@@ -432,7 +410,6 @@ function validarFormulario() {
   const activo = chkActivo?.checked;
   const canales = obtenerCanalesSeleccionados();
   const asunto = txtAsunto?.value?.trim() || '';
-  const cuerpo = txtCuerpo?.value?.trim() || '';
 
   if (activo) {
     if (canales.length === 0) {
@@ -440,9 +417,6 @@ function validarFormulario() {
     }
     if (canales.includes('correo') && !asunto) {
       return 'El asunto es obligatorio cuando el canal de correo está habilitado.';
-    }
-    if (!cuerpo) {
-      return 'El cuerpo o plantilla del mensaje es obligatorio.';
     }
   }
 
@@ -484,8 +458,7 @@ if (btnModalSi) {
     const payload = {
       canales: obtenerCanalesSeleccionados(),
       activo: Boolean(chkActivo?.checked),
-      asunto: txtAsunto?.value?.trim() || null,
-      cuerpo: txtCuerpo?.value?.trim() || null
+      asunto: txtAsunto?.value?.trim() || null
     };
 
     const res = await actualizarNotificacion(eventoActual.tipo, payload);

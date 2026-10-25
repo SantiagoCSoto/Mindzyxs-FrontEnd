@@ -1,6 +1,6 @@
-/* PB-27 — Administración de base de datos (mismo estilo visual que inicio.css) */
+﻿/* PB-27 â€” AdministraciÃ³n de base de datos (mismo estilo visual que inicio.css) */
 
-/* Hero principal (igual que la página de inicio) */
+/* Hero principal (igual que la pÃ¡gina de inicio) */
 .inicio-hero {
   margin: 0 auto;
   padding: 60px 40px;
@@ -23,11 +23,11 @@
 
 .mensaje-bienvenida {
   font-size: 16px;
-  color: #64748b;
+  color: var(--muted);
   margin: 0 0 40px;
 }
 
-/* Tarjeta de sesión */
+/* Tarjeta de sesiÃ³n */
 .tarjeta-sesion {
   display: flex;
   align-items: center;
@@ -65,7 +65,7 @@
 
 .sesion-estado {
   font-size: 12px;
-  color: #64748b;
+  color: var(--muted);
   margin: 0 0 4px;
   font-weight: 600;
 }
@@ -95,17 +95,17 @@
 .denied-box .denied-title {
   font-size: 14px;
   font-weight: 700;
-  color: #eb5771;
+  color: var(--color-peligro);
   margin-top: 6px;
 }
 
 .denied-box .denied-sub {
   font-size: 12px;
-  color: #64748b;
+  color: var(--muted);
   margin-top: 4px;
 }
 
-/* Sección acceso rápido (igual que la página de inicio) */
+/* SecciÃ³n acceso rÃ¡pido (igual que la pÃ¡gina de inicio) */
 .acceso-rapido {
   max-width: 900px;
   margin: 60px auto 40px;
@@ -123,7 +123,9 @@
 .admin-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  gap: 14px;
+  margin-bottom: 18px;
+  align-items: stretch;
 }
 
 .admin-tile {
@@ -153,7 +155,7 @@
 .admin-tile p {
   margin: 0;
   font-size: 12px;
-  color: #64748b;
+  color: var(--muted);
   font-weight: 400;
   line-height: 1.5;
   text-align: center;
@@ -167,7 +169,7 @@
   box-shadow: 0 8px 16px rgba(86, 197, 192, 0.15);
 }
 
-/* Botones de acción (mismo lenguaje visual que inicio) */
+/* Botones de acciÃ³n (mismo lenguaje visual que inicio) */
 .btn-admin {
   width: 100%;
   height: 38px;
@@ -178,11 +180,13 @@
   font-weight: 700;
   font-size: 12px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: filter 0.2s ease, transform 0.15s ease;
+  box-shadow: 0 4px 12px rgba(94, 188, 196, 0.35);
 }
 
 .btn-admin:hover {
-  background-color: #48b4af;
+  filter: brightness(1.05);
+  transform: translateY(-1px);
 }
 
 .btn-admin:disabled {
@@ -246,7 +250,7 @@
   display: block;
   background: #fff1f3;
   border: 1px solid #ffe0e6;
-  color: #eb5771;
+  color: var(--color-peligro);
 }
 
 /* Lista de respaldos */
@@ -278,7 +282,7 @@
   padding: 12px;
   border-top: 1px solid #f0faf9;
   font-size: 11px;
-  color: #64748b;
+  color: var(--muted);
 }
 
 .btn-download {
@@ -300,7 +304,7 @@
   background: #ecf9f7;
 }
 
-/* Consola de auditoría (estilo info-contenedor de inicio) */
+/* Consola de auditorÃ­a (estilo info-contenedor de inicio) */
 .audit-console {
   width: 100%;
   margin-top: 24px;
@@ -323,7 +327,7 @@
   border-radius: 8px;
   padding: 12px;
   font-size: 11px;
-  color: #64748b;
+  color: var(--muted);
   max-height: 120px;
   overflow: auto;
   margin-top: 10px;
@@ -332,9 +336,8 @@
   text-align: left;
 }
 
-/* Botón logout en header (igual que inicio.css) */
 .btn-logout {
-  background-color: #eb5771;
+  background-color: var(--color-peligro);
   color: white;
   border: none;
   padding: 8px 16px;
@@ -346,7 +349,7 @@
 }
 
 .btn-logout:hover {
-  background-color: #d63a54;
+  background-color: var(--color-peligro-hover);
 }
 
 /* Responsividad (igual que inicio) */
@@ -390,3 +393,4 @@
     width: 100%;
   }
 }
+

@@ -7,6 +7,7 @@
   <link rel="icon" type="image/png" href="../assets/Logo1.png">
   <title>Administración de base de datos - Mindzyxs</title>
   <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/inicio.css" />
   <link rel="stylesheet" href="../css/admin_bd.css">
 </head>
 
@@ -23,13 +24,12 @@
     <nav class="main-nav">
       <ul>
         <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
-        <li><a href="inicio.html#nosotros">Nosotros</a></li>
-        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="ayuda.html">Ayuda</a></li>
         </ul>
     </nav>
 
     <div class="header-auth-buttons">
-      <span id="rol-usuario" class="header-tag" style="font-size:13px;color:#64748b;font-weight:500;margin-right:8px">Consola administración</span>
       <button type="button" id="btn-cerrar-sesion" class="btn-logout">Cerrar sesión</button>
     </div>
   </header>
@@ -80,7 +80,7 @@
 
         </div>
 
-        <div class="backup-list" id="backup-list">
+        <div class="backup-list" id="backup-list" tabindex="0">
           <div class="backup-list-head"><span>Respaldo</span><span>Tamaño</span><span>Fecha/hora</span><span></span></div>
           <div id="backup-rows"></div>
         </div>

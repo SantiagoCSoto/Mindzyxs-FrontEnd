@@ -27,8 +27,8 @@
     <nav class="main-nav" aria-label="Navegación principal">
       <ul>
         <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
-        <li><a href="inicio.html#nosotros">Nosotros</a></li>
-        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="ayuda.html">Ayuda</a></li>
         </ul>
     </nav>
 
@@ -46,60 +46,87 @@
       <!-- Opciones del Paciente -->
       <div class="dash-invitado" id="dashPaciente">
         <div class="grid grid-avail">
-          <article class="tile">
-            <div class="tile-icon tile-icon-cyan" aria-hidden="true">🌿</div>
-            <h3>Responder cuestionario</h3>
-            <p>Cuestionario de bienestar emocional</p>
-            <button type="button" class="btn btn-tile" id="btn-paciente-cuestionario" data-feature="Responder cuestionario">Entrar</button>
-          </article>
-          <article class="tile">
-            <div class="tile-icon" aria-hidden="true">📝</div>
-            <h3>Registrar estado</h3>
-            <p>Registra cómo te sientes hoy</p>
-            <button type="button" class="btn btn-tile" id="btn-paciente-registro" data-feature="Registrar estado">Entrar</button>
-          </article>
-          <article class="tile">
-            <div class="tile-icon" aria-hidden="true">🧠</div>
-            <h3>Historial emocional</h3>
-            <p>Consulta tus registros anteriores</p>
-            <button type="button" class="btn btn-tile" id="btn-paciente-historial">Abrir</button>
-          </article>
-          <article class="tile">
-            <div class="tile-icon" aria-hidden="true">👤</div>
-            <h3>Mi perfil</h3>
-            <p>Actualiza tu información personal</p>
-            <button type="button" class="btn btn-tile" id="btn-paciente-perfil">Abrir</button>
-          </article>
-          <article class="tile">
-            <div class="tile-icon tile-icon-yellow" aria-hidden="true">⏰</div>
-            <h3>Recordatorios</h3>
-            <p>Configura tus avisos</p>
-            <button type="button" class="btn btn-tile" id="btn-paciente-recordatorios">Abrir</button>
-          </article>
-          <article class="tile">
-            <div class="tile-icon tile-icon-sos" aria-hidden="true">💬</div>
-            <h3>Chat de apoyo</h3>
-            <p>Habla con tu psicólogo</p>
-            <button type="button" class="btn btn-tile" id="btn-paciente-chat">Abrir</button>
-          </article>
-          <article class="tile">
-            <div class="tile-icon tile-icon-cyan" aria-hidden="true">🔑</div>
-            <h3>Gestión de accesos</h3>
-            <p>Autoriza o revoca el acceso de psicólogos</p>
-            <button type="button" class="btn btn-tile" id="btn-paciente-accesos">Abrir</button>
-          </article>
-          <article class="tile">
-            <div class="tile-icon tile-icon-sos" aria-hidden="true">🆘</div>
-            <h3>Líneas de ayuda</h3>
-            <p>Contactos de emergencia y apoyo</p>
-            <button type="button" class="btn btn-tile" id="btn-paciente-ayuda" data-feature="Líneas de ayuda">Abrir</button>
-          </article>
-          <article class="tile">
-            <div class="tile-icon" aria-hidden="true">⚠️</div>
-            <h3>Aviso importante</h3>
-            <p>Información clave de la plataforma</p>
-            <button type="button" class="btn btn-tile" id="btn-paciente-aviso">Leer</button>
-          </article>
+          <section aria-labelledby="tile-responder-heading">
+            <h2 id="tile-responder-heading" class="visually-hidden">Cuestionarios</h2>
+            <article class="tile">
+              <div class="tile-icon tile-icon-cyan" aria-hidden="true">🌿</div>
+              <h3>Responder cuestionario</h3>
+              <p>Cuestionario de bienestar emocional</p>
+              <button type="button" class="btn btn-tile" id="btn-paciente-cuestionario" data-feature="Responder cuestionario">Entrar</button>
+            </article>
+          </section>
+          <section aria-labelledby="tile-registrar-heading">
+            <h2 id="tile-registrar-heading" class="visually-hidden">Registros</h2>
+            <article class="tile">
+              <div class="tile-icon" aria-hidden="true">📝</div>
+              <h3>Registrar estado</h3>
+              <p>Registra cómo te sientes hoy</p>
+              <button type="button" class="btn btn-tile" id="btn-paciente-registro" data-feature="Registrar estado">Entrar</button>
+            </article>
+          </section>
+          <section aria-labelledby="tile-historial-heading">
+            <h2 id="tile-historial-heading" class="visually-hidden">Historial</h2>
+            <article class="tile">
+              <div class="tile-icon" aria-hidden="true">🧠</div>
+              <h3>Historial emocional</h3>
+              <p>Consulta tus registros anteriores</p>
+              <button type="button" class="btn btn-tile" id="btn-paciente-historial">Abrir</button>
+            </article>
+          </section>
+          <section aria-labelledby="tile-perfil-heading">
+            <h2 id="tile-perfil-heading" class="visually-hidden">Perfil</h2>
+            <article class="tile">
+              <div class="tile-icon" aria-hidden="true">👤</div>
+              <h3>Mi perfil</h3>
+              <p>Actualiza tu información personal</p>
+              <button type="button" class="btn btn-tile" id="btn-paciente-perfil">Abrir</button>
+            </article>
+          </section>
+          <section aria-labelledby="tile-recordatorios-heading">
+            <h2 id="tile-recordatorios-heading" class="visually-hidden">Recordatorios</h2>
+            <article class="tile">
+              <div class="tile-icon tile-icon-yellow" aria-hidden="true">⏰</div>
+              <h3>Recordatorios</h3>
+              <p>Configura tus avisos</p>
+              <button type="button" class="btn btn-tile" id="btn-paciente-recordatorios">Abrir</button>
+            </article>
+          </section>
+          <section aria-labelledby="tile-chat-heading">
+            <h2 id="tile-chat-heading" class="visually-hidden">Chat</h2>
+            <article class="tile">
+              <div class="tile-icon tile-icon-sos" aria-hidden="true">💬</div>
+              <h3>Chat de apoyo</h3>
+              <p>Habla con tu psicólogo</p>
+              <button type="button" class="btn btn-tile" id="btn-paciente-chat">Abrir</button>
+            </article>
+          </section>
+          <section aria-labelledby="tile-accesos-heading">
+            <h2 id="tile-accesos-heading" class="visually-hidden">Accesos</h2>
+            <article class="tile">
+              <div class="tile-icon tile-icon-cyan" aria-hidden="true">🔑</div>
+              <h3>Gestión de accesos</h3>
+              <p>Autoriza a psicólogos</p>
+              <button type="button" class="btn btn-tile" id="btn-paciente-accesos">Abrir</button>
+            </article>
+          </section>
+          <section aria-labelledby="tile-ayuda-heading">
+            <h2 id="tile-ayuda-heading" class="visually-hidden">Ayuda</h2>
+            <article class="tile">
+              <div class="tile-icon tile-icon-sos" aria-hidden="true">🆘</div>
+              <h3>Líneas de ayuda</h3>
+              <p>Contactos de emergencia y apoyo</p>
+              <button type="button" class="btn btn-tile" id="btn-paciente-ayuda" data-feature="Líneas de ayuda">Abrir</button>
+            </article>
+          </section>
+          <section aria-labelledby="tile-aviso-heading">
+            <h2 id="tile-aviso-heading" class="visually-hidden">Avisos</h2>
+            <article class="tile">
+              <div class="tile-icon" aria-hidden="true">⚠️</div>
+              <h3>Aviso importante</h3>
+              <p>Información clave de la plataforma</p>
+              <button type="button" class="btn btn-tile" id="btn-paciente-aviso">Leer</button>
+            </article>
+          </section>
         </div>
       </div>
     </section>
@@ -196,7 +223,7 @@
           <li>📞 <b>Línea 192:</b> Orientación en salud mental y apoyo psicosocial.</li>
           <li>🚨 <b>Línea 123:</b> Emergencias y urgencias generales.</li>
         </ul>
-        <p style="font-size: 11.5px; color: #8E91A3;">Recuerda que no estás solo y siempre hay ayuda disponible.</p>
+        <p style="font-size: 11.5px; color: var(--muted);">Recuerda que no estás solo y siempre hay ayuda disponible.</p>
       </div>
 
       <div class="modal-actions">

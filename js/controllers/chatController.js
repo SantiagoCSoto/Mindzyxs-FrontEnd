@@ -17,7 +17,7 @@ import {
 import { obtenerDirectorio, solicitarChatPsicologo } from '../services/psicologoService.js';
 
 const $ = (id) => document.getElementById(id);
-const rolePill = $('rolePill'), convList = $('convList'), convCount = $('convCount');
+const convList = $('convList'), convCount = $('convCount');
 const msgs = $('msgs'), msgInput = $('msgInput'), sendBtn = $('sendBtn');
 const blockBtn = $('blockBtn'), blockedBanner = $('blockedBanner'), typing = $('typing');
 const toast = $('toast'), reqBadge = $('reqBadge'), reqList = $('reqList');
@@ -26,13 +26,13 @@ const blockModal = $('blockModal'), authModal = $('authModal');
 
 // Autochequeo de versión: si falta algún id, la vista es vieja (caché) y nada funcionará.
 (function verificarVista() {
-  const ids = ['rolePill', 'convList', 'convCount', 'msgs', 'msgInput', 'sendBtn', 'blockBtn',
+  const ids = ['convList', 'convCount', 'msgs', 'msgInput', 'sendBtn', 'blockBtn',
     'blockedBanner', 'typing', 'toast', 'reqBadge', 'reqList', 'tabChat', 'tabReq',
     'panelChat', 'panelReq', 'blockModal', 'authModal', 'searchBox', 'searchPaciente',
     'filterNivel', 'filterMinCuest', 'filterPsicologos', 'btnBuscar', 'searchResults',
     'chatName', 'chatAvatar', 'chatStatus', 'blockTitle', 'blockText', 'blockMotivo', 'blockCancel',
     'blockConfirm', 'unblockBtn', 'btnResolverSi', 'btnResolverNo', 'authText', 'authOk',
-    'searchPsiBox', 'searchPsi', 'filterEspecialidad', 'btnBuscarPsi', 'searchPsiResults'];
+    'searchPsiBox', 'searchPsi', 'filterEspecialidad', 'filterGenero', 'btnBuscarPsi', 'searchPsiResults'];
   const faltan = ids.filter((id) => !$(id));
   if (faltan.length) {
     document.body.innerHTML = '<div style="font-family:sans-serif;padding:40px;text-align:center">' +
@@ -509,31 +509,55 @@ async function buscar() {
 }
 
 // ---------- Buscador de psicólogos (paciente, espejo del de psicólogo) ----------
+let especialidadesMap = new Map();
 async function cargarEspecialidades() {
-  const sel = $('filterEspecialidad');
-  if (!sel) return;
+  const input = $('filterEspecialidad');
+  const datalist = $('listaEspecialidades');
+  const genSel = $('filterGenero');
+  if (!input) return;
   try {
     const cat = await authService.getCatalogos();
     const lista = cat.especialidades || cat.Especialidades || [];
+    const generos = cat.generos || cat.Generos || [];
+    // Géneros
+    if (genSel) {
+      generos.forEach((g) => {
+        const id = g.id ?? g.Id;
+        const nombre = g.nombre || g.codigo || g.Nombre || g.Codigo || '';
+        if (!id || !nombre) return;
+        const o = document.createElement('option');
+        o.value = id;
+        o.textContent = nombre;
+        genSel.appendChild(o);
+      });
+    }
+    // Especialidades (datalist integrado)
+    especialidadesMap = new Map();
+    if (datalist) datalist.innerHTML = '';
     lista.forEach((e) => {
       const id = e.id ?? e.Id;
       const nombre = e.nombre || e.codigo || e.Nombre || e.Codigo || '';
       if (!id || !nombre) return;
-      const o = document.createElement('option');
-      o.value = id;
-      o.textContent = nombre;
-      sel.appendChild(o);
+      especialidadesMap.set(nombre.toLowerCase(), id);
+      if (datalist) {
+        const o = document.createElement('option');
+        o.value = nombre;
+        datalist.appendChild(o);
+      }
     });
   } catch (_) { /* checklist no disponible: se busca solo por nombre */ }
 }
 
 async function buscarPsicologos() {
   const q = $('searchPsi').value.trim();
-  const esp = $('filterEspecialidad').value || null;
+  const espText = $('filterEspecialidad') ? $('filterEspecialidad').value.trim() : '';
+  const esp = espText ? (especialidadesMap.get(espText.toLowerCase()) || null) : null;
+  const gen = $('filterGenero') ? ($('filterGenero').value || null) : null;
+  const minAnios = $('filterAniosPsi') ? ($('filterAniosPsi').value || null) : null;
   const box = $('searchPsiResults');
   box.innerHTML = '<p class="hint">Buscando…</p>';
   try {
-    const res = await obtenerDirectorio(q, esp ? Number(esp) : null);
+    const res = await obtenerDirectorio(q, esp ? Number(esp) : null, gen ? Number(gen) : null, minAnios ? Number(minAnios) : null);
     if (!res.ok) {
       box.innerHTML = `<p class="hint">No fue posible buscar: ${escapar(res.error)}</p>`;
       return;
@@ -545,6 +569,12 @@ async function buscarPsicologos() {
       const espHtml = tieneEsp
         ? '<div class="esp-chips">' + p.especialidades.map((e) => '<span>' + escapar(e) + '</span>').join('') + '</div>'
         : '<p class="esp-none">Sin especialidad registrada</p>';
+      const aniosHtml = p.aniosExperiencia != null
+        ? '<p class="psi-anios">Años de experiencia: ' + escapar(String(p.aniosExperiencia)) + '</p>'
+        : '';
+      const descHtml = p.descripcionProfesional
+        ? '<p class="psi-desc">' + escapar(p.descripcionProfesional) + '</p>'
+        : '';
       const div = document.createElement('div');
       div.className = 'dir-item';
       const iniciales = p.nombre.split(' ').map((x) => x[0]).slice(0, 2).join('').toUpperCase();
@@ -552,7 +582,7 @@ async function buscarPsicologos() {
         '<div class="dir-top"><div class="dir-avatar" aria-hidden="true">' + escapar(iniciales) + '</div>' +
         '<div><h3>' + escapar(p.nombre) + '</h3>' +
         '<span class="count-tag">' + p.pacientesAsignados + ' paciente(s) asignado(s)</span></div></div>' +
-        espHtml;
+        espHtml + aniosHtml + descHtml;
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'btn btn-tile';
@@ -663,7 +693,7 @@ async function iniciar() {
   try {
     const t = await obtenerTokenChat();
     yo = { uid: t.uid, rol: t.rol };
-    $('rolePill').textContent = t.rol === 'Paciente' ? 'Paciente' : 'Psicólogo';
+    const _rp = $('rolePill'); if (_rp) _rp.textContent = t.rol === 'Paciente' ? 'Paciente' : 'Psicólogo';
     $('searchBox').hidden = t.rol !== 'Psicologo';
     $('searchPsiBox').hidden = t.rol !== 'Paciente';
     if (t.rol === 'Paciente') await cargarEspecialidades();

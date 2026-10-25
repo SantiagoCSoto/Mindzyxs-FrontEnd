@@ -7,6 +7,8 @@
   <link rel="icon" type="image/png" href="../assets/Logo1.png" />
   <title>Mindzyx — Perfil profesional</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/inicio.css" />
   <link rel="stylesheet" href="../css/perfil_profesional.css" />
 </head>
 
@@ -26,13 +28,12 @@
     <nav class="main-nav" aria-label="Navegación principal">
       <ul>
         <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
-        <li><a href="inicio.html#nosotros">Nosotros</a></li>
-        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="ayuda.html">Ayuda</a></li>
       </ul>
     </nav>
     <div class="header-right">
       <div class="header-auth-buttons">
-        <span id="rol-usuario" class="badge-role">Psicólogo</span>
         <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
       </div>
     </div>
@@ -82,23 +83,23 @@
 
     <!-- Pantalla: editar perfil profesional -->
     <section class="card screen" id="screenEditar">
-      <h1>Editar perfil profesional</h1>
+      <h2>Editar perfil profesional</h2>
 
       <label class="fl" for="buscarEsp">Especialidades (una, varias o ninguna)</label>
       <input type="text" id="buscarEsp" placeholder="Buscar especialidad..." autocomplete="off" aria-label="Buscar especialidad" />
-      <div class="checks" id="listaEsp"></div>
+      <div class="checks" id="listaEsp" tabindex="0"></div>
 
       <label class="fl" for="fExp">Años de experiencia *</label>
-      <input type="number" id="fExp" min="0" max="60" step="1" />
+      <input type="number" id="fExp" min="0" max="60" step="1" / aria-label="fExp">
 
       <label class="fl" for="fDesc">Descripción profesional</label>
-      <textarea id="fDesc" maxlength="1000" placeholder="Describa brevemente su experiencia y enfoque (opcional)"></textarea>
+      <textarea id="fDesc" maxlength="1000" placeholder="Describa brevemente su experiencia y enfoque (opcional)" aria-label="Describa brevemente su experiencia y enfoque (opcional)"></textarea>
 
       <label class="fl" for="fCont">Datos de contacto</label>
-      <input type="text" id="fCont" maxlength="300" placeholder="Teléfono, clínica, ciudad... (opcional)" />
+      <input type="text" id="fCont" maxlength="300" placeholder="Teléfono, clínica, ciudad... (opcional)" / aria-label="Teléfono, clínica, ciudad... (opcional)">
 
       <label class="fl" for="fCorreo">Correo de contacto *</label>
-      <input type="email" id="fCorreo" autocomplete="email" />
+      <input type="email" id="fCorreo" autocomplete="email" / aria-label="fCorreo">
       <span class="err-msg" id="eCorreo">El correo ya se encuentra registrado.</span>
 
       <div class="err-msg" id="eForm">No fue posible guardar los cambios. Intente nuevamente.</div>

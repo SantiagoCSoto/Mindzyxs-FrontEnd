@@ -117,7 +117,7 @@ async function cargarInicio() {
     preguntas = ordenar(cuestionario.preguntas || []);
     const hero = document.querySelector('.hero p');
     if (hero) {
-      hero.innerHTML = 'Responde ' + preguntas.length + ' preguntas sobre tu bienestar. Tus respuestas se <b>guardan en tu historial</b>.';
+      hero.innerHTML = 'Tus respuestas se <b>guardan en tu historial</b>.';
     }
     if (cuestionario.disponible === false || !preguntas.length) {
       startBtn.textContent = cuestionario.mensaje || 'No tienes cuestionarios pendientes por responder.';

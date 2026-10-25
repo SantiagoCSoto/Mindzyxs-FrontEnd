@@ -7,6 +7,7 @@
   <link rel="icon" type="image/png" href="../assets/Logo1.png" />
   <title>Perfil — Mindzyxs</title>
   <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/inicio.css" />
   <link rel="stylesheet" href="../css/perfil.css" />
 </head>
 
@@ -29,8 +30,8 @@
     <nav class="main-nav" aria-label="Navegación principal">
       <ul>
         <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
-        <li><a href="inicio.html#nosotros">Nosotros</a></li>
-        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="ayuda.html">Ayuda</a></li>
         </ul>
     </nav>
 
@@ -104,7 +105,7 @@
           <div class="form-grid">
             <div class="form-group full">
               <label for="inCorreo">Correo electrónico *</label>
-              <input type="email" id="inCorreo" name="correo" placeholder="tucorreo@test.com" autocomplete="email" required />
+              <input type="email" id="inCorreo" name="correo" placeholder="tucorreo@test.com" autocomplete="email" required / aria-label="tucorreo@test.com">
               <span class="err-msg" id="eCorreo">Ingresa un correo válido.</span>
             </div>
           </div>

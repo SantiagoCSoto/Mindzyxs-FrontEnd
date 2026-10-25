@@ -14,7 +14,7 @@ function authHeaders() {
 
 /** Endpoints de autenticación: un 401 aquí es error de credenciales, no sesión expirada. */
 function esEndpointAuth(endpoint) {
-  return ['/account/login', '/account/verify', '/account/resend', '/account/forgot']
+  return ['/account/login', '/account/verify', '/account/resend', '/account/forgot', '/account/verificacion/reanudar']
     .some((p) => endpoint.startsWith(p));
 }
 

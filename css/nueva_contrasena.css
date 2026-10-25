@@ -1,4 +1,4 @@
-/* Tarjeta principal de nueva contraseña */
+﻿/* Tarjeta principal de nueva contraseÃ±a */
 .nueva-contrasena-card {
   max-width: 440px;
   margin: 40px auto;
@@ -18,16 +18,16 @@
 
 .nueva-contrasena-subtitulo {
   font-size: 13px;
-  color: #64748b;
+  color: var(--muted);
   margin: 0 0 24px;
 }
 
-/* Banner de alerta de éxito */
+/* Banner de alerta de Ã©xito */
 .alerta-exito {
   display: none;
   width: 100%;
   background-color: #ecf9f7;
-  color: #4db7b2;
+  color: var(--ok);
   padding: 10px 14px;
   border-radius: 8px;
   font-size: 13px;
@@ -46,7 +46,7 @@
   flex-direction: column;
 }
 
-/* Wrapper para inputs de contraseña */
+/* Wrapper para inputs de contraseÃ±a */
 .input-password-wrapper {
   position: relative;
   display: flex;
@@ -74,16 +74,16 @@
 }
 
 .input-password-wrapper input.error {
-  border-color: #eb5771;
+  border-color: var(--color-peligro);
   background-color: #fff8f8;
 }
 
 .input-password-wrapper input.error:focus {
-  border-color: #eb5771;
+  border-color: var(--color-peligro);
   box-shadow: 0 0 0 3px rgba(235, 87, 113, 0.15);
 }
 
-/* Botón toggle de mostrar/ocultar contraseña */
+/* BotÃ³n toggle de mostrar/ocultar contraseÃ±a */
 .btn-toggle-password {
   position: absolute;
   right: 12px;
@@ -109,7 +109,7 @@
   stroke-linejoin: round;
 }
 
-/* Botón principal */
+/* BotÃ³n principal */
 .btn-nueva-contrasena {
   width: 100%;
   background-color: var(--color-primario-fuerte, #0E7490);
@@ -122,11 +122,18 @@
   cursor: pointer;
   margin-top: 4px;
   margin-bottom: 16px;
-  transition: background-color 0.2s ease;
+  transition: filter 0.2s ease, transform 0.15s ease;
+  box-shadow: 0 4px 12px rgba(14, 116, 144, 0.35);
 }
 
 .btn-nueva-contrasena:hover {
-  background-color: #48b4af;
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+.btn-nueva-contrasena:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
 }
 
 .btn-nueva-contrasena:disabled {
@@ -134,7 +141,7 @@
   cursor: not-allowed;
 }
 
-/* Enlaces de acción */
+/* Enlaces de acciÃ³n */
 .nueva-contrasena-enlaces {
   display: flex;
   justify-content: center;
@@ -144,7 +151,7 @@
 
 .nueva-contrasena-enlaces .link-cancelar {
   font-size: 13px;
-  color: #64748b;
+  color: var(--muted);
   text-decoration: underline;
   transition: color 0.2s;
 }
@@ -153,7 +160,7 @@
   color: #334155;
 }
 
-/* Modal de éxito */
+/* Modal de Ã©xito */
 .modal-overlay {
   display: none;
   position: fixed;
@@ -210,7 +217,7 @@
 
 .modal-contenido p {
   font-size: 13px;
-  color: #64748b;
+  color: var(--muted);
   margin: 0 0 20px;
   line-height: 1.6;
 }
@@ -231,7 +238,7 @@
   background-color: #48b4af;
 }
 
-/* Animación modal */
+/* AnimaciÃ³n modal */
 @keyframes modalSlideIn {
   from {
     opacity: 0;
@@ -259,3 +266,4 @@
     padding: 28px 20px;
   }
 }
+

@@ -7,6 +7,7 @@
   <link rel="icon" type="image/png" href="../assets/Logo1.png" />
   <title>Observaciones clínicas - Mindzyxs</title>
   <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/inicio.css" />
   <link rel="stylesheet" href="../css/observaciones.css" />
 </head>
 
@@ -29,14 +30,13 @@
     <nav class="main-nav" aria-label="Navegación principal">
       <ul>
         <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
-        <li><a href="inicio.html#nosotros">Nosotros</a></li>
-        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="ayuda.html">Ayuda</a></li>
       </ul>
     </nav>
 
     <div class="header-right">
       <div class="header-auth-buttons">
-        <span id="rol-usuario" class="badge-role">Psicólogo</span>
         <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
       </div>
     </div>
@@ -93,12 +93,12 @@
 
       <div class="modal-form-body">
         <label for="obsReg" class="form-label">Asociar al registro:</label>
-        <select id="obsReg" class="form-select">
+        <select id="obsReg" class="form-select" aria-label="obsReg">
           <option value="0">General del paciente</option>
         </select>
 
         <label for="obsText" class="form-label">Observación *</label>
-        <textarea id="obsText" class="form-textarea" placeholder="Escriba su observación clínica..." rows="4"></textarea>
+        <textarea id="obsText" class="form-textarea" placeholder="Escriba su observación clínica..." rows="4" aria-label="Escriba su observación clínica..."></textarea>
         <span class="err-msg" id="eObs">La observación es obligatoria.</span>
       </div>
 

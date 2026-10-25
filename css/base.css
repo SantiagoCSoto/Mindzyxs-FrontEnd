@@ -1,14 +1,16 @@
-* {
+﻿* {
   box-sizing: border-box;
 }
 
-/* Tokens de diseño Mindzyxs (única fuente): solo azules/morados existentes.
+/* Tokens de diseÃ±o Mindzyxs (Ãºnica fuente): solo azules/morados existentes.
    primario = navegar/guardar/continuar; apoyo = secundario/informativo;
    fuerte = fondos con texto blanco (contraste AA); resto = tinta/superficie. */
 :root {
   --color-primario: #6ECFD4;
   --color-primario-hover: #5ABCC2;
   --color-primario-fuerte: #0E7490;
+  --color-primario-fuerte-hover: #0B5F75;
+  --color-primario-fuerte-hover-2: #084A5A;
   --color-primario-suave: #E6F7F8;
   --color-apoyo: #6B5BCE;
   --color-apoyo-hover: #5A45C9;
@@ -16,14 +18,31 @@
   --color-apoyo-suave: #EDE7FF;
   --color-apoyo-borde: #DFDAEE;
   --color-tinta: #1E293B;
-  --color-mudo: #64748B;
+  --color-mudo: #475569;
   --color-fondo: #F8FAFC;
   --color-superficie: #FFFFFF;
   --color-borde-neutro: #E2E8F0;
-  --color-peligro: #E85D7A;
+  --color-peligro: #C0392B;
+  --color-peligro-hover: #A93226;
   --color-peligro-suave: #FFF1F3;
   --color-ok: #1BBF6B;
   --color-aviso: #E8A347;
+  --color-texto-claro: #FFFFFF;
+  --color-primario-fuerte-hover: #0B5F75;
+  --color-primario-fuerte-hover-2: #084A5A;
+  --text: #1E293B;
+  --muted: #475569;
+  --cyan: #0E7490;
+  --cyan-hover: #0B5F75;
+  --cyan-fuerte: #0E7490;
+  --violet: #6B5BCE;
+  --violet-bg: #EDE7FF;
+  --border: #EDE8F0;
+  --warning: #E8A347;
+  --ok: #1BBF6B;
+  --purple-accent: #6B5BCE;
+  --error: #C0392B;
+  --error-hover: #A93226;
 }
 
 /* Foco visible accesible (WCAG 2.4.7) para todo elemento interactivo */
@@ -59,6 +78,18 @@ textarea:focus-visible,
 @keyframes sk-shimmer {
   from { transform: translateX(-100%); }
   to { transform: translateX(100%); }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .sk-line { height: 14px; margin: 8px 0; }
@@ -105,7 +136,7 @@ body::after {
   pointer-events: none;
 }
 
-/* Barra de navegación superior común */
+/* Barra de navegaciÃ³n superior comÃºn */
 .header-nav {
   display: flex;
   justify-content: space-between;
@@ -197,7 +228,7 @@ body::after {
   display: none;
   width: 100%;
   background-color: #feeef2;
-  color: #eb5771;
+  color: #C0392B;
   padding: 10px 14px;
   border-radius: 8px;
   font-size: 13px;
@@ -240,3 +271,4 @@ body::after {
     right: -120px;
   }
 }
+

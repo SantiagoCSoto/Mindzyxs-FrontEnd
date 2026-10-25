@@ -4,11 +4,14 @@
 
 /* Variables de tema y acentos */
 :root {
-  --cyan: #6ECFD4;
-  --cyan-hover: #5ABCC2;
+
+
+
+  --color-primario: #6ECFD4;
+  
   --text: #1E293B;
-  --muted: #64748B;
-  --error: #E85D7A;
+  --muted: #475569;
+  
   --warning: #E8A347;
   --ok: #1BBF6B;
   --purple-accent: #6B5BCE;
@@ -138,7 +141,7 @@ body {
 }
 
 .btn-logout {
-  background-color: #EB5771;
+  background-color: var(--color-peligro);
   color: white;
   border: none;
   padding: 7px 16px;
@@ -150,7 +153,7 @@ body {
 }
 
 .btn-logout:hover {
-  background-color: #D63A54;
+  background-color: var(--color-peligro-hover);
   transform: translateY(-1px);
 }
 
@@ -191,7 +194,7 @@ body {
 }
 
 .btn-login-header:hover {
-  background: #5ABCC2;
+  background: var(--color-primario-hover);
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(110, 207, 212, 0.4);
 }
@@ -343,7 +346,7 @@ body {
 
 .tile p {
   font-size: 12px;
-  color: #8E91A3;
+  color: var(--muted);
   line-height: 1.45;
   margin-bottom: 16px;
   flex: 1;
@@ -381,12 +384,12 @@ body {
 
 .tile-icon-sos {
   background: #FFF1F3;
-  color: #EB5771;
+  color: var(--color-peligro);
 }
 
 .tile-icon-locked {
   background: #F1F5F9;
-  color: #64748B;
+  color: var(--muted);
   font-size: 20px;
 }
 
@@ -413,7 +416,7 @@ body {
 
 .tile-locked:hover {
   opacity: 1;
-  border-color: #94A3B8;
+  border-color: #475569;
   transform: translateY(-2px);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
 }
@@ -469,7 +472,7 @@ body {
 
 .btn-volver-landing:hover {
   background: #F1F5F9;
-  border-color: #94A3B8;
+  border-color: #475569;
   color: #1E293B;
   transform: translateY(-1px);
 }
@@ -774,24 +777,52 @@ body {
 
 /* Landing publica (inicio): heroe, features, nosotros, ayuda */
 .hero-landing { text-align: center; padding: 34px 24px; }
-.eyebrow { display: inline-block; font-size: 11px; font-weight: 700; color: #2A8A94; background: #E6F7F8; padding: 5px 12px; border-radius: 20px; margin-bottom: 10px; }
+.eyebrow { display: inline-block; font-size: 11px; font-weight: 700; color: #0D6B73; background: #E6F7F8; padding: 5px 12px; border-radius: 20px; margin-bottom: 10px; }
 .hero-landing h1 { font-size: 30px; }
 .hero-desc { font-size: 14px; color: #475467; line-height: 1.7; margin-top: 12px; max-width: 640px; margin-left: auto; margin-right: auto; }
 .hero-ctas { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
 .btn-cta { display: inline-block; padding: 12px 22px; border-radius: 20px; font-weight: 700; font-size: 14px; text-decoration: none; border: 1px solid #DFDAEE; background: #fff; color: var(--text); cursor: pointer; font-family: inherit; }
-.btn-cta.primary { background: var(--color-primario-fuerte); color: #fff; border: none; box-shadow: 0 4px 12px rgba(94,188,196,.35); }
+.btn-cta.primary {
+  background: var(--color-primario-fuerte);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 12px rgba(94,188,196,.35);
+  transition: filter 0.2s ease, transform 0.15s ease;
+}
+
+.btn-cta.primary:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
 .btn-cta.ghost { background: #EDE7FF; border-color: #EDE7FF; color: #5A45C9; }
 .grid-features { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
 .section-text { font-size: 13px; color: #475467; line-height: 1.7; margin-top: 10px; }
-.mail-link { color: #2A8A94; font-weight: 700; }
-.btn-registro-header { display: inline-flex; align-items: center; padding: 9px 18px; border-radius: 20px; font-weight: 700; font-size: 13px; text-decoration: none; background: var(--color-primario-fuerte); color: #fff; box-shadow: 0 4px 12px rgba(94,188,196,.35); }
+.mail-link { color: #0D6B73; font-weight: 700; }
+.btn-registro-header {
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 18px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 13px;
+  text-decoration: none;
+  background: var(--color-primario-fuerte);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(94,188,196,.35);
+  transition: filter 0.2s ease, transform 0.15s ease;
+}
+
+.btn-registro-header:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
 
 a.btn-tile { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; line-height: 38px; }
 
 .modal { position: relative; }
 .modal-wide { width: min(560px,100%); }
-.modal-x { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 50%; border: 1px solid #DFDAEE; background: #fff; font-size: 14px; font-weight: 700; color: #8E91A3; cursor: pointer; }
-.modal-x:hover { border-color: #6ECFD4; color: #2E2E33; }
+.modal-x { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 50%; border: 1px solid #DFDAEE; background: #fff; font-size: 14px; font-weight: 700; color: var(--muted); cursor: pointer; }
+.modal-x:hover { border-color: var(--color-primario); color: #2E2E33; }
 
 /* Directorio de psicólogos: tarjeta alineada a la izquierda con chips */
 .tile-dir { text-align: left; align-items: stretch; }
@@ -799,7 +830,7 @@ a.btn-tile { display: inline-flex; align-items: center; justify-content: center;
 .tile-dir h3 { text-align: center; }
 .esp-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
 .esp-chips span { background: #EDE7FF; color: #5A45C9; font-size: 11.5px; font-weight: 600; padding: 4px 10px; border-radius: 20px; }
-.esp-none { color: #8E91A3; font-size: 12px; margin-bottom: 12px; }
+.esp-none { color: var(--muted); font-size: 12px; margin-bottom: 12px; }
 .dir-count { font-size: 12px; color: #475569; font-weight: 600; margin-bottom: 0; }
 
 /* Tarjeta de psicólogo estilo buscador: avatar + datos + tags + acción */
@@ -809,3 +840,5 @@ a.btn-tile { display: inline-flex; align-items: center; justify-content: center;
 .dir-top h3 { font-size: 14px; }
 .dir-item .btn { margin-top: 10px; min-height: 44px; }
 .count-tag { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-top: 4px; background: #E6F7F8; color: #0E7490; }
+
+

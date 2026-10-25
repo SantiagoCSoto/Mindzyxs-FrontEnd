@@ -25,6 +25,24 @@
         el.setAttribute('href', destino);
       });
     }
+    // Botón de cerrar sesión dinámico en el header.
+    document.querySelectorAll('.header-auth-buttons').forEach(function (box) {
+      if (box.querySelector('.btn-logout')) return;
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn-logout';
+      btn.textContent = 'Cerrar sesión';
+      btn.addEventListener('click', function () {
+        try {
+          sessionStorage.clear();
+          localStorage.removeItem('token');
+          localStorage.removeItem('rol');
+          localStorage.removeItem('usuario');
+        } catch (e) { /* ignore */ }
+        window.location.href = 'login.html';
+      });
+      box.appendChild(btn);
+    });
   });
 
   function destinoPanel() {

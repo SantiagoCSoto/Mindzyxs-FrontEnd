@@ -1,9 +1,11 @@
 :root {
-  --cyan: #6ECFD4;
-  --cyan-hover: #5ABCC2;
+
+
+  --color-primario: #6ECFD4;
+  
   --text: #2E2E33;
-  --muted: #8E91A3;
-  --error: #E85D7A;
+  --muted: #475569;
+  
   --warning: #E8A347;
   --ok: #1BBF6B;
 }
@@ -401,7 +403,7 @@ body {
   padding: 0 16px;
   border-radius: 20px;
   border: none;
-  background: var(--cyan);
+  background: var(--color-primario-fuerte);
   color: white;
   font-weight: 700;
   font-size: 12px;
@@ -561,7 +563,7 @@ body {
 }
 
 .btn-detail.ok {
-  background: var(--cyan);
+  background: var(--color-primario-fuerte);
   color: white;
 }
 
@@ -735,7 +737,7 @@ body {
 }
 
 .btn-modal.ok {
-  background: var(--cyan);
+  background: var(--color-primario-fuerte);
   color: white;
 }
 
@@ -769,3 +771,5 @@ body {
   }
 
 }
+
+

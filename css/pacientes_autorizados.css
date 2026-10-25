@@ -1,4 +1,27 @@
-/* Estilos para la vista de Pacientes Autorizados y Registros (PB-18 HU1-PB18) */
+:root {
+  --color-primario: #6ECFD4;
+  --color-primario-fuerte: #0E7490;
+  --color-primario-fuerte-hover: #0B5F75;
+  --color-primario-suave: #E6F7F8;
+  --color-apoyo: #6B5BCE;
+  --color-apoyo-hover: #5A45C9;
+  --color-apoyo-oscuro: #4A38B0;
+  --color-apoyo-suave: #EDE7FF;
+  --color-apoyo-borde: #DFDAEE;
+  --color-tinta: #1E293B;
+  --color-mudo: #475569;
+  --color-fondo: #F8FAFC;
+  --color-superficie: #FFFFFF;
+  --color-borde-neutro: #E2E8F0;
+  --color-peligro: #C0392B;
+  --color-peligro-hover: #A93226;
+  --color-peligro-suave: #FFF1F3;
+  --color-ok: #1BBF6B;
+  --color-aviso: #E8A347;
+  --color-texto-claro: #FFFFFF;
+}
+
+﻿/* Estilos para la vista de Pacientes Autorizados y Registros (PB-18 HU1-PB18) */
 
 .wrap {
   width: 100%;
@@ -88,10 +111,10 @@
 }
 
 .buscar::placeholder {
-  color: #94A3B8;
+  color: #475569;
 }
 
-/* Tabla semántica de pacientes */
+/* Tabla semÃ¡ntica de pacientes */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -133,12 +156,17 @@ tr:hover td {
   border: none;
   background: var(--color-primario-fuerte);
   color: #FFFFFF;
-  transition: all .15s ease;
+  transition: filter 0.2s ease, transform 0.15s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   text-decoration: none;
+}
+
+.btn:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
 }
 
 .btn:hover:not(:disabled) {
@@ -278,7 +306,7 @@ tr:hover td {
   border: 1px solid #F8B4C0;
 }
 
-/* Estado vacío */
+/* Estado vacÃ­o */
 .empty {
   border: 1.5px dashed var(--color-borde-neutro);
   border-radius: 12px;
@@ -317,7 +345,7 @@ tr:hover td {
   line-height: 1.5;
 }
 
-/* Observaciones clínicas */
+/* Observaciones clÃ­nicas */
 .lista-obs {
   display: flex;
   flex-direction: column;
@@ -514,3 +542,5 @@ tr:hover td {
     width: 100%;
   }
 }
+
+

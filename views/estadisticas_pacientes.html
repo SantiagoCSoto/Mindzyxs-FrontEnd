@@ -7,6 +7,8 @@
   <link rel="icon" type="image/png" href="../assets/Logo1.png" />
   <title>Mindzyx — Estadísticas de pacientes</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/inicio.css" />
   <link rel="stylesheet" href="../css/estadisticas_pacientes.css" />
 </head>
 
@@ -26,13 +28,12 @@
     <nav class="main-nav" aria-label="Navegación principal">
       <ul>
         <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
-        <li><a href="inicio.html#nosotros">Nosotros</a></li>
-        <li><a href="inicio.html#ayuda">Ayuda</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="ayuda.html">Ayuda</a></li>
       </ul>
     </nav>
     <div class="header-right">
       <div class="header-auth-buttons">
-        <span id="rol-usuario" class="badge-role">Psicólogo</span>
         <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
       </div>
     </div>
@@ -52,15 +53,15 @@
         <div>
           <label for="selPac">Paciente autorizado</label>
           <div class="sk sk-line" id="skSelPac" aria-hidden="true"></div>
-          <select id="selPac" hidden></select>
+          <select id="selPac" hidden aria-label="selPac"></select>
         </div>
         <div>
           <label for="fDesde">Desde</label>
-          <input type="date" id="fDesde" disabled />
+          <input type="date" id="fDesde" disabled / aria-label="fDesde">
         </div>
         <div>
           <label for="fHasta">Hasta</label>
-          <input type="date" id="fHasta" disabled />
+          <input type="date" id="fHasta" disabled / aria-label="fHasta">
         </div>
         <div class="filtros-accion">
           <button type="button" class="btn btn-save" id="btnGenerar" disabled>
