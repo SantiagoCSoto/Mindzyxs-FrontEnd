@@ -34,7 +34,7 @@
       <div class="result-level" id="resLevel">…</div>
       <div class="result-score" id="resScore">Calculando…</div>
       <div class="alert-urgente" id="alertUrgente">
-        <span class="ico">🚨</span>
+        <span class="ico" aria-hidden="true">🚨</span>
         <div>
           <b>Por lo que nos has contado, sería importante buscar apoyo profesional pronto.</b>
           <p>Tu bienestar es lo más importante. Te recomendamos contactar a un profesional de la salud mental o a una línea de ayuda disponible en tu país. Aquí tienes opciones de ayuda inmediata.</p>
@@ -46,7 +46,7 @@
         <button class="btn-help lineas" id="btnLineas">Líneas de ayuda</button>
         <a class="btn-help volver" href="panel_invitado.html">Volver al panel</a>
       </div>
-      <p class="hint">⚠️ Este resultado <b>no es un diagnóstico clínico</b>. Mindzyx es solo una herramienta de apoyo y monitoreo emocional.</p>
+      <p class="hint"><span aria-hidden="true">⚠️</span> Este resultado <b>no es un diagnóstico clínico</b>. Mindzyx es solo una herramienta de apoyo y monitoreo emocional.</p>
     </div>
 
     <div class="card error-card" id="errorCard" hidden>
@@ -64,13 +64,13 @@
       <a href="privacidad.html">Privacidad</a>
       <a href="cookies.html">Cookies</a>
       <a href="terminos.html">Términos</a>
-      <a href="#" class="aviso" id="footerAviso">⚠️ Aviso: no diagnóstico</a>
+      <a href="#" class="aviso" id="footerAviso" role="button" aria-haspopup="dialog"><span aria-hidden="true">⚠️</span> Aviso: no diagnóstico</a>
     </div>
   </footer>
 
   <div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true" aria-labelledby="avisoTitle">
     <div class="modal">
-      <div class="modal-icon">⚠️</div>
+      <div class="modal-icon" aria-hidden="true">⚠️</div>
       <h3 id="avisoTitle">Mensaje aclaratorio</h3>
       <div class="aviso-txt" id="avisoText">
         <b>Mindzyx</b> es una plataforma de <b>monitoreo y apoyo del bienestar emocional</b>.
@@ -87,8 +87,8 @@
 
   <div class="modal-overlay" id="lineasModal" role="dialog" aria-modal="true" aria-labelledby="lineasTitle">
     <div class="modal modal-wide">
-      <button class="modal-x" id="lineasX" aria-label="Cerrar">✕</button>
-      <div class="modal-icon info">🆘</div>
+      <button class="modal-x" id="lineasX" aria-label="Cerrar"><span aria-hidden="true">✕</span></button>
+      <div class="modal-icon info" aria-hidden="true">🆘</div>
       <h3 id="lineasTitle">Líneas de ayuda</h3>
       <p class="sub">Líneas de emergencia y acompañamiento emocional.</p>
       <div class="lineas-filtros">

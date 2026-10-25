@@ -48,14 +48,14 @@
         <h1>Mi panel</h1>
         <p>Registra cómo te sientes hoy. La escala va de <b>1 (Muy mal)</b> a <b>5 (Excelente)</b> y puedes agregar una nota opcional.</p>
         <button class="btn-main" id="goRegister">
-          <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+          <svg aria-hidden="true" class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
           Registrar estado emocional
         </button>
       </div>
 
       <div class="card">
         <div class="saved" id="savedCard">
-          <h2><svg class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg> Último registro guardado</h2>
+          <h2><svg aria-hidden="true" class="icon-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg> Último registro guardado</h2>
           <p id="savedText"></p>
           <small id="savedDate"></small>
         </div>
@@ -75,27 +75,27 @@
         <label class="field-label" for="scale">¿Cómo te sientes? *</label>
         <div class="scale" id="scale" role="radiogroup" aria-label="Estado emocional">
           <button type="button" class="pill" data-val="1" role="radio" aria-checked="false">
-            <span class="face" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M8.5 9.5h2.5"></path><path d="M13 9.5h2.5"></path><path d="M8.5 17q3.5-4 7 0"></path></svg></span>
+            <span class="face" aria-hidden="true"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M8.5 9.5h2.5"></path><path d="M13 9.5h2.5"></path><path d="M8.5 17q3.5-4 7 0"></path></svg></span>
             <span class="num">1</span>
             <span class="lbl">Muy mal</span>
           </button>
           <button type="button" class="pill" data-val="2" role="radio" aria-checked="false">
-            <span class="face" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M8.5 9.5h2.5"></path><path d="M13 9.5h2.5"></path><path d="M9 16.5q3-2.5 6 0"></path></svg></span>
+            <span class="face" aria-hidden="true"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M8.5 9.5h2.5"></path><path d="M13 9.5h2.5"></path><path d="M9 16.5q3-2.5 6 0"></path></svg></span>
             <span class="num">2</span>
             <span class="lbl">Mal</span>
           </button>
           <button type="button" class="pill" data-val="3" role="radio" aria-checked="false">
-            <span class="face" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9 10h.01"></path><path d="M15 10h.01"></path><path d="M9 15.5h6"></path></svg></span>
+            <span class="face" aria-hidden="true"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9 10h.01"></path><path d="M15 10h.01"></path><path d="M9 15.5h6"></path></svg></span>
             <span class="num">3</span>
             <span class="lbl">Regular</span>
           </button>
           <button type="button" class="pill" data-val="4" role="radio" aria-checked="false">
-            <span class="face" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9 10h.01"></path><path d="M15 10h.01"></path><path d="M9 14.5q3 2 6 0"></path></svg></span>
+            <span class="face" aria-hidden="true"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9 10h.01"></path><path d="M15 10h.01"></path><path d="M9 14.5q3 2 6 0"></path></svg></span>
             <span class="num">4</span>
             <span class="lbl">Bien</span>
           </button>
           <button type="button" class="pill" data-val="5" role="radio" aria-checked="false">
-            <span class="face" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9 10h.01"></path><path d="M15 10h.01"></path><path d="M8.5 13.5q3.5 3 7 0"></path></svg></span>
+            <span class="face" aria-hidden="true"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9 10h.01"></path><path d="M15 10h.01"></path><path d="M8.5 13.5q3.5 3 7 0"></path></svg></span>
             <span class="num">5</span>
             <span class="lbl">Excelente</span>
           </button>
@@ -121,7 +121,7 @@
       <a href="privacidad.html">Privacidad</a>
       <a href="cookies.html">Cookies</a>
       <a href="terminos.html">Términos</a>
-      <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog"><span class="aviso-ico"><svg class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5A45C9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span> Aviso: no diagnóstico</a>
+      <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog"><span class="aviso-ico" aria-hidden="true"><svg aria-hidden="true" class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5A45C9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span> Aviso: no diagnóstico</a>
     </div>
   </footer>
 
