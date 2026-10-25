@@ -101,13 +101,12 @@ label {
   font-size: 14px;
   padding: 0 14px;
   color: #1e293b;
-  outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .form-group input:focus {
-  border-color: #56c5c0;
-  box-shadow: 0 0 0 3px rgba(86, 197, 192, 0.15);
+  border-color: var(--color-primario-fuerte);
+  box-shadow: 0 0 0 3px rgba(14, 116, 144, 0.25);
 }
 
 .form-group input.error {
@@ -117,7 +116,7 @@ label {
 
 .form-group input.error:focus {
   border-color: var(--color-peligro);
-  box-shadow: 0 0 0 3px rgba(235, 87, 113, 0.15);
+  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.25);
 }
 
 .error-mensaje {

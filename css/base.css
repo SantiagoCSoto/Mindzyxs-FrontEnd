@@ -1,4 +1,4 @@
-﻿* {
+* {
   box-sizing: border-box;
 }
 
@@ -45,15 +45,57 @@
   --error-hover: #A93226;
 }
 
-/* Foco visible accesible (WCAG 2.4.7) para todo elemento interactivo */
+/* ==========================================================================
+   WCAG 2.4.7 Foco visible (Nivel AA)
+   Garantiza un indicador de foco prominente con contraste >= 3:1
+   ========================================================================== */
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
-[tabindex]:focus-visible {
-  outline: 3px solid var(--color-primario-fuerte);
-  outline-offset: 2px;
+[tabindex]:focus-visible,
+summary:focus-visible,
+[role="button"]:focus-visible {
+  outline: 3px solid var(--color-primario-fuerte) !important;
+  outline-offset: 2px !important;
+}
+
+/* Indicador accesible de foco para campos de entrada */
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--color-primario-fuerte) !important;
+}
+
+/* Contraste accesible para placeholders (WCAG 1.4.3 AA >= 4.5:1) */
+::placeholder {
+  color: #475569;
+  opacity: 1;
+}
+
+/* Enlace de salto accesible para navegación por teclado (WCAG 2.4.1) */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  background: var(--color-primario-fuerte);
+  color: #FFFFFF !important;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  z-index: 10000;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  top: 16px;
+  outline: 3px solid #FFFFFF !important;
+  outline-offset: 2px !important;
 }
 
 /* Skeleton de carga (silueta gris shimmer) */
@@ -190,12 +232,18 @@ body::after {
 
 .main-nav a {
   text-decoration: none;
-  color: #666;
+  color: var(--color-mudo); /* 5.9:1 contraste contra blanco */
   font-size: 15px;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.main-nav a:hover {
+  color: var(--color-primario-fuerte);
 }
 
 .main-nav li:first-child a {
-  color: #333;
+  color: var(--color-tinta);
   font-weight: bold;
 }
 
@@ -206,39 +254,113 @@ body::after {
 
 .btn-login {
   text-decoration: none;
-  color: #333;
-  border: 1px solid #ccc;
+  color: var(--color-tinta);
+  border: 1px solid #CBD5E1;
   padding: 8px 18px;
   border-radius: 20px;
   font-size: 14px;
+  font-weight: 600;
+  background-color: #FFFFFF;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-login:hover {
+  background-color: var(--color-fondo);
+  border-color: #94A3B8;
 }
 
 .btn-signup-header {
   text-decoration: none;
-  color: white;
+  color: #FFFFFF;
   background-color: var(--color-primario-fuerte);
   padding: 8px 20px;
   border-radius: 20px;
   font-size: 14px;
   font-weight: bold;
+  box-shadow: 0 4px 12px rgba(14, 116, 144, 0.3);
+  transition: background-color 0.2s ease, transform 0.15s ease;
 }
 
-/* Banners de alerta globales */
+.btn-signup-header:hover {
+  background-color: var(--color-primario-fuerte-hover);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   Botones con contraste accesible (WCAG 1.4.3 AA - Mínimo 4.5:1)
+   ========================================================================== */
+.btn-logout {
+  background-color: var(--color-peligro); /* #C0392B: 5.1:1 con blanco */
+  color: #FFFFFF !important;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-logout:hover {
+  background-color: var(--color-peligro-hover); /* #A93226 */
+  transform: translateY(-1px);
+}
+
+.btn-save,
+#btnSave {
+  background: linear-gradient(135deg, var(--color-primario-fuerte), var(--color-primario-fuerte-hover)) !important;
+  color: #FFFFFF !important;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(14, 116, 144, 0.35);
+  transition: all 0.2s ease;
+}
+
+.btn-save:hover,
+#btnSave:hover {
+  background: var(--color-primario-fuerte-hover) !important;
+  box-shadow: 0 6px 16px rgba(14, 116, 144, 0.45);
+  transform: translateY(-1px);
+}
+
+/* Banners de alerta globales (WCAG 1.4.3 AA) */
 .alerta-error {
   display: none;
   width: 100%;
-  background-color: #feeef2;
-  color: #C0392B;
+  background-color: #FEE2E2;
+  color: #991B1B; /* 7.7:1 sobre fondo claro */
+  border: 1px solid #F87171;
   padding: 10px 14px;
   border-radius: 8px;
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 13.5px;
+  font-weight: 600;
   text-align: left;
   margin-bottom: 16px;
 }
 
 .alerta-error.visible {
   display: block;
+}
+
+.error-mensaje,
+.mensaje-error,
+.err-msg {
+  color: var(--color-peligro);
+  font-weight: 600;
+}
+
+/* Reducción de movimiento para usuarios que lo solicitan (WCAG 2.3.3) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Responsividad base para header y fondo */
