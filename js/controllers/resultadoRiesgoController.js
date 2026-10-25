@@ -43,7 +43,7 @@ function mostrarError(mensaje) {
 }
 
 function pintarResultado(r, esPrevio = false) {
-  resLevel.textContent = 'Riesgo ' + r.nivel;
+  resLevel.textContent = 'Nivel orientativo: ' + r.nivel;
   resLevel.className = 'result-level ' + String(r.nivel).toLowerCase();
   resScore.textContent = 'Puntaje ' + r.puntaje + ' / 5' + (esPrevio ? ' (resultado anterior)' : '');
   resExpl.textContent = r.explicacion || '';
@@ -51,7 +51,7 @@ function pintarResultado(r, esPrevio = false) {
   const alto = (r.alerta && r.alerta.mostrar) || r.alerta === true || (esPrevio && String(r.nivel).toLowerCase() === 'alto');
   alertEl.classList.toggle('show', !!alto);
   lineasBtn.classList.toggle('urgente', !!alto);
-  lineasBtn.textContent = alto ? '🚨 Líneas de ayuda (urgente)' : 'Líneas de ayuda';
+  lineasBtn.textContent = alto ? '🚨 Líneas de ayuda (atención prioritaria)' : 'Líneas de ayuda';
   btnRecom.href = 'recomendaciones_invitado.html?nivel=' + encodeURIComponent(r.nivel);
 }
 
