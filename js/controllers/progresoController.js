@@ -231,14 +231,13 @@ async function cargarProgreso() {
   const serie = datos.serie || [];
   const suficientes = datos.suficientes && serie.length >= 2;
 
-  // Caso 3: Sin registros suficientes (< 2 registros)
+  // Siempre permitir descarga de reporte; mostrar gráfico si hay datos suficientes
   if (!suficientes) {
     ocultarTodosLosEstados();
-    if (emptyState) {
-      emptyState.style.display = 'block';
-      emptyState.classList.add('show');
-    }
-    progresoService.logAuditoria('Datos insuficientes para graficar:', `${serie.length} registros`);
+    if (chartBox) chartBox.style.display = 'block';
+    if (chartTitle) chartTitle.textContent = nombrePaciente;
+    if (chartRange) chartRange.textContent = `${serie.length} registro(s)`;
+    progresoService.logAuditoria('Datos insuficientes para graficar, pero se permite reporte:', `${serie.length} registros`);
     return;
   }
 
