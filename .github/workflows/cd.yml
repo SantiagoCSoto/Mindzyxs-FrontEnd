@@ -2,7 +2,7 @@ name: CD - Deploy Frontend to Azure Static Web Apps (develop)
 
 on:
   push:
-    branches: [develop]
+    branches: [develop, main]
   workflow_dispatch:
 
 jobs:
