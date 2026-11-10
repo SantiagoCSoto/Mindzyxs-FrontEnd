@@ -442,6 +442,20 @@ function registrarEventos() {
     });
   }
 
+  // Botón Descargar reporte PDF
+  const btnReporte = document.getElementById('btnReporte');
+  if (btnReporte) {
+    btnReporte.addEventListener('click', async () => {
+      const idPaciente = patientSel?.value;
+      if (!idPaciente) {
+        showToast('Selecciona un paciente primero.');
+        return;
+      }
+      const res = await progresoService.descargarReporte(idPaciente);
+      if (!res.exito) showToast(res.mensaje || 'No fue posible descargar el reporte.');
+    });
+  }
+
   // Botón Restablecer fechas desde el estado vacío
   if (btnRestablecerFiltros) {
     btnRestablecerFiltros.addEventListener('click', () => {
