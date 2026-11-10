@@ -1,0 +1,20 @@
+name: CI - Frontend
+
+on:
+  push:
+    branches: [develop, main]
+  pull_request:
+    branches: [develop, main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check files
+        run: |
+          echo "Frontend is static (HTML/CSS/JS). No build required."
+          test -f js/services/apiClient.js
+          grep -n "API_BASE_URL" js/services/apiClient.js
