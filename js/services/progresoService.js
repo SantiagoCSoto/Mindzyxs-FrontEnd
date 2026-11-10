@@ -72,7 +72,7 @@ export const progresoService = {
    */
   async descargarReporte(idPaciente) {
     const res = await getBlob(`/progreso/${idPaciente}/reporte`);
-    if (res.exito) {
+    if (res.ok) {
       const url = URL.createObjectURL(res.blob);
       const a = document.createElement('a');
       a.href = url;
