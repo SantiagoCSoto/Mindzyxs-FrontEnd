@@ -8,7 +8,7 @@
  */
 
 import { authService } from '../services/authService.js';
-import { listarPacientesAutorizados, obtenerEstadisticas } from '../services/estadisticasPacientesService.js';
+import { listarPacientesAutorizados, obtenerEstadisticas, descargarReporte } from '../services/estadisticasPacientesService.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -205,7 +205,20 @@ async function generar() {
   }
 }
 
-$('btnGenerar').addEventListener('click', generar);
+  $('btnGenerar').addEventListener('click', generar);
+
+  const btnReporte = $('btnReporte');
+  if (btnReporte) {
+    btnReporte.addEventListener('click', async () => {
+      const id = selPac?.value;
+      if (!id) {
+        mostrarError('Selecciona un paciente primero.');
+        return;
+      }
+      const res = await descargarReporte(id);
+      if (!res.exito) mostrarError(res.mensaje || 'No fue posible descargar el reporte.');
+    });
+  }
 
 // ---------- Cerrar sesión ----------
 $('btn-logout').addEventListener('click', () => {

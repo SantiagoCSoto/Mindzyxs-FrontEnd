@@ -8,7 +8,7 @@
  *  - Normalización de datos para gráficos SVG, KPIs y auditoría en consola [HU1-PB14]
  */
 
-import { getJson } from './apiClient.js';
+import { getJson, getBlob } from './apiClient.js';
 import { authService } from './authService.js';
 
 export const progresoService = {
@@ -70,6 +70,22 @@ export const progresoService = {
    * @param {string|null} desde - Fecha inicial (YYYY-MM-DD)
    * @param {string|null} hasta - Fecha final (YYYY-MM-DD)
    */
+  async descargarReporte(idPaciente) {
+    const res = await getBlob(`/progreso/${idPaciente}/reporte`);
+    if (res.ok) {
+      const url = URL.createObjectURL(res.blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `reporte_paciente_${idPaciente}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      return { exito: true };
+    }
+    return { exito: false, mensaje: res.error || 'No fue posible descargar el reporte' };
+  },
+
   async obtenerProgresoPaciente(idPaciente, desde = null, hasta = null) {
     const params = new URLSearchParams();
     if (desde) params.set('desde', desde);

@@ -231,14 +231,13 @@ async function cargarProgreso() {
   const serie = datos.serie || [];
   const suficientes = datos.suficientes && serie.length >= 2;
 
-  // Caso 3: Sin registros suficientes (< 2 registros)
+  // Siempre permitir descarga de reporte; mostrar gráfico si hay datos suficientes
   if (!suficientes) {
     ocultarTodosLosEstados();
-    if (emptyState) {
-      emptyState.style.display = 'block';
-      emptyState.classList.add('show');
-    }
-    progresoService.logAuditoria('Datos insuficientes para graficar:', `${serie.length} registros`);
+    if (chartBox) chartBox.style.display = 'block';
+    if (chartTitle) chartTitle.textContent = nombrePaciente;
+    if (chartRange) chartRange.textContent = `${serie.length} registro(s)`;
+    progresoService.logAuditoria('Datos insuficientes para graficar, pero se permite reporte:', `${serie.length} registros`);
     return;
   }
 
@@ -439,6 +438,20 @@ function registrarEventos() {
 
       progresoService.logAuditoria('Aplicando filtros de fecha:', `${desde || 'inicio'} a ${hasta || 'fin'}`);
       cargarProgreso();
+    });
+  }
+
+  // Botón Descargar reporte PDF
+  const btnReporte = document.getElementById('btnReporte');
+  if (btnReporte) {
+    btnReporte.addEventListener('click', async () => {
+      const idPaciente = patientSel?.value;
+      if (!idPaciente) {
+        showToast('Selecciona un paciente primero.');
+        return;
+      }
+      const res = await progresoService.descargarReporte(idPaciente);
+      if (!res.exito) showToast(res.mensaje || 'No fue posible descargar el reporte.');
     });
   }
 
