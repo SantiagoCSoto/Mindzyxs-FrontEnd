@@ -1,0 +1,52 @@
+name: CI - Frontend
+
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [develop]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check files
+        run: |
+          echo "Frontend is static (HTML/CSS/JS). No build required."
+          test -f js/services/apiClient.js
+          grep -n "API_BASE_URL" js/services/apiClient.js
+
+      - name: Create PR develop -> main (if not exists)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          if git merge-base --is-ancestor origin/main HEAD; then
+            echo "develop ya incluye main."
+          else
+            if git merge origin/main --no-edit; then
+              git push origin develop
+            else
+              echo "CONFLICTO entre develop y main."
+              git merge --abort
+              exit 1
+            fi
+          fi
+          if gh pr list --base main --head develop --state open --json number --jq 'length' | grep -q '^0$'; then
+            gh pr create --base main --head develop \
+              --title "Merge develop into main" \
+              --body "PR automatico generado por CI tras verificacion exitosa."
+          else
+            echo "Ya existe un PR abierto de develop a main."
+          fi
