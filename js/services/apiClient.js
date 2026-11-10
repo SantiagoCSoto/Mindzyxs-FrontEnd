@@ -3,7 +3,7 @@
  * Base URL: http://localhost:5015/api
  */
 
-export const API_BASE_URL = 'http://localhost:5015/api';
+export const API_BASE_URL = 'https://mindzyxs-api-g7h0d7c9gzhagecz.mexicocentral-01.azurewebsites.net/api';
 
 const TIMEOUT_MS = 8000;
 
