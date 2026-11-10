@@ -7,7 +7,7 @@
  * Requiere sesión Bearer del psicólogo.
  */
 
-import { getJson } from './apiClient.js';
+import { getJson, getBlob } from './apiClient.js';
 
 /**
  * Lista los pacientes que autorizaron al psicólogo (selector de estadísticas).
@@ -27,6 +27,22 @@ export async function listarPacientesAutorizados() {
  * Devuelve { promedio, tendencia, totalRegistros, distribucion, porSemana,
  * porMes, nivelFrecuente, suficientes }. Lanza Error con el mensaje exacto.
  */
+export async function descargarReporte(idPaciente) {
+  const res = await getBlob(`/progreso/${idPaciente}/reporte`);
+  if (res.ok) {
+    const url = URL.createObjectURL(res.blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `reporte_paciente_${idPaciente}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    return { exito: true };
+  }
+  return { exito: false, mensaje: res.error || 'No fue posible descargar el reporte' };
+}
+
 export async function obtenerEstadisticas(idPaciente, desde = '', hasta = '') {
   const params = new URLSearchParams();
   if (desde) params.set('desde', desde);
