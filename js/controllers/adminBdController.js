@@ -36,6 +36,11 @@ function addLog(msg) {
   auditLog.scrollTop = auditLog.scrollHeight;
 }
 
+/** Escapa HTML (anti-XSS): nombres de archivo vienen del servidor. */
+function escapar(s) {
+  return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
 function mostrarMsg(el, texto, tipo = 'ok') {
   el.className = 'msg-admin ' + tipo;
   el.textContent = texto;
@@ -70,10 +75,10 @@ function renderRespaldos(respaldos = []) {
       row.className = 'backup-row';
       const fecha = r.fechaHora ? new Date(r.fechaHora).toLocaleString() : '';
       row.innerHTML =
-        `<span>${r.nombreArchivo || ''}</span>` +
-        `<span>${r.tamano || ''}</span>` +
-        `<span>${fecha}</span>` +
-        `<span><button class="btn-download" data-id="${r.idRespaldo}" data-name="${r.nombreArchivo || ''}" title="Descargar respaldo">&#11015;</button></span>`;
+        `<span>${escapar(r.nombreArchivo || '')}</span>` +
+        `<span>${escapar(r.tamano || '')}</span>` +
+        `<span>${escapar(fecha)}</span>` +
+        `<span><button class="btn-download" data-id="${Number(r.idRespaldo) || 0}" data-name="${escapar(r.nombreArchivo || '')}" title="Descargar respaldo">&#11015;</button></span>`;
       backupRows.appendChild(row);
     });
   }

@@ -79,9 +79,14 @@ export function leerNivel() {
   }
 }
 
+import { consentFuncional } from './consentService.js';
+
 // --- Sesión del invitado (cookies): cuest_<id>=1 marca cuestionario hecho al 100% ---
+// Solo se escriben con consentimiento funcional (ver Política de Cookies).
 export function marcarHecho(id) {
+  if (!consentFuncional()) return false;
   document.cookie = `cuest_${id}=1;max-age=31536000;path=/;SameSite=Lax`;
+  return true;
 }
 
 export function getHechos() {
@@ -89,4 +94,37 @@ export function getHechos() {
     .filter((s) => s.startsWith('cuest_'))
     .map((s) => s.split('=')[0].replace('cuest_', ''))
     .filter((v) => /^\d+$/.test(v));
+}
+
+// --- Riesgo previo (cookies, sobreviven al cierre): riesgo_<id>=JSON{puntaje,nivel,alerta,explicacion} ---
+// Solo se escriben con consentimiento funcional (ver Política de Cookies).
+export function guardarRiesgo(id, resultado) {
+  if (!consentFuncional()) return false;
+  try {
+    const payload = {
+      puntaje: resultado.puntaje,
+      nivel: resultado.nivel,
+      alerta: !!(resultado.alerta && resultado.alerta.mostrar),
+      explicacion: resultado.explicacion || ''
+    };
+    document.cookie = `riesgo_${id}=${encodeURIComponent(JSON.stringify(payload))};max-age=31536000;path=/;SameSite=Lax`;
+    return true;
+  } catch (_) { /* cookie llena o bloqueada: no rompe el flujo */ }
+  return false;
+}
+
+export function leerRiesgos() {
+  const out = [];
+  document.cookie.split(';').map((s) => s.trim())
+    .filter((s) => s.startsWith('riesgo_'))
+    .forEach((s) => {
+      const eq = s.indexOf('=');
+      const id = s.slice('riesgo_'.length, eq < 0 ? undefined : eq);
+      if (!/^\d+$/.test(id)) return;
+      try {
+        const data = JSON.parse(decodeURIComponent(eq < 0 ? '' : s.slice(eq + 1)));
+        if (data && data.nivel) out.push({ cuestionarioId: Number(id), ...data });
+      } catch (_) { /* cookie corrupta: se ignora */ }
+    });
+  return out.sort((a, b) => a.cuestionarioId - b.cuestionarioId);
 }

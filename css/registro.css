@@ -49,19 +49,20 @@ select {
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 14px;
-  outline: none;
   background-color: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 input:focus,
 select:focus {
-  border-color: #56c5c0;
+  border-color: var(--color-primario-fuerte);
+  box-shadow: 0 0 0 3px rgba(14, 116, 144, 0.25);
 }
 
-/* Sección de credenciales para el Psicólogo */
+/* SecciÃ³n de credenciales para el PsicÃ³logo */
 #seccion-credenciales-psicologo {
   display: none;
-  /* Oculto por defecto hasta que se seleccione Psicólogo */
+  /* Oculto por defecto hasta que se seleccione PsicÃ³logo */
   background-color: #f7f6fd;
   border: 1px dashed #b8b1ea;
   border-radius: 10px;
@@ -84,7 +85,7 @@ select:focus {
 
 .formato-ayuda {
   font-size: 12px;
-  color: #777;
+  color: var(--muted);
   margin-top: 5px;
   display: block;
 }
@@ -135,7 +136,7 @@ select:focus {
 
 .file-name-text {
   font-size: 13px;
-  color: #888888;
+  color: var(--color-mudo);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -159,7 +160,7 @@ select:focus {
   margin-top: 5px;
 }
 
-/* Botones de acción inferiores */
+/* Botones de acciÃ³n inferiores */
 .form-actions {
   display: flex;
   gap: 15px;
@@ -178,7 +179,7 @@ select:focus {
 
 .btn-submit {
   flex: 1;
-  background-color: #56c5c0;
+  background-color: var(--color-primario-fuerte, #0E7490);
   border: none;
   color: white;
   padding: 10px 20px;
@@ -186,9 +187,21 @@ select:focus {
   cursor: pointer;
   font-size: 15px;
   font-weight: bold;
+  box-shadow: 0 4px 12px rgba(14, 116, 144, 0.35);
+  transition: filter 0.2s ease, transform 0.15s ease;
 }
 
-/* Modal de confirmación al cancelar */
+.btn-submit:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+.btn-submit:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+/* Modal de confirmaciÃ³n al cancelar */
 .modal-overlay {
   display: none;
   position: fixed;
@@ -240,7 +253,7 @@ select:focus {
 }
 
 .modal-badge-icon span {
-  color: #eb5771;
+  color: var(--color-peligro);
   font-size: 24px;
   font-weight: 700;
   line-height: 1;
@@ -285,7 +298,7 @@ select:focus {
 
 .btn-modal-confirm {
   flex: 1;
-  background-color: #eb5771;
+  background-color: var(--color-peligro);
   border: none;
   color: #ffffff;
   padding: 11px 18px;
@@ -300,7 +313,7 @@ select:focus {
   background-color: #d84560;
 }
 
-/* Diseño responsivo (Tablets y Dispositivos Móviles) */
+/* DiseÃ±o responsivo (Tablets y Dispositivos MÃ³viles) */
 
 @media (max-width: 768px) {
   .registro-card {

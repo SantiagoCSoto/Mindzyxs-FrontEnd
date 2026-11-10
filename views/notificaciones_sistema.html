@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="../assets/Logo1.png" />
+  <title>Notificaciones del sistema - Mindzyxs</title>
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/inicio.css" />
+  <link rel="stylesheet" href="../css/notificaciones_sistema.css" />
+</head>
+
+<body>
+  <!-- Fondo decorativo suave -->
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-pink"></div>
+    <div class="blob blob-lav"></div>
+  </div>
+
+  <!-- Encabezado y Navegación -->
+  <header class="header-nav">
+    <div class="logo-container">
+      <a href="panel_admin.html" class="logo-link">
+        <img src="../assets/Logo1.png" alt="Logo Mindzyxs" class="logo-img" />
+        <span>Mindzyxs</span>
+      </a>
+    </div>
+
+    <nav class="main-nav" aria-label="Navegación principal">
+      <ul>
+        <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="ayuda.html">Ayuda</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-right">
+      <div class="header-auth-buttons">
+        <button type="button" id="btn-logout" class="btn-logout">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <main class="wrap">
+    <a href="panel_admin.html" class="btn-back" id="btnVolverPanel" aria-label="Volver al panel de administración">
+      &larr; Volver al panel
+    </a>
+
+    <!-- Pantalla 1: Catálogo de eventos -->
+    <section class="card screen active" id="screenCatalogo" aria-labelledby="catTitulo">
+      <div class="panel-head">
+        <div class="head-info">
+          <h1 id="catTitulo">Notificaciones del sistema</h1>
+          <p class="sub">Configura las plantillas de mensajes, canales de difusión y el estado activo de cada evento automático.</p>
+        </div>
+        <div class="badge-counter" id="badgeContador" style="display: none;">
+          <span id="contadorTexto">0 eventos</span>
+        </div>
+      </div>
+
+      <!-- Barra de filtros -->
+      <div class="filtros" role="search" aria-label="Filtros de catálogo de notificaciones">
+        <input
+          type="text"
+          class="input buscar"
+          id="fBuscar"
+          placeholder="Buscar evento por nombre o clave..."
+          aria-label="Buscar evento por nombre o clave"
+          autocomplete="off"
+        />
+
+        <select class="input" id="fCanal" aria-label="Filtrar por canal de entrega">
+          <option value="">Todos los canales</option>
+          <option value="correo">Correo electrónico</option>
+        </select>
+
+        <select class="input" id="fEstado" aria-label="Filtrar por estado">
+          <option value="">Todos los estados</option>
+          <option value="activo">Habilitadas</option>
+          <option value="inactivo">Deshabilitadas</option>
+        </select>
+
+        <button type="button" class="btn btn-sec" id="btnRefrescar" title="Actualizar catálogo">
+          Actualizar
+        </button>
+      </div>
+
+      <!-- Mensaje de error en catálogo -->
+      <div class="err-msg" id="errCatalogo" role="alert"></div>
+
+      <!-- Lista dinámica de eventos con skeleton loader -->
+      <div id="listaEventos" aria-live="polite" tabindex="0">
+        <div class="sk-card fila-sk">
+          <div class="sk sk-icon"></div>
+          <div class="sk-info">
+            <div class="sk sk-line" style="width: 50%;"></div>
+            <div class="sk sk-line" style="width: 70%;"></div>
+          </div>
+          <div class="sk sk-btn"></div>
+        </div>
+        <div class="sk-card fila-sk">
+          <div class="sk sk-icon"></div>
+          <div class="sk-info">
+            <div class="sk sk-line" style="width: 45%;"></div>
+            <div class="sk sk-line" style="width: 60%;"></div>
+          </div>
+          <div class="sk sk-btn"></div>
+        </div>
+      </div>
+
+      <!-- Estado vacío -->
+      <div class="empty" id="vacio" style="display: none;">
+        <div class="empty-icon" aria-hidden="true">🔔</div>
+        <h2>No se encontraron eventos</h2>
+        <p>No hay eventos de notificación que coincidan con los filtros aplicados.</p>
+      </div>
+    </section>
+
+    <!-- Pantalla 2: Edición y Previsualización -->
+    <section class="card screen" id="screenEditar" style="display: none;" aria-labelledby="editTitulo">
+      <button type="button" class="btn-back" id="btnVolverCatalogo" aria-label="Volver al catálogo de notificaciones">
+        &larr; Volver a notificaciones
+      </button>
+
+      <div class="panel-head">
+        <div class="head-info">
+          <h2 id="editTitulo">Configurar evento</h2>
+          <p class="sub" id="editSub">Personaliza los canales de entrega y el estado activo de cada evento automático.</p>
+        </div>
+        <div class="switch-container">
+          <label class="switch-label" for="chkActivo">
+            <input type="checkbox" id="chkActivo" class="switch-input" aria-label="Habilitar o inhabilitar notificación">
+            <span class="switch-slider"></span>
+            <span class="switch-text" id="lblActivoTexto">Habilitada</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Mensaje de error en pantalla de edición -->
+      <div class="err-msg" id="errEditar" role="alert"></div>
+
+      <form id="formNotificacion" novalidate>
+        <!-- Selección de canales de entrega -->
+        <fieldset class="form-section">
+          <legend class="section-sub">Canales de entrega activos</legend>
+          <p class="sub-help">Selecciona por cuáles medios se transmitirá este mensaje (al menos uno requerido si el evento está activo):</p>
+          <div class="canales-grid" id="canalesGrid" tabindex="0">
+            <label class="checkbox-card" for="chkCanalCorreo">
+              <input type="checkbox" id="chkCanalCorreo" value="correo">
+              <div class="checkbox-content">
+                <span class="canal-ico" aria-hidden="true">✉️</span>
+                <div>
+                  <strong>Correo electrónico</strong>
+                  <small>Entrega de asunto y cuerpo formateado</small>
+                </div>
+              </div>
+            </label>
+          </div>
+        </fieldset>
+
+        <!-- Botones de acción -->
+        <div class="actions">
+          <button type="button" class="btn btn-sec" id="btnCancelarEdicion">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="btnGuardar">Guardar cambios</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <!-- Pie de página legal estándar -->
+  <footer class="footer">
+    <div class="footer-in">
+      <a href="privacidad.html">Privacidad</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="terminos.html">Términos</a>
+      <a href="#" class="aviso-link" id="footerAviso" role="button" aria-haspopup="dialog">
+        <span class="aviso-ico" aria-hidden="true">⚠️</span> Aviso: no diagnóstico
+      </a>
+    </div>
+  </footer>
+
+  <!-- Modal de confirmación para guardar cambios -->
+  <div class="modal-overlay" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-hidden="true">
+    <div class="modal">
+      <h3 id="confirmTitle">Confirmar guardado</h3>
+      <p id="confirmText" class="modal-desc"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn-modal btn-close" id="btnModalNo">Cancelar</button>
+        <button type="button" class="btn-modal btn-ok" id="btnModalSi">Sí, guardar cambios</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor Toast para notificaciones emergentes -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="../js/controllers/notificacionesController.js"></script>
+  <script src="../js/accessibility.js"></script>
+  <script src="../js/cookies-banner.js"></script>
+  <script src="../js/sesion-header.js"></script>
+</body>
+
+</html>

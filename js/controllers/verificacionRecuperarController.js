@@ -18,8 +18,7 @@ const btnVerificar = document.getElementById('btn-verificar');
 let temporizadorExito = null;
 
 // Obtener correo desde sessionStorage o parámetros URL
-const urlParams = new URLSearchParams(window.location.search);
-const correoRecuperacion = (urlParams.get('correo') || sessionStorage.getItem('correoRecuperacion') || '').trim();
+const correoRecuperacion = (sessionStorage.getItem('correoRecuperacion') || '').trim();
 const chipCorreoStrong = document.querySelector('.chip-correo strong');
 
 if (chipCorreoStrong && correoRecuperacion) {

@@ -173,7 +173,8 @@ export const authService = {
 
     return {
       tiposCuenta: [],
-      generos: []
+      generos: [],
+      especialidades: []
     };
   },
 
@@ -191,9 +192,11 @@ export const authService = {
   },
 
   /**
-   * Cerrar sesión y limpiar almacenamiento local
+   * Cerrar sesión: limpia lo local de inmediato e invalida el token en el servidor (best-effort).
+   * No requiere await en quien llama: la limpieza local es sincrónica.
    */
-  logout() {
+  async logout() {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
     sessionStorage.removeItem('usuario');
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('autenticado');
@@ -201,6 +204,13 @@ export const authService = {
     localStorage.removeItem('token');
     localStorage.removeItem('autenticado');
     localStorage.removeItem('rol');
+    if (token) {
+      try {
+        await postJson('/account/logout', {}, { headers: { 'Authorization': `Bearer ${token}` } });
+      } catch {
+        // sin conexión: la sesión expira sola en el servidor
+      }
+    }
     return { exito: true };
   },
 
@@ -333,5 +343,37 @@ export const authService = {
       expirado: false,
       mensaje: res.error || 'No fue posible conectar con el servidor backend.'
     };
-  }
+  },
+
+  /**
+   * Reanudar verificación de cuenta (POST /api/account/verificacion/reanudar)
+   * Para usuarios que iniciaron registro pero no completaron la verificación
+   */
+  async reanudarVerificacion(correo) {
+    const email = correo ? correo.trim().toLowerCase() : '';
+
+    const res = await postJson('/account/verificacion/reanudar', {
+      correo: email
+    });
+
+    if (res.ok && res.data) {
+      return {
+        exito: true,
+        mensaje: res.data.mensaje || 'Código reenviado. Revisa tu correo.',
+        requiereVerificacion: res.data.requiere === true
+      };
+    }
+
+    if (!res.ok && !res.isNetworkError) {
+      return {
+        exito: false,
+        mensaje: res.error || 'Error al reanudar la verificación.'
+      };
+    }
+
+    return {
+      exito: false,
+      mensaje: res.error || 'No fue posible conectar con el servidor backend.'
+    };
+  },
 };

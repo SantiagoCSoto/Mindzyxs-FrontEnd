@@ -12,7 +12,6 @@ import { invitadoService } from '../services/invitadoService.js';
 
 const headerGuest = document.getElementById('headerGuest');
 const headerSesion = document.getElementById('headerSesion');
-const roleBadge = document.getElementById('roleBadge');
 const btnLogout = document.getElementById('btn-logout');
 const btnModoInvitado = document.getElementById('btn-modo-invitado');
 
@@ -38,10 +37,8 @@ function pintarEncabezado() {
   const usuario = authService.getSesion();
 
   if (usuario && !invitadoService.esInvitado()) {
-    const rol = usuario.rol || usuario.tipo_usuario || 'Paciente';
     if (headerGuest) headerGuest.style.display = 'none';
     if (headerSesion) headerSesion.style.display = 'inline-flex';
-    if (roleBadge) roleBadge.textContent = rol;
   } else {
     if (headerGuest) headerGuest.style.display = 'inline-flex';
     if (headerSesion) headerSesion.style.display = 'none';

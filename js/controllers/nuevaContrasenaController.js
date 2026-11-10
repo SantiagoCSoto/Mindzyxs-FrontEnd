@@ -17,13 +17,14 @@ const modalExito = document.getElementById('modal-exito');
 const btnGuardar = document.getElementById('btn-guardar');
 const toggleButtons = document.querySelectorAll('.btn-toggle-password');
 
-// Funciones de validación
+// Funciones de validación (misma regla del backend: mínimo 6, al menos 1 letra y 1 número)
 function validarContrasena(contrasena) {
   if (!contrasena || contrasena.trim() === '') {
     return { valido: false, mensaje: 'La contraseña es obligatoria' };
   }
-  if (contrasena.length < 6) {
-    return { valido: false, mensaje: 'La contraseña debe tener mínimo 6 caracteres' };
+  const passRegex = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+  if (!passRegex.test(contrasena)) {
+    return { valido: false, mensaje: 'La contraseña debe tener mínimo 6 caracteres e incluir al menos una letra y un número' };
   }
   return { valido: true };
 }

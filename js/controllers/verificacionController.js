@@ -17,8 +17,7 @@ const btnReenviar = document.getElementById('btn-reenviar');
 let temporizadorExito = null;
 
 // Obtener correo desde parámetros URL o sessionStorage
-const urlParams = new URLSearchParams(window.location.search);
-const correoRegistrado = (urlParams.get('correo') || sessionStorage.getItem('correoRegistro') || '').trim();
+const correoRegistrado = (sessionStorage.getItem('correoRegistro') || '').trim();
 const chipCorreoStrong = document.querySelector('.chip-correo strong');
 
 if (chipCorreoStrong && correoRegistrado) {

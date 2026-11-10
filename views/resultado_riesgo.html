@@ -4,8 +4,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mindzyx — Resultado del riesgo (Invitado)</title>
+  <link rel="icon" type="image/png" href="../assets/Logo1.png" />
+  <title>Mindzyx — Resultado del riesgo</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/inicio.css" />
   <link rel="stylesheet" href="../css/resultado_riesgo.css" />
 </head>
 
@@ -21,31 +24,29 @@
     </div>
     <nav class="nav">
       <a href="inicio.html" class="active">Inicio</a>
-      <a href="inicio.html#nosotros">Nosotros</a>
-      <a href="inicio.html#ayuda">Ayuda</a>
     </nav>
-    <span class="guest-pill">Modo invitado</span>
   </header>
 
   <main class="wrap">
+    <h1 class="visually-hidden">Resultado de riesgo</h1>
     <div class="card result-card">
-      <span class="result-title">Resultado del riesgo (Invitado)</span>
+      <span class="result-title">Tu resultado orientativo</span>
       <div class="result-level" id="resLevel">…</div>
       <div class="result-score" id="resScore">Calculando…</div>
       <div class="alert-urgente" id="alertUrgente">
-        <span class="ico">🚨</span>
+        <span class="ico" aria-hidden="true">🚨</span>
         <div>
-          <b>Riesgo alto detectado. Busca ayuda profesional o comunícate con una línea de ayuda</b>
-          <p>Tu bienestar es lo más importante. Te recomendamos contactar a un profesional de la salud mental o a una línea de ayuda disponible en tu país.</p>
+          <b>Por lo que nos has contado, sería importante buscar apoyo profesional pronto.</b>
+          <p>Tu bienestar es lo más importante. Te recomendamos contactar a un profesional de la salud mental o a una línea de ayuda disponible en tu país. Aquí tienes opciones de ayuda inmediata.</p>
         </div>
       </div>
       <div class="result-expl" id="resExpl"></div>
       <div class="result-actions">
         <a class="btn-help" id="btnRecom" href="recomendaciones_invitado.html">Ver recomendaciones básicas</a>
         <button class="btn-help lineas" id="btnLineas">Líneas de ayuda</button>
-        <a class="btn-help volver" href="panel_invitado.html">Volver al inicio (Invitado)</a>
+        <a class="btn-help volver" href="panel_invitado.html">Volver al panel</a>
       </div>
-      <p class="hint">⚠️ Este resultado <b>no es un diagnóstico clínico</b>. Mindzyx es solo una herramienta de apoyo y monitoreo emocional.</p>
+      <p class="hint"><span aria-hidden="true">⚠️</span> Este resultado <b>no es un diagnóstico clínico</b>. Mindzyx es solo una herramienta de apoyo y monitoreo emocional.</p>
     </div>
 
     <div class="card error-card" id="errorCard" hidden>
@@ -53,24 +54,24 @@
       <p id="errorMsg">No se encontraron respuestas para calcular el riesgo. Por favor responde el cuestionario nuevamente</p>
       <div class="result-actions">
         <a class="btn-help" href="encuesta_invitado.html">Responder cuestionario</a>
-        <a class="btn-help volver" href="panel_invitado.html">Volver al inicio (Invitado)</a>
+        <a class="btn-help volver" href="panel_invitado.html">Volver al panel</a>
       </div>
     </div>
   </main>
 
   <footer class="footer">
     <div class="footer-in">
-      <a href="inicio.html">Inicio</a>
-      <a href="inicio.html#nosotros">Nosotros</a>
-      <a href="inicio.html#ayuda">Ayuda</a>
-      <a href="#" class="aviso" id="footerAviso">⚠️ Aviso: no diagnóstico</a>
+      <a href="privacidad.html">Privacidad</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="terminos.html">Términos</a>
+      <a href="#" class="aviso" id="footerAviso" role="button" aria-haspopup="dialog"><span aria-hidden="true">⚠️</span> Aviso: no diagnóstico</a>
     </div>
   </footer>
 
-  <div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true">
+  <div class="modal-overlay" id="avisoModal" role="dialog" aria-modal="true" aria-labelledby="avisoTitle">
     <div class="modal">
-      <div class="modal-icon">⚠️</div>
-      <h3>Mensaje aclaratorio</h3>
+      <div class="modal-icon" aria-hidden="true">⚠️</div>
+      <h3 id="avisoTitle">Mensaje aclaratorio</h3>
       <div class="aviso-txt" id="avisoText">
         <b>Mindzyx</b> es una plataforma de <b>monitoreo y apoyo del bienestar emocional</b>.
         Este sistema <b>no realiza diagnósticos clínicos</b> y <b>no sustituye la atención de un profesional de la salud mental</b>.
@@ -84,12 +85,25 @@
     </div>
   </div>
 
-  <div class="modal-overlay" id="lineasModal" role="dialog" aria-modal="true">
-    <div class="modal">
-      <div class="modal-icon info">🆘</div>
-      <h3>Líneas de ayuda</h3>
+  <div class="modal-overlay" id="lineasModal" role="dialog" aria-modal="true" aria-labelledby="lineasTitle">
+    <div class="modal modal-wide">
+      <button class="modal-x" id="lineasX" aria-label="Cerrar"><span aria-hidden="true">✕</span></button>
+      <div class="modal-icon info" aria-hidden="true">🆘</div>
+      <h3 id="lineasTitle">Líneas de ayuda</h3>
       <p class="sub">Líneas de emergencia y acompañamiento emocional.</p>
-      <div id="lineasList" style="display:flex;flex-direction:column;gap:10px;margin-top:14px;text-align:left"></div>
+      <div class="lineas-filtros">
+        <input type="text" id="lineasQ" maxlength="60" placeholder="Ciudad, departamento o nombre…" autocomplete="off" aria-label="Buscar líneas por ciudad o nombre" />
+        <select id="lineasTipo" aria-label="Tipo de atención">
+          <option value="">Todas</option>
+          <option value="apoyo_emocional">Apoyo emocional</option>
+          <option value="intervencion_crisis">Intervención en crisis</option>
+          <option value="emergencia">Emergencia</option>
+          <option value="violencia_genero">Violencia de género</option>
+          <option value="infancia_adolescencia">Infancia y adolescencia</option>
+          <option value="orientacion_institucional">Orientación institucional</option>
+        </select>
+      </div>
+      <div id="lineasList" style="display:flex;flex-direction:column;gap:10px;margin-top:14px;text-align:left" tabindex="0"></div>
       <div class="modal-actions">
         <button class="btn-modal close" id="lineasClose">Cerrar</button>
       </div>
@@ -97,6 +111,8 @@
   </div>
 
   <script type="module" src="../js/controllers/resultadoRiesgoController.js"></script>
+  <script src="../js/accessibility.js"></script>
+  <script src="../js/cookies-banner.js"></script>
 </body>
 
 </html>

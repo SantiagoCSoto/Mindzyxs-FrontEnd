@@ -35,8 +35,7 @@ if (btnModoInvitado) {
 }
 
 // Precargar correo si proviene de registro o recuperación
-const urlParams = new URLSearchParams(window.location.search);
-const correoInicial = urlParams.get('correo') || sessionStorage.getItem('correoRegistro');
+const correoInicial = sessionStorage.getItem('correoRegistro');
 if (correoInicial && inputCorreo && !inputCorreo.value) {
   inputCorreo.value = correoInicial;
 }
@@ -136,7 +135,10 @@ if (formLogin) {
 // Cerrar modal y redirigir según el rol
 function destinoPorRol() {
   const rol = String(localStorage.getItem('rol') || '').toLowerCase();
-  return rol === 'administrador' || rol === 'admin' ? 'admin_bd.html' : 'inicio.html';
+  if (rol === 'administrador' || rol === 'admin') return 'panel_admin.html';
+  if (rol.includes('paciente')) return 'panel_paciente.html';
+  if (rol.includes('psicologo')) return 'panel_psicologo.html';
+  return 'inicio.html';
 }
 
 if (btnModalContinuar) {

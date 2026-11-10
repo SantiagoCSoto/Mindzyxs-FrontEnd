@@ -18,6 +18,9 @@ const btnCancelar = document.querySelector('.btn-cancel');
 const modalCancelar = document.getElementById('modal-cancelar');
 const btnNoCancelar = document.getElementById('btn-no-cancelar');
 const btnSiCancelar = document.getElementById('btn-si-cancelar');
+const inputBuscarEspecialidad = document.getElementById('buscar-especialidad');
+const listaEspecialidades = document.getElementById('lista-especialidades');
+let especialidadesDisponibles = [];
 
 function actualizarNombreArchivo() {
   if (inputTarjetaProfesional.files && inputTarjetaProfesional.files.length > 0) {
@@ -62,7 +65,48 @@ function actualizarVisibilidadCredenciales() {
     actualizarNombreArchivo();
     if (errorTarjeta) errorTarjeta.style.display = 'none';
     if (boxArchivo) boxArchivo.classList.remove('error');
+    limpiarEspecialidades();
   }
+}
+
+// Checklist de especialidades (una, varias o ninguna) con buscador
+function normalizarEspecialidades(catalogo) {
+  const raw = catalogo.especialidades || catalogo.Especialidades || [];
+  return raw.map((e) => ({ id: e.id ?? e.Id, nombre: e.nombre || e.codigo || e.Nombre || e.Codigo || '' }))
+    .filter((e) => e.id && e.nombre);
+}
+
+function renderEspecialidades(filtro = '') {
+  if (!listaEspecialidades) return;
+  const f = filtro.trim().toLowerCase();
+  const items = especialidadesDisponibles.filter((e) => !f || e.nombre.toLowerCase().includes(f));
+  listaEspecialidades.innerHTML = '';
+  if (!items.length) {
+    listaEspecialidades.innerHTML = '<small class="formato-ayuda">Sin coincidencias.</small>';
+    return;
+  }
+  items.forEach((e) => {
+    const label = document.createElement('label');
+    label.style.cssText = 'display:flex;align-items:center;gap:8px;font-size:13.5px;color:#334155;padding:4px 2px;cursor:pointer;';
+    const check = document.createElement('input');
+    check.type = 'checkbox';
+    check.value = e.id;
+    check.dataset.especialidad = '1';
+    label.appendChild(check);
+    label.appendChild(document.createTextNode(e.nombre));
+    listaEspecialidades.appendChild(label);
+  });
+}
+
+function especialidadesSeleccionadas() {
+  if (!listaEspecialidades) return [];
+  return [...listaEspecialidades.querySelectorAll('input[data-especialidad]:checked')]
+    .map((c) => Number(c.value)).filter((n) => Number.isFinite(n) && n > 0);
+}
+
+function limpiarEspecialidades() {
+  if (inputBuscarEspecialidad) inputBuscarEspecialidad.value = '';
+  renderEspecialidades('');
 }
 
 // Fecha máxima permitida = hoy (el navegador bloquea fechas futuras)
@@ -97,14 +141,24 @@ if (formularioRegistro) {
       return;
     }
 
-    const contrasena = document.getElementById('contrasena').value;
-    // Validación de contraseña según regla del backend: mínimo 6 caracteres, al menos 1 letra y 1 número
+    const contrasena = document.getElementById('contrasena').value;    // Validación de contraseña según regla del backend: mínimo 6 caracteres, al menos 1 letra y 1 número
     const passRegex = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
     if (!passRegex.test(contrasena)) {
       mostrarBanner(bannerErrorRegistro, 'La contraseña debe tener mínimo 6 caracteres e incluir al menos una letra y un número.');
       document.getElementById('contrasena').focus();
       return;
     }
+
+    // Consentimiento de políticas (casilla no premarcada)
+    const acepta = document.getElementById('acepta-privacidad');
+    const errorPriv = document.getElementById('error-privacidad');
+    if (!acepta || !acepta.checked) {
+      if (errorPriv) errorPriv.style.display = 'block';
+      mostrarBanner(bannerErrorRegistro, 'Debes aceptar la Política de Privacidad y los Términos para registrarte.');
+      if (acepta) acepta.focus();
+      return;
+    }
+    if (errorPriv) errorPriv.style.display = 'none';
 
     const nombres = document.getElementById('nombres').value.trim();
     const apellidos = document.getElementById('apellidos').value.trim();
@@ -151,6 +205,10 @@ if (formularioRegistro) {
 
     if (esPsicologo && inputTarjetaProfesional.files && inputTarjetaProfesional.files[0]) {
       formData.append('TarjetaProfesional', inputTarjetaProfesional.files[0]);
+    }
+
+    if (esPsicologo) {
+      especialidadesSeleccionadas().forEach((id) => formData.append('Especialidades', id));
     }
 
     const btnSubmit = formularioRegistro.querySelector('.btn-submit');
@@ -226,6 +284,10 @@ if (inputTarjetaProfesional) {
   inputTarjetaProfesional.addEventListener('change', actualizarNombreArchivo);
 }
 
+if (inputBuscarEspecialidad) {
+  inputBuscarEspecialidad.addEventListener('input', () => renderEspecialidades(inputBuscarEspecialidad.value));
+}
+
 if (selectTipoUsuario) {
   selectTipoUsuario.addEventListener('change', actualizarVisibilidadCredenciales);
 }
@@ -259,6 +321,9 @@ async function cargarCatalogos() {
         selectGenero.appendChild(opcion);
       });
     }
+
+    especialidadesDisponibles = normalizarEspecialidades(catalogo);
+    renderEspecialidades('');
 
     actualizarVisibilidadCredenciales();
   } catch (err) {

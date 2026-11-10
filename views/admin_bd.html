@@ -4,8 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="../assets/Logo1.png">
   <title>Administración de base de datos - Mindzyxs</title>
   <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/inicio.css" />
   <link rel="stylesheet" href="../css/admin_bd.css">
 </head>
 
@@ -21,42 +23,31 @@
 
     <nav class="main-nav">
       <ul>
-        <li><a href="inicio.html">Inicio</a></li>
-        <li><a href="#acceso">Acceso Rápido</a></li>
-        <li><a href="#auditoria">Auditoría</a></li>
-      </ul>
+        <li class="nav-inicio"><a href="inicio.html">Inicio</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="ayuda.html">Ayuda</a></li>
+        </ul>
     </nav>
 
     <div class="header-auth-buttons">
-      <span id="rol-usuario" class="header-tag" style="font-size:13px;color:#64748b;font-weight:500;margin-right:8px">Consola administración</span>
       <button type="button" id="btn-cerrar-sesion" class="btn-logout">Cerrar sesión</button>
     </div>
   </header>
 
-  <main>
+  <main class="wrap" style="max-width:1100px;margin:0 auto;padding:24px 20px 48px;">
+    <a href="panel_admin.html" class="btn-volver-landing" id="btnVolverPanel" style="background:#FFFFFF;border:1.5px solid #CBD5E1;color:#475569;font-size:13px;font-weight:600;padding:8px 20px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;margin-bottom:14px;">&larr; Volver al panel</a>
+
     <section class="inicio-hero">
       <div class="hero-contenido">
         <div class="saludo-principal">
           <h1>Administración de base de datos</h1>
           <p class="mensaje-bienvenida">Respaldos locales y mantenimiento — solo rol Administrador</p>
         </div>
-
-        <div class="tarjeta-sesion">
-          <div class="sesion-icono">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-            </svg>
-          </div>
-          <div class="sesion-info">
-            <p class="sesion-estado">Sesión iniciada como:</p>
-            <p class="sesion-rol">Administrador</p>
-          </div>
-        </div>
       </div>
     </section>
 
     <div class="denied-box" id="denied-box">
-      <div style="font-size:20px">🔒</div>
+      <div style="font-size:20px" aria-hidden="true">🔒</div>
       <div class="denied-title">Permiso denegado</div>
       <div class="denied-sub">No tienes permisos para acceder a esta función</div>
     </div>
@@ -89,7 +80,7 @@
 
         </div>
 
-        <div class="backup-list" id="backup-list">
+        <div class="backup-list" id="backup-list" tabindex="0">
           <div class="backup-list-head"><span>Respaldo</span><span>Tamaño</span><span>Fecha/hora</span><span></span></div>
           <div id="backup-rows"></div>
         </div>
@@ -103,6 +94,9 @@
   </main>
 
   <script type="module" src="../js/controllers/adminBdController.js"></script>
+  <script src="../js/accessibility.js"></script>
+  <script src="../js/cookies-banner.js"></script>
+  <script src="../js/sesion-header.js"></script>
 </body>
 
 </html>

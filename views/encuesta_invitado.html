@@ -4,7 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="../assets/Logo1.png" />
   <title>Encuesta para invitado - Mindzyxs</title>
+  <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/encuesta_invitado.css" />
 </head>
 
@@ -15,7 +17,6 @@
         <img src="../assets/Logo1.png" alt="Logo Mindzyxs" class="brand-logo">
         <span>Mindzyxs</span>
       </a>
-      <span class="badge">Encuesta a invitado</span>
     </header>
 
     <main class="survey-shell">
@@ -30,7 +31,7 @@
             <span>Progreso</span>
             <span id="progress-text">0%</span>
           </div>
-          <div class="progress-bar" aria-live="polite" aria-label="Progreso del formulario">
+          <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-live="polite" aria-label="Progreso del formulario" id="progressBar">
             <div class="progress-fill" id="progress-fill"></div>
           </div>
         </div>
@@ -57,7 +58,7 @@
               <h2>Sin cuestionarios pendientes</h2>
               <p id="sin-pendientes-msg">No tienes cuestionarios pendientes por responder.</p>
               <div class="modal-actions">
-                <a href="panel_invitado.html" class="button button-secondary">Volver al inicio</a>
+                <a href="panel_invitado.html" class="button button-secondary">Volver al panel</a>
               </div>
             </div>
           </section>
@@ -69,7 +70,7 @@
               <p>Intente nuevamente.</p>
               <div class="modal-actions">
                 <button type="button" id="btn-reintentar" class="button">Reintentar</button>
-                <a href="panel_invitado.html" class="button button-secondary">Volver al inicio</a>
+                <a href="panel_invitado.html" class="button button-secondary">Volver al panel</a>
               </div>
             </div>
           </section>
@@ -80,7 +81,7 @@
               <h2>Cuestionario completado</h2>
               <p>Gracias por participar. Tus respuestas fueron registradas.</p>
               <div class="modal-actions">
-                <button type="button" id="btn-volver-inicio" class="button button-secondary">Volver al inicio</button>
+                <button type="button" id="btn-volver-inicio" class="button button-secondary">Volver al panel</button>
                 <button type="button" id="btn-ver-resultado" class="button">Ver resultado</button>
               </div>
             </div>
@@ -102,9 +103,9 @@
   </div>
 
   <!-- Modal de confirmación para salir del cuestionario (PB-07: Sí, salir / No, continuar) -->
-  <div class="modal-overlay" id="modal-salir">
+  <div class="modal-overlay" id="modal-salir" role="dialog" aria-modal="true" aria-labelledby="modal-salir-titulo">
     <div class="modal-card">
-      <h2>Salir del cuestionario</h2>
+      <h2 id="modal-salir-titulo">Salir del cuestionario</h2>
       <p>¿Deseas salir del cuestionario? Se perderán tus respuestas</p>
       <div class="modal-actions">
         <button type="button" id="btn-salir-no" class="button button-secondary">No, continuar</button>
@@ -114,6 +115,8 @@
   </div>
 
   <script type="module" src="../js/controllers/encuestaInvitadoController.js"></script>
+  <script src="../js/accessibility.js"></script>
+  <script src="../js/cookies-banner.js"></script>
 </body>
 
 </html>

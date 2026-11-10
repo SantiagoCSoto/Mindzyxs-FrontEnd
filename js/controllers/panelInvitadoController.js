@@ -67,19 +67,33 @@ if (btnInvitadoCuestionario) {
   });
 }
 
-// 2. Ver recomendaciones básicas
+// 2. Ver recomendaciones básicas (aviso PB-04 si no aceptado)
 if (btnInvitadoRecomendaciones) {
   btnInvitadoRecomendaciones.addEventListener('click', () => {
-    invitadoService.logAuditoria('ACCESO a "Ver recomendaciones básicas"');
-    window.location.href = 'recomendaciones_invitado.html';
+    const feature = 'Ver recomendaciones básicas';
+    if (!avisoService.haAceptadoAviso()) {
+      pendingAction = 'recomendaciones_invitado';
+      invitadoService.logAuditoria(`INTENTO de acceder por primera vez a: "${feature}" (Invitado) -> se muestra aviso`);
+      openAviso(feature);
+    } else {
+      invitadoService.logAuditoria(`ACCESO directo a "${feature}" (aviso ya aceptado)`);
+      window.location.href = 'recomendaciones_invitado.html';
+    }
   });
 }
 
-// 2b. Ver resultado -> pantalla de riesgo PB-08
+// 2b. Ver resultado -> pantalla de riesgo PB-08 (aviso PB-04 si no aceptado)
 if (btnInvitadoResultado) {
   btnInvitadoResultado.addEventListener('click', () => {
-    invitadoService.logAuditoria('ACCESO a "Ver resultado" (dashboard invitado)');
-    window.location.href = 'resultado_riesgo.html';
+    const feature = 'Ver resultado';
+    if (!avisoService.haAceptadoAviso()) {
+      pendingAction = 'resultado_riesgo';
+      invitadoService.logAuditoria(`INTENTO de acceder por primera vez a: "${feature}" (Invitado) -> se muestra aviso`);
+      openAviso(feature);
+    } else {
+      invitadoService.logAuditoria(`ACCESO directo a "${feature}" (aviso ya aceptado)`);
+      window.location.href = 'resultado_riesgo.html';
+    }
   });
 }
 
@@ -99,6 +113,12 @@ if (btnInvitadoAyuda) {
 }
 if (btnCerrarAyuda) {
   btnCerrarAyuda.addEventListener('click', () => {
+    if (modalLineasAyuda) modalLineasAyuda.classList.remove('open');
+  });
+}
+const btnXAyuda = document.getElementById('btnXAyuda');
+if (btnXAyuda) {
+  btnXAyuda.addEventListener('click', () => {
     if (modalLineasAyuda) modalLineasAyuda.classList.remove('open');
   });
 }
@@ -135,10 +155,14 @@ if (btnEntendido) {
       const accion = pendingAction;
       pendingAction = null;
       if (accion === 'cuestionario_invitado' || accion === 'Responder cuestionario') {
-        invitadoService.logAuditoria('ACCESO PERMITIDO tras aceptar aviso -> encuesta_invitado.html');
+        avisoService.logAuditoria('ACCESO PERMITIDO tras aceptar aviso -> Redirigiendo a encuesta_invitado.html');
         window.location.href = 'encuesta_invitado.html';
-      } else {
-        showToast(`Accediendo a: ${accion} ✓`);
+      } else if (accion === 'resultado_riesgo' || accion === 'Ver resultado') {
+        avisoService.logAuditoria('ACCESO PERMITIDO tras aceptar aviso -> Redirigiendo a resultado_riesgo.html');
+        window.location.href = 'resultado_riesgo.html';
+      } else if (accion === 'recomendaciones_invitado' || accion === 'Ver recomendaciones básicas') {
+        avisoService.logAuditoria('ACCESO PERMITIDO tras aceptar aviso -> Redirigiendo a recomendaciones_invitado.html');
+        window.location.href = 'recomendaciones_invitado.html';
       }
     }
   });
@@ -149,7 +173,7 @@ if (btnCerrar) {
     invitadoService.logAuditoria('AVISO CERRADO - retorna al panel sin alterar información');
     if (pendingAction) {
       pendingAction = null;
-      showToast('Acceso cancelado - retornaste al panel de invitado');
+      showToast('Acceso cancelado - retornó al panel de invitado');
     }
   });
 }
