@@ -27,13 +27,14 @@ export async function listarPacientesAutorizados() {
  * Devuelve { promedio, tendencia, totalRegistros, distribucion, porSemana,
  * porMes, nivelFrecuente, suficientes }. Lanza Error con el mensaje exacto.
  */
-export async function descargarReporte(idPaciente) {
+export async function descargarReporte(idPaciente, nombrePaciente = '') {
   const res = await getBlob(`/progreso/${idPaciente}/reporte`);
   if (res.ok) {
     const url = URL.createObjectURL(res.blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `reporte_paciente_${idPaciente}.pdf`;
+    const nombre = nombrePaciente ? nombrePaciente.replace(/\s+/g, '_') : idPaciente;
+    a.download = `reporte_${nombre}.pdf`;
     document.body.appendChild(a);
     a.click();
     a.remove();

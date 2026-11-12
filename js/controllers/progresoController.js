@@ -446,11 +446,12 @@ function registrarEventos() {
   if (btnReporte) {
     btnReporte.addEventListener('click', async () => {
       const idPaciente = patientSel?.value;
+      const nombrePaciente = patientSel?.options[patientSel.selectedIndex]?.text || '';
       if (!idPaciente) {
         showToast('Selecciona un paciente primero.');
         return;
       }
-      const res = await progresoService.descargarReporte(idPaciente);
+      const res = await progresoService.descargarReporte(idPaciente, nombrePaciente);
       if (!res.exito) showToast(res.mensaje || 'No fue posible descargar el reporte.');
     });
   }

@@ -70,13 +70,14 @@ export const progresoService = {
    * @param {string|null} desde - Fecha inicial (YYYY-MM-DD)
    * @param {string|null} hasta - Fecha final (YYYY-MM-DD)
    */
-  async descargarReporte(idPaciente) {
+  async descargarReporte(idPaciente, nombrePaciente = '') {
     const res = await getBlob(`/progreso/${idPaciente}/reporte`);
     if (res.ok) {
       const url = URL.createObjectURL(res.blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `reporte_paciente_${idPaciente}.pdf`;
+      const nombre = nombrePaciente ? nombrePaciente.replace(/\s+/g, '_') : idPaciente;
+      a.download = `reporte_${nombre}.pdf`;
       document.body.appendChild(a);
       a.click();
       a.remove();
