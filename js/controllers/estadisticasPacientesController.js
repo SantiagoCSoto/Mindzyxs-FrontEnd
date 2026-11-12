@@ -211,11 +211,12 @@ async function generar() {
   if (btnReporte) {
     btnReporte.addEventListener('click', async () => {
       const id = selPac?.value;
+      const nombrePaciente = selPac?.options[selPac.selectedIndex]?.text || '';
       if (!id) {
         showToast('Selecciona un paciente primero.');
         return;
       }
-      const res = await descargarReporte(id);
+      const res = await descargarReporte(id, nombrePaciente);
       if (!res.exito) showToast(res.mensaje || 'No fue posible descargar el reporte.');
     });
   }
