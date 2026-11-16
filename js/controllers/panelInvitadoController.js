@@ -13,6 +13,14 @@ if (!invitadoService.esInvitado()) {
   window.location.href = 'inicio.html';
 }
 
+// Prevenir navegación hacia atrás fuera del panel con la flecha del navegador
+try {
+  window.history.pushState(null, '', window.location.href);
+  window.addEventListener('popstate', () => {
+    window.history.pushState(null, '', window.location.href);
+  });
+} catch (_) {}
+
 const btnInvitadoCuestionario = document.getElementById('btn-invitado-cuestionario');
 const btnInvitadoRecomendaciones = document.getElementById('btn-invitado-recomendaciones');
 const btnInvitadoAyuda = document.getElementById('btn-invitado-ayuda');
