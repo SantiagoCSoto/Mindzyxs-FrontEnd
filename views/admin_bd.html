@@ -84,7 +84,10 @@
 def q(v):
     return "NULL" if v is None else chr(39) + str(v).replace(chr(39), chr(39)+chr(39)) + chr(39)
 
-files = glob.glob(sys.argv[1])\nif not files:\n    raise SystemExit("No se encontro el archivo de respaldo")\nd = json.load(open(files[0], encoding="utf-8-sig"))
+files = glob.glob(sys.argv[1])
+if not files:
+    raise SystemExit("No se encontro el archivo de respaldo")
+d = json.load(open(files[0], encoding="utf-8-sig"))
 for r in d["data"]["roles"]:
     print(f"INSERT INTO dbo.roles (id_rol, nombre) VALUES ({r['idRol']}, {q(r['nombre'])});")
 for g in d["data"]["generos"]:
