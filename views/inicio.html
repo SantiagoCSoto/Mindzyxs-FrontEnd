@@ -6,6 +6,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="../assets/Logo1.png" />
   <title>Mindzyxs — Apoyo y monitoreo del bienestar emocional</title>
+  <script>
+    (function () {
+      try {
+        if (sessionStorage.getItem('es_invitado') === 'true') {
+          if (typeof window.location.replace === 'function') {
+            window.location.replace('panel_invitado.html');
+          } else {
+            window.location.href = 'panel_invitado.html';
+          }
+          return;
+        }
+        var s = JSON.parse(sessionStorage.getItem('usuario') || localStorage.getItem('usuario') || 'null');
+        var auth = sessionStorage.getItem('autenticado') === 'true' || localStorage.getItem('autenticado') === 'true' || !!localStorage.getItem('token');
+        if (s && auth) {
+          var rol = String((s && (s.rol || s.tipo_usuario)) || localStorage.getItem('rol') || '').toLowerCase();
+          var dest = rol.includes('paciente') ? 'panel_paciente.html' : rol.includes('psicologo') ? 'panel_psicologo.html' : 'panel_admin.html';
+          if (typeof window.location.replace === 'function') {
+            window.location.replace(dest);
+          } else {
+            window.location.href = dest;
+          }
+        }
+      } catch (_) {}
+    })();
+  </script>
   <link rel="stylesheet" href="../css/base.css" />
   <link rel="stylesheet" href="../css/inicio.css" />
 </head>
