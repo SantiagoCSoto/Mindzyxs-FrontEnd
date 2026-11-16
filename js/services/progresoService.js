@@ -122,7 +122,8 @@ export const progresoService = {
       return { exito: false, status: 401, noSesion: true, mensaje: 'Tu sesión ha expirado. Inicia sesión nuevamente' };
     }
 
-    // Caso 3: datos de prueba solo con ?demo=1 explícito    if ((res.isNetworkError || !res.ok) && this.modoDemo()) {
+    // Caso 3: datos de prueba solo con ?demo=1 explícito
+    if ((res.isNetworkError || !res.ok) && this.modoDemo()) {
       this.logAuditoria(`FALLBACK Progreso local para paciente id=${idPaciente}`);
       const fallbackData = this.obtenerProgresoFallback(idPaciente, desde, hasta);
 
