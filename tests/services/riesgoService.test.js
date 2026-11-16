@@ -18,13 +18,22 @@ describe('riesgoService.js', () => {
     expect(res.puntaje).toBe(4);
   });
 
-  it('calcularRiesgo lanza error si la petición falla', async () => {
+  it('calcularRiesgo lanza error si la petición falla con error', async () => {
     vi.spyOn(apiClient, 'postJson').mockResolvedValue({
       ok: false,
       error: 'Error calculando riesgo'
     });
 
     await expect(riesgoService.calcularRiesgo(1, [])).rejects.toThrow('Error calculando riesgo');
+  });
+
+  it('calcularRiesgo lanza error por defecto si res.error es falsy', async () => {
+    vi.spyOn(apiClient, 'postJson').mockResolvedValue({
+      ok: false,
+      error: ''
+    });
+
+    await expect(riesgoService.calcularRiesgo(1, [])).rejects.toThrow('No se encontraron respuestas para calcular el riesgo');
   });
 
   it('obtenerLineas devuelve las líneas activas', async () => {
@@ -38,11 +47,30 @@ describe('riesgoService.js', () => {
     expect(lineas[0].nombre).toBe('Línea 106');
   });
 
+  it('obtenerLineas devuelve array vacío si data es null', async () => {
+    vi.spyOn(apiClient, 'getJson').mockResolvedValue({
+      ok: true,
+      data: null
+    });
+
+    const lineas = await riesgoService.obtenerLineas();
+    expect(lineas).toEqual([]);
+  });
+
   it('obtenerLineas lanza error si la petición falla', async () => {
     vi.spyOn(apiClient, 'getJson').mockResolvedValue({
       ok: false
     });
 
     await expect(riesgoService.obtenerLineas()).rejects.toThrow('No fue posible cargar las líneas de ayuda');
+  });
+
+  it('obtenerLineas lanza error custom si res.error existe', async () => {
+    vi.spyOn(apiClient, 'getJson').mockResolvedValue({
+      ok: false,
+      error: 'Error personalizado de lineas'
+    });
+
+    await expect(riesgoService.obtenerLineas()).rejects.toThrow('Error personalizado de lineas');
   });
 });

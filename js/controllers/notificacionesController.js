@@ -54,6 +54,7 @@ const badgeContador = $('badgeContador');
 const contadorTexto = $('contadorTexto');
 
 const btnVolverCatalogo = $('btnVolverCatalogo');
+const btnCancelarEdicion = $('btnCancelarEdicion');
 const editTitulo = $('editTitulo');
 const editSub = $('editSub');
 const chkActivo = $('chkActivo');
@@ -62,6 +63,7 @@ const lblActivoTexto = $('lblActivoTexto');
 const formNotificacion = $('formNotificacion');
 const chkCanalCorreo = $('chkCanalCorreo');
 const txtAsunto = $('txtAsunto');
+const txtCuerpo = $('txtCuerpo');
 
 const btnActualizarPreview = $('btnActualizarPreview');
 const varNombre = $('varNombre');
@@ -415,7 +417,7 @@ function validarFormulario() {
     if (canales.length === 0) {
       return 'Debes seleccionar al menos un canal de entrega si la notificación está habilitada.';
     }
-    if (canales.includes('correo') && !asunto) {
+    if (canales.includes('correo') && txtAsunto && !asunto) {
       return 'El asunto es obligatorio cuando el canal de correo está habilitado.';
     }
   }
@@ -458,7 +460,7 @@ if (btnModalSi) {
     const payload = {
       canales: obtenerCanalesSeleccionados(),
       activo: Boolean(chkActivo?.checked),
-      asunto: txtAsunto?.value?.trim() || null
+      asunto: txtAsunto ? (txtAsunto.value?.trim() || null) : (eventoActual.asunto || null)
     };
 
     const res = await actualizarNotificacion(eventoActual.tipo, payload);

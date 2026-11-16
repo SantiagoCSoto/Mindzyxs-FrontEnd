@@ -15,7 +15,7 @@ describe('gestionUsuariosService.js', () => {
   });
 
   describe('listarUsuarios', () => {
-    it('debe listar usuarios con filtros', async () => {
+    it('debe listar usuarios con filtros válidos', async () => {
       vi.spyOn(apiClient, 'getJson').mockResolvedValue({
         ok: true,
         data: {
@@ -31,16 +31,41 @@ describe('gestionUsuariosService.js', () => {
       expect(res.data[0].id).toBe(1);
     });
 
-    it('debe manejar error al listar usuarios', async () => {
+    it('debe listar usuarios sin filtros cuando son cadenas vacías', async () => {
+      vi.spyOn(apiClient, 'getJson').mockResolvedValue({
+        ok: true,
+        data: [
+          { Id: 2, Nombre: 'Ana', Correo: 'ana@test.com', Rol: 'Psicologo', Estado: 'Activo', Aprobacion: 'Aprobado', FechaRegistro: '2026-01-01' }
+        ]
+      });
+
+      const res = await listarUsuarios({ q: '  ', rol: '', estado: '' });
+      expect(res.ok).toBe(true);
+      expect(res.data[0].id).toBe(2);
+      expect(res.data[0].nombre).toBe('Ana');
+    });
+
+    it('debe retornar lista vacía si data es nula', async () => {
+      vi.spyOn(apiClient, 'getJson').mockResolvedValue({
+        ok: true,
+        data: null
+      });
+
+      const res = await listarUsuarios();
+      expect(res.ok).toBe(true);
+      expect(res.data).toEqual([]);
+    });
+
+    it('debe manejar error al listar usuarios con fallback de mensaje', async () => {
       vi.spyOn(apiClient, 'getJson').mockResolvedValue({
         ok: false,
         status: 500,
-        error: 'Error de servidor'
+        error: ''
       });
 
       const res = await listarUsuarios();
       expect(res.ok).toBe(false);
-      expect(res.error).toBe('Error de servidor');
+      expect(res.error).toBe('No fue posible cargar la lista de usuarios.');
     });
   });
 
@@ -48,28 +73,67 @@ describe('gestionUsuariosService.js', () => {
     it('debe validar id de usuario', async () => {
       const res = await obtenerDetalleUsuario(null);
       expect(res.ok).toBe(false);
+      expect(res.error).toBe('Identificador de usuario no válido.');
     });
 
-    it('debe devolver detalle del usuario', async () => {
+    it('debe devolver detalle del usuario con minúsculas', async () => {
       vi.spyOn(apiClient, 'getJson').mockResolvedValue({
         ok: true,
-        data: { id: 1, nombre: 'Juan Perez', correo: 'juan@test.com', rol: 'Paciente' }
+        data: {
+          id: 1,
+          nombre: 'Juan Perez',
+          correo: 'juan@test.com',
+          rol: 'Paciente',
+          estado: 'Activo',
+          aprobacion: null,
+          fechaRegistro: '2026-01-01',
+          nombres: 'Juan',
+          apellidos: 'Perez',
+          fechaNacimiento: '1990-01-01',
+          genero: 'Masculino'
+        }
       });
 
       const res = await obtenerDetalleUsuario(1);
       expect(res.ok).toBe(true);
       expect(res.data.id).toBe(1);
+      expect(res.data.nombres).toBe('Juan');
     });
 
-    it('debe manejar error al consultar detalle', async () => {
+    it('debe devolver detalle con campos mayúsculas o vacíos', async () => {
+      vi.spyOn(apiClient, 'getJson').mockResolvedValue({
+        ok: true,
+        data: {
+          Id: 2,
+          Nombre: null,
+          Correo: null,
+          Rol: null,
+          Estado: null,
+          Aprobacion: null,
+          FechaRegistro: null,
+          Nombres: null,
+          Apellidos: null,
+          FechaNacimiento: null,
+          Genero: null
+        }
+      });
+
+      const res = await obtenerDetalleUsuario(2);
+      expect(res.ok).toBe(true);
+      expect(res.data.id).toBe(2);
+      expect(res.data.nombre).toBe('');
+      expect(res.data.apellidos).toBe('');
+    });
+
+    it('debe manejar error al consultar detalle con fallback', async () => {
       vi.spyOn(apiClient, 'getJson').mockResolvedValue({
         ok: false,
-        error: 'Usuario no existe'
+        error: ''
       });
 
       const res = await obtenerDetalleUsuario(99);
       expect(res.ok).toBe(false);
-      expect(res.error).toBe('Usuario no existe');
+      expect(res.error).toBe('No fue posible cargar el detalle del usuario.');
     });
   });
 
@@ -77,87 +141,124 @@ describe('gestionUsuariosService.js', () => {
     it('debe validar id de usuario', async () => {
       const res = await actualizarUsuario(null, {});
       expect(res.ok).toBe(false);
+      expect(res.error).toBe('Identificador de usuario no válido.');
     });
 
-    it('debe actualizar datos del usuario', async () => {
-      vi.spyOn(apiClient, 'putJson').mockResolvedValue({
+    it('debe actualizar datos del usuario con mensaje personalizado o fallback', async () => {
+      vi.spyOn(apiClient, 'putJson').mockResolvedValueOnce({
         ok: true,
         data: { mensaje: 'Datos guardados' }
+      }).mockResolvedValueOnce({
+        ok: true,
+        data: null
       });
 
-      const res = await actualizarUsuario(1, { nombres: 'Pedro' });
-      expect(res.ok).toBe(true);
-      expect(res.mensaje).toBe('Datos guardados');
+      const res1 = await actualizarUsuario(1, { nombres: 'Pedro' });
+      expect(res1.ok).toBe(true);
+      expect(res1.mensaje).toBe('Datos guardados');
+
+      const res2 = await actualizarUsuario(1, {});
+      expect(res2.ok).toBe(true);
+      expect(res2.mensaje).toBe('Cambios guardados correctamente.');
     });
 
-    it('debe manejar error al actualizar', async () => {
+    it('debe manejar error al actualizar con fallback', async () => {
       vi.spyOn(apiClient, 'putJson').mockResolvedValue({
         ok: false,
-        error: 'No se pudo guardar'
+        error: ''
       });
 
       const res = await actualizarUsuario(1, {});
       expect(res.ok).toBe(false);
-      expect(res.error).toBe('No se pudo guardar');
+      expect(res.error).toBe('No fue posible actualizar los datos del usuario.');
     });
   });
 
   describe('cambiarEstadoUsuario', () => {
-    it('debe validar id y nuevoEstado', async () => {
-      const res1 = await cambiarEstadoUsuario(null, 'Inactivo');
+    it('debe validar id de usuario y nuevo estado obligatorio', async () => {
+      const res1 = await cambiarEstadoUsuario(null, 'Inactiva');
       expect(res1.ok).toBe(false);
+      expect(res1.error).toBe('Identificador de usuario no válido.');
 
-      const res2 = await cambiarEstadoUsuario(1, '');
+      const res2 = await cambiarEstadoUsuario(1, '   ');
       expect(res2.ok).toBe(false);
+      expect(res2.error).toBe('El nuevo estado es obligatorio.');
     });
 
-    it('debe cambiar el estado del usuario', async () => {
-      vi.spyOn(apiClient, 'putJson').mockResolvedValue({
+    it('debe actualizar estado con mensaje devuelto o fallback', async () => {
+      vi.spyOn(apiClient, 'putJson').mockResolvedValueOnce({
         ok: true,
         data: { mensaje: 'Estado cambiado' }
+      }).mockResolvedValueOnce({
+        ok: true,
+        data: null
       });
 
-      const res = await cambiarEstadoUsuario(1, 'Suspendida');
-      expect(res.ok).toBe(true);
-      expect(res.mensaje).toBe('Estado cambiado');
+      const res1 = await cambiarEstadoUsuario(1, 'Suspendida');
+      expect(res1.ok).toBe(true);
+      expect(res1.mensaje).toBe('Estado cambiado');
+
+      const res2 = await cambiarEstadoUsuario(1, 'Activa');
+      expect(res2.ok).toBe(true);
+      expect(res2.mensaje).toBe('Estado actualizado correctamente.');
     });
 
-    it('debe manejar error al cambiar estado', async () => {
+    it('debe manejar error al cambiar estado con fallback', async () => {
       vi.spyOn(apiClient, 'putJson').mockResolvedValue({
         ok: false,
-        error: 'No se pudo actualizar estado'
+        error: ''
       });
 
-      const res = await cambiarEstadoUsuario(1, 'Inactivo');
+      const res = await cambiarEstadoUsuario(1, 'Inactiva');
       expect(res.ok).toBe(false);
+      expect(res.error).toBe('No fue posible cambiar el estado del usuario.');
     });
   });
 
   describe('forzarRestablecimientoPassword', () => {
     it('debe validar id de usuario', async () => {
-      const res = await forzarRestablecimientoPassword(null);
+      const res = await forzarRestablecimientoPassword(0);
       expect(res.ok).toBe(false);
+      expect(res.error).toBe('Identificador de usuario no válido.');
     });
 
-    it('debe forzar restablecimiento exitosamente', async () => {
-      vi.spyOn(apiClient, 'postJson').mockResolvedValue({
+    it('debe restablecer contraseña con mensaje devuelto o fallback', async () => {
+      vi.spyOn(apiClient, 'postJson').mockResolvedValueOnce({
         ok: true,
         data: { mensaje: 'Código enviado' }
+      }).mockResolvedValueOnce({
+        ok: true,
+        data: null
       });
 
-      const res = await forzarRestablecimientoPassword(1);
-      expect(res.ok).toBe(true);
-      expect(res.mensaje).toBe('Código enviado');
+      const res1 = await forzarRestablecimientoPassword(1);
+      expect(res1.ok).toBe(true);
+      expect(res1.mensaje).toBe('Código enviado');
+
+      const res2 = await forzarRestablecimientoPassword(1);
+      expect(res2.ok).toBe(true);
+      expect(res2.mensaje).toBe('Se envió un código de restablecimiento al correo del usuario.');
     });
 
-    it('debe manejar error al restablecer contraseña', async () => {
+    it('debe manejar error al restablecer contraseña con fallback', async () => {
       vi.spyOn(apiClient, 'postJson').mockResolvedValue({
         ok: false,
-        error: 'Fallo al resetear'
+        error: ''
       });
 
       const res = await forzarRestablecimientoPassword(1);
       expect(res.ok).toBe(false);
+      expect(res.error).toBe('No fue posible forzar el restablecimiento de contraseña.');
+    });
+  });
+
+  describe('gestionUsuariosService export', () => {
+    it('debe exportar todas las funciones', () => {
+      expect(gestionUsuariosService.listarUsuarios).toBe(listarUsuarios);
+      expect(gestionUsuariosService.obtenerDetalleUsuario).toBe(obtenerDetalleUsuario);
+      expect(gestionUsuariosService.actualizarUsuario).toBe(actualizarUsuario);
+      expect(gestionUsuariosService.cambiarEstadoUsuario).toBe(cambiarEstadoUsuario);
+      expect(gestionUsuariosService.forzarRestablecimientoPassword).toBe(forzarRestablecimientoPassword);
     });
   });
 });

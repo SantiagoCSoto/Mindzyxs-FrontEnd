@@ -25,18 +25,42 @@ describe('cuestionariosAdminService.js', () => {
       expect(res[0].titulo).toBe('GAD-7');
     });
 
-    it('debe lanzar error si falla la consulta', async () => {
+    it('debe mapear estructura anidada y mayúsculas en campos', async () => {
       vi.spyOn(apiClient, 'getJson').mockResolvedValue({
-        ok: false,
-        error: 'Error de servidor'
+        ok: true,
+        data: {
+          cuestionarios: [{ Id: 10, Titulo: 'Cuestionario Mayus', Descripcion: 'Desc', Estado: 'Activo', NumPreguntas: 5, FechaCreacion: '2026-01-01' }]
+        }
       });
 
-      await expect(listarPredeterminados()).rejects.toThrow('Error de servidor');
+      const res = await listarPredeterminados('');
+      expect(res).toHaveLength(1);
+      expect(res[0].id).toBe(10);
+      expect(res[0].titulo).toBe('Cuestionario Mayus');
+    });
+
+    it('debe manejar data vacía o nula retornando arreglo vacío', async () => {
+      vi.spyOn(apiClient, 'getJson').mockResolvedValue({
+        ok: true,
+        data: null
+      });
+
+      const res = await listarPredeterminados();
+      expect(res).toEqual([]);
+    });
+
+    it('debe lanzar error con mensaje por defecto si res.error es nulo', async () => {
+      vi.spyOn(apiClient, 'getJson').mockResolvedValue({
+        ok: false,
+        error: ''
+      });
+
+      await expect(listarPredeterminados()).rejects.toThrow('No fue posible cargar los cuestionarios predeterminados');
     });
   });
 
   describe('obtenerPredeterminado', () => {
-    it('debe obtener detalle del cuestionario', async () => {
+    it('debe obtener detalle del cuestionario con datos minúsculas', async () => {
       vi.spyOn(apiClient, 'getJson').mockResolvedValue({
         ok: true,
         data: {
@@ -53,13 +77,33 @@ describe('cuestionariosAdminService.js', () => {
       expect(res.preguntas).toHaveLength(1);
     });
 
-    it('debe lanzar error si no existe', async () => {
+    it('debe mapear detalle con campos en mayúsculas o data vacía', async () => {
       vi.spyOn(apiClient, 'getJson').mockResolvedValue({
-        ok: false,
-        error: 'No existe'
+        ok: true,
+        data: {
+          Id: 2,
+          Titulo: 'Test',
+          Descripcion: 'Desc',
+          Estado: 'Borrador',
+          UmbralBajoMax: 3,
+          UmbralMedioMax: 8,
+          Preguntas: [{ id: 1 }]
+        }
       });
 
-      await expect(obtenerPredeterminado(99)).rejects.toThrow('No existe');
+      const res = await obtenerPredeterminado(2);
+      expect(res.id).toBe(2);
+      expect(res.titulo).toBe('Test');
+      expect(res.umbralBajoMax).toBe(3);
+    });
+
+    it('debe lanzar error con mensaje por defecto si res.error no viene', async () => {
+      vi.spyOn(apiClient, 'getJson').mockResolvedValue({
+        ok: false,
+        error: null
+      });
+
+      await expect(obtenerPredeterminado(99)).rejects.toThrow('No fue posible cargar el cuestionario');
     });
   });
 
@@ -75,13 +119,13 @@ describe('cuestionariosAdminService.js', () => {
       expect(res.mensaje).toBe('Guardado');
     });
 
-    it('debe lanzar error si faltan campos obligatorios', async () => {
+    it('debe lanzar error con fallback si falla la creación', async () => {
       vi.spyOn(apiClient, 'postJson').mockResolvedValue({
         ok: false,
-        error: 'Debes ingresar título'
+        error: null
       });
 
-      await expect(crearPredeterminado({})).rejects.toThrow('Debes ingresar título');
+      await expect(crearPredeterminado({})).rejects.toThrow('Debes completar todos los campos obligatorios');
     });
   });
 
@@ -97,13 +141,13 @@ describe('cuestionariosAdminService.js', () => {
       expect(res.mensaje).toBe('Actualizado');
     });
 
-    it('debe lanzar error si falla actualizacion', async () => {
+    it('debe lanzar error si falla actualizacion sin mensaje de backend', async () => {
       vi.spyOn(apiClient, 'putJson').mockResolvedValue({
         ok: false,
-        error: 'Error al actualizar'
+        error: ''
       });
 
-      await expect(actualizarPredeterminado(2, {})).rejects.toThrow('Error al actualizar');
+      await expect(actualizarPredeterminado(2, {})).rejects.toThrow('Debes completar todos los campos obligatorios');
     });
   });
 
@@ -118,13 +162,19 @@ describe('cuestionariosAdminService.js', () => {
       expect(res.mensaje).toBe('Desactivado');
     });
 
-    it('debe lanzar error si no se encuentra', async () => {
+    it('debe lanzar error con mensaje de backend o fallback si falla', async () => {
       vi.spyOn(apiClient, 'postJson').mockResolvedValue({
         ok: false,
-        error: 'No encontrado'
+        error: 'No se puede desactivar'
       });
 
-      await expect(desactivarPredeterminado(99)).rejects.toThrow('No encontrado');
+      await expect(desactivarPredeterminado(2)).rejects.toThrow('No se puede desactivar');
+
+      vi.spyOn(apiClient, 'postJson').mockResolvedValue({
+        ok: false,
+        error: ''
+      });
+      await expect(desactivarPredeterminado(2)).rejects.toThrow('Cuestionario predeterminado no encontrado.');
     });
   });
 });
