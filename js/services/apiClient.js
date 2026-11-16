@@ -1,9 +1,23 @@
 /**
  * Cliente HTTP base para comunicación con el backend (API REST ASP.NET Core)
- * Base URL: http://localhost:5015/api
+ * Base URL: http://localhost:5015/api (desarrollo local) o Azure (producción)
  */
 
-export const API_BASE_URL = 'https://mindzyxs-api-g7h0d7c9gzhagecz.mexicocentral-01.azurewebsites.net/api';
+export const API_BASE_URL = (function () {
+  try {
+    if (typeof localStorage !== 'undefined') {
+      const custom = localStorage.getItem('API_URL');
+      if (custom) return custom;
+    }
+    if (typeof window !== 'undefined' && window.location) {
+      const host = window.location.hostname;
+      if (host === 'localhost' || host === '127.0.0.1' || !host) {
+        return 'http://localhost:5015/api';
+      }
+    }
+  } catch (_) {}
+  return 'https://mindzyxs-api-g7h0d7c9gzhagecz.mexicocentral-01.azurewebsites.net/api';
+})();
 
 const TIMEOUT_MS = 8000;
 

@@ -21,6 +21,26 @@ const btnLoginSubmit = document.getElementById('btn-login');
 const btnModalContinuar = document.getElementById('btn-modal-continuar');
 const btnModoInvitado = document.getElementById('btn-modo-invitado');
 
+function redirigir(url) {
+  if (typeof window !== 'undefined' && window.location) {
+    if (typeof window.location.replace === 'function') {
+      window.location.replace(url);
+    } else {
+      window.location.href = url;
+    }
+  }
+}
+
+// Si ya existe sesión activa, redirigir inmediatamente a su panel para evitar volver al login con la flecha
+try {
+  const sesionPrevia = authService.getSesion();
+  if (sesionPrevia && sessionStorage.getItem('autenticado') === 'true') {
+    redirigir(destinoPorRol());
+  } else if (sessionStorage.getItem('es_invitado') === 'true') {
+    redirigir('panel_invitado.html');
+  }
+} catch (_) {}
+
 // Acción para entrar en Modo Invitado (PB-06) -> Panel del invitado
 if (btnModoInvitado) {
   btnModoInvitado.addEventListener('click', async () => {
@@ -29,7 +49,7 @@ if (btnModoInvitado) {
     try {
       await invitadoService.iniciarModoInvitado('login');
     } finally {
-      window.location.href = 'panel_invitado.html';
+      redirigir('panel_invitado.html');
     }
   });
 }
@@ -117,7 +137,7 @@ if (formLogin) {
 
         // Redirigir según el rol después de 1.5 segundos
         setTimeout(() => {
-          window.location.href = destinoPorRol();
+          redirigir(destinoPorRol());
         }, 1500);
       } else {
         mostrarBanner(bannerError, resultado.mensaje || 'Correo o contraseña incorrectos');
@@ -144,7 +164,7 @@ function destinoPorRol() {
 if (btnModalContinuar) {
   btnModalContinuar.addEventListener('click', () => {
     cerrarModal(modalRol);
-    window.location.href = destinoPorRol();
+    redirigir(destinoPorRol());
   });
 }
 
@@ -152,7 +172,7 @@ if (modalRol) {
   modalRol.addEventListener('click', (e) => {
     if (e.target === modalRol) {
       cerrarModal(modalRol);
-      window.location.href = destinoPorRol();
+      redirigir(destinoPorRol());
     }
   });
 }

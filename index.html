@@ -5,18 +5,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mindzyxs - Cargando...</title>
+  <script>
+    (function () {
+      function redirigir(url) {
+        if (typeof window.location.replace === 'function') {
+          window.location.replace(url);
+        } else {
+          window.location.href = url;
+        }
+      }
+      try {
+        if (sessionStorage.getItem('es_invitado') === 'true') {
+          redirigir("views/panel_invitado.html");
+          return;
+        }
+        var s = JSON.parse(sessionStorage.getItem('usuario') || localStorage.getItem('usuario') || 'null');
+        var auth = sessionStorage.getItem('autenticado') === 'true' || localStorage.getItem('autenticado') === 'true' || !!localStorage.getItem('token');
+        if (s && auth) {
+          var rol = String((s && (s.rol || s.tipo_usuario)) || localStorage.getItem('rol') || '').toLowerCase();
+          var dest = rol.includes('paciente') ? 'views/panel_paciente.html' : rol.includes('psicologo') ? 'views/panel_psicologo.html' : 'views/panel_admin.html';
+          redirigir(dest);
+          return;
+        }
+      } catch (_) {}
+      redirigir("views/inicio.html");
+    })();
+  </script>
 </head>
 
 <body>
-  <script>
-    // Si hay modo invitado, ir a su panel; en cualquier otro caso, a la landing
-    const esInvitado = sessionStorage.getItem('es_invitado') === 'true';
-    if (esInvitado) {
-      window.location.href = "views/panel_invitado.html";
-    } else {
-      window.location.href = "views/inicio.html";
-    }
-  </script>
 </body>
 
 </html>

@@ -14,6 +14,14 @@ if (!sesion || !rol.includes('psicologo')) {
   window.location.href = 'login.html';
 }
 
+// Prevenir navegación hacia atrás fuera del panel con la flecha del navegador
+try {
+  window.history.pushState(null, '', window.location.href);
+  window.addEventListener('popstate', () => {
+    window.history.pushState(null, '', window.location.href);
+  });
+} catch (_) {}
+
 const btnPacientes = document.getElementById('btn-psicologo-pacientes');
 const btnCuestionarios = document.getElementById('btn-psicologo-cuestionarios');
 const btnEstadisticas = document.getElementById('btn-psicologo-estadisticas');

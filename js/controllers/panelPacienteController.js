@@ -14,6 +14,14 @@ if (!sesion || !rol.includes('paciente')) {
   window.location.href = 'login.html';
 }
 
+// Prevenir navegación hacia atrás fuera del panel con la flecha del navegador
+try {
+  window.history.pushState(null, '', window.location.href);
+  window.addEventListener('popstate', () => {
+    window.history.pushState(null, '', window.location.href);
+  });
+} catch (_) {}
+
 const btnCuestionario = document.getElementById('btn-paciente-cuestionario');
 const btnRegistro = document.getElementById('btn-paciente-registro');
 const btnHistorial = document.getElementById('btn-paciente-historial');
