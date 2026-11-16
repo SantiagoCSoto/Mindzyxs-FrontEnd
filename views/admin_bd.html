@@ -79,12 +79,12 @@
               <li>Verifica conteos por tabla y relaciones (usuarios, roles, estados, géneros).</li>
               <li>Si todo es correcto, ejecuta el mismo script en producción en horario de bajo uso.</li>
             </ol>
-            <pre style="margin-top:8px; padding:8px; background:#f1f5f9; border-radius:8px; overflow:auto; white-space:pre-wrap; word-break:break-word; font-size:11px; color:#1e293b;">import json, sys
+            <pre style="margin-top:8px; padding:8px; background:#f1f5f9; border-radius:8px; overflow:auto; white-space:pre-wrap; word-break:break-word; font-size:11px; color:#1e293b;">import json, sys, glob
 
 def q(v):
     return "NULL" if v is None else chr(39) + str(v).replace(chr(39), chr(39)+chr(39)) + chr(39)
 
-d = json.load(open(sys.argv[1], encoding="utf-8-sig"))
+files = glob.glob(sys.argv[1])\nif not files:\n    raise SystemExit("No se encontro el archivo de respaldo")\nd = json.load(open(files[0], encoding="utf-8-sig"))
 for r in d["data"]["roles"]:
     print(f"INSERT INTO dbo.roles (id_rol, nombre) VALUES ({r['idRol']}, {q(r['nombre'])});")
 for g in d["data"]["generos"]:
