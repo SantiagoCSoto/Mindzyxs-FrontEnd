@@ -89,13 +89,13 @@ if not files:
     raise SystemExit("No se encontro el archivo de respaldo")
 d = json.load(open(files[0], encoding="utf-8-sig"))
 for r in d["data"]["roles"]:
-    print(f"INSERT INTO dbo.roles (id_rol, nombre) VALUES ({r['idRol']}, {q(r['nombre'])});")
+    print(f"INSERT INTO dbo.roles (id_rol, nombre) VALUES ({r['IdRol']}, {q(r['Nombre'])});")
 for g in d["data"]["generos"]:
-    print(f"INSERT INTO dbo.generos (id_genero, nombre) VALUES ({g['idGenero']}, {q(g['nombre'])});")
+    print(f"INSERT INTO dbo.generos (id_genero, nombre) VALUES ({g['IdGenero']}, {q(g['Nombre'])});")
 for e in d["data"]["estados"]:
-    print(f"INSERT INTO dbo.estados (id_estado, nombre) VALUES ({e['idEstado']}, {q(e['nombre'])});")
+    print(f"INSERT INTO dbo.estados (id_estado, nombre) VALUES ({e['IdEstado']}, {q(e['Nombre'])});")
 for u in d["data"]["usuarios"]:
-    print(f"INSERT INTO dbo.usuarios (id_usuario, id_rol, id_estado_cuenta, id_estado_aprobacion, nombre, apellido, correo, fecha_nacimiento, fecha_registro, id_genero, ultimo_acceso) VALUES ({u['idUsuario']}, {u['idRol']}, {u['idEstadoCuenta']}, {u['idEstadoAprobacion']}, {q(u['nombre'])}, {q(u['apellido'])}, {q(u['correo'])}, {q(u['fechaNacimiento'])}, {q(u['fechaRegistro'])}, {q(u['idGenero'])}, {q(u['ultimoAcceso'])});")
+    print(f"INSERT INTO dbo.usuarios (id_usuario, id_rol, id_estado_cuenta, id_estado_aprobacion, nombre, apellido, correo, fecha_nacimiento, fecha_registro, id_genero, ultimo_acceso) VALUES ({u['IdUsuario']}, {u['IdRol']}, {u['IdEstadoCuenta']}, {u['IdEstadoAprobacion']}, {q(u['Nombre'])}, {q(u['Apellido'])}, {q(u['Correo'])}, {q(u['FechaNacimiento'])}, {q(u['FechaRegistro'])}, {q(u['IdGenero'])}, {q(u['UltimoAcceso'])});")
 </pre>
             <p style="margin-top:8px;"><strong>Precauciones:</strong> evita duplicar registros; realiza la restauración en horario de bajo uso; conserva una copia del archivo original.</p>
             <p><strong>Limitaciones:</strong> el JSON no incluye contraseñas, rutas de archivos, tablas de auditoría ni esquema. No se puede importar directamente a Azure SQL sin transformación. Mindzyxs no incluye restauración automática; el script anterior es una herramienta externa de apoyo.</p>
