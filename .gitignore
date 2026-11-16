@@ -8,3 +8,7 @@ Mindzyxs-BackEnd-develop/
 .vs/
 .DS_Store
 Thumbs.db
+
+# Node / Pruebas
+node_modules/
+coverage/

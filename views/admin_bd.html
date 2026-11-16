@@ -65,6 +65,43 @@
             <div class="msg-admin" id="msg-backup"></div>
           </div>
 
+          <div class="admin-tile" style="grid-column:1 / -1; align-items:flex-start; text-align:left;">
+            <h3>¿Cómo restaurar un respaldo en Azure SQL Database?</h3>
+            <p>El botón “Generar Respaldo Local” crea un archivo JSON con una instantánea de datos (roles, géneros, estados y usuarios, sin contraseñas ni rutas de archivos). No es un respaldo completo de la base de datos ni incluye estructura (tablas, índices, procedimientos).</p>
+            <p style="font-weight:600; margin-top:6px;">Procedimiento manual (ejecutable):</p>
+            <ol style="margin:8px 0 0 18px; font-size:12px; color:var(--muted); line-height:1.6;">
+              <li>Descarga el archivo <code>.backup</code> desde “Ver respaldos”.</li>
+              <li>Instala Python 3 en el equipo del administrador.</li>
+              <li>Guarda el siguiente script como <code>restore.py</code> junto al archivo descargado y ejecútalo: <code>python restore.py mindzyx_backup_*.backup > restore.sql</code></li>
+              <li>Revisa <code>restore.sql</code> antes de ejecutarlo.</li>
+              <li>Abre Azure Data Studio o SQL Server Management Studio y conéctate a la base de datos Azure SQL de Mindzyxs.</li>
+              <li>Ejecuta <code>restore.sql</code> primero en una base de datos de prueba.</li>
+              <li>Verifica conteos por tabla y relaciones (usuarios, roles, estados, géneros).</li>
+              <li>Si todo es correcto, ejecuta el mismo script en producción en horario de bajo uso.</li>
+            </ol>
+            <pre style="margin-top:8px; padding:8px; background:#f1f5f9; border-radius:8px; overflow:auto; white-space:pre-wrap; word-break:break-word; font-size:11px; color:#1e293b;">import json, sys, glob
+
+def q(v):
+    return "NULL" if v is None else chr(39) + str(v).replace(chr(39), chr(39)+chr(39)) + chr(39)
+
+files = glob.glob(sys.argv[1])
+if not files:
+    raise SystemExit("No se encontro el archivo de respaldo")
+d = json.load(open(files[0], encoding="utf-8-sig"))
+for r in d["data"]["roles"]:
+    print(f"INSERT INTO dbo.roles (id_rol, nombre) VALUES ({r['IdRol']}, {q(r['Nombre'])});")
+for g in d["data"]["generos"]:
+    print(f"INSERT INTO dbo.generos (id_genero, nombre) VALUES ({g['IdGenero']}, {q(g['Nombre'])});")
+for e in d["data"]["estados"]:
+    print(f"INSERT INTO dbo.estados (id_estado, nombre) VALUES ({e['IdEstado']}, {q(e['Nombre'])});")
+for u in d["data"]["usuarios"]:
+    print(f"INSERT INTO dbo.usuarios (id_usuario, id_rol, id_estado_cuenta, id_estado_aprobacion, nombre, apellido, correo, fecha_nacimiento, fecha_registro, id_genero, ultimo_acceso) VALUES ({u['IdUsuario']}, {u['IdRol']}, {u['IdEstadoCuenta']}, {u['IdEstadoAprobacion']}, {q(u['Nombre'])}, {q(u['Apellido'])}, {q(u['Correo'])}, {q(u['FechaNacimiento'])}, {q(u['FechaRegistro'])}, {q(u['IdGenero'])}, {q(u['UltimoAcceso'])});")
+</pre>
+            <p style="margin-top:8px;"><strong>Precauciones:</strong> evita duplicar registros; realiza la restauración en horario de bajo uso; conserva una copia del archivo original.</p>
+            <p><strong>Limitaciones:</strong> el JSON no incluye contraseñas, rutas de archivos, tablas de auditoría ni esquema. No se puede importar directamente a Azure SQL sin transformación. Mindzyxs no incluye restauración automática; el script anterior es una herramienta externa de apoyo.</p>
+          </div>
+
+
           <div class="admin-tile">
             <h3>Ver respaldos</h3>
             <p>Lista con fecha, tamaño e identificador, y descarga de respaldos existentes.</p>
