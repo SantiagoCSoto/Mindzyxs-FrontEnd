@@ -627,7 +627,7 @@ async function buscarPsicologos() {
 // ---------- Eventos ----------
 sendBtn.addEventListener('click', sendMessage);
 msgInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') { sendMessage(); return; }
+  if (e.key === 'Enter') { void sendMessage(); return; }
   const c = conversaciones.find((x) => x.id === activaId);
   if (!c || msgInput.disabled) return;
   avisarEscribiendo(db, c.id, yo.uid, true);
