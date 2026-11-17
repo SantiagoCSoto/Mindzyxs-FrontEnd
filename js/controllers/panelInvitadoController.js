@@ -67,7 +67,7 @@ if (btnInvitadoCuestionario) {
     if (!avisoService.haAceptadoAviso()) {
       pendingAction = 'cuestionario_invitado';
       invitadoService.logAuditoria(`INTENTO de acceder por primera vez a: "${feature}" (Invitado) -> se muestra aviso`);
-      openAviso(feature);
+      void openAviso(feature);
     } else {
       invitadoService.logAuditoria(`ACCESO directo a "${feature}" (aviso ya aceptado)`);
       window.location.href = 'encuesta_invitado.html';
@@ -82,7 +82,7 @@ if (btnInvitadoRecomendaciones) {
     if (!avisoService.haAceptadoAviso()) {
       pendingAction = 'recomendaciones_invitado';
       invitadoService.logAuditoria(`INTENTO de acceder por primera vez a: "${feature}" (Invitado) -> se muestra aviso`);
-      openAviso(feature);
+      void openAviso(feature);
     } else {
       invitadoService.logAuditoria(`ACCESO directo a "${feature}" (aviso ya aceptado)`);
       window.location.href = 'recomendaciones_invitado.html';
@@ -97,7 +97,7 @@ if (btnInvitadoResultado) {
     if (!avisoService.haAceptadoAviso()) {
       pendingAction = 'resultado_riesgo';
       invitadoService.logAuditoria(`INTENTO de acceder por primera vez a: "${feature}" (Invitado) -> se muestra aviso`);
-      openAviso(feature);
+      void openAviso(feature);
     } else {
       invitadoService.logAuditoria(`ACCESO directo a "${feature}" (aviso ya aceptado)`);
       window.location.href = 'resultado_riesgo.html';
@@ -108,7 +108,7 @@ if (btnInvitadoResultado) {
 // 2c. Aviso importante -> modal aclaratorio
 if (btnInvitadoAviso) {
   btnInvitadoAviso.addEventListener('click', () => {
-    openAviso(null);
+    void openAviso(null);
   });
 }
 
@@ -197,7 +197,7 @@ if (errOk) {
 if (footerAviso) {
   footerAviso.addEventListener('click', (e) => {
     e.preventDefault();
-    openAviso(null);
+    void openAviso(null);
   });
 }
 

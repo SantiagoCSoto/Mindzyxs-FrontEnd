@@ -68,7 +68,7 @@ if (btnCuestionario) {
   btnCuestionario.addEventListener('click', () => {
     if (!avisoService.haAceptadoAviso()) {
       pendingAction = 'cuestionario_paciente';
-      openAviso('Responder cuestionario');
+      void openAviso('Responder cuestionario');
     } else {
       window.location.href = 'cuestionario_paciente.html';
     }
@@ -142,7 +142,7 @@ if (modalLineasAyuda) {
 // 8. Aviso importante (modal aclaratorio)
 if (btnAviso) {
   btnAviso.addEventListener('click', () => {
-    openAviso(null);
+    void openAviso(null);
   });
 }
 
@@ -182,7 +182,7 @@ if (errOk) {
 if (footerAviso) {
   footerAviso.addEventListener('click', (e) => {
     e.preventDefault();
-    openAviso(null);
+    void openAviso(null);
   });
 }
 
@@ -190,7 +190,7 @@ if (footerAviso) {
 if (btnLogoutTop) {
   btnLogoutTop.addEventListener('click', () => {
     if (!confirm('¿Está seguro de que desea cerrar sesión?')) return;
-    authService.logout();
+    void authService.logout();
     avisoService.resetearAviso();
     window.location.href = 'login.html';
   });

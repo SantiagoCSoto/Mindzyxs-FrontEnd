@@ -12,8 +12,11 @@ export function tieneArroba(correo) {
 
 export function esCorreoValido(correo) {
   if (!correo) return false;
-  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return regex.test(correo.trim());
+  const v = String(correo).trim();
+  const at = v.indexOf('@');
+  const dot = v.lastIndexOf('.');
+  return at > 0 && dot > at + 1 && dot < v.length - 1 &&
+    !v.includes(' ') && !v.includes('\t') && !v.includes('\n');
 }
 
 export function tieneLongitudMinima(texto, min = 6) {

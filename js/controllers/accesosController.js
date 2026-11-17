@@ -202,7 +202,7 @@ async function cargarDatos(q = '') {
       listaPsicologos = res.data || [];
       render(inputBuscar ? inputBuscar.value : '');
     } else {
-      console.warn('[HU1-PB17] Error cargando accesos:', res.error);
+      console.warn('[HU1-PB17] Error cargando accesos');
       boxLista.innerHTML = '';
       boxVacio.style.display = 'block';
       showToast(res.error || 'No fue posible cargar los psicólogos.');

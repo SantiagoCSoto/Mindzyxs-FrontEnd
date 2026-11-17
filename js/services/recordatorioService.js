@@ -298,21 +298,31 @@ export const recordatorioService = {
    */
   guardarEnStorage(config) {
     try {
-      // Solo se guardan los campos esperados, con tipo y longitud acotados (mismos límites que la BD).
+      const frecuenciasValidas = new Set(['Diaria', 'Semanal']);
+      const frecuencia = frecuenciasValidas.has(config?.frecuencia) ? config.frecuencia : '';
+      const hora = /^\d{2}:\d{2}$/.test(String(config?.hora ?? '')) ? String(config.hora) : '08:00';
+      const dias = Array.isArray(config?.dias)
+        ? config.dias.map(Number).filter((n) => Number.isInteger(n) && n >= 1 && n <= 7)
+        : [];
+      const diasValidos = new Set(Object.values(DIAS_MAP));
+      const diasNombres = Array.isArray(config?.diasNombres)
+        ? config.diasNombres.map(String).filter((d) => diasValidos.has(d)).slice(0, 7)
+        : [];
+      const sanitizar = (v, max) => String(v ?? '').replace(/[<>]/g, '').slice(0, max);
       const limpia = {
-        frecuencia: String(config?.frecuencia ?? '').slice(0, 20),
-        hora: String(config?.hora ?? '').slice(0, 5),
-        dias: Array.isArray(config?.dias) ? config.dias.map(Number).filter(Number.isInteger) : [],
-        diasNombres: Array.isArray(config?.diasNombres) ? config.diasNombres.map(String).slice(0, 7) : [],
+        frecuencia,
+        hora,
+        dias,
+        diasNombres,
         activo: config?.activo === true,
-        titulo: String(config?.titulo ?? '').slice(0, 100),
-        mensaje: String(config?.mensaje ?? '').slice(0, 500)
+        titulo: sanitizar(config?.titulo, 100),
+        mensaje: sanitizar(config?.mensaje, 500)
       };
       const str = JSON.stringify(limpia);
       localStorage.setItem(STORAGE_KEY_RECORDATORIO, str);
       sessionStorage.setItem(STORAGE_KEY_RECORDATORIO, str);
     } catch (e) {
-      console.warn('No se pudo guardar la configuración en storage local', e);
+      console.warn('No se pudo guardar la configuración en storage local');
     }
   },
 
@@ -320,6 +330,7 @@ export const recordatorioService = {
    * Emite logs de auditoría estructurados con etiqueta [HU1-PB15]
    */
   logAuditoria(accion, detalle = '') {
-    console.log('[HU1-PB15]', new Date().toLocaleTimeString(), accion, detalle);
+    void detalle;
+    console.log('[HU1-PB15]', new Date().toLocaleTimeString(), accion);
   }
 };

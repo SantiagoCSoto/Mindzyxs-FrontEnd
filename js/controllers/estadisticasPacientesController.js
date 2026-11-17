@@ -224,7 +224,7 @@ async function generar() {
 // ---------- Cerrar sesión ----------
 $('btn-logout').addEventListener('click', () => {
   if (!confirm('¿Está seguro de que desea cerrar sesión?')) return;
-  authService.logout();
+  void authService.logout();
   sessionStorage.removeItem('es_invitado');
   window.location.href = 'login.html';
 });
@@ -239,4 +239,4 @@ const rolUsuario = document.getElementById('rol-usuario');
 if (rolUsuario) rolUsuario.textContent = 'Psicólogo';
 
 // Inicializa el selector de pacientes.
-cargarPacientes();
+void cargarPacientes();

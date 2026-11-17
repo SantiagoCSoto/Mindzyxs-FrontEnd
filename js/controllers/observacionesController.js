@@ -1,14 +1,15 @@
+import { crearNodo } from '../utils/dom.js';
 /**
- * Controlador de la vista de Observaciones Clínicas (views/observaciones.html).
- * PB-19 HU1-PB19: Permite al psicólogo consultar el detalle de un registro y registrar
- * nuevas observaciones clínicas con firma profesional automática.
+ * Controlador de la vista de Observaciones Cl�nicas (views/observaciones.html).
+ * PB-19 HU1-PB19: Permite al psic�logo consultar el detalle de un registro y registrar
+ * nuevas observaciones cl�nicas con firma profesional autom�tica.
  */
 
 import { authService } from '../services/authService.js';
 import { psicologoRegistrosService } from '../services/psicologoRegistrosService.js';
 import { observacionesService } from '../services/observacionesService.js';
 
-// 1. Verificación obligatoria de sesión y rol de Psicólogo
+// 1. Verificaci�n obligatoria de sesi�n y rol de Psic�logo
 const sesion = authService.getSesion();
 const rol = String(sesion?.rol || sesion?.tipo_usuario || '').toLowerCase();
 if (!sesion || !rol.includes('psicologo')) {
@@ -34,7 +35,7 @@ const toast = document.getElementById('toast');
 const btnLogout = document.getElementById('btn-logout');
 const footerAviso = document.getElementById('footerAviso');
 
-// 3. Parámetros de URL y estado local
+// 3. Par�metros de URL y estado local
 const urlParams = new URLSearchParams(window.location.search);
 let idPaciente = urlParams.get('idPaciente') ? Number(urlParams.get('idPaciente')) : null;
 let idEvento = urlParams.get('idEvento') ? Number(urlParams.get('idEvento')) : null;
@@ -44,7 +45,7 @@ let listaRegistrosPaciente = [];
 let pacienteActual = null;
 
 /**
- * Notificación flotante
+ * Notificaci�n flotante
  */
 function showToast(mensaje) {
   if (!toast) return;
@@ -76,7 +77,7 @@ function formatearFecha(fechaStr) {
   if (!fechaStr) return '-';
   try {
     const d = new Date(fechaStr);
-    if (isNaN(d.getTime())) return String(fechaStr);
+    if (Number.isNaN(d.getTime())) return String(fechaStr);
     const dia = String(d.getDate()).padStart(2, '0');
     const mes = String(d.getMonth() + 1).padStart(2, '0');
     const anio = d.getFullYear();
@@ -99,7 +100,7 @@ function renderDetalle(detalle) {
   const tipoFmt = detalle.tipo === 'Cuestionario' ? 'Cuestionario' : 'Registro Emocional';
 
   if (detMeta) {
-    detMeta.textContent = `${fechaFmt} · ${tipoFmt} · ${nombrePac}`;
+    detMeta.textContent = `${fechaFmt} \u00b7 ${tipoFmt} \u00b7 ${nombrePac}`;
   }
 
   if (detValor) {
@@ -134,27 +135,23 @@ function renderDetalle(detalle) {
 }
 
 /**
- * Renderiza la lista de observaciones clínicas
+ * Renderiza la lista de observaciones cl�nicas
  */
 function renderObservaciones(observaciones) {
   if (!detObs) return;
   detObs.innerHTML = '';
 
   if (!observaciones || observaciones.length === 0) {
-    detObs.innerHTML = '<div class="empty">Sin observaciones clínicas registradas para este evento.</div>';
+    detObs.innerHTML = '<div class="empty">Sin observaciones cl�nicas registradas para este evento.</div>';
     return;
   }
 
   observaciones.forEach((o) => {
     const item = document.createElement('div');
-    item.className = 'obs';
-    const firma = o.firma ? ` · ${o.firma}` : '';
+    item.replaceChildren(crearNodo('div', { texto: o.contenido }),
+      crearNodo('small', { texto: formatearFecha(o.fecha) + (o.firma ? ' \u00b7 ' + o.firma : '') }));
     const fObs = formatearFecha(o.fecha);
 
-    item.innerHTML = `
-      ${escaparHtml(o.contenido)}
-      <small>${escaparHtml(fObs)}${escaparHtml(firma)}</small>
-    `;
     detObs.appendChild(item);
   });
 }
@@ -164,7 +161,7 @@ function renderObservaciones(observaciones) {
  */
 async function inicializar() {
   try {
-    // Si no se proporcionaron parámetros, obtener el primer paciente autorizado
+    // Si no se proporcionaron par�metros, obtener el primer paciente autorizado
     if (!idPaciente) {
       const resPac = await psicologoRegistrosService.obtenerPacientes();
       if (resPac.ok && resPac.data && resPac.data.length > 0) {
@@ -202,7 +199,7 @@ async function inicializar() {
       obsReg.innerHTML = opcionesHtml;
     }
 
-    // Cargar detalle del registro específico
+    // Cargar detalle del registro espec�fico
     if (idEvento) {
       const resDet = await psicologoRegistrosService.obtenerDetalleRegistro(idEvento);
       if (resDet.ok && resDet.data) {
@@ -210,11 +207,11 @@ async function inicializar() {
         renderDetalle(registroDetalle);
       } else {
         showToast(resDet.error || 'No fue posible cargar el registro.');
-        if (detMeta) detMeta.textContent = 'No se encontró el registro seleccionado.';
+        if (detMeta) detMeta.textContent = 'No se encontr\u00f3 el registro seleccionado.';
         if (detObs) detObs.innerHTML = '<div class="empty">Registro no disponible.</div>';
       }
     } else {
-      if (detMeta) detMeta.textContent = `Observaciones generales · ${pacienteActual.nombre}`;
+      if (detMeta) detMeta.textContent = `Observaciones generales \u00b7 ${pacienteActual.nombre}`;
       if (detValor) detValor.textContent = 'No aplica';
       if (detNota) detNota.textContent = 'No aplica';
       if (detQuiz) detQuiz.textContent = 'No aplica';
@@ -222,12 +219,12 @@ async function inicializar() {
     }
   } catch (err) {
     console.error('[HU1-PB19] Error en inicializar:', err);
-    showToast('Error de conexión al cargar la información.');
+    showToast('Error de conexi\u00f3n al cargar la informaci\u00f3n.');
   }
 }
 
 // -------------------------------------------------------------
-// MODAL DE OBSERVACIÓN
+// MODAL DE OBSERVACI�N
 // -------------------------------------------------------------
 
 function abrirModalObs() {
@@ -236,7 +233,7 @@ function abrirModalObs() {
   if (eObs) eObs.classList.remove('show');
   if (obsSave) {
     obsSave.disabled = false;
-    obsSave.textContent = 'Guardar observación';
+    obsSave.textContent = 'Guardar observaci\u00f3n';
   }
   obsModal.classList.add('open');
   obsModal.setAttribute('aria-hidden', 'false');
@@ -258,7 +255,7 @@ async function guardarObservacion() {
 
   if (eObs) eObs.classList.remove('show');
   if (!idPaciente) {
-    showToast('No se identificó el paciente autorizado.');
+    showToast('No se identific\u00f3 el paciente autorizado.');
     return;
   }
 
@@ -280,9 +277,9 @@ async function guardarObservacion() {
 
     if (res.ok) {
       cerrarModalObs();
-      showToast(res.mensaje || 'Observación guardada correctamente');
+      showToast(res.mensaje || 'Observaci\u00f3n guardada correctamente');
 
-      // Recargar el detalle del registro para mostrar la nueva observación
+      // Recargar el detalle del registro para mostrar la nueva observaci�n
       if (idEventoSeleccionado) {
         idEvento = idEventoSeleccionado;
         const resDet = await psicologoRegistrosService.obtenerDetalleRegistro(idEvento);
@@ -294,18 +291,18 @@ async function guardarObservacion() {
         await inicializar();
       }
     } else {
-      showToast(res.error || 'No fue posible guardar la observación.');
+      showToast(res.error || 'No fue posible guardar la observaci\u00f3n.');
       if (obsSave) {
         obsSave.disabled = false;
-        obsSave.textContent = 'Guardar observación';
+        obsSave.textContent = 'Guardar observaci\u00f3n';
       }
     }
   } catch (err) {
     console.error('[HU1-PB19] Error en guardarObservacion:', err);
-    showToast('Ocurrió un error inesperado al guardar la observación.');
+    showToast('Ocurri\u00f3 un error inesperado al guardar la observaci\u00f3n.');
     if (obsSave) {
       obsSave.disabled = false;
-      obsSave.textContent = 'Guardar observación';
+      obsSave.textContent = 'Guardar observaci\u00f3n';
     }
   }
 }
@@ -335,11 +332,11 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// Cierre de sesión
+// Cierre de sesi�n
 if (btnLogout) {
   btnLogout.addEventListener('click', () => {
-    if (confirm('¿Está seguro de que desea cerrar sesión?')) {
-      authService.logout();
+    if (confirm('\u00bfEst\u00e1 seguro de que desea cerrar sesi\u00f3n?')) {
+      void authService.logout();
       window.location.href = 'login.html';
     }
   });
@@ -349,9 +346,9 @@ if (btnLogout) {
 if (footerAviso) {
   footerAviso.addEventListener('click', (e) => {
     e.preventDefault();
-    showToast('Mindzyxs no realiza diagnósticos clínicos.');
+    showToast('Mindzyxs no realiza diagn\u00f3sticos cl\u00ednicos.');
   });
 }
 
 // Inicializar al cargar
-inicializar();
+void inicializar();

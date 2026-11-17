@@ -1,3 +1,4 @@
+import { crearNodo } from '../utils/dom.js';
 /**
  * Controlador de la gestión de cuestionarios del psicólogo (PB-20 HU1-PB20 y PB-21 HU1-PB21).
  * Conecta los ids de views/mis_cuestionarios.html con misCuestionariosService.js:
@@ -95,10 +96,11 @@ function renderLista(items) {
   items.forEach((c) => {
     const d = document.createElement('div');
     d.className = 'lista-item';
-    d.innerHTML =
-      '<div class="info"><b>' + escaparHtml(c.titulo) + '</b>' +
-      '<small>' + Number(c.numPreguntas ?? 0) + ' pregunta(s)</small></div>' +
-      etiquetaEstado(c.estado);
+    d.replaceChildren(
+      crearNodo('div', { class: 'info' },
+        crearNodo('b', { texto: c.titulo }),
+        crearNodo('small', { texto: Number(c.numPreguntas ?? 0) + ' pregunta(s)' })),
+      etiquetaEstado(c.estado));
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'btn btn-cancel btn-sm';
@@ -156,10 +158,26 @@ function filaOpcion(op = {}) {
   const div = document.createElement('div');
   div.className = 'opc-row';
   if (op.id) div.dataset.oid = op.id;
-  div.innerHTML =
-    '<input type="text" class="opc-texto" placeholder="Opción" value="' + escaparHtml(op.texto ?? '') + '" aria-label="Opción" />' +
-    '<input type="number" class="opc-valor" min="0" step="1" value="' + (op.valor ?? 0) + '" aria-label="Valor de la opción" />' +
-    '<button type="button" class="opc-rm" title="Quitar opción"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>';
+  const inputTexto = document.createElement('input');
+  inputTexto.type = 'text';
+  inputTexto.className = 'opc-texto';
+  inputTexto.placeholder = 'Opción';
+  inputTexto.value = op.texto ?? '';
+  inputTexto.setAttribute('aria-label', 'Opción');
+  const inputValor = document.createElement('input');
+  inputValor.type = 'number';
+  inputValor.className = 'opc-valor';
+  inputValor.min = '0';
+  inputValor.step = '1';
+  inputValor.value = op.valor ?? 0;
+  inputValor.setAttribute('aria-label', 'Valor de la opción');
+  const btnQuitar = document.createElement('button');
+  btnQuitar.type = 'button';
+  btnQuitar.className = 'opc-rm';
+  btnQuitar.title = 'Quitar opción';
+  btnQuitar.textContent = '×';
+  btnQuitar.addEventListener('click', () => div.remove());
+  div.append(inputTexto, inputValor, btnQuitar);
   div.querySelector('.opc-rm').addEventListener('click', () => div.remove());
   return div;
 }
@@ -522,7 +540,7 @@ if (btnVolverListaNuevo) btnVolverListaNuevo.addEventListener('click', () => sho
 // ---------- Cerrar sesión ----------
 $('btn-logout').addEventListener('click', () => {
   if (!confirm('¿Está seguro de que desea cerrar sesión?')) return;
-  authService.logout();
+  void authService.logout();
   sessionStorage.removeItem('es_invitado');
   window.location.href = 'login.html';
 });
@@ -537,4 +555,4 @@ const rolUsuario = document.getElementById('rol-usuario');
 if (rolUsuario) rolUsuario.textContent = 'Psicólogo';
 
 // Inicializa la lista.
-cargarLista();
+void cargarLista();

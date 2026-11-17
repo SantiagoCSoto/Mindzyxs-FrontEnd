@@ -57,7 +57,7 @@
       <div class="layout">
         <div>
           <div class="list-title">CONVERSACIONES ACTIVAS (<span id="convCount">0</span>)</div>
-          <div class="conv-list" id="convList" tabindex="0" role="region" aria-label="Conversaciones"></div>
+          <div class="conv-list" id="convList" role="region" aria-label="Conversaciones"></div>
         </div>
         <div class="chat">
           <div class="chat-head">
@@ -68,7 +68,7 @@
             <button class="btn-block" id="blockBtn" hidden><svg aria-hidden="true" class="icon-inline" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg> <span id="blockBtnText">Bloquear</span></button>
           </div>
           <div class="day-sticky" id="daySticky">Hoy</div>
-          <div class="msgs" id="msgs" tabindex="0" role="region" aria-label="Mensajes del chat"></div>
+          <div class="msgs" id="msgs" role="region" aria-label="Mensajes del chat"></div>
           <div class="typing" id="typing">Escribiendo…</div>
           <div class="blocked-banner" id="blockedBanner">
             <span id="blockedText">Has bloqueado a este contacto. No puedes enviar ni recibir mensajes.</span><br />
@@ -86,7 +86,7 @@
 
     <div class="card" id="panelReq" hidden>
       <div class="list-title">SOLICITUDES DE CHAT</div>
-      <div id="reqList" tabindex="0"></div>
+      <div id="reqList"></div>
       <div id="searchBox" hidden>
         <div class="list-title" style="margin-top:16px">BUSCAR PACIENTE</div>
         <details>
@@ -108,7 +108,7 @@
           <button type="button" class="btn btn-tile" id="btnBuscar">Buscar</button>
         </div>
         </details>
-        <div id="searchResults" tabindex="0"></div>
+        <div id="searchResults"></div>
       </div>
       <div id="searchPsiBox" hidden>
         <div class="list-title" style="margin-top:16px">BUSCAR PSICÓLOGO</div>
@@ -122,7 +122,7 @@
            <datalist id="listaEspecialidades"></datalist>
           <button type="button" class="btn btn-tile" id="btnBuscarPsi">Buscar</button>
         </div>
-        <div id="searchPsiResults" tabindex="0"></div>
+        <div id="searchPsiResults"></div>
       </div>
     </div>
   </main>
@@ -163,9 +163,9 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js" integrity="sha256-JKH9kKlCRkdjZmn1kBMgG6OF7/gqWPiMdqfUANTXETk=" crossorigin="anonymous"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js" integrity="sha256-J39u9wUlFoJHkh56Uf6ZXsxm+cPPVsl/DSvCYvdLWQY=" crossorigin="anonymous"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js" integrity="sha256-J047Aae4bcUkQfnQmAunZbffbl7/bi0Fpa5imAFA7Kg=" crossorigin="anonymous"></script>
   <script type="module" src="../js/controllers/chatController.js"></script>
   <script type="module">
     import { authService } from '../js/services/authService.js';

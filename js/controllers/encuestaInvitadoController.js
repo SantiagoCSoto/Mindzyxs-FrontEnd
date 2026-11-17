@@ -225,7 +225,7 @@ if (btnSiguiente) {
     }
 
     if (esUltimaPregunta(paso)) {
-      finalizarCuestionario();
+      void finalizarCuestionario();
       return;
     }
 
@@ -284,11 +284,11 @@ if (form) {
 }
 
 document.getElementById('btn-reintentar')?.addEventListener('click', () => {
-  cargarCuestionario();
+  void cargarCuestionario();
 });
 
 // Si el aviso aclaratorio ya fue aceptado (PB-04), se salta el paso de aviso
-cargarCuestionario().then(() => {
+void cargarCuestionario().then(() => {
   if (avisoService.haAceptadoAviso() && pasos.length > 1) {
     indiceActual = 1;
     mostrarPaso();

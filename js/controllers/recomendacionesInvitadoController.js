@@ -1,3 +1,4 @@
+﻿import { crearNodo } from '../utils/dom.js';
 /**
  * Front-end de la pantalla "Recomendaciones básicas (Invitado)" (PB-09).
  * Controla el panel de invitado, la lista de recomendaciones, el detalle
@@ -157,16 +158,20 @@ function renderState() {
     const nivelItem = r.nivel ?? r.nivel_riesgo;
     const esPrioritaria = r.prioritaria === true || (riesgo && nivelItem === riesgo);
     const item = document.createElement('div');
-    item.className = 'rec-item' + (esPrioritaria ? ' prio' : '');
-    item.innerHTML =
-      '<div class="rec-ico">' + iconFor(r.icono) + '</div>' +
-      '<div class="rec-info">' +
-        '<h4>' + escapeHtml(r.titulo) + '</h4>' +
-        '<p>' + escapeHtml(r.intro || '') + '</p>' +
-        (esPrioritaria ? '<span class="prio-tag">Prioritaria para tu nivel</span>' : '') +
-      '</div>' +
-      '<button class="btn-ver" data-id="' + r.id + '">Ver / Abrir</button>';
-    item.querySelector('.btn-ver').addEventListener('click', () => openDetail(r.id));
+    const btnVer = document.createElement('button');
+    btnVer.className = 'btn-ver';
+    btnVer.dataset.id = String(r.id);
+    btnVer.textContent = 'Ver / Abrir';
+    btnVer.addEventListener('click', () => openDetail(r.id));
+    item.replaceChildren(
+      crearNodo('div', { class: 'rec-ico', texto: iconFor(r.icono) }),
+      crearNodo('div', { class: 'rec-body' },
+        crearNodo('h3', { texto: r.titulo }),
+        crearNodo('p', { texto: r.descripcion }),
+        crearNodo('ul', {}, ...(r.pasos || []).map((paso) => crearNodo('li', { texto: paso }))),
+        r.duracion ? crearNodo('div', { class: 'rec-dur', texto: r.duracion }) : null),
+      btnVer);
+    btnVer.addEventListener('click', () => openDetail(r.id));
     recList.appendChild(item);
   });
 }
@@ -176,7 +181,7 @@ async function openDetail(id) {
   pendingRecId = id;
   await ensureAviso();
   avisoModal.classList.add('open');
-  registrarVisualizacion('recomendaciones-invitado', 'ok');
+  void registrarVisualizacion('recomendaciones-invitado', 'ok');
 }
 
 async function showDetail(id) {
@@ -208,7 +213,7 @@ async function showDetail(id) {
 }
 
 document.getElementById('openRecom').addEventListener('click', () => {
-  loadList();
+  void loadList();
   showScreen('recom');
 });
 
@@ -256,7 +261,7 @@ document.getElementById('footerAviso').addEventListener('click', async (e) => {
   e.preventDefault();
   await ensureAviso();
   avisoModal.classList.add('open');
-  registrarVisualizacion('recomendaciones-invitado', 'ok');
+  void registrarVisualizacion('recomendaciones-invitado', 'ok');
   addLog('VISUALIZACIÓN del mensaje aclaratorio por enlace "Aviso: no diagnóstico"');
 });
 
@@ -275,6 +280,6 @@ document.getElementById('emptyBack').addEventListener('click', () => {
   addLog('NAVEGACIÓN: "Volver al inicio (Invitado)" desde estado vacío');
 });
 
-loadList();
+void loadList();
 showScreen('recom');
 addLog('Sistema listo — recomendaciones dinámicas por API (priorizadas por nivel de la sesión)');

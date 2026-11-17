@@ -109,7 +109,7 @@ function formatearFecha(fechaStr) {
   if (!fechaStr) return '';
   try {
     const f = new Date(fechaStr);
-    if (isNaN(f.getTime())) return String(fechaStr).split('T')[0];
+    if (Number.isNaN(f.getTime())) return String(fechaStr).split('T')[0];
     return f.toLocaleDateString('es-CO', {
       day: '2-digit',
       month: 'long',
@@ -335,7 +335,7 @@ if (fBuscar) {
 
 if (btnRefrescar) {
   btnRefrescar.addEventListener('click', () => {
-    cargarLista();
+    void cargarLista();
     showToast('Lista actualizada.');
   });
 }
@@ -463,5 +463,5 @@ if (btnModalSi) {
 
 // 9. Inicialización al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
-  cargarLista();
+  void cargarLista();
 });

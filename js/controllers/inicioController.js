@@ -49,10 +49,10 @@ if (btnLogout) {
   btnLogout.addEventListener('click', () => {
     if (!confirm('¿Estás seguro de que deseas cerrar sesión?')) return;
     if (invitadoService.esInvitado()) {
-      invitadoService.salirModoInvitado('header').finally(() => window.location.reload());
+      void invitadoService.salirModoInvitado('header').finally(() => window.location.reload());
       return;
     }
-    authService.logout();
+    void authService.logout();
     avisoService.resetearAviso();
     sessionStorage.removeItem('es_invitado');
     window.location.reload();

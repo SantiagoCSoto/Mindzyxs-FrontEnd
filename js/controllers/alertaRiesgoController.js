@@ -95,7 +95,7 @@ function pintarLineas(lineas) {
 }
 
 async function abrirLineas() {
-  registrarAccion('lineas');
+  void registrarAccion('lineas');
   abrirModal(linesModal);
   if (!linesList) return;
   try {
@@ -147,14 +147,14 @@ footerAviso?.addEventListener('click', (e) => {
   showToast('Mindzyx no realiza diagnósticos clínicos');
 });
 
-registrarAccion('vista');
+void registrarAccion('vista');
 
 // Cerrar sesión (header unificado)
 const btnLogout = document.getElementById('btn-logout');
 if (btnLogout) {
   btnLogout.addEventListener('click', () => {
     if (!confirm('¿Está seguro de que desea cerrar sesión?')) return;
-    authService.logout();
+    void authService.logout();
     sessionStorage.removeItem('es_invitado');
     window.location.href = 'login.html';
   });

@@ -187,11 +187,14 @@ function validarFormulario() {
   const vCor = inCorreo.value.trim();
 
   // Validación Correo Electrónico
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const at = vCor.indexOf('@');
+  const dot = vCor.lastIndexOf('.');
+  const emailValido = at > 0 && dot > at + 1 && dot < vCor.length - 1 &&
+    !vCor.includes(' ') && !vCor.includes('\t') && !vCor.includes('\n');
   if (!vCor) {
     setFieldError(inCorreo, eCorreo, true, 'El correo electrónico es obligatorio.');
     esValido = false;
-  } else if (!emailRegex.test(vCor)) {
+  } else if (!emailValido) {
     setFieldError(inCorreo, eCorreo, true, 'Ingresa un correo electrónico válido.');
     esValido = false;
   } else {
@@ -365,7 +368,7 @@ function registrarEventosLimpiezaErrores() {
     codeInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
-        manejarVerificarCodigo();
+        void manejarVerificarCodigo();
       }
     });
   }
@@ -424,7 +427,7 @@ function registrarEventos() {
   if (btnLogout) {
     btnLogout.addEventListener('click', () => {
       if (!confirm('¿Estás seguro de que deseas cerrar sesión?')) return;
-      authService.logout();
+      void authService.logout();
       window.location.href = 'inicio.html';
     });
   }
@@ -492,5 +495,5 @@ async function inicializar() {
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', inicializar);
 } else {
-  inicializar();
+  void inicializar();
 }

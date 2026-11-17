@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Controlador de asignación de cuestionarios a pacientes (PB-22 HU1-PB22).
  * Conecta los ids de views/asignar_cuestionario.html con asignarCuestionarioService.js:
  *   lista de cuestionarios publicados (GET /psicologo/cuestionarios?q= filtrado),
@@ -8,6 +8,7 @@
  */
 
 import { authService } from '../services/authService.js';
+import { crearNodo } from '../utils/dom.js';
 import { escaparHtml } from '../services/apiClient.js';
 import { listarCuestionarios } from '../services/misCuestionariosService.js';
 import { obtenerPantallaAsignacion, asignarCuestionario } from '../services/asignarCuestionarioService.js';
@@ -72,10 +73,11 @@ function renderLista(items) {
   items.forEach((c) => {
     const d = document.createElement('div');
     d.className = 'lista-item';
-    d.innerHTML =
-      '<div class="info"><b>' + escaparHtml(c.titulo) + '</b>' +
-      '<small>' + Number(c.numPreguntas ?? 0) + ' pregunta(s)</small></div>' +
-      '<span class="est est-p">Publicado</span>';
+    d.replaceChildren(
+      crearNodo('div', { class: 'info' },
+        crearNodo('b', { texto: c.titulo }),
+        crearNodo('small', { texto: Number(c.numPreguntas ?? 0) + ' pregunta(s)' })),
+      crearNodo('span', { class: 'est est-p', texto: 'Publicado' }));
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'btn btn-cancel btn-sm';
@@ -139,8 +141,8 @@ function renderPacientes(pacientes) {
     else seleccionables += 1;
     l.appendChild(input);
     const span = document.createElement('span');
-    span.innerHTML = '<b>' + escaparHtml(p.nombre) + '</b>' +
-      (p.yaAsignado ? '<small>Ya tiene este cuestionario asignado</small>' : '');
+    span.replaceChildren(crearNodo('b', { texto: p.nombre }));
+    if (p.yaAsignado) span.append(crearNodo('small', { texto: 'Ya tiene este cuestionario asignado' }));
     l.appendChild(span);
     listaPac.appendChild(l);
   });
@@ -176,18 +178,18 @@ $('btnVolver').addEventListener('click', () => {
 });
 
 // La lista de publicados siempre se carga (para "Volver" tras entrar con ?id=).
-cargarLista();
+void cargarLista();
 
 // Si viene con ?id= se abre directamente esa asignación (enlace desde Mis cuestionarios).
 const parametroId = new URLSearchParams(window.location.search).get('id');
 if (parametroId && /^\d+$/.test(parametroId)) {
-  abrirAsignacion(Number(parametroId));
+  void abrirAsignacion(Number(parametroId));
 }
 
 // ---------- Cerrar sesión ----------
 $('btn-logout').addEventListener('click', () => {
   if (!confirm('¿Está seguro de que desea cerrar sesión?')) return;
-  authService.logout();
+  void authService.logout();
   sessionStorage.removeItem('es_invitado');
   window.location.href = 'login.html';
 });

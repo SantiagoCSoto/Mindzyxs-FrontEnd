@@ -108,7 +108,7 @@ if (errOk) {
 if (footerAviso) {
   footerAviso.addEventListener('click', (e) => {
     e.preventDefault();
-    openAviso();
+    void openAviso();
   });
 }
 
@@ -116,7 +116,7 @@ if (footerAviso) {
 if (btnLogoutTop) {
   btnLogoutTop.addEventListener('click', () => {
     if (!confirm('¿Está seguro de que desea cerrar sesión?')) return;
-    authService.logout();
+    void authService.logout();
     avisoService.resetearAviso();
     window.location.href = 'login.html';
   });

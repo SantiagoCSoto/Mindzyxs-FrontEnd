@@ -182,7 +182,7 @@ export const perfilService = {
   calcularEdad(fechaStr) {
     if (!fechaStr) return null;
     const nac = new Date(fechaStr + 'T00:00:00');
-    if (isNaN(nac.getTime())) return null;
+    if (Number.isNaN(nac.getTime())) return null;
     const hoy = new Date();
     let edad = hoy.getFullYear() - nac.getFullYear();
     const mes = hoy.getMonth() - nac.getMonth();
