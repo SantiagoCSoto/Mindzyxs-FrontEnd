@@ -184,7 +184,7 @@ function renderPacientes(filtro = '') {
     btn.addEventListener('click', () => {
       const idPac = Number(btn.getAttribute('data-pac'));
       const pac = listaPacientes.find((x) => x.id === idPac);
-      if (pac) abrirRegistros(pac);
+      if (pac) void abrirRegistros(pac);
     });
   });
 }

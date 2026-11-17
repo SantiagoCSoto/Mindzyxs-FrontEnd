@@ -206,7 +206,7 @@ if (btnSiguiente) {
 
     if (paso.dataset.step === 'aviso') {
       avisoService.marcarAvisoAceptado();
-      if (quiz) registrarInicio(quiz.id);
+      if (quiz) void registrarInicio(quiz.id);
       registrarLog('INICIO del cuestionario como invitado (aviso aceptado con Entendido)');
       avanzaA(indiceActual + 1);
       return;
