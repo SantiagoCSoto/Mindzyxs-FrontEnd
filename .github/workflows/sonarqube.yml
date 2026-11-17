@@ -31,4 +31,6 @@ jobs:
           organization: santiagocsoto
           projectKey: SantiagoCSoto_Mindzyxs-FrontEnd
           args: >
+            -Dsonar.projectKey=SantiagoCSoto_Mindzyxs-FrontEnd
+            -Dsonar.organization=santiagocsoto
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
