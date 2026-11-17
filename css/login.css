@@ -21,7 +21,7 @@
   --color-texto-claro: #FFFFFF;
 }
 
-﻿/* Tag de sprint en header */
+/* Tag de sprint en header */
 .header-tag {
   font-size: 13px;
   color: var(--muted);

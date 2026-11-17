@@ -244,7 +244,7 @@ if (inputBuscar) {
 
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => {
-      cargarDatos(query);
+      void cargarDatos(query);
     }, 450);
   });
 }
@@ -253,7 +253,7 @@ if (inputBuscar) {
 if (btnLogout) {
   btnLogout.addEventListener('click', () => {
     if (confirm('¿Está seguro de que desea cerrar sesión?')) {
-      authService.logout();
+      void authService.logout();
       window.location.href = 'login.html';
     }
   });
@@ -268,4 +268,4 @@ if (footerAviso) {
 }
 
 // Iniciar carga al cargar el módulo
-cargarDatos();
+void cargarDatos();
