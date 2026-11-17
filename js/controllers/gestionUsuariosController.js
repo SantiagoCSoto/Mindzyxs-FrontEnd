@@ -1,3 +1,4 @@
+import { crearNodo } from '../utils/dom.js';
 /**
  * Controlador para la gestión de usuarios del sistema (PB-25 HU1-PB25).
  * Conecta views/gestion_usuarios.html con gestionUsuariosService.js:
@@ -111,7 +112,7 @@ function formatearFechaCorta(fechaStr) {
   if (!fechaStr) return '';
   try {
     const f = new Date(fechaStr);
-    if (isNaN(f.getTime())) return String(fechaStr).split('T')[0];
+    if (Number.isNaN(f.getTime())) return String(fechaStr).split('T')[0];
     return f.toLocaleDateString('es-CO', {
       day: '2-digit',
       month: '2-digit',
@@ -218,14 +219,12 @@ function renderLista(usuarios) {
       u.aprobacion ? ` · Aprobación: ${escapar(u.aprobacion)}` : ''
     }${fechaFmt ? ` · Reg: ${fechaFmt}` : ''}`;
 
-    fila.innerHTML = `
-      <div class="avatar" aria-hidden="true">${obtenerIniciales(u.nombre)}</div>
-      <div class="info">
-        <b>${escapar(u.nombre || 'Sin nombre')}</b>
-        <small>${subDetalle}</small>
-      </div>
-      ${etiquetaEstado(u.estado)}
-    `;
+    fila.replaceChildren(
+      crearNodo('div', { class: 'avatar', 'aria-hidden': 'true', texto: obtenerIniciales(u.nombre) }),
+      crearNodo('div', { class: 'info' },
+        crearNodo('b', { texto: u.nombre || 'Sin nombre' }),
+        crearNodo('small', { texto: subDetalle })),
+      etiquetaEstado(u.estado));
 
     const btnEditar = document.createElement('button');
     btnEditar.type = 'button';
@@ -269,7 +268,7 @@ if (fQ) {
   fQ.addEventListener('input', () => {
     clearTimeout(debounceBusqueda);
     debounceBusqueda = setTimeout(() => {
-      cargarLista();
+      void cargarLista();
     }, 320);
   });
 }
@@ -277,7 +276,7 @@ if (fQ) {
 if (btnFiltrar) {
   btnFiltrar.addEventListener('click', () => {
     clearTimeout(debounceBusqueda);
-    cargarLista();
+    void cargarLista();
   });
 }
 
@@ -287,7 +286,7 @@ if (btnLimpiar) {
     if (fEstado) fEstado.value = '';
     if (fQ) fQ.value = '';
     clearTimeout(debounceBusqueda);
-    cargarLista();
+    void cargarLista();
   });
 }
 
@@ -465,7 +464,7 @@ const btnLogout = $('btn-logout');
 if (btnLogout) {
   btnLogout.addEventListener('click', () => {
     if (confirm('¿Está seguro de que desea cerrar sesión?')) {
-      authService.logout();
+      void authService.logout();
       window.location.href = 'login.html';
     }
   });
@@ -480,4 +479,4 @@ if (footerAviso) {
 }
 
 // 13. Carga inicial
-cargarLista();
+void cargarLista();

@@ -98,7 +98,7 @@ function formatearFecha(fechaStr) {
   if (!fechaStr) return '-';
   try {
     const d = new Date(fechaStr);
-    if (isNaN(d.getTime())) return String(fechaStr);
+    if (Number.isNaN(d.getTime())) return String(fechaStr);
     const dia = String(d.getDate()).padStart(2, '0');
     const mes = String(d.getMonth() + 1).padStart(2, '0');
     const anio = d.getFullYear();
@@ -196,7 +196,7 @@ async function cargarPacientes(q = '') {
       listaPacientes = res.data || [];
       renderPacientes(buscarPac ? buscarPac.value : '');
     } else {
-      console.warn('[HU1-PB18] Error al cargar pacientes:', res.error);
+      console.warn('[HU1-PB18] Error al cargar pacientes');
       tablaPac.innerHTML = '';
       sinPac.style.display = 'block';
       showToast(res.error || 'No fue posible cargar los pacientes.');
@@ -306,7 +306,7 @@ function renderRegistros() {
   listaReg.querySelectorAll('[data-det]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const idReg = Number(btn.getAttribute('data-det'));
-      abrirDetalle(idReg);
+      void abrirDetalle(idReg);
     });
   });
 }
@@ -482,7 +482,7 @@ if (buscarPac) {
 
     clearTimeout(debounceBuscar);
     debounceBuscar = setTimeout(() => {
-      cargarPacientes(q);
+      void cargarPacientes(q);
     }, 400);
   });
 }
@@ -496,7 +496,7 @@ if (btnLimpiarFiltros) {
   btnLimpiarFiltros.addEventListener('click', () => {
     if (fDesde) fDesde.value = '';
     if (fHasta) fHasta.value = '';
-    cargarRegistrosPaciente();
+    void cargarRegistrosPaciente();
   });
 }
 
@@ -560,7 +560,7 @@ document.addEventListener('keydown', (e) => {
 if (btnLogout) {
   btnLogout.addEventListener('click', () => {
     if (confirm('¿Está seguro de que desea cerrar sesión?')) {
-      authService.logout();
+      void authService.logout();
       window.location.href = 'login.html';
     }
   });
@@ -575,4 +575,4 @@ if (footerAviso) {
 }
 
 // Inicializar carga de pacientes al montar el módulo
-cargarPacientes();
+void cargarPacientes();

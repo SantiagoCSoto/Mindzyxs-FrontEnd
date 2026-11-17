@@ -136,7 +136,7 @@ function renderizarLista() {
   recordList.querySelectorAll('[data-action="detail"]').forEach(btn => {
     btn.addEventListener('click', () => {
       const id = Number(btn.getAttribute('data-id'));
-      abrirDetalle(id);
+      void abrirDetalle(id);
     });
   });
 }
@@ -281,7 +281,7 @@ function manejarFiltrar() {
   }
 
   historialService.logAuditoria(`Aplicando filtro: desde=${vDesde || 'inicio'}, hasta=${vHasta || 'hoy'}`);
-  cargarHistorial(vDesde || null, vHasta || null).then(() => {
+  void cargarHistorial(vDesde || null, vHasta || null).then(() => {
     showToast(`Filtro aplicado: ${registrosActuales.length} registro(s)`);
   });
 }
@@ -294,7 +294,7 @@ function manejarLimpiar() {
   if (dateTo) dateTo.value = '';
 
   historialService.logAuditoria('Filtro limpiado - recargando historial completo');
-  cargarHistorial().then(() => {
+  void cargarHistorial().then(() => {
     showToast('Filtro limpiado');
   });
 }
@@ -328,7 +328,7 @@ function registrarEventos() {
   if (btnLogout) {
     btnLogout.addEventListener('click', () => {
       if (!confirm('¿Estás seguro de que deseas cerrar sesión?')) return;
-      authService.logout();
+      void authService.logout();
       window.location.href = 'inicio.html';
     });
   }
@@ -399,5 +399,5 @@ async function inicializar() {
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', inicializar);
 } else {
-  inicializar();
+  void inicializar();
 }

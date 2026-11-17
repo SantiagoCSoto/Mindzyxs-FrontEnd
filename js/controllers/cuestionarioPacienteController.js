@@ -5,11 +5,12 @@
  *   POST /cuestionario/paciente/inicio     -> log de inicio (no bloquea)
  *   POST /cuestionario/paciente/finalizar  -> valida 100% y persiste en historial
  *   GET  /historial                        -> historial reciente (PB-13)
- * Flujo: home (Responder / historial) -> aviso no diagnóstico -> una pregunta a la
+ * Flujo: home (Responder / historial) -> aviso no diagn�stico -> una pregunta a la
  * vez (Siguiente / Cancelar) -> resultado con respuestas guardadas en el historial.
  */
 
 import { authService } from '../services/authService.js';
+import { crearNodo } from '../utils/dom.js';
 import {
   obtenerPendientePaciente,
   registrarInicioPaciente,
@@ -49,7 +50,7 @@ let cuestionario = null;   // pendiente cargado (backend o respaldo local)
 let preguntas = [];        // preguntas ordenadas del pendiente
 let indiceActual = 0;
 const respuestas = {};     // preguntaId -> opcionId
-let seleccionada = null;   // opción seleccionada en la pregunta actual
+let seleccionada = null;   // opci�n seleccionada en la pregunta actual
 let avisoOk = false;
 let pendienteInicio = false;
 
@@ -57,8 +58,8 @@ function escapar(s) {
   return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
-function registrarLog(mensaje) {
-  void mensaje;
+function registrarLog(...args) {
+  void args;
 }
 
 function showToast(mensaje) {
@@ -139,7 +140,7 @@ async function cargarInicio() {
   await cargarAsignados();
 }
 
-// --- Asignados del psicólogo (PB-22): lista separada para consultar y responder ---
+// --- Asignados del psic�logo (PB-22): lista separada para consultar y responder ---
 async function cargarAsignados() {
   if (!asigList) return;
   asigList.innerHTML = '';
@@ -160,13 +161,11 @@ async function cargarAsignados() {
     const li = document.createElement('li');
     const est = String(a.estado || 'Pendiente');
     const respondible = !/complet/i.test(est);
-    const limite = a.fechaLimite ? ' · Límite ' + formatoFecha(a.fechaLimite) : '';
-    li.innerHTML =
-      '<span class="asig-titulo">' + escapar(a.titulo) + '</span>' +
-      '<span class="est ' + (respondible ? 'est-pend' : 'est-ok') + '">' + escapar(est) + limite + '</span>' +
-      (respondible
-        ? '<button type="button" class="btn-sm" data-asignado="' + a.idAsignacion + '">Responder</button>'
-        : '<span class="date">✓ completado</span>');
+    const limite = a.fechaLimite ? ' � L�mite ' + formatoFecha(a.fechaLimite) : '';
+    li.replaceChildren(
+      crearNodo('span', { class: 'asig-titulo', texto: a.titulo }),
+      crearNodo('span', { class: 'asig-estado ' + (respondible ? 'pendiente' : 'completado'), texto: est + limite }),
+      respondible ? crearNodo('button', { type: 'button', class: 'btn-sm', 'data-asignado': a.idAsignacion, texto: 'Responder' }) : crearNodo('span', { class: 'date', texto: 'completado' }));
     asigList.appendChild(li);
   });
   asigList.querySelectorAll('[data-asignado]').forEach((btn) => {
@@ -199,7 +198,7 @@ function renderHistorial(items) {
   histList.innerHTML = '';
   if (!items.length) {
     const li = document.createElement('li');
-    li.innerHTML = '<span>Aún no tienes cuestionarios guardados.</span>';
+    li.innerHTML = '<span>A\u00fan no tienes cuestionarios guardados.</span>';
     histList.appendChild(li);
     return;
   }
@@ -208,7 +207,7 @@ function renderHistorial(items) {
     const fecha = formatoFecha(item.fecha);
     const resumen = item.resumen || 'Cuestionario guardado';
     li.innerHTML =
-      '<span>Cuestionario ' + fecha + ' — ' + escapar(resumen) + '</span>' +
+      '<span>Cuestionario ' + fecha + ' � ' + escapar(resumen) + '</span>' +
       '<span class="date"><svg class="icon-inline" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg> guardado</span>';
     histList.appendChild(li);
   });
@@ -223,7 +222,7 @@ function formatoFecha(iso) {
   return dd + '/' + mm;
 }
 
-// --- Aviso no diagnóstico (obligatorio antes del cuestionario) ---
+// --- Aviso no diagn�stico (obligatorio antes del cuestionario) ---
 function abrirAviso() {
   if (avisoModal) avisoModal.classList.add('open');
 }
@@ -238,10 +237,10 @@ function iniciarCuestionario() {
   Object.keys(respuestas).forEach((k) => delete respuestas[k]);
   seleccionada = null;
   pendienteInicio = false;
-  registrarInicioPaciente(cuestionario.id);
+  void registrarInicioPaciente(cuestionario.id);
   showScreen('quiz');
   renderPregunta();
-  registrarLog('INICIO del cuestionario como paciente — pregunta 1 de ' + preguntas.length);
+  registrarLog('INICIO del cuestionario como paciente � pregunta 1 de ' + preguntas.length);
 }
 
 function renderPregunta() {
@@ -278,7 +277,7 @@ function renderPregunta() {
   });
 
   nextBtn.textContent = indiceActual === total - 1 ? 'Finalizar' : 'Siguiente';
-  registrarLog('Pregunta mostrada', etiqueta, '—', q.id);
+  registrarLog('Pregunta mostrada', etiqueta, '�', q.id);
 }
 
 async function finalizarCuestionario() {
@@ -286,7 +285,7 @@ async function finalizarCuestionario() {
 
   if (lista.some((r) => r.opcionId == null)) {
     mostrarError();
-    registrarLog('VALIDACIÓN FINAL: falta responder alguna pregunta');
+    registrarLog('VALIDACI�N FINAL: falta responder alguna pregunta');
     return;
   }
 
@@ -295,20 +294,20 @@ async function finalizarCuestionario() {
 
     bar.style.width = '100%';
     renderResultado(lista);
-    registrarLog('CUESTIONARIO FINALIZADO — puntaje ' + r.puntaje + ', nivel ' + r.nivel + (r.localOnly ? ' (local)' : ''));
+    registrarLog('CUESTIONARIO FINALIZADO � puntaje ' + r.puntaje + ', nivel ' + r.nivel + (r.localOnly ? ' (local)' : ''));
     if (r.localOnly) {
       guardarHistorialLocal({
         fecha: new Date().toISOString(),
         tipo: 'Cuestionario',
-        resumen: preguntas.length + ' respuestas · nivel ' + r.nivel
+        resumen: preguntas.length + ' respuestas � nivel ' + r.nivel
       });
-      showToast('Sin conexión con el servidor — resultado guardado localmente');
+      showToast('Sin conexi\u00f3n con el servidor \u2014 resultado guardado localmente');
     } else {
       showToast('Cuestionario guardado en tu historial');
     }
   } catch (error) {
     mostrarError(error.message);
-    registrarLog('VALIDACIÓN fallida al finalizar: ' + error.message);
+    registrarLog('VALIDACI�N fallida al finalizar: ' + error.message);
   }
 }
 
@@ -324,7 +323,7 @@ function renderResultado(lista) {
     resultList.appendChild(row);
   });
   showScreen('result');
-  registrarLog('RESULTADO mostrado — ' + resultadoTexto());
+  registrarLog('RESULTADO mostrado � ' + resultadoTexto());
 }
 
 function resultadoTexto() {
@@ -342,7 +341,7 @@ if (startBtn) {
     if (cuestionario.avisoObligatorio !== false && !avisoOk) {
       pendienteInicio = true;
       abrirAviso();
-      registrarLog('Aviso no-diagnóstico MOSTRADO (obligatorio antes del cuestionario)');
+      registrarLog('Aviso no-diagn�stico MOSTRADO (obligatorio antes del cuestionario)');
       return;
     }
     iniciarCuestionario();
@@ -362,7 +361,7 @@ document.getElementById('avisoCerrar').addEventListener('click', () => {
 document.getElementById('avisoOk').addEventListener('click', () => {
   cerrarAviso();
   avisoOk = true;
-  registrarLog('AVISO ACEPTADO — botón "Entendido"');
+  registrarLog('AVISO ACEPTADO � bot�n "Entendido"');
   if (pendienteInicio) {
     pendienteInicio = false;
     iniciarCuestionario();
@@ -376,7 +375,7 @@ if (nextBtn) {
 
     if (seleccionada == null) {
       mostrarError();
-      registrarLog('VALIDACIÓN: intento de avanzar sin responder en', q.id);
+      registrarLog('VALIDACI�N: intento de avanzar sin responder en', q.id);
       return;
     }
 
@@ -384,7 +383,7 @@ if (nextBtn) {
     registrarLog('Respuesta GUARDADA (temporal)', q.id, '=', seleccionada);
 
     if (indiceActual === preguntas.length - 1) {
-      finalizarCuestionario();
+      void finalizarCuestionario();
       return;
     }
 
@@ -408,28 +407,28 @@ document.getElementById('exitYes').addEventListener('click', () => {
   Object.keys(respuestas).forEach((k) => delete respuestas[k]);
   seleccionada = null;
   showScreen('home');
-  showToast('Cuestionario cancelado — respuestas descartadas');
-  registrarLog('SALIDA confirmada — respuestas no guardadas descartadas');
+  showToast('Cuestionario cancelado \u2014 respuestas descartadas');
+  registrarLog('SALIDA confirmada � respuestas no guardadas descartadas');
 });
 
 if (continueBtn) {
   continueBtn.addEventListener('click', () => {
     showScreen('home');
-    cargarInicio();
-    registrarLog('Click "Continuar" desde Resultado — vuelve al inicio del paciente');
+    void cargarInicio();
+    registrarLog('Click "Continuar" desde Resultado � vuelve al inicio del paciente');
   });
 }
 if (sesion) {
-  cargarInicio();
-  registrarLog('Sistema listo — paciente autenticado, botón "Responder cuestionario" disponible');
+  void cargarInicio();
+  registrarLog('Sistema listo � paciente autenticado, bot�n "Responder cuestionario" disponible');
 }
 
-// Cerrar sesión (header unificado)
+// Cerrar sesi�n (header unificado)
 const btnLogout = document.getElementById('btn-logout');
 if (btnLogout) {
   btnLogout.addEventListener('click', () => {
-    if (!confirm('¿Está seguro de que desea cerrar sesión?')) return;
-    authService.logout();
+    if (!confirm('\u00bfEst\u00e1 seguro de que desea cerrar sesi\u00f3n?')) return;
+    void authService.logout();
     sessionStorage.removeItem('es_invitado');
     window.location.href = 'login.html';
   });

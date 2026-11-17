@@ -5,10 +5,6 @@
 
 export const API_BASE_URL = (function () {
   try {
-    if (typeof localStorage !== 'undefined') {
-      const custom = localStorage.getItem('API_URL');
-      if (custom) return custom;
-    }
     if (typeof window !== 'undefined' && window.location) {
       const host = window.location.hostname;
       if (host === 'localhost' || host === '127.0.0.1' || !host) {

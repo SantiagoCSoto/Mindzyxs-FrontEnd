@@ -1,3 +1,4 @@
+﻿import { crearNodo } from '../utils/dom.js';
 /**
  * Controlador de la Vista de Progreso Emocional (views/progreso_emocional.html)
  * Historia de Usuario: HU1-PB14 (Progreso emocional del paciente - Rol Psicólogo)
@@ -409,8 +410,7 @@ function renderizarGraficoSVG(serie) {
       `;
     }
   });
-
-  chartSvg.innerHTML = svgHtml;
+  chartSvg.replaceChildren(crearNodo('div', { texto: svgHtml }));
 }
 
 /**
@@ -421,7 +421,7 @@ function registrarEventos() {
   if (patientSel) {
     patientSel.addEventListener('change', () => {
       progresoService.logAuditoria('Cambio de paciente en selector a id:', patientSel.value);
-      cargarProgreso();
+      void cargarProgreso();
     });
   }
 
@@ -437,7 +437,7 @@ function registrarEventos() {
       }
 
       progresoService.logAuditoria('Aplicando filtros de fecha:', `${desde || 'inicio'} a ${hasta || 'fin'}`);
-      cargarProgreso();
+      void cargarProgreso();
     });
   }
 
@@ -463,7 +463,7 @@ function registrarEventos() {
       if (dateTo) dateTo.value = '';
       showToast('Filtros de fecha restablecidos.');
       progresoService.logAuditoria('Filtros de fecha restablecidos');
-      cargarProgreso();
+      void cargarProgreso();
     });
   }
 
@@ -479,7 +479,7 @@ function registrarEventos() {
   if (btnLogout) {
     btnLogout.addEventListener('click', () => {
       if (!confirm('¿Estás seguro de que deseas cerrar sesión?')) return;
-      authService.logout();
+      void authService.logout();
       window.location.href = 'inicio.html';
     });
   }
@@ -542,5 +542,5 @@ async function inicializar() {
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', inicializar);
 } else {
-  inicializar();
+  void inicializar();
 }

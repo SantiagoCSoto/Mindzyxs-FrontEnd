@@ -177,7 +177,7 @@ if (formularioRegistro) {
     const fechaLimiteMinima = new Date(hoy.getFullYear() - 14, hoy.getMonth(), hoy.getDate());
     const nacimiento = new Date(fechaNacimiento + 'T00:00:00');
 
-    if (isNaN(nacimiento.getTime())) {
+    if (Number.isNaN(nacimiento.getTime())) {
       mostrarBanner(bannerErrorRegistro, 'Ingresa una fecha de nacimiento válida');
       document.getElementById('fecha-nacimiento').focus();
       return;
@@ -199,7 +199,7 @@ if (formularioRegistro) {
     formData.append('Nombre', nombres);
     formData.append('Apellido', apellidos);
     formData.append('FechaNacimiento', fechaNacimiento);
-    formData.append('IdGenero', parseInt(idGenero, 10));
+    formData.append('IdGenero', Number.parseInt(idGenero, 10));
     formData.append('Correo', correo);
     formData.append('Password', contrasena);
 
@@ -332,4 +332,4 @@ async function cargarCatalogos() {
 
 actualizarVisibilidadCredenciales();
 fijarLimiteFechaNacimiento();
-cargarCatalogos();
+void cargarCatalogos();

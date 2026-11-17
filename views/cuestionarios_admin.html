@@ -56,15 +56,15 @@
         </button>
       </div>
       <input type="text" class="buscar" id="buscarC" placeholder="Buscar por título..." aria-label="Buscar cuestionario por título" autocomplete="off" />
-      <div class="err-msg" id="listaErr" role="alert" tabindex="0">No fue posible cargar los cuestionarios. Intente nuevamente.</div>
-      <div class="sk-stack" id="skLista" aria-hidden="true" hidden tabindex="0">
+      <div class="err-msg" id="listaErr" role="alert">No fue posible cargar los cuestionarios. Intente nuevamente.</div>
+      <div class="sk-stack" id="skLista" hidden>
         <div class="sk sk-title"></div>
         <div class="sk sk-card"></div>
         <div class="sk sk-card"></div>
         <div class="sk sk-card"></div>
       </div>
       <div class="empty" id="vacioCuestionario" hidden>No se encontraron cuestionarios predeterminados.</div>
-      <div id="listaC" tabindex="0"></div>
+      <div id="listaC"></div>
     </section>
 
     <!-- Pantalla: crear / editar -->
@@ -78,7 +78,7 @@
       <label class="field-label" for="eDesc">Descripción</label>
       <textarea id="eDesc" maxlength="1000" placeholder="Descripción e instrucciones del cuestionario"></textarea>
 
-      <label class="field-label">Preguntas *</label>
+      <span class="field-label">Preguntas *</span>
       <p class="field-hint">Cada pregunta debe tener al menos dos opciones con su valor ponderado (0 o más).</p>
       <div id="pregBox"></div>
       <div class="btn-add-wrap">

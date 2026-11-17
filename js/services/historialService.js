@@ -206,7 +206,7 @@ export const historialService = {
     if (!fechaStr) return '-';
     try {
       const d = new Date(fechaStr);
-      if (isNaN(d.getTime())) return fechaStr.split('T')[0];
+      if (Number.isNaN(d.getTime())) return fechaStr.split('T')[0];
       const dia = String(d.getDate()).padStart(2, '0');
       const mes = String(d.getMonth() + 1).padStart(2, '0');
       const anio = d.getFullYear();
@@ -223,7 +223,7 @@ export const historialService = {
     if (!fechaStr) return '00:00';
     try {
       const d = new Date(fechaStr);
-      if (isNaN(d.getTime())) return '00:00';
+      if (Number.isNaN(d.getTime())) return '00:00';
       const hora = String(d.getHours()).padStart(2, '0');
       const min = String(d.getMinutes()).padStart(2, '0');
       return `${hora}:${min}`;
@@ -245,7 +245,8 @@ export const historialService = {
   },
 
   logAuditoria(accion, detalle = '') {
-    console.log('[HU1-PB13]', new Date().toLocaleTimeString(), accion, detalle);
+    void detalle;
+    console.log('[HU1-PB13]', new Date().toLocaleTimeString(), accion);
   },
 
   /**

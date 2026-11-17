@@ -1,3 +1,4 @@
+﻿import { crearNodo } from '../utils/dom.js';
 /**
  * Controlador del chat psicólogo-paciente (PB-31) — fiel al mockup.
  * Tabs Conversaciones/Solicitudes, previews, typing, presencia,
@@ -135,9 +136,13 @@ function claseEstado(estado) {
 
 function pintarNodo(div, c) {
   div.className = 'conv' + (c.id === activaId ? ' active' : '');
-  div.innerHTML = '<div class="conv-top"><div class="avatar">' + escapar(inicialesDe(c.contraparte.nombre)) + '</div>' +
-    '<div><b>' + escapar(c.contraparte.nombre) + '</b><small>' + escapar(c.contraparte.rol) + ' • ' + escapar(c.estado) + '</small></div></div>' +
-    '<div class="conv-preview">…</div>';
+  div.replaceChildren(
+    crearNodo('div', { class: 'conv-top' },
+      crearNodo('div', { class: 'avatar', texto: inicialesDe(c.contraparte.nombre) }),
+      crearNodo('div', {},
+        crearNodo('b', { texto: c.contraparte.nombre }),
+        crearNodo('small', { texto: `${c.contraparte.rol ?? ''} · ${c.estado ?? ''}` }))),
+    crearNodo('div', { class: 'conv-preview', texto: '…' }));
 }
 
 function renderConvs() {
@@ -207,7 +212,7 @@ async function recargar() {
     conversaciones = await obtenerConversaciones();
   } catch (error) {
     if (!conversaciones.length) {
-      convList.innerHTML = '<div class="empty">No fue posible cargar: ' + escapar(error.message) + '</div>';
+      convList.replaceChildren(crearNodo('div', { class: 'empty', texto: 'No fue posible cargar: ' + String(error.message ?? '') }));
     } else {
       showToast('No fue posible actualizar: ' + error.message);
     }
@@ -370,7 +375,7 @@ async function sendMessage() {
   avisarEscribiendo(db, c.id, yo.uid, false);
   try {
     await enviarMensaje(db, c.id, yo.uid, texto);
-    avisarMensaje(c.id);
+    void avisarMensaje(c.id);
   } catch (error) {
     showToast(error.message || 'No fue posible enviar el mensaje. Intente nuevamente');
   }
@@ -395,11 +400,17 @@ function renderReqs() {
   pend.forEach((c) => {
     const div = document.createElement('div');
     div.className = 'req-card';
-    div.innerHTML = '<div class="conv-top"><div class="avatar">' + escapar(inicialesDe(c.contraparte.nombre)) + '</div>' +
-      '<div><h3>' + escapar(c.contraparte.nombre) + '</h3><p style="margin:0">Solicitud • ' + escapar(c.contraparte.rol) + '</p></div></div>' +
-      '<p>Quiere iniciar un chat de apoyo contigo.</p>' +
-      '<p class="hint">Al aceptar, autorizas a tu psicólogo a ver tu progreso y asignarte cuestionarios.</p>' +
-      '<div class="req-actions"><button class="btn-accept">Aceptar</button><button class="btn-reject">Rechazar</button></div>';
+    div.replaceChildren(
+      crearNodo('div', { class: 'conv-top' },
+        crearNodo('div', { class: 'avatar', texto: inicialesDe(c.contraparte.nombre) }),
+        crearNodo('div', {},
+          crearNodo('h3', { texto: c.contraparte.nombre }),
+          crearNodo('p', { style: 'margin:0', texto: `Solicitud · ${c.contraparte.rol ?? ''}` }))),
+      crearNodo('p', { texto: 'Quiere iniciar un chat de apoyo contigo.' }),
+      crearNodo('p', { class: 'hint', texto: 'Al aceptar, autorizas a tu psicólogo a ver tu progreso y asignarte cuestionarios.' }),
+      crearNodo('div', { class: 'req-actions' },
+        crearNodo('button', { class: 'btn-accept', texto: 'Aceptar' }),
+        crearNodo('button', { class: 'btn-reject', texto: 'Rechazar' })));
     div.querySelector('.btn-accept').addEventListener('click', () => responder(c.id, true));
     div.querySelector('.btn-reject').addEventListener('click', () => responder(c.id, false));
     reqList.appendChild(div);
@@ -409,10 +420,16 @@ function renderReqs() {
     entrantes.forEach((c) => {
       const div = document.createElement('div');
       div.className = 'req-card';
-      div.innerHTML = '<div class="conv-top"><div class="avatar">' + escapar(inicialesDe(c.contraparte.nombre)) + '</div>' +
-        '<div><h3>' + escapar(c.contraparte.nombre) + '</h3><p style="margin:0">Solicitud • Paciente</p></div></div>' +
-        '<p>Le solicita iniciar un chat de apoyo.</p>' +
-        '<div class="req-actions"><button class="btn-accept">Aceptar</button><button class="btn-reject">Rechazar</button></div>';
+    div.replaceChildren(
+      crearNodo('div', { class: 'conv-top' },
+        crearNodo('div', { class: 'avatar', texto: inicialesDe(c.contraparte.nombre) }),
+        crearNodo('div', {},
+          crearNodo('h3', { texto: c.contraparte.nombre }),
+          crearNodo('p', { style: 'margin:0', texto: 'Solicitud · Paciente' }))),
+      crearNodo('p', { texto: 'Le solicita iniciar un chat de apoyo.' }),
+      crearNodo('div', { class: 'req-actions' },
+        crearNodo('button', { class: 'btn-accept', texto: 'Aceptar' }),
+        crearNodo('button', { class: 'btn-reject', texto: 'Rechazar' })));
       div.querySelector('.btn-accept').addEventListener('click', () => responderPsi(c.id, true));
       div.querySelector('.btn-reject').addEventListener('click', () => responderPsi(c.id, false));
       reqList.appendChild(div);
@@ -437,7 +454,7 @@ async function responderPsi(id, aceptar) {
   try {
     await responderPsicologo(id, aceptar);
     showToast(aceptar ? 'Conversación iniciada.' : 'Solicitud rechazada');
-    await recargar(false);
+    await recargar();
     if (aceptar) { setTab(false); await openConv(id); }
   } catch (error) {
     showToast(error.message);
@@ -449,7 +466,7 @@ async function responder(id, aceptar) {
   try {
     await responderSolicitud(id, aceptar);
     showToast(aceptar ? 'Conversación iniciada. Autorizaste a tu psicólogo.' : 'Solicitud rechazada');
-    await recargar(false);
+    await recargar();
     if (aceptar) { setTab(false); await openConv(id); }
   } catch (error) {
     if (/permiso|autoriz/i.test(error.message)) {
@@ -621,8 +638,8 @@ tabChat.addEventListener('click', () => setTab(false));
 tabReq.addEventListener('click', () => setTab(true));
 $('btnBuscar')?.addEventListener('click', buscar);
 $('btnBuscarPsi')?.addEventListener('click', buscarPsicologos);
-$('searchPsi')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') buscarPsicologos(); });
-$('searchPaciente')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') buscar(); });
+void $('searchPsi')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') buscarPsicologos(); });
+void $('searchPaciente')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') buscar(); });
 
 blockBtn.addEventListener('click', () => {
   const c = conversaciones.find((x) => x.id === activaId);
@@ -644,7 +661,7 @@ $('blockConfirm').addEventListener('click', async () => {
   try {
     await solicitarBloqueo(activaId, motivo);
     showToast('Solicitud enviada. Quedará pendiente de revisión.');
-    await recargar(true);
+    await recargar();
   } catch (error) {
     showToast(error.message);
   }
@@ -659,7 +676,7 @@ $('unblockBtn').addEventListener('click', async () => {
       await desbloquearChat(activaId);
       showToast('Contacto desbloqueado');
     }
-    await recargar(true);
+    await recargar();
   } catch (error) {
     showToast(error.message);
   }
@@ -668,7 +685,7 @@ $('btnResolverSi').addEventListener('click', async () => {
   try {
     await resolverBloqueo(activaId, true);
     showToast('Bloqueo confirmado');
-    await recargar(true);
+    await recargar();
   } catch (error) {
     showToast(error.message);
   }
@@ -677,7 +694,7 @@ $('btnResolverNo').addEventListener('click', async () => {
   try {
     await resolverBloqueo(activaId, false);
     showToast('Solicitud rechazada. El chat continúa.');
-    await recargar(true);
+    await recargar();
   } catch (error) {
     showToast(error.message);
   }
@@ -685,8 +702,8 @@ $('btnResolverNo').addEventListener('click', async () => {
 $('authOk').addEventListener('click', () => authModal.classList.remove('open'));
 
 // Refresco periódico suave (por si algo cambió fuera del chat).
-setInterval(() => { recargar(true).catch(() => { }); }, 20000);
-window.addEventListener('focus', () => { recargar(true).catch(() => { }); });
+setInterval(() => { recargar().catch(() => { }); }, 20000);
+window.addEventListener('focus', () => { recargar().catch(() => { }); });
 
 async function iniciar() {
   if (!sesion()) { window.location.href = 'login.html'; return; }
@@ -699,23 +716,23 @@ async function iniciar() {
     if (t.rol === 'Paciente') await cargarEspecialidades();
     $('blockBtnText').textContent = t.rol === 'Paciente' ? 'Bloquear psicólogo' : 'Bloquear paciente';
     db = await conectarRtdb(t.firebaseToken, t.databaseUrl);
-    await recargar(false);
+    await recargar();
     const primero = conversaciones.find((c) => c.estado === 'Aceptada') || conversaciones[0];
     if (primero) await openConv(primero.id);
   } catch (error) {
-    convList.innerHTML = '<div class="empty">No fue posible conectar: ' + escapar(error.message) + '</div>';
+    convList.replaceChildren(crearNodo('div', { class: 'empty', texto: 'No fue posible conectar: ' + String(error.message ?? '') }));
     showToast(error.message);
   }
 }
 
-iniciar();
+void iniciar();
 
 // Cerrar sesión (header unificado)
 const btnLogout = document.getElementById('btn-logout');
 if (btnLogout) {
   btnLogout.addEventListener('click', () => {
     if (!confirm('¿Está seguro de que desea cerrar sesión?')) return;
-    authService.logout();
+    void authService.logout();
     sessionStorage.removeItem('es_invitado');
     window.location.href = 'login.html';
   });

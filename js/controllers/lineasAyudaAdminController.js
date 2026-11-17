@@ -384,7 +384,7 @@ document.addEventListener('keydown', (e) => {
 // ---------- Cerrar sesión ----------
 $('btn-logout-top').addEventListener('click', () => {
   if (!confirm('¿Está seguro de que desea cerrar sesión?')) return;
-  authService.logout();
+  void authService.logout();
   sessionStorage.removeItem('es_invitado');
   window.location.href = 'login.html';
 });
@@ -399,4 +399,4 @@ const rolUsuario = $('rol-usuario');
 if (rolUsuario) rolUsuario.textContent = 'Administrador';
 
 // Inicializa la lista.
-cargarLista();
+void cargarLista();

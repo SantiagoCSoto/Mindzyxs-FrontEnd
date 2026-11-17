@@ -71,7 +71,7 @@ async function iniciar() {
   if (sesion && sesion.cuestionarioId && sesion.respuestas && sesion.respuestas.length) {
     // Flujo normal: calcula con las respuestas de la sesión.
     await mostrarAvisoSiAplica();
-    avisoService.registrarVisualizacion('resultado-riesgo', 'ok');
+    void avisoService.registrarVisualizacion('resultado-riesgo', 'ok');
     if (avisoModal) abrirModal(avisoModal);
 
     try {
@@ -108,7 +108,7 @@ document.getElementById('avisoOk')?.addEventListener('click', () => cerrarModal(
 document.getElementById('avisoCerrar')?.addEventListener('click', () => cerrarModal(avisoModal));
 document.getElementById('footerAviso')?.addEventListener('click', (e) => {
   e.preventDefault();
-  mostrarAvisoSiAplica().then(() => abrirModal(avisoModal));
+  void mostrarAvisoSiAplica().then(() => abrirModal(avisoModal));
 });
 
 lineasBtn?.addEventListener('click', async () => {
@@ -163,4 +163,4 @@ function tipoLabel(t) {
   }[t] || t;
 }
 
-iniciar();
+void iniciar();

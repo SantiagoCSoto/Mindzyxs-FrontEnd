@@ -209,7 +209,7 @@ export const progresoService = {
     if (!fechaStr) return '';
     try {
       const d = new Date(fechaStr);
-      if (isNaN(d.getTime())) {
+      if (Number.isNaN(d.getTime())) {
         const partes = fechaStr.split('T')[0].split('-');
         return partes.length === 3 ? `${partes[2]}/${partes[1]}` : fechaStr;
       }
@@ -225,7 +225,8 @@ export const progresoService = {
    * Emite logs de auditoría estructurados con etiqueta [HU1-PB14]
    */
   logAuditoria(accion, detalle = '') {
-    console.log('[HU1-PB14]', new Date().toLocaleTimeString(), accion, detalle);
+    void detalle;
+    console.log('[HU1-PB14]', new Date().toLocaleTimeString(), accion);
   },
 
   /**

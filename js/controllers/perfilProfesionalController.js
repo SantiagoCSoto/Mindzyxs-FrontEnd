@@ -1,3 +1,4 @@
+﻿import { crearNodo } from '../utils/dom.js';
 /**
  * Controlador del perfil profesional del psicólogo (PB-24 HU1-PB24).
  * Conecta los ids de views/perfil_profesional.html con perfilProfesionalService.js:
@@ -55,7 +56,11 @@ function iniciales(nombre) {
 }
 
 function correoValido(correo) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(correo || '').trim());
+  const v = String(correo || '').trim();
+  const at = v.indexOf('@');
+  const dot = v.lastIndexOf('.');
+  return at > 0 && dot > at + 1 && dot < v.length - 1 &&
+    !v.includes(' ') && !v.includes('\t') && !v.includes('\n');
 }
 
 // ---------- Vista: ver perfil ----------
@@ -66,9 +71,7 @@ function renderVer() {
   $('verNombre').textContent = perfil.nombre || '—';
   $('verCorreoTop').textContent = perfil.correo || '—';
   const esp = Array.isArray(perfil.especialidades) ? perfil.especialidades : [];
-  $('verEsp').innerHTML = esp.length
-    ? esp.map((e) => '<span>' + escaparHtml(e) + '</span>').join('')
-    : '<span class="chip-vacia">Sin especialidad registrada</span>';
+  $('verEsp').replaceChildren(...(esp.length ? esp.map((e) => crearNodo('span', { texto: e })) : [crearNodo('span', { class: 'muted', texto: 'Sin especialidades' })]));
   $('verExp').textContent = perfil.añosExperiencia != null ? String(perfil.añosExperiencia) : '—';
   $('verDesc').textContent = perfil.descripcionProfesional ? perfil.descripcionProfesional : '—';
   $('verCont').textContent = perfil.datosContacto ? perfil.datosContacto : '—';
@@ -208,7 +211,7 @@ $('btnCancelar').addEventListener('click', () => show('screenVer'));
 // ---------- Cerrar sesión ----------
 $('btn-logout').addEventListener('click', () => {
   if (!confirm('¿Está seguro de que desea cerrar sesión?')) return;
-  authService.logout();
+  void authService.logout();
   sessionStorage.removeItem('es_invitado');
   window.location.href = 'login.html';
 });
@@ -223,4 +226,4 @@ const rolUsuario = document.getElementById('rol-usuario');
 if (rolUsuario) rolUsuario.textContent = 'Psicólogo';
 
 // Inicializa la vista.
-cargarPerfil();
+void cargarPerfil();

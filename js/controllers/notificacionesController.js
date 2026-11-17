@@ -331,7 +331,7 @@ async function abrirEdicion(tipo) {
     varFecha.value = `${String(hoy.getDate()).padStart(2, '0')}/${String(hoy.getMonth() + 1).padStart(2, '0')}/${hoy.getFullYear()}`;
   }
 
-  actualizarVistaPrevia();
+  void actualizarVistaPrevia();
 }
 
 function actualizarTextoActivo() {
@@ -502,12 +502,12 @@ if (fEstado) fEstado.addEventListener('change', filtrarCatalogo);
 
 if (btnRefrescar) {
   btnRefrescar.addEventListener('click', () => {
-    cargarCatalogo();
+    void cargarCatalogo();
     showToast('Catálogo actualizado.');
   });
 }
 
 // 10. Inicialización
 document.addEventListener('DOMContentLoaded', () => {
-  cargarCatalogo();
+  void cargarCatalogo();
 });

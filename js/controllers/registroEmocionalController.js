@@ -192,7 +192,7 @@ pills.forEach((p) => {
     });
     p.classList.add('selected');
     p.setAttribute('aria-checked', 'true');
-    seleccionado = parseInt(p.dataset.val, 10);
+    seleccionado = Number.parseInt(p.dataset.val, 10);
     ocultarError();
     registrarLog('ESTADO SELECCIONADO: ' + seleccionado + ' (' + ETIQUETAS[seleccionado] + ')');
   });
@@ -200,7 +200,7 @@ pills.forEach((p) => {
 
 if (btnSave) {
   btnSave.addEventListener('click', () => {
-    guardar();
+    void guardar();
   });
 }
 
@@ -216,7 +216,7 @@ document.getElementById('footerAviso').addEventListener('click', (e) => {
 });
 
 if (sesion) {
-  cargarUltimo();
+  void cargarUltimo();
   registrarLog('Sistema listo — panel del paciente, botón "Registrar estado emocional" disponible');
 }
 
@@ -225,7 +225,7 @@ const btnLogout = document.getElementById('btn-logout');
 if (btnLogout) {
   btnLogout.addEventListener('click', () => {
     if (!confirm('¿Está seguro de que desea cerrar sesión?')) return;
-    authService.logout();
+    void authService.logout();
     sessionStorage.removeItem('es_invitado');
     window.location.href = 'login.html';
   });
