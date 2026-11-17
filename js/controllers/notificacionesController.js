@@ -205,7 +205,7 @@ function renderizarCatalogo(items) {
   listaEventos.querySelectorAll('.btn-editar').forEach((btn) => {
     btn.addEventListener('click', () => {
       const tipo = btn.getAttribute('data-tipo');
-      if (tipo) abrirEdicion(tipo);
+      if (tipo) void abrirEdicion(tipo);
     });
   });
 }

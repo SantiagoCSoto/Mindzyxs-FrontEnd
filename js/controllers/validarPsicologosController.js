@@ -200,7 +200,7 @@ function renderizarLista(items) {
   listaSolicitudes.querySelectorAll('.btn-revisar').forEach((btn) => {
     btn.addEventListener('click', () => {
       const id = Number(btn.getAttribute('data-id'));
-      if (id) abrirDetalle(id);
+      if (id) void abrirDetalle(id);
     });
   });
 }

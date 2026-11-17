@@ -638,8 +638,8 @@ tabChat.addEventListener('click', () => setTab(false));
 tabReq.addEventListener('click', () => setTab(true));
 $('btnBuscar')?.addEventListener('click', buscar);
 $('btnBuscarPsi')?.addEventListener('click', buscarPsicologos);
-void $('searchPsi')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') buscarPsicologos(); });
-void $('searchPaciente')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') buscar(); });
+void $('searchPsi')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') void buscarPsicologos(); });
+void $('searchPaciente')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') void buscar(); });
 
 blockBtn.addEventListener('click', () => {
   const c = conversaciones.find((x) => x.id === activaId);
