@@ -74,11 +74,20 @@ function renderRespaldos(respaldos = []) {
       const row = document.createElement('div');
       row.className = 'backup-row';
       const fecha = r.fechaHora ? new Date(r.fechaHora).toLocaleString() : '';
-      row.innerHTML =
-        `<span>${escapar(r.nombreArchivo || '')}</span>` +
-        `<span>${escapar(r.tamano || '')}</span>` +
-        `<span>${escapar(fecha)}</span>` +
-        `<span><button class="btn-download" data-id="${Number(r.idRespaldo) || 0}" data-name="${escapar(r.nombreArchivo || '')}" title="Descargar respaldo">&#11015;</button></span>`;
+      [r.nombreArchivo || '', r.tamano || '', fecha].forEach((texto) => {
+        const span = document.createElement('span');
+        span.textContent = texto;
+        row.appendChild(span);
+      });
+      const celdaBoton = document.createElement('span');
+      const boton = document.createElement('button');
+      boton.className = 'btn-download';
+      boton.dataset.id = String(Number(r.idRespaldo) || 0);
+      boton.dataset.name = r.nombreArchivo || '';
+      boton.title = 'Descargar respaldo';
+      boton.textContent = '\u2B07';
+      celdaBoton.appendChild(boton);
+      row.appendChild(celdaBoton);
       backupRows.appendChild(row);
     });
   }
@@ -163,9 +172,9 @@ backupRows.addEventListener('click', async (e) => {
 
 document.getElementById('btn-cerrar-sesion').addEventListener('click', (e) => {
   e.preventDefault();
-  authService.logout();
+  void authService.logout();
   window.location.href = 'login.html';
 });
 
 initPermisos();
-verRespaldos(false);
+void verRespaldos(false);

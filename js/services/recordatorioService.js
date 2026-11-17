@@ -298,7 +298,17 @@ export const recordatorioService = {
    */
   guardarEnStorage(config) {
     try {
-      const str = JSON.stringify(config);
+      // Solo se guardan los campos esperados, con tipo y longitud acotados (mismos límites que la BD).
+      const limpia = {
+        frecuencia: String(config?.frecuencia ?? '').slice(0, 20),
+        hora: String(config?.hora ?? '').slice(0, 5),
+        dias: Array.isArray(config?.dias) ? config.dias.map(Number).filter(Number.isInteger) : [],
+        diasNombres: Array.isArray(config?.diasNombres) ? config.diasNombres.map(String).slice(0, 7) : [],
+        activo: config?.activo === true,
+        titulo: String(config?.titulo ?? '').slice(0, 100),
+        mensaje: String(config?.mensaje ?? '').slice(0, 500)
+      };
+      const str = JSON.stringify(limpia);
       localStorage.setItem(STORAGE_KEY_RECORDATORIO, str);
       sessionStorage.setItem(STORAGE_KEY_RECORDATORIO, str);
     } catch (e) {

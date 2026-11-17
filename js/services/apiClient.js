@@ -37,6 +37,14 @@ export function escaparHtml(texto) {
   return String(texto ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
+// Solo acepta rutas relativas al API: impide que un endpoint construido desde la UI apunte a otro host.
+function construirUrl(endpoint) {
+  const ruta = String(endpoint ?? '');
+  if (!ruta.startsWith('/') || ruta.startsWith('//') || ruta.includes('\\') || /^[a-z][a-z0-9+.-]*:/i.test(ruta)) {
+    throw new Error('Endpoint no válido');
+  }
+  return `${API_BASE_URL}${ruta}`;
+}
 function conTimeout(signal) {
   try {
     const t = AbortSignal.timeout(TIMEOUT_MS);
@@ -78,7 +86,7 @@ function errorRed(err) {
  * Petición POST enviando un objeto JSON
  */
 export async function postJson(endpoint, data, opciones = {}) {
-  const url = `${API_BASE_URL}${endpoint}`;
+  const url = construirUrl(endpoint);
   try {
     const response = await fetch(url, {
       method: 'POST',
@@ -118,7 +126,7 @@ export async function postJson(endpoint, data, opciones = {}) {
  * Petición PUT enviando un objeto JSON
  */
 export async function putJson(endpoint, data, opciones = {}) {
-  const url = `${API_BASE_URL}${endpoint}`;
+  const url = construirUrl(endpoint);
   try {
     const response = await fetch(url, {
       method: 'PUT',
@@ -158,7 +166,7 @@ export async function putJson(endpoint, data, opciones = {}) {
  * Petición POST enviando un FormData (multipart/form-data)
  */
 export async function postFormData(endpoint, formData, opciones = {}) {
-  const url = `${API_BASE_URL}${endpoint}`;
+  const url = construirUrl(endpoint);
   try {
     const response = await fetch(url, {
       method: 'POST',
@@ -196,7 +204,7 @@ export async function postFormData(endpoint, formData, opciones = {}) {
  * Petición GET esperando respuesta JSON
  */
 export async function getJson(endpoint, opciones = {}) {
-  const url = `${API_BASE_URL}${endpoint}`;
+  const url = construirUrl(endpoint);
   try {
     const response = await fetch(url, {
       method: 'GET',
@@ -234,7 +242,7 @@ export async function getJson(endpoint, opciones = {}) {
  * Petición DELETE esperando respuesta JSON
  */
 export async function deleteJson(endpoint, opciones = {}) {
-  const url = `${API_BASE_URL}${endpoint}`;
+  const url = construirUrl(endpoint);
   try {
     const response = await fetch(url, {
       method: 'DELETE',
@@ -271,7 +279,7 @@ export async function deleteJson(endpoint, opciones = {}) {
 /**
  * Petición GET devolviendo un Blob (para descarga de archivos).
  */export async function getBlob(endpoint, opciones = {}) {
-  const url = `${API_BASE_URL}${endpoint}`;
+  const url = construirUrl(endpoint);
   try {
     const response = await fetch(url, {
       method: 'GET',

@@ -127,7 +127,7 @@ function setTab(isReq) {
 
 // ---------- Lista con reconciliación (sin parpadeo: nunca se vacía y re-llena) ----------
 const nodosConv = new Map(); // id -> button
-const metaEstado = {};       // id -> último estado visto en RTDB (evita loops del evento inicial)
+const metaEstado = new Map();       // id -> último estado visto en RTDB (evita loops del evento inicial)
 
 function claseEstado(estado) {
   return estado === 'Pendiente' ? 'pend' : (estado === 'Aceptada' ? 'ok' : (estado === 'Bloqueada' ? 'block' : ''));
@@ -219,7 +219,7 @@ async function recargar() {
   if (activaId) {
     const c = conversaciones.find((x) => x.id === activaId);
     if (c) {
-      metaEstado[c.id] = c.estado;
+      metaEstado.set(c.id, c.estado);
       $('chatName').textContent = c.contraparte.nombre;
       actualizarBloqueo(c);
       if (c.estado !== 'Aceptada') {
@@ -254,11 +254,11 @@ async function openConv(id, mantener = false) {
 
   // Meta en vivo: solo reacciona si el estado REALMENTE cambió
   // (el evento inicial al suscribirse se ignora vía metaEstado).
-  metaEstado[c.id] = c.estado;
+  metaEstado.set(c.id, c.estado);
   offMeta = escucharMeta(db, c.id, async (meta) => {
     const nuevo = meta && meta.estado;
-    if (!nuevo || nuevo === metaEstado[c.id]) return;
-    metaEstado[c.id] = nuevo;
+    if (!nuevo || nuevo === metaEstado.get(c.id)) return;
+    metaEstado.set(c.id, nuevo);
     showToast('La conversación cambió a: ' + nuevo);
     await recargar();
   });
